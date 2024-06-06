@@ -1,0 +1,83 @@
+project:
+  type: book
+  output-dir: docs/
+  # resources:
+
+book:
+  title: Linear Systems and Control
+  author: 
+    - name: Aditya Mahajan
+      url: "https://adityam.github.io"
+      affiliation: McGill University
+      affiliation-url: "https://www.mcgill.ca/ece"
+  description: "Course Notes for ECSE 307 (McGill University)"
+  site-url: "https://adityam.github.io/linear-systems/"
+
+  repo-url: "https://github.com/adityam/linear-systems"
+  repo-actions: [edit]
+  repo-branch: quarto
+  reader-mode: true
+
+  navbar:
+    background: dark
+    title: false
+    pinned: false
+    search: false
+    left:
+    - href: ../linear-systems/index.html
+      text: Linear Control Systems
+        # - href: ../multi-agent-systems/index.html
+        #   text: Multi-Agent Systems
+
+  sidebar:
+    # background: light
+    collapse-level: 2
+    pinned: false
+    style : floating
+
+  chapters:
+    - index.qmd
+    - 01-review.qmd
+
+    #- references.qmd
+
+    # bibliography: references.bib
+    # csl: _extensions/csl/acm-siggraph.csl
+
+format:
+  html:
+    author:
+      - name: Aditya Mahajan
+        url: http://www.cim.mcgill.ca/~adityam
+        affiliation: McGill University
+        affiliation-url: http://www.mcgill.ca/ece
+    citation:
+      type: webpage
+      container-title: "Course notes for Linear Systems and Control"
+        # google-scholar: true
+    theme: 
+      light: 
+        - lumen
+        - static/css/style.scss
+      dark: 
+        - darkly
+        - static/css/style.scss
+    mermaid:
+      theme: neutral
+    include-in-header: 
+      - static/html/mathjax.html
+      - static/html/clicky.html
+
+    reference-location: margin
+      #    citation-location: margin
+    filters:
+      - _extensions/schochastics/nutshell/nutshell.lua
+    published-title: Updated
+    date: last-modified
+    notebook-links: inline
+
+    embed-resources: false
+    smooth-scroll: true
+
+    jupyter: julia-1.9
+    freeze: true

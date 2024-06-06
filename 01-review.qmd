@@ -1,0 +1,236 @@
+---
+title: Frequency domain modeling
+---
+
+:::{.callout-note icon=false appearance="simple"}
+## <i class="bi bi-journal-text text-primary"></i> A comment about notation
+In Signals and Systems, we used $u(t)$ to denote the step function. In this course, we will use $u(t)$ to denote the control input. So, to avoid confusion, we will use $\mathbb{1}(t)$ to denote the step function. _Note that the book uses $u(t)$, which can get confusing, in my opinion._
+:::
+
+In this lecture, we will review frequency domain modeling of LTI (linear and time invariant) systems. You have seen this material in Signals and Systems. The purpose of this review is to simply introduce the notation used in this course, in case it happens to be different from the notation used in Signals and Systems. You are strongly encouraged to review your notes on this topic.
+
+## Unilateral Laplace Transforms
+
+Recall that there are two types of Laplace transforms (LTs): bi-lateral or two-sided LTs and unilateral or one-sided LTs. In this course, we will work exclusively with unilateral LTs.
+
+Also recall that for two-sided LTs, we need to worry about the ROC (region of convergence). For one-sided LTs, we never explicitly mention the ROC since it is always the right hand plane right to the rightmost pole. 
+
+We will use the notation
+$$f(t) \xleftrightarrow{\quad\mathcal L\quad} F(s)$$
+to denote a LT-pair. We will also use
+$$F(s) = \mathcal{L}\{ f(t)\}$$
+or
+$$f(t) = \mathcal L^{-1}\{F(s)\}$$
+when we want to explicitly write the LT or the inverse LT of a signal.
+
+---
+
+The basic formula for a unilateral LT is
+$$F(s) = \int_{0-}^{\infty} f(t)e^{-st} dt.$$
+The inverse Laplace transform is given by
+$$f(t) = \frac{1}{2\pi j} \int_{\sigma - j \infty}^{\sigma + j \infty} F(s) e^{st} ds$$
+where $\sigma$ is chosen such that $(\sigma,0)$ is in the ROC. 
+
+In this course, we will **never** explicitly use these formulas to compute LTs. We will **always** use LT tables. You do not need to memorize the LT table; one will be provided during the examples. What you do need is the understanding of how to use the LT tables to compute LTs of complicated expressions and to compute inverse LTs using partial fraction expansion.
+
+I will not review this material in class. Please go back to your SS notes or review Sec 2.1--2.2 of the textbook. In is important to understand the following three cases:
+
+1. Roots of the denominator are real and distinct
+2. Roots of the denominator are complex and distinct
+3. Roots of the denominator are real and repeated. 
+
+
+## The Transfer Function
+
+In this course, we will work exclusively with LTI systems. Such systems arise in all branches of engineering, e.g., electrical circuits, spring-mass systems, gear systems, and thermodynamics. See Chapter 2 of Nice for detailed modeling examples. 
+
+Consider an LTI system with input $r(t)$ (also called the reference signal sometimes) and output $c(t)$. We can also represent this as the following block diagram:
+
+
+:::{.text-center}
+
+```{mermaid}
+flowchart LR
+	input["r(t)"] --> system[LTI System] --> output["c(t)"]
+
+classDef noBox fill:none,stroke:none; 
+class input noBox;
+class output noBox;
+```
+:::
+
+
+All such systems can be represented by constant coefficient linear differential equations (LDE) of the form
+$$
+a_n \frac{d^n c(t)}{dt^n}  + a_{n-1} \frac{d^{n-1} c(t)}{dt^{n-1}} + \cdots  a_0 c(t)
+= b_m \frac{d^m r(t)}{dt^m} + b_{m-1} \frac{d^{m-1} r(t)}{dt^{m-1}} + \cdots + b_0 r(t).
+$$
+
+- This differential equation is called **linear** because there are no non-linear or multiplicative terms of the form $\displaystyle \left(\frac{d^3 c(t)}{dt^3}\right)\left(\frac{d^2 c(t)}{dt^2}\right)$. 
+
+- It is called **constant coefficient** because the coefficients $a_n$ and $b_m$ are constants that do not depend on time.
+
+There is a one-to-one correspondence between constant coefficient LDE and an LTI system. That is, every LTI system can be described by a constant coefficient LDE and vice-versa. 
+
+Recall that a key defining property of an LTI system is its impulse response, which we will typically denote by $g(t)$ and the transfer function, which we denote by $G(s)$. Recall that $g(t) \xleftrightarrow{\quad \mathcal L \quad} G(s)$. 
+
+Now an interesting feature of a constant coefficient LDE is that we can identify the transfer function simply by inspection. 
+
+:::{.text-center}
+
+```{mermaid}
+flowchart LR
+	input["R(s)"] --> system["G(s)"] --> output["C(s)"]
+
+classDef noBox fill:none,stroke:none; 
+class input noBox;
+class output noBox;
+```
+:::
+
+Given an TLI system with input $r(t)$ and output $c(t)$, we know that
+$$C(s) = G(s)R(s).$$
+Therefore, if we know the input and output, we can identify the transfer function using
+$$ G(s) = \frac{C(s)}{R(s)}.$$
+Now, if we go back to the general formula of a constant coefficient LDE 
+$$
+a_n \frac{d^n c(t)}{dt^n}  + a_{n-1} \frac{d^{n-1} c(t)}{dt^{n-1}} + \cdots  a_0 c(t)
+= b_m \frac{d^m r(t)}{dt^m} + b_{m-1} \frac{d^{m-1} r(t)}{dt^{m-1}} + \cdots + b_0 r(t).
+$$
+and assume that the system starts from zero-initial state and take the LT of both sides, we get
+$$
+a_n s^n C(s) + a_{n-1} s^{n-1} C(s) + \cdots + a_0 C(s)
+=
+b_m s^m R(s) + b_{m-1} s^{m-1} R(s) + \cdots + b_m R(s).
+$$
+Rearranging terms, we get
+$$
+(a_n s^n + a_{n-1} s^{n-1} + \cdots + a_0) C(s)
+=
+(b_m s^m + b_{m-1}s^{m-1} + \cdots + b_0) R(s).
+$$
+Therefore,
+$$
+G(s) = \frac{C(s)}{R(s)}
+= \frac{b_m s^m + b_{m-1} s^{m-1} + \cdots + b_m}
+{a_n s^n + a_{n-1} s^{n-1} + \cdots + a_0}.
+$$
+Thus, we can easily go back and forth between the DE and the transfer function.
+
+:::{#exr-LDE-TF}
+Find the transfer function corresponding to the following LDE
+$$
+\frac{d}{dt}c(t) + 2 c(t) = r(t)
+$$
+:::
+
+::: {.callout-tip collapse="true"}
+#### Solution
+From inspection, we have
+$$G(s) = \frac{1}{s + 2}$$
+:::
+
+:::{#exr-LDE-TF}
+Find a LDE that implements the following TF
+$$
+G(s) = \frac{2s+1}{s^2 + 2s + 3}.
+$$
+:::
+
+::: {.callout-tip collapse="true"}
+#### Solution
+From inspection, we have
+$$
+\frac{d^2c(t)}{dt} + 2\frac{d c(t)}{dt} + 3c(t) = 2\frac{d r(t)}{dt} + r(t).
+$$
+:::
+
+In this course, we will assume that the system is specified either as a LDE or as a TF. The textbook provides detailed examples of how to derive either the LDE or the TF from a physical system such as an electric circuit or a spring-mass system. 
+
+Later in the course we will also study other equivalent forms of representing the system such as state space equations and Bode plots.
+
+A final remark. In all the systems that we consider in this course, we will assume that $m < n$. So, the denominator of the TF has a strictly higher degree than the numerator. Such transfer functions are called **proper**. It is possible to have causal systems where $m=n$ but we will not consider that in this course. As a consequence, when we consider state space representation in future lectures, we will get formulas which are simpler than more general formulas which you may find at other sources. 
+
+## Step Response
+
+Since we can easily compute the TF from the LDE, we can compute the output for interesting inputs. 
+
+One of the configurations that we will really focus on in the course is the output of a system when the **input is a step function.** This is often the case when we specify a reference input such as the desired temperature of a room or the desired speed in cruise control of a car, and are interested in seeing if we get a "good" output. 
+
+For example, consider the system of @exr-LDE-TF. What is the output when the input is a step function (assuming that the system starts from a zero initial state)?
+
+To compute this, recall
+$$
+\mathbb{1}(t) \xleftrightarrow{\quad \mathcal L\quad} \frac 1s.
+$$
+
+Thus, $R(s) = 1/s$. We had already identified that $G(s) = 1/(s+2)$. Thus,
+\begin{align*}
+C(s) &= G(s) R(s) \\
+     &= \frac{1}{s(s+2)} \\
+     &= \frac{ \frac 12 }{s} - \frac{ \frac 12 }{ s + 2 }
+     \quad \text{[By partial fraction expansion]}.
+\end{align*}
+Thus,
+$$
+  c(t) = \left[ \frac 12 - \frac 12 e^{-2t} \right] \mathbb{1}(t).
+$$
+
+## Poles and Zeros of a Transfer Function
+
+The TF of an LTI system is always of the form:
+$$
+G(s) 
+= \frac{b_m s^m + b_{m-1} s^{m-1} + \cdots + b_m}
+{a_n s^n + a_{n-1} s^{n-1} + \cdots + a_0}.
+$$
+
+Both the numerator and the denominator are polynomials in $s$. So, we can factorize them and write the TF as 
+$$
+G(s) 
+= K
+\frac{(s-z_1)(s-z_2) \cdots (s - z_m)}
+{(s-p_1)(s-p_2)\cdots (s-p_n)}.
+$$
+The roots of the numerator are called the **zeros** (because $G(z_i) = 0$). The roots of the denominator are called **poles** (because $G(p_i) = \infty$ and if we plot $G(s)$ it will have a peak going to $∞$ at $p_i$; this peak looks like a pole). The constant $K$ is called the **gain** (because, when none of the poles and zeros are at origin, the step response of $G(s)$ will have a steady state value of $K$). 
+
+We often represent the poles and zeros using a **pole-zero plot.**
+
+::: {#exm-pole-zero}
+#### Pole-zero plot
+Consder
+$$G(s) = \frac{s+2}{(s+1)^2 + 1^2}.$$
+The poles are $-1 \pm j$ and the zero is $-2$. The pole-zero plot is shown below, where the location of the pole is represented by a "cross" and the location of the zero is represented by a "circle". 
+
+<!-- TODO: Add ojs plot -->
+:::
+
+Since the polynomials in the numerator and denominator of $G(s)$ have real coefficients, the roots are either real or occur in complex conjugate pairs. So, the poles and zeros either lie on the $σ$-axis or are symmetric about the $σ$-axis. 
+
+
+## BIBO Stability
+
+Recall that an LTI system with impulse response $g(t)$ is BIBO stable if
+$$
+\int_{-∞}^{∞} |g(t)| dt < \infty.
+$$
+
+For a causal system, this is equivalent to 
+$$
+\int_{0^{-}}^{∞} |g(t)| dt < ∞.
+$$
+
+This implies that for any $σ \in \reals$, $σ > 0$, we have 
+$$
+\int_{0^{-}}^{∞} |g(t)| e^{-σt} dt < ∞. 
+$$
+
+Therefore, there can be no pole in the open right hand plane $\{ (σ + j ω) : σ > 0 \}$. Thus, we have the following:
+
+> A causal LTI system is stable if all poles are in the open left hand plane. 
+
+If there are poles on the $j ω$ axis and the poles have multiplicity 1, then the system is **marginally stable**; if poles have multiplicity greater than 1, then the system is unstable.
+
+In the next lecture, we will see how to use the poles to identify the step response of the system.
+
+
