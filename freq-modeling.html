@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.550">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -132,6 +166,8 @@ window.MathJax = {
 };
 </script>
 <script async="" data-id="101261731" src="//static.getclicky.com/js"></script>
+<script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 <meta name="mermaid-theme" content="neutral">
 <script src="site_libs/quarto-diagram/mermaid.min.js"></script>
 <script src="site_libs/quarto-diagram/mermaid-init.js"></script>
@@ -203,7 +239,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01-review.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./freq-modeling.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -223,7 +259,7 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./01-review.html" class="sidebar-item-text sidebar-link active">
+  <a href="./freq-modeling.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></span></a>
   </div>
 </li>
@@ -239,11 +275,11 @@ window.Quarto = {
   <ul>
   <li><a href="#unilateral-laplace-transforms" id="toc-unilateral-laplace-transforms" class="nav-link active" data-scroll-target="#unilateral-laplace-transforms"><span class="header-section-number">1.1</span> Unilateral Laplace Transforms</a></li>
   <li><a href="#the-transfer-function" id="toc-the-transfer-function" class="nav-link" data-scroll-target="#the-transfer-function"><span class="header-section-number">1.2</span> The Transfer Function</a></li>
-  <li><a href="#step-response" id="toc-step-response" class="nav-link" data-scroll-target="#step-response"><span class="header-section-number">1.3</span> Step Response</a></li>
-  <li><a href="#poles-and-zeros-of-a-transfer-function" id="toc-poles-and-zeros-of-a-transfer-function" class="nav-link" data-scroll-target="#poles-and-zeros-of-a-transfer-function"><span class="header-section-number">1.4</span> Poles and Zeros of a Transfer Function</a></li>
-  <li><a href="#bibo-stability" id="toc-bibo-stability" class="nav-link" data-scroll-target="#bibo-stability"><span class="header-section-number">1.5</span> BIBO Stability</a></li>
+  <li><a href="#poles-and-zeros-of-a-transfer-function" id="toc-poles-and-zeros-of-a-transfer-function" class="nav-link" data-scroll-target="#poles-and-zeros-of-a-transfer-function"><span class="header-section-number">1.3</span> Poles and Zeros of a Transfer Function</a></li>
+  <li><a href="#bibo-stability" id="toc-bibo-stability" class="nav-link" data-scroll-target="#bibo-stability"><span class="header-section-number">1.4</span> BIBO Stability</a></li>
+  <li><a href="#step-response" id="toc-step-response" class="nav-link" data-scroll-target="#step-response"><span class="header-section-number">1.5</span> Step Response</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/01-review.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/freq-modeling.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -431,28 +467,11 @@ Solution
 </div>
 </div>
 <p>In this course, we will assume that the system is specified either as a LDE or as a TF. The textbook provides detailed examples of how to derive either the LDE or the TF from a physical system such as an electric circuit or a spring-mass system.</p>
-<p>Later in the course we will also study other equivalent forms of representing the system such as state space equations and Bode plots.</p>
+<p>We present an alternative representation of the TF (pole-zero plot) in the next section. Later in the course we will also study other equivalent forms of representing the system such as state space equations and Bode plots.</p>
 <p>A final remark. In all the systems that we consider in this course, we will assume that <span class="math inline">\(m &lt; n\)</span>. So, the denominator of the TF has a strictly higher degree than the numerator. Such transfer functions are called <strong>proper</strong>. It is possible to have causal systems where <span class="math inline">\(m=n\)</span> but we will not consider that in this course. As a consequence, when we consider state space representation in future lectures, we will get formulas which are simpler than more general formulas which you may find at other sources.</p>
 </section>
-<section id="step-response" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="step-response"><span class="header-section-number">1.3</span> Step Response</h2>
-<p>Since we can easily compute the TF from the LDE, we can compute the output for interesting inputs.</p>
-<p>One of the configurations that we will really focus on in the course is the output of a system when the <strong>input is a step function.</strong> This is often the case when we specify a reference input such as the desired temperature of a room or the desired speed in cruise control of a car, and are interested in seeing if we get a “good” output.</p>
-<p>For example, consider the system of <a href="#exr-LDE-TF" class="quarto-xref">Exercise&nbsp;<span>1.2</span></a>. What is the output when the input is a step function (assuming that the system starts from a zero initial state)?</p>
-<p>To compute this, recall <span class="math display">\[
-\mathbb{1}(t) \xleftrightarrow{\quad \mathcal L\quad} \frac 1s.
-\]</span></p>
-<p>Thus, <span class="math inline">\(R(s) = 1/s\)</span>. We had already identified that <span class="math inline">\(G(s) = 1/(s+2)\)</span>. Thus, <span class="math display">\[\begin{align*}
-C(s) &amp;= G(s) R(s) \\
-     &amp;= \frac{1}{s(s+2)} \\
-     &amp;= \frac{ \frac 12 }{s} - \frac{ \frac 12 }{ s + 2 }
-     \quad \text{[By partial fraction expansion]}.
-\end{align*}\]</span> Thus, <span class="math display">\[
-  c(t) = \left[ \frac 12 - \frac 12 e^{-2t} \right] \mathbb{1}(t).
-\]</span></p>
-</section>
-<section id="poles-and-zeros-of-a-transfer-function" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="poles-and-zeros-of-a-transfer-function"><span class="header-section-number">1.4</span> Poles and Zeros of a Transfer Function</h2>
+<section id="poles-and-zeros-of-a-transfer-function" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="poles-and-zeros-of-a-transfer-function"><span class="header-section-number">1.3</span> Poles and Zeros of a Transfer Function</h2>
 <p>The TF of an LTI system is always of the form: <span class="math display">\[
 G(s)
 = \frac{b_m s^m + b_{m-1} s^{m-1} + \cdots + b_m}
@@ -465,18 +484,54 @@ G(s)
 {(s-p_1)(s-p_2)\cdots (s-p_n)}.
 \]</span> The roots of the numerator are called the <strong>zeros</strong> (because <span class="math inline">\(G(z_i) = 0\)</span>). The roots of the denominator are called <strong>poles</strong> (because <span class="math inline">\(G(p_i) = \infty\)</span> and if we plot <span class="math inline">\(G(s)\)</span> it will have a peak going to <span class="math inline">\(∞\)</span> at <span class="math inline">\(p_i\)</span>; this peak looks like a pole). The constant <span class="math inline">\(K\)</span> is called the <strong>gain</strong> (because, when none of the poles and zeros are at origin, the step response of <span class="math inline">\(G(s)\)</span> will have a steady state value of <span class="math inline">\(K\)</span>).</p>
 <p>We often represent the poles and zeros using a <strong>pole-zero plot.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb1" data-startfrom="176" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 175;"><span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a>PZplot <span class="op">=</span> <span class="kw">function</span>(zeros<span class="op">,</span> poles<span class="op">,</span> xdomain<span class="op">,</span> ydomain) {</span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>    <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a>    <span class="dt">x</span><span class="op">:</span> { <span class="dt">domain</span><span class="op">:</span> xdomain}<span class="op">,</span></span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a>    <span class="dt">y</span><span class="op">:</span> { <span class="dt">domain</span><span class="op">:</span> ydomain}<span class="op">,</span></span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a>    <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Axes</span></span>
+<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">ruleX</span>([<span class="dv">0</span>])<span class="op">,</span></span>
+<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="dv">0</span>])<span class="op">,</span></span>
+<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Data</span></span>
+<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">dot</span>(zeros<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span><span class="st">"σ"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span><span class="st">"jω"</span><span class="op">,</span> <span class="dt">r</span><span class="op">:</span> <span class="dv">5</span>})<span class="op">,</span></span>
+<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">dot</span>(poles<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span><span class="st">"σ"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span><span class="st">"jω"</span><span class="op">,</span> <span class="dt">symbol</span><span class="op">:</span> <span class="st">"times"</span><span class="op">,</span> <span class="dt">r</span><span class="op">:</span> <span class="dv">5</span>})<span class="op">,</span></span>
+<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
 <div id="exm-pole-zero" class="theorem example">
 <p><span class="theorem-title"><strong>Example 1.1 (Pole-zero plot)</strong></span> Consder <span class="math display">\[G(s) = \frac{s+2}{(s+1)^2 + 1^2}.\]</span> The poles are <span class="math inline">\(-1 \pm j\)</span> and the zero is <span class="math inline">\(-2\)</span>. The pole-zero plot is shown below, where the location of the pole is represented by a “cross” and the location of the zero is represented by a “circle”.</p>
-<!-- TODO: Add ojs plot -->
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb2" data-startfrom="201" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 200;"><span id="cb2-201"><a href="#cb2-201" aria-hidden="true" tabindex="-1"></a><span class="fu">PZplot</span>(</span>
+<span id="cb2-202"><a href="#cb2-202" aria-hidden="true" tabindex="-1"></a>       [ {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span> </span>
+<span id="cb2-203"><a href="#cb2-203" aria-hidden="true" tabindex="-1"></a>       [ { <span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">1</span> } ]<span class="op">,</span></span>
+<span id="cb2-204"><a href="#cb2-204" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">3</span><span class="op">,</span> <span class="dv">3</span>]<span class="op">,</span></span>
+<span id="cb2-205"><a href="#cb2-205" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">3</span><span class="op">,</span> <span class="dv">3</span>]<span class="op">,</span></span>
+<span id="cb2-206"><a href="#cb2-206" aria-hidden="true" tabindex="-1"></a>      )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
 </div>
 <p>Since the polynomials in the numerator and denominator of <span class="math inline">\(G(s)\)</span> have real coefficients, the roots are either real or occur in complex conjugate pairs. So, the poles and zeros either lie on the <span class="math inline">\(σ\)</span>-axis or are symmetric about the <span class="math inline">\(σ\)</span>-axis.</p>
+<p>Note that the pole-zero plot does not capture the gain of the TF.</p>
 </section>
-<section id="bibo-stability" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="bibo-stability"><span class="header-section-number">1.5</span> BIBO Stability</h2>
-<p>Recall that an LTI system with impulse response <span class="math inline">\(g(t)\)</span> is BIBO stable if <span class="math display">\[
+<section id="bibo-stability" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="bibo-stability"><span class="header-section-number">1.4</span> BIBO Stability</h2>
+<p>Recall from Signals and Systems that an LTI system with impulse response <span class="math inline">\(g(t)\)</span> is BIBO stable if <span class="math display">\[
 \int_{-∞}^{∞} |g(t)| dt &lt; \infty.
 \]</span></p>
-<p>For a causal system, this is equivalent to <span class="math display">\[
+<p>For a causal system (i.e., a system for which <span class="math inline">\(g(t) = 0\)</span> for <span class="math inline">\(t &lt; 0\)</span>), this is equivalent to <span class="math display">\[
 \int_{0^{-}}^{∞} |g(t)| dt &lt; ∞.
 \]</span></p>
 <p>This implies that for any <span class="math inline">\(σ \in \reals\)</span>, <span class="math inline">\(σ &gt; 0\)</span>, we have <span class="math display">\[
@@ -486,13 +541,133 @@ G(s)
 <blockquote class="blockquote">
 <p>A causal LTI system is stable if all poles are in the open left hand plane.</p>
 </blockquote>
+<div class="sourceCode cell-code hidden" id="cb3" data-startfrom="246" data-source-offset="-1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 245;"><span id="cb3-246"><a href="#cb3-246" aria-hidden="true" tabindex="-1"></a><span class="fu">PZplot</span>(</span>
+<span id="cb3-247"><a href="#cb3-247" aria-hidden="true" tabindex="-1"></a>       [ {<span class="dt">σ</span><span class="op">:</span> <span class="fl">1.5</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span> </span>
+<span id="cb3-248"><a href="#cb3-248" aria-hidden="true" tabindex="-1"></a>       [ { <span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="fl">1.5</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span></span>
+<span id="cb3-249"><a href="#cb3-249" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb3-250"><a href="#cb3-250" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb3-251"><a href="#cb3-251" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb3-252"><a href="#cb3-252" aria-hidden="true" tabindex="-1"></a><span class="fu">PZplot</span>(</span>
+<span id="cb3-253"><a href="#cb3-253" aria-hidden="true" tabindex="-1"></a>       [ {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="fl">1.5</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span> </span>
+<span id="cb3-254"><a href="#cb3-254" aria-hidden="true" tabindex="-1"></a>       [ { <span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">1</span> }<span class="op">,</span> { <span class="dt">σ</span><span class="op">:</span> <span class="fl">1.5</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span> } ]<span class="op">,</span></span>
+<span id="cb3-255"><a href="#cb3-255" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb3-256"><a href="#cb3-256" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb3-257"><a href="#cb3-257" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb3-258"><a href="#cb3-258" aria-hidden="true" tabindex="-1"></a><span class="fu">PZplot</span>(</span>
+<span id="cb3-259"><a href="#cb3-259" aria-hidden="true" tabindex="-1"></a>       [ {<span class="dt">σ</span><span class="op">:</span> <span class="fl">1.5</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span> </span>
+<span id="cb3-260"><a href="#cb3-260" aria-hidden="true" tabindex="-1"></a>       [ { <span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span></span>
+<span id="cb3-261"><a href="#cb3-261" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb3-262"><a href="#cb3-262" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb3-263"><a href="#cb3-263" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb3-264"><a href="#cb3-264" aria-hidden="true" tabindex="-1"></a><span class="fu">PZplot</span>(</span>
+<span id="cb3-265"><a href="#cb3-265" aria-hidden="true" tabindex="-1"></a>       [ {<span class="dt">σ</span><span class="op">:</span> <span class="fl">1.5</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span> </span>
+<span id="cb3-266"><a href="#cb3-266" aria-hidden="true" tabindex="-1"></a>       [ { <span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="fl">0.02</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>}<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="fl">0.02</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span></span>
+<span id="cb3-267"><a href="#cb3-267" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb3-268"><a href="#cb3-268" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb3-269"><a href="#cb3-269" aria-hidden="true" tabindex="-1"></a>      )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="fig-ojs-cell-3" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ojs-cell-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-ojs-cell-3" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-ojs-cell-3-1" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-ojs-cell-3-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div id="ojs-cell-3-1" data-nodetype="expression">
+
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-ojs-cell-3-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Stable systems
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-ojs-cell-3" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-ojs-cell-3-2" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-ojs-cell-3-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div id="ojs-cell-3-2" data-nodetype="expression">
+
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-ojs-cell-3-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Unstable systems
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-ojs-cell-3" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-ojs-cell-3-3" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-ojs-cell-3-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div id="ojs-cell-3-3" data-nodetype="expression">
+
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-ojs-cell-3-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(c) Marginally systems
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-ojs-cell-3" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-ojs-cell-3-4" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-ojs-cell-3-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div id="ojs-cell-3-4" data-nodetype="expression">
+
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-ojs-cell-3-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(d) Unstable systems (double pole at origin)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ojs-cell-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.1: Illustration of stable and unstable systems
+</figcaption>
+</figure>
+</div>
 <p>If there are poles on the <span class="math inline">\(j ω\)</span> axis and the poles have multiplicity 1, then the system is <strong>marginally stable</strong>; if poles have multiplicity greater than 1, then the system is unstable.</p>
 <p>In the next lecture, we will see how to use the poles to identify the step response of the system.</p>
+</section>
+<section id="step-response" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="step-response"><span class="header-section-number">1.5</span> Step Response</h2>
+<p>One of the configurations that we will really focus on in the course is the output of a <em>stable</em> system when the <strong>input is a step function.</strong> This is often the case when we specify a reference input such as the desired temperature of a room or the desired speed in cruise control of a car, and are interested in seeing if we get a “good” output. Note that this question is only of interest for stable systems. If the system is unstable, then the output will go to infinity.</p>
+<p>As an example, consider the system of <a href="#exr-LDE-TF" class="quarto-xref">Exercise&nbsp;<span>1.2</span></a>. What is the output when the input is a step function (assuming that the system starts from a zero initial state)?</p>
+<p>To compute this, recall <span class="math display">\[
+\mathbb{1}(t) \xleftrightarrow{\quad \mathcal L\quad} \frac 1s.
+\]</span></p>
+<p>Thus, <span class="math inline">\(R(s) = 1/s\)</span>. We had already identified that <span class="math inline">\(G(s) = 1/(s+2)\)</span>. Thus, <span class="math display">\[\begin{align*}
+C(s) &amp;= G(s) R(s) \\
+     &amp;= \frac{1}{s(s+2)} \\
+     &amp;= \frac{ \frac 12 }{s} - \frac{ \frac 12 }{ s + 2 }
+     \quad \text{[By partial fraction expansion]}.
+\end{align*}\]</span> Thus, <span class="math display">\[
+  c(t) = \left[ \frac 12 - \frac 12 e^{-2t} \right] \mathbb{1}(t).
+\]</span></p>
 
 
 </section>
 
 </main> <!-- /main -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IlBacGxvdCA9IGZ1bmN0aW9uKHplcm9zLCBwb2xlcywgeGRvbWFpbiwgeWRvbWFpbikge1xuICByZXR1cm4gUGxvdC5wbG90KHtcbiAgICBncmlkOiB0cnVlLFxuICAgIHg6IHsgZG9tYWluOiB4ZG9tYWlufSxcbiAgICB5OiB7IGRvbWFpbjogeWRvbWFpbn0sXG5cbiAgICBtYXJrczogW1xuICAgICAgLy8gQXhlc1xuICAgICAgUGxvdC5ydWxlWChbMF0pLFxuICAgICAgUGxvdC5ydWxlWShbMF0pLFxuICAgICAgLy8gRGF0YVxuICAgICAgUGxvdC5kb3QoemVyb3MsIHt4Olwiz4NcIiwgeTpcImrPiVwiLCByOiA1fSksXG4gICAgICBQbG90LmRvdChwb2xlcywge3g6XCLPg1wiLCB5Olwias+JXCIsIHN5bWJvbDogXCJ0aW1lc1wiLCByOiA1fSksXG4gICAgXVxuICB9KVxufVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0yIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiUFpwbG90KFxuICAgICAgIFsge8+DOiAtMiwgas+JOiAwfSBdLCBcbiAgICAgICBbIHsgz4M6IC0xLCBqz4k6IC0xIH0sIHvPgzogLTEsIGrPiTogMSB9IF0sXG4gICAgICAgWy0zLCAzXSxcbiAgICAgICBbLTMsIDNdLFxuICAgICAgKVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0zIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiXG5QWnBsb3QoXG4gICAgICAgWyB7z4M6IDEuNSwgas+JOiAwfSBdLCBcbiAgICAgICBbIHsgz4M6IC0xLCBqz4k6IC0xIH0sIHvPgzogLTEsIGrPiTogMSB9LCB7z4M6IC0xLjUsIGrPiTogMH0gXSxcbiAgICAgICBbLTIsIDJdLFxuICAgICAgIFstMiwgMl0sXG4gICAgICApXG5cblBacGxvdChcbiAgICAgICBbIHvPgzogLTEuNSwgas+JOiAwfSBdLCBcbiAgICAgICBbIHsgz4M6IC0xLCBqz4k6IC0xIH0sIHvPgzogLTEsIGrPiTogMSB9LCB7IM+DOiAxLjUsIGrPiTogMCB9IF0sXG4gICAgICAgWy0yLCAyXSxcbiAgICAgICBbLTIsIDJdLFxuICAgICAgKVxuXG5QWnBsb3QoXG4gICAgICAgWyB7z4M6IDEuNSwgas+JOiAwfSBdLCBcbiAgICAgICBbIHsgz4M6IC0xLCBqz4k6IC0xIH0sIHvPgzogLTEsIGrPiTogMSB9LCB7z4M6IDAsIGrPiTogMH0gXSxcbiAgICAgICBbLTIsIDJdLFxuICAgICAgIFstMiwgMl0sXG4gICAgICApXG5cblBacGxvdChcbiAgICAgICBbIHvPgzogMS41LCBqz4k6IDB9IF0sIFxuICAgICAgIFsgeyDPgzogLTEsIGrPiTogLTEgfSwge8+DOiAtMSwgas+JOiAxIH0sIHvPgzogLTAuMDIsIGrPiTogMH0sIHvPgzogMC4wMiwgas+JOiAwfSBdLFxuICAgICAgIFstMiwgMl0sXG4gICAgICAgWy0yLCAyXSxcbiAgICAgIClcblxuIn1dfQ==
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../..";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -716,6 +891,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/adityam\.github\.io\/linear-systems\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -750,7 +943,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
@@ -1038,5 +1235,5 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/01-review.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div></div></footer><script src="site_libs/quarto-html/zenscroll-min.js"></script>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/freq-modeling.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div></div></footer><script src="site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>
