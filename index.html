@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Aditya Mahajan">
+<meta name="dcterms.date" content="2024-06-06">
+<meta name="description" content="Course Notes for ECSE 307 (McGill University)">
+
+<title>Linear Systems and Control</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./01-review.html" rel="next">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="site_libs/quarto-contrib/nutshell-1.0.6/nutshell.js"></script>
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script>
+// https://github.com/mathjax/MathJax/issues/2744#issuecomment-1658624747
+// To fix the bug that uppercase unicode letters are shown in italic
+window.MathJax = {
+  startup: {
+    ready() {
+      const {RANGES} = MathJax._.core.MmlTree.OperatorDictionary;
+      const {TEXCLASS} = MathJax._.core.MmlTree.MmlNode;
+      RANGES.splice(4, 1,
+        [0x0370, 0x0385, TEXCLASS.ORD, 'mi'],
+        [0x0386, 0x3AB, TEXCLASS.ORD, 'mi', 'normal'],
+        [0x03AC, 0x1A20, TEXCLASS.ORD, 'mi']
+      );
+      MathJax.startup.defaultReady();
+    }
+  },
+  tex: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+    processEscapes: true,
+    tags: "ams",
+    macros: {
+      PR: "\\mathbb{P}",
+      EXP: "\\mathbb{E}",
+      IND: "\\mathbb{I}",
+      ONES: "\\mathbb{1}",
+      reals: "\\mathbb{R}",
+      integers: "\\mathbb{Z}",
+      BLANK: "\\mathfrak{E}",
+      TRANS: "\\intercal",
+      BELLMAN: "\\mathcal{B}",
+      RICCATI: "\\mathcal{R}",
+      GAIN: "\\mathcal{G}",
+      GREEDY: "\\mathcal{G}",
+      MISMATCH: "\\mathcal{D}",
+      VEC: "\\operatorname{vec}",
+      diag: "\\operatorname{diag}",
+      ROWS: "\\operatorname{vec}",
+      TR: "\\operatorname{Tr}",   
+      SPAN: "\\operatorname{sp}",   
+      DRE: "\\operatorname{DRE}",   
+      DARE: "\\operatorname{DARE}",   
+      LQR: "\\operatorname{LQR}",   
+      ALPHABET: ["\\mathcal{#1}", 1],
+      MATRIX: ["\\begin{bmatrix} #1 \\end{bmatrix}", 1],
+      NORM: ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1],
+      ABS: ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1],
+      GRAD: "\\nabla",
+      IP: ["\\left\\langle #1, #2 \\right\\rangle", 2]
+    },
+  },
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  },
+};
+</script>
+<script async="" data-id="101261731" src="//static.getclicky.com/js"></script>
+
+
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./../linear-systems/index.html"> 
+<span class="menu-text">Linear Control Systems</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools tools-wide">
+    <a href="https://github.com/adityam/linear-systems" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Course Outline</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Course Outline</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01-review.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#course-outline" id="toc-course-outline" class="nav-link active" data-scroll-target="#course-outline">Course Outline</a>
+  <ul class="collapse">
+  <li><a href="#general-information" id="toc-general-information" class="nav-link" data-scroll-target="#general-information">General Information (Fall 2024)</a></li>
+  <li><a href="#graduate-attributes-and-learning-outcomes" id="toc-graduate-attributes-and-learning-outcomes" class="nav-link" data-scroll-target="#graduate-attributes-and-learning-outcomes">Graduate Attributes and Learning Outcomes</a></li>
+  <li><a href="#course-content" id="toc-course-content" class="nav-link" data-scroll-target="#course-content">Course Content</a></li>
+  <li><a href="#lab-schedule" id="toc-lab-schedule" class="nav-link" data-scroll-target="#lab-schedule">Lab Schedule</a></li>
+  <li><a href="#course-material" id="toc-course-material" class="nav-link" data-scroll-target="#course-material">Course Material</a></li>
+  <li><a href="#evaluation" id="toc-evaluation" class="nav-link" data-scroll-target="#evaluation">Evaluation</a></li>
+  <li><a href="#marking-policy" id="toc-marking-policy" class="nav-link" data-scroll-target="#marking-policy">Marking policy</a></li>
+  <li><a href="#course-delivery" id="toc-course-delivery" class="nav-link" data-scroll-target="#course-delivery">Course delivery</a></li>
+  <li><a href="#additional-notes" id="toc-additional-notes" class="nav-link" data-scroll-target="#additional-notes">Additional Notes</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Linear Systems and Control</h1>
+</div>
+
+<div>
+  <div class="description">
+    Course Notes for ECSE 307 (McGill University)
+  </div>
+</div>
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://adityam.github.io">Aditya Mahajan</a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://www.mcgill.ca/ece">
+            McGill University
+            </a>
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Updated</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 6, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="course-outline" class="level1 unnumbered">
+<h1 class="unnumbered">Course Outline</h1>
+<section id="general-information" class="level2">
+<h2 class="anchored" data-anchor-id="general-information">General Information (Fall 2024)</h2>
+<dl>
+<dt>Instructor</dt>
+<dd>
+<ul>
+<li>Aditya Mahajan</li>
+<li><em>Office Hours</em>: TBD</li>
+</ul>
+</dd>
+<dt>Teaching Assistants</dt>
+<dd>
+<ul>
+<li><p>TBD</p></li>
+</ul>
+</dd>
+<dt>Lectures</dt>
+<dd>
+<ul>
+<li><p>10:05am–11:25am Tuesday, Thursday (ENGMC 11)</p></li>
+</ul>
+</dd>
+<dt>Tutorials</dt>
+<dd>
+<ul>
+<li><p>8:35am–10:25am Friday, (ENGMC 11)</p></li>
+</ul>
+</dd>
+</dl>
+<p>Everyone <strong>must</strong> be registered for the tutorial. Tutorials start from the <strong>second</strong> week of classes.</p>
+<dl>
+<dt>Labs</dt>
+<dd>
+<ul>
+<li><p>1:35pm-3:25pm Monday (TR 4090)</p></li>
+</ul>
+</dd>
+<dd>
+<ul>
+<li><p>3:35pm–5:25pm Monday (TR 4090)</p></li>
+</ul>
+</dd>
+<dd>
+<ul>
+<li><p>1:35pm–3:25pm Tuesday (TR 4090)</p></li>
+</ul>
+</dd>
+<dd>
+<ul>
+<li><p>1:35pm–3:25pm Wednesday (TR 4090)</p></li>
+</ul>
+</dd>
+<dd>
+<ul>
+<li><p>1:35pm–3:25pm Friday (TR 4090)</p></li>
+</ul>
+</dd>
+</dl>
+<p>Everyone <strong>must</strong> be registered for one lab. Labs start from the <strong>second</strong> week of classes.</p>
+<p>The labs have to be done in groups of two. The groups will be formed in the first week of classs.</p>
+<dl>
+<dt>Prerequisites</dt>
+<dd>
+<ul>
+<li>ECSE 206 (Fundamentals of Signals and Systems)</li>
+<li>ECSE 210 (Electrical Circuits 2)</li>
+</ul>
+</dd>
+<dt>Communication</dt>
+<dd>
+<span class="text-info">Use the discussion board on myCourses</span> for all questions related to the course. Only personal emails related to medical exceptions for missing a deliverable will be answered.
+</dd>
+</dl>
+</section>
+<section id="graduate-attributes-and-learning-outcomes" class="level2">
+<h2 class="anchored" data-anchor-id="graduate-attributes-and-learning-outcomes">Graduate Attributes and Learning Outcomes</h2>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Attribute</th>
+<th>Description</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>KB</td>
+<td>Knowledge Base for Engineering</td>
+<td>Developed</td>
+</tr>
+<tr class="even">
+<td>PA</td>
+<td>Problem Analysis</td>
+<td>Developed</td>
+</tr>
+<tr class="odd">
+<td>IN</td>
+<td>Investigation</td>
+<td>Developed</td>
+</tr>
+<tr class="even">
+<td>DE</td>
+<td>Design</td>
+<td>Introduced</td>
+</tr>
+</tbody>
+</table>
+<p>Upon the successful completion of this course, the student students will have demonstrated the ability to:</p>
+<ul>
+<li>Apply time- and frequency-domain tools to analyze linear time-invariant systems (KB, PA)</li>
+<li>Design controllers based on state-space methods and lead-lag compensators to meet time-response specifications (KB, PA, DE)</li>
+<li>Use Matlab to analyze and synthesize controllers for linear time-invariant systems (DE, IN)</li>
+</ul>
+</section>
+<section id="course-content" class="level2">
+<h2 class="anchored" data-anchor-id="course-content">Course Content</h2>
+<table class="table-striped table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 90%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Week</th>
+<th style="text-align: left;">Material Covered</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td style="text-align: left;">Review of LTI Systems and Laplace Transforms</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td style="text-align: left;">Pole Zero Plot Step response of first and second order systems, dominant pole approximation</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td style="text-align: left;">State-space modeling, canoncial forms, transfer function of state space models</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td style="text-align: left;">Matrix exponential and solution of matrix differential equations, time response of state space models</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td style="text-align: left;">Pole placement, controllability, and state feedback</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td style="text-align: left;">Luenberger observer, observability, output feedback, and separation principle</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td style="text-align: left;">Review and Mid-Term</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td style="text-align: left;">Routh-Hurwitz stability criterion. Special cases: zero in first column, row of zeros.</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td style="text-align: left;">Block diagrams, rules for simplifying block diagrams, block diagram implementations of canonical forms of state space models</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td style="text-align: left;">System type, steady state error, disturbance rejection and sensitivity</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td style="text-align: left;">Bode and Nyquist Plots</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td style="text-align: left;">Nyquist stability criterion, gain and phase margins</td>
+</tr>
+<tr class="odd">
+<td>13</td>
+<td style="text-align: left;">Lead-Lag compensators</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="lab-schedule" class="level2">
+<h2 class="anchored" data-anchor-id="lab-schedule">Lab Schedule</h2>
+<table class="table-striped table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 90%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Week</th>
+<th style="text-align: left;">Lab</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td style="text-align: left;">No Labs</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td style="text-align: left;">Lab 1 : Introduction to Matlab</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td style="text-align: left;">Lab 2 : Transfer functions and step response</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td style="text-align: left;">Lab 3 : System identification via Step Response</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td style="text-align: left;">Lab 4 : Eigenvalues and eigenvectors</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td style="text-align: left;">Lab 5 : State-Feedback Control (in simulation)</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td style="text-align: left;">Lab 6 : State-Feedback Control (in hardware)</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td style="text-align: left;">Lab 7 : Luenberger Observer for State Estimation</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td style="text-align: left;">Lab 8 : Output-Feedback Control</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td style="text-align: left;">Lab 9 : Block Diagram Reduction using Matlab</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td style="text-align: left;">Lab 10 : System identification via Bode Plots</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td style="text-align: left;">Lab 11 : Nyquist stability criterion</td>
+</tr>
+<tr class="odd">
+<td>13</td>
+<td style="text-align: left;">Lab 12 : Lead-Lag compensator design</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="course-material" class="level2">
+<h2 class="anchored" data-anchor-id="course-material">Course Material</h2>
+<dl>
+<dt>Textbook</dt>
+<dd>
+<ul>
+<li><p>N. Nise, <em>Control Systems Engineering,</em> 7th Ed., Wiley</p>
+<p>Both paper and electronic versions of the textbook are available from the McGill bookstore. The electronic version of the book is also available from the publisher’s website and Google books.</p></li>
+</ul>
+</dd>
+<dt>Reference Books</dt>
+<dd>
+<ul>
+<li>G.F. Franklin, J. Powell, A. Emani-Naeini, <em>Feedback Control of Dynamical Systems</em>, 7th Ed., Pearson.</li>
+<li>K. Oagata, <em>Modern Control Engineering</em>, 5th Ed., Pearson.</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="evaluation" class="level2">
+<h2 class="anchored" data-anchor-id="evaluation">Evaluation</h2>
+<ul>
+<li><p><strong>Assignments (20%)</strong> Weekly homework assignments. Typically, each assignment will consist of four questions, out of which one or two randomly selected questions will be grader. The lowest two homework assignments will be dropped.</p></li>
+<li><p><strong>Laboratory (20%)</strong> In-person weekly labs, to be conducted in groups of two. At the end of each lab, each group has to submit a lab report by filling in a Matlab Livescript template provided as part of the lab assignment.</p></li>
+<li><p><strong>Mid Term (20%)</strong> Closed book in-class exam. <span class="text-danger"><strong>Oct 10</strong></span> (during class time)</p></li>
+<li><p><strong>Final Exam (40%)</strong> Closed book, in-person exam. Will be scheduled by the exam office and the dates will be announced later.</p>
+<p>The final exam will cover <strong>all</strong> the material seen in the class during the term.</p></li>
+</ul>
+</section>
+<section id="marking-policy" class="level2">
+<h2 class="anchored" data-anchor-id="marking-policy">Marking policy</h2>
+<ul>
+<li><p>Assignments must be submitted electronically on myCourses as a PDF. You may write the assignments on paper and then scan them as a PDF (there are several such apps available for all phone platforms), or write on a tablet and convert to PDF, or type using a word processor.</p></li>
+<li><p><strong>There will no make-up examination</strong> for students who miss a mid-term.</p>
+<ul>
+<li><p>Student who miss the exam due to a valid reason (see <a href="https://www.mcgill.ca/engineering/students/undergraduate/courses-registration/exams-assessment/midterms-and-class-tests/adjustments-missed-midterms-and-class-tests">Faculty of Engineering policy</a>) should <strong>notify the instructor within a week</strong> of the exam and provide <strong>necessary documentation</strong>.</p></li>
+<li><p>If, and only if, proper documentation for a missed exam is presented, the marks for the missed exam will be shifted to the final exam.</p></li>
+<li><p>Students who miss the mid-term exam for any other reason (e.g., no medical note, going to the exam at the wrong time, or on the wrong day, etc.) will get zero marks on the exam.</p></li>
+</ul></li>
+<li><p>Any request for reevaluation of a mid-term or an assignment must be made <strong>in writing within a week of its return</strong>. Note that requesting a re-grade will mean that you <strong>WHOLE</strong> assignment or exam will be re-graded.</p></li>
+<li><p><span class="text-danger">Due to paucity of grading hours, only one or two randomly selected questions will be graded in each assignment.</span></p></li>
+<li><p>The lowest two assignments and labs will be dropped. There will be no make-up for missed assignments and labs, <em>even if it is for a valid reason.</em> The whole point of dropping the lowest two assignments/labs is to reduce the administrative overhead of keeping track of such missed assignments/labs.</p></li>
+</ul>
+<dl>
+<dt>Right to submit in English or French written work that is to be graded.</dt>
+<dd>
+In accord with McGill University’s <a href="https://www.mcgill.ca/secretariat/files/secretariat/charter_of_student_rights_last_approved_october_262017.pdf">Charter of Students’ Rights</a>, students in this course have the right to submit in English or in French any written work that is to be graded.
+</dd>
+<dt>Academic Integrity</dt>
+<dd>
+<p>McGill University values academic integrity. Therefore all students must understand the meaning and consequences of cheating, plagiarism and other academic offences under the <a href="https://www.mcgill.ca/secretariat/files/secretariat/code_of_student_conduct_and_disciplinary_procedures.pdf">Code of Student Conduct and Disciplinary Procedures</a> (see McGill’s <a href="http://www.mcgill.ca/students/srr/honest/">guide to academic honesty</a> for more information).</p>
+<p>L’université McGill attache une haute importance à l’honnêteté académique. Il incombe par conséquent à tous les étudiants de comprendre ce que l’on entend par tricherie, plagiat et autres infractions académiques, ainsi que les conséquences que peuvent avoir de telles actions, selon le <a href="https://www.mcgill.ca/secretariat/files/secretariat/code_of_student_conduct_and_disciplinary_procedures.pdf">Code de conduite de l’étudiant et des procédures disciplinaires</a> (pour de plus amples renseignements, veuillez consulter le <a href="http://www.mcgill.ca/students/srr/honest/">guide pour l’honnêteté académique</a> de McGill.)</p>
+</dd>
+</dl>
+</section>
+<section id="course-delivery" class="level2">
+<h2 class="anchored" data-anchor-id="course-delivery">Course delivery</h2>
+<p>The course is taught in a “chalk and board” style; there will be no power point presentations. All students are expected to attend lectures and take notes. Partial notes on some of the material will be provided, but are not a substitute for the material covered in class.</p>
+<p>© Instructor-generated course materials (e.g., handouts, notes, summaries, exam questions) are protected by law and may not be copied or distributed in any form or in any medium without explicit permission of the instructor. Note that infringements of copyright can be subject to follow up by the University under the Code of Student Conduct and Disciplinary Procedures.</p>
+</section>
+<section id="additional-notes" class="level2">
+<h2 class="anchored" data-anchor-id="additional-notes">Additional Notes</h2>
+<ul>
+<li><p>As the instructor of this course I endeavor to provide an inclusive learning environment. However, if you&nbsp;experience barriers to learning in this course, do not hesitate to discuss them with me or contact the office of <a href="https://www.mcgill.ca/access-achieve/">Student Accessibility and Achievement</a>.</p></li>
+<li><p><a href="http://www.mcgill.ca/mercury/">End-of-course evaluations</a> are one of the ways that McGill works towards maintaining and improving the quality of courses and the student’s learning experience. You will be notified by e-mail when the evaluations are available. Please note that a minimum number of responses must be received for results to be available to students.</p></li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./01-review.html" class="pagination-link" aria-label="Frequency domain modeling">
+        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div></div></footer><script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
