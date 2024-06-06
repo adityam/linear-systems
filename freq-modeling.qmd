@@ -1,5 +1,7 @@
 ---
 title: Frequency domain modeling
+execute:
+  echo: false
 ---
 
 :::{.callout-note icon=false appearance="simple"}
@@ -147,34 +149,9 @@ $$
 
 In this course, we will assume that the system is specified either as a LDE or as a TF. The textbook provides detailed examples of how to derive either the LDE or the TF from a physical system such as an electric circuit or a spring-mass system. 
 
-Later in the course we will also study other equivalent forms of representing the system such as state space equations and Bode plots.
+We present an alternative representation of the TF (pole-zero plot) in the next section. Later in the course we will also study other equivalent forms of representing the system such as state space equations and Bode plots.
 
 A final remark. In all the systems that we consider in this course, we will assume that $m < n$. So, the denominator of the TF has a strictly higher degree than the numerator. Such transfer functions are called **proper**. It is possible to have causal systems where $m=n$ but we will not consider that in this course. As a consequence, when we consider state space representation in future lectures, we will get formulas which are simpler than more general formulas which you may find at other sources. 
-
-## Step Response
-
-Since we can easily compute the TF from the LDE, we can compute the output for interesting inputs. 
-
-One of the configurations that we will really focus on in the course is the output of a system when the **input is a step function.** This is often the case when we specify a reference input such as the desired temperature of a room or the desired speed in cruise control of a car, and are interested in seeing if we get a "good" output. 
-
-For example, consider the system of @exr-LDE-TF. What is the output when the input is a step function (assuming that the system starts from a zero initial state)?
-
-To compute this, recall
-$$
-\mathbb{1}(t) \xleftrightarrow{\quad \mathcal L\quad} \frac 1s.
-$$
-
-Thus, $R(s) = 1/s$. We had already identified that $G(s) = 1/(s+2)$. Thus,
-\begin{align*}
-C(s) &= G(s) R(s) \\
-     &= \frac{1}{s(s+2)} \\
-     &= \frac{ \frac 12 }{s} - \frac{ \frac 12 }{ s + 2 }
-     \quad \text{[By partial fraction expansion]}.
-\end{align*}
-Thus,
-$$
-  c(t) = \left[ \frac 12 - \frac 12 e^{-2t} \right] \mathbb{1}(t).
-$$
 
 ## Poles and Zeros of a Transfer Function
 
@@ -196,26 +173,54 @@ The roots of the numerator are called the **zeros** (because $G(z_i) = 0$). The 
 
 We often represent the poles and zeros using a **pole-zero plot.**
 
+```{ojs}
+PZplot = function(zeros, poles, xdomain, ydomain) {
+  return Plot.plot({
+    grid: true,
+    x: { domain: xdomain},
+    y: { domain: ydomain},
+
+    marks: [
+      // Axes
+      Plot.ruleX([0]),
+      Plot.ruleY([0]),
+      // Data
+      Plot.dot(zeros, {x:"σ", y:"jω", r: 5}),
+      Plot.dot(poles, {x:"σ", y:"jω", symbol: "times", r: 5}),
+    ]
+  })
+}
+```
+
 ::: {#exm-pole-zero}
 #### Pole-zero plot
 Consder
 $$G(s) = \frac{s+2}{(s+1)^2 + 1^2}.$$
 The poles are $-1 \pm j$ and the zero is $-2$. The pole-zero plot is shown below, where the location of the pole is represented by a "cross" and the location of the zero is represented by a "circle". 
 
-<!-- TODO: Add ojs plot -->
+```{ojs}
+PZplot(
+       [ {σ: -2, jω: 0} ], 
+       [ { σ: -1, jω: -1 }, {σ: -1, jω: 1 } ],
+       [-3, 3],
+       [-3, 3],
+      )
+```
 :::
 
 Since the polynomials in the numerator and denominator of $G(s)$ have real coefficients, the roots are either real or occur in complex conjugate pairs. So, the poles and zeros either lie on the $σ$-axis or are symmetric about the $σ$-axis. 
 
+Note that the pole-zero plot does not capture the gain of the TF. 
+
 
 ## BIBO Stability
 
-Recall that an LTI system with impulse response $g(t)$ is BIBO stable if
+Recall from Signals and Systems that an LTI system with impulse response $g(t)$ is BIBO stable if
 $$
 \int_{-∞}^{∞} |g(t)| dt < \infty.
 $$
 
-For a causal system, this is equivalent to 
+For a causal system (i.e., a system for which $g(t) = 0$ for $t < 0$), this is equivalent to 
 $$
 \int_{0^{-}}^{∞} |g(t)| dt < ∞.
 $$
@@ -229,8 +234,70 @@ Therefore, there can be no pole in the open right hand plane $\{ (σ + j ω) : �
 
 > A causal LTI system is stable if all poles are in the open left hand plane. 
 
+```{ojs}
+//| layout-ncol: 2 
+//| fig-cap: Illustration of stable and unstable systems
+//| fig-subcap:
+//|     - Stable systems
+//|     - Unstable systems
+//|     - Marginally systems
+//|     - Unstable systems (double pole at origin)
+
+PZplot(
+       [ {σ: 1.5, jω: 0} ], 
+       [ { σ: -1, jω: -1 }, {σ: -1, jω: 1 }, {σ: -1.5, jω: 0} ],
+       [-2, 2],
+       [-2, 2],
+      )
+
+PZplot(
+       [ {σ: -1.5, jω: 0} ], 
+       [ { σ: -1, jω: -1 }, {σ: -1, jω: 1 }, { σ: 1.5, jω: 0 } ],
+       [-2, 2],
+       [-2, 2],
+      )
+
+PZplot(
+       [ {σ: 1.5, jω: 0} ], 
+       [ { σ: -1, jω: -1 }, {σ: -1, jω: 1 }, {σ: 0, jω: 0} ],
+       [-2, 2],
+       [-2, 2],
+      )
+
+PZplot(
+       [ {σ: 1.5, jω: 0} ], 
+       [ { σ: -1, jω: -1 }, {σ: -1, jω: 1 }, {σ: -0.02, jω: 0}, {σ: 0.02, jω: 0} ],
+       [-2, 2],
+       [-2, 2],
+      )
+
+```
+
 If there are poles on the $j ω$ axis and the poles have multiplicity 1, then the system is **marginally stable**; if poles have multiplicity greater than 1, then the system is unstable.
 
 In the next lecture, we will see how to use the poles to identify the step response of the system.
+
+## Step Response
+
+One of the configurations that we will really focus on in the course is the output of a _stable_ system when the **input is a step function.** This is often the case when we specify a reference input such as the desired temperature of a room or the desired speed in cruise control of a car, and are interested in seeing if we get a "good" output. Note that this question is only of interest for stable systems. If the system is unstable, then the output will go to infinity. 
+
+As an example, consider the system of @exr-LDE-TF. What is the output when the input is a step function (assuming that the system starts from a zero initial state)?
+
+To compute this, recall
+$$
+\mathbb{1}(t) \xleftrightarrow{\quad \mathcal L\quad} \frac 1s.
+$$
+
+Thus, $R(s) = 1/s$. We had already identified that $G(s) = 1/(s+2)$. Thus,
+\begin{align*}
+C(s) &= G(s) R(s) \\
+     &= \frac{1}{s(s+2)} \\
+     &= \frac{ \frac 12 }{s} - \frac{ \frac 12 }{ s + 2 }
+     \quad \text{[By partial fraction expansion]}.
+\end{align*}
+Thus,
+$$
+  c(t) = \left[ \frac 12 - \frac 12 e^{-2t} \right] \mathbb{1}(t).
+$$
 
 
