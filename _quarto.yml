@@ -37,7 +37,7 @@ book:
 
   chapters:
     - index.qmd
-    - 01-review.qmd
+    - freq-modeling.qmd
 
     #- references.qmd
 
