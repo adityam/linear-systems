@@ -122,6 +122,12 @@ Textbook
 
       Both paper and electronic versions of the textbook are available from the McGill bookstore. The electronic version of the book is also available from the publisher’s website and Google books.
 
+  - R.L. Williams II and D.A. Lawrence, Linear State‐Space Control Systems, Wiley.
+
+      The [electronic version of the book][LSSC] is available the library.
+
+[LSSC]: https://onlinelibrary.wiley.com/doi/book/10.1002/9780470117873
+
 Reference Books
 : - G.F. Franklin, J. Powell, A. Emani-Naeini, _Feedback Control of Dynamical Systems_, 7th Ed., Pearson.
 - K. Oagata, _Modern Control Engineering_, 5th Ed., Pearson.
