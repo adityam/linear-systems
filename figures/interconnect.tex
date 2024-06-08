@@ -83,7 +83,7 @@ enddef ;
 
   for i = 1 upto 5 :
     sketch_amount := 1.3bp;
-    draw bpath LTI;
+    draw bpath LTI cornered 10bp;
     
     sketch_amount := 0.6bp;
     drawarrow Input -- lft LTI.w;
@@ -118,7 +118,7 @@ enddef ;
 
   for i = 1 upto 5 :
     sketch_amount := 1.3bp;
-    draw bpath LTI;
+    draw bpath LTI cornered 10bp;
     
     sketch_amount := 0.6bp;
     drawarrow Input -- lft LTI.w;
@@ -156,8 +156,8 @@ enddef ;
 
   for i = 1 upto 5 :
     sketch_amount := 1.3bp;
-    draw bpath LTI_one;
-    draw bpath LTI_two;
+    draw bpath LTI_one cornered 10bp;
+    draw bpath LTI_two cornered 10bp;
     
     sketch_amount := 0.6bp;
     drawarrow Input -- lft LTI_one.w;
@@ -202,8 +202,8 @@ enddef ;
 
   for i = 1 upto 5 :
     sketch_amount := 1.3bp;
-    draw bpath LTI_one;
-    draw bpath LTI_two;
+    draw bpath LTI_one cornered 10bp;
+    draw bpath LTI_two cornered 10bp;
     draw bpath sum_one;
     
     sketch_amount := 0.6bp;
@@ -255,8 +255,8 @@ enddef ;
 
   for i = 1 upto 5 :
     sketch_amount := 1.3bp;
-    draw bpath LTI_one;
-    draw bpath LTI_two;
+    draw bpath LTI_one cornered 10bp;
+    draw bpath LTI_two cornered 10bp;
     draw bpath sum_one;
     
     sketch_amount := 0.6bp;
