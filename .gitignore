@@ -1,1 +1,6 @@
 /.quarto/
+*.pdf
+*.tuc
+*.log
+/docs/
+svg/
