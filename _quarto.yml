@@ -61,3 +61,5 @@ format:
 
     jupyter: julia-1.9
     freeze: true
+
+    toc: true

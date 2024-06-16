@@ -1,8 +1,4 @@
 ---
-format:
-  html:
-    toc: true
-
 course:
   term: "Fall 2024"
   office-hours: "TBD"
