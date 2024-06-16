@@ -48,7 +48,7 @@ In this course, we will work exclusively with LTI systems. Such systems arise in
 
 Consider an LTI system with input $r(t)$ (also called the reference signal sometimes) and output $c(t)$. We can also represent this as the following block diagram:
 
-![An LTI System](figures/rsvg/interconnect1.svg){#fig-LTI}
+![An LTI System](figures/svg/interconnect1.svg){#fig-LTI}
 
 All such systems can be represented by constant coefficient linear differential equations (LDE) of the form
 $$
@@ -66,7 +66,7 @@ Recall that a key defining property of an LTI system is its impulse response, wh
 
 Now an interesting feature of a constant coefficient LDE is that we can identify the transfer function simply by inspection. 
 
-![An LTI System](figures/rsvg/interconnect2.svg){#fig-LTI-s}
+![An LTI System](figures/svg/interconnect2.svg){#fig-LTI-s}
 
 Given an LTI system with input $r(t)$ and output $c(t)$, we know that
 $$C(s) = G(s)R(s).$$
@@ -282,9 +282,9 @@ $$
 
 There are three common ways to inter connect LTI systems shown below.
 
-![Series Connection equivalent to $G_1(s)G_2(s)$.](figures/rsvg/interconnect3.svg){#fig-series}
+![Series Connection equivalent to $G_1(s)G_2(s)$.](figures/svg/interconnect3.svg){#fig-series}
 
-![Parallel Connection equivalent to $G_1(s) + G_2(s)$.](figures/rsvg/interconnect4.svg){#fig-parallel}
+![Parallel Connection equivalent to $G_1(s) + G_2(s)$.](figures/svg/interconnect4.svg){#fig-parallel}
 
-![Feedback Connection equivalent to $\displaystyle \frac{G(s)}{1 + G(s)H(s)}$.](figures/rsvg/interconnect5.svg){#fig-feedback}
+![Feedback Connection equivalent to $\displaystyle \frac{G(s)}{1 + G(s)H(s)}$.](figures/svg/interconnect5.svg){#fig-feedback}
 
