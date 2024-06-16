@@ -31,10 +31,10 @@ format:
         url: https://adityam.github.io
         affiliation: McGill University
         affiliation-url: http://www.mcgill.ca/ece
-    citation:
-      type: webpage
-      container-title: "Course notes for Linear Systems and Control"
-        # google-scholar: true
+        # citation:
+        #   type: webpage
+        #   container-title: "Course notes for Linear Systems and Control"
+        #     # google-scholar: true
     theme: 
       light: 
         - lumen
