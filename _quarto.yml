@@ -1,15 +1,10 @@
 project:
-  type: book
+  type: website
   output-dir: docs/
   # resources:
 
-book:
+website:
   title: Linear Systems and Control
-  author: 
-    - name: Aditya Mahajan
-      url: "https://adityam.github.io"
-      affiliation: McGill University
-      affiliation-url: "https://www.mcgill.ca/ece"
   description: "Course Notes for ECSE 307 (McGill University)"
   site-url: "https://adityam.github.io/linear-systems/"
 
@@ -28,21 +23,6 @@ book:
       text: Linear Control Systems
         # - href: ../multi-agent-systems/index.html
         #   text: Multi-Agent Systems
-
-  sidebar:
-    # background: light
-    collapse-level: 2
-    pinned: false
-    style : floating
-
-  chapters:
-    - index.qmd
-    - freq-modeling.qmd
-
-    #- references.qmd
-
-    # bibliography: references.bib
-    # csl: _extensions/csl/acm-siggraph.csl
 
 format:
   html:

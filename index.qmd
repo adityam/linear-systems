@@ -77,7 +77,7 @@ Upon the successful completion of this course, the student students will have de
 
 | Week | Material Covered | 
 |------|:-----------------|
-| 1    | Review of LTI Systems and Laplace Transforms |
+| 1    | [Review of LTI Systems and Laplace Transforms](freq-modeling.qmd) |
 | 2    | Pole Zero Plot Step response of first and second order systems, dominant pole approximation |
 | 3    | State-space modeling, canoncial forms, transfer function of state space models |
 | 4    | Matrix exponential and solution of matrix differential equations, time response of state space models | 
