@@ -1,0 +1,442 @@
+---
+title: Step Response
+
+execute:
+  echo: false
+  freeze: true
+  cache: true
+---
+
+In the [previous lecture](freq-modeling.qmd), we saw that we can use the pole zero plot to determine if a system is BIBO stability. We also saw that we can compute the step reponse using inverse LTs. In this lecture, we will develop a heuristic method to approximate the step response from a pole-zero plot. 
+
+```{julia}
+#| output: false
+# Install packages
+
+# using Pkg; Pkg.activate(".")
+# for pkg in ["IJulia", "Revise", "ControlSystems", "Plots", "LaTeXStrings", "DataFrames", "JSON"]
+#    Pkg.add(pkg)
+# end
+# 
+# # Installing Jupyter Cache
+# Pkg.add("Conda")
+# using Conda
+# Conda.add("jupyter-cache")
+
+using Revise
+
+using ControlSystems, Plots, LaTeXStrings
+
+current_theme = :bright
+current_colors = theme_palette(current_theme)
+theme(current_theme)
+default(linewidth=2)
+
+```
+
+## Step response from pole-zero plot
+
+To understand how to infer the step response from the pole-zero plot, let's revisit [the example from last lecture]:
+
+![Block diagram for a simple LTI system](figures/svg/step-response-block-diagrams1.svg){#fig-ex-motivating}
+
+[the example from last lecture]: freq-modeling.qmd#step-response
+
+Recall that we simplified the partial fraction expansion as
+$$ \frac{\frac12}{s} - \frac{\frac12}{s+2}.$$
+
+Consequently, the step response (which is the inverse LT of the above) is:
+$$
+\Bigl[ \underbrace{\frac 12}_{\text{Forced response}} 
+-
+\underbrace{\frac 12 e^{-2t}}_{\text{Natural response}}
+\Bigr] \mathbb{1}(t).
+$$
+
+The salient features of the step response are:
+
+- The pole of the input generates a **forced** response.
+- The pole of the system TF generates a **natural** response.
+- The **amplitude** of the response depends on the exact values of the poles and zeros, but the **form** of the response only depends on the location of the poles.
+
+Thus, even without doing any exact partial fraction expansion, we know that
+$$
+\dfrac{1}{s(s+2)} = \frac{K_1}{s} + \frac{K_2}{s+2}.
+$$
+Thus, we know that the output will be of the form:
+$$
+c(t) = \bigl[ K_1 + K_2 e^{-2t} \bigr] \mathbb{1}(t).
+$$
+
+Thus, we can obtain the **form** of the output without any explicit calculations.
+
+:::{#exr-step-response-form}
+Find the general form of the step response of the following systems:
+
+a. $\displaystyle
+G(s) = \frac{ s + 2 } { (s+5)(s+10) }.$
+b. $\displaystyle
+G(s) = \frac{ 5(s+3)(s+10) }{ (s+1)(s+5)(s+20) }.$
+:::
+
+:::{.callout-note collapse="true"} 
+#### Solution
+
+a. $c(t) = \bigl[
+K_1 + K_2 e^{-5t} + K_3 e^{-10t} 
+\bigr] \mathbb{1}(t).$
+
+b. $c(t) = \bigl[
+K_1 + K_2 e^{-t} + K_3 e^{-5t}  + K_4 e^{-20t}
+\bigr] \mathbb{1}(t).$
+
+:::
+
+## DC Gain
+
+In the above examples, the system does not have a pole at origin. Such systems are called **type 0** systems. For stable type 0 systems, the step response always settles to a steady state value known as the **DC gain**. For a type 0 system with TF $G(s)$, the DC gain is given by
+$$
+\text{DC-gain} = G(0).
+$$
+
+We will expand more on this point later in the course.
+
+## Dominant poles and approximate system response
+
+Now we compare the step response of two systems
+
+- $G_1(s) = \dfrac{1}{(s+2)}$
+- $G_2(s) = \dfrac{20}{(s+2)(s+20)}$.
+
+Note that both systems are stable type 0 systems with a DC gain of $0.5$. So, we expect them to settle at a steady state value of $0.5$.
+
+```{julia}
+#| label: fig-dominant-pole
+#| fig-cap: Step response of $G_1(s)$ and $G_2(s)$.
+
+using ControlSystems, Plots
+
+G1 = zpk([],[-2],1)
+G2 = zpk([],[-2,-20],20)
+
+T = 10 
+
+plt = plot(size=(600,300))
+plot!(plt, step(G1, T), label=L"G_1(s)")
+plot!(plt, step(G2, T), label=L"G_2(s)")
+```
+
+The step responses of both systems are very close. Thus, we can approximate $G_2(s)$ by $G_1(s)$. Let's look at the partial fraction expansion to see what is happening.
+
+- $\displaystyle
+C_1(s) = \frac{1}{s(s+2)} = \frac{0.5}{s} - \frac{0.5}{s+2}.$
+
+- $\displaystyle
+C_2(s) = \frac{20}{s(s+2)(s+20)}
+= \frac{0.5}{s} - \frac{0.55}{s+2} + \frac{0.055}{s+20}.$
+
+Note that the first two terms of $C_2(s)$ are almost the same as $C_1(s)$. Why is the third term $0.055/(s+20)$ negligible? The factor $0.055$ is small, but that is not the main reason for the third term to be small. To see what is happening, let's do the inverse LTs:
+
+- $c_1(t) = [ 0.5 - 0.5 e^{-2t} ] \mathbb{1}(t).$
+- $c_2(t) = [0.5 - 0.55 e^{-2t} + 0.055 e^{-20t}.$
+
+The reason that we can ignore $0.55/(s+20)$ is that $e^{-20t}$ decays much faster than $e^{-2t}$. In particular, at $t=1$, 
+
+- $e^{-2t} \approx 0.1353$
+- $e^{-20t} \approx 2.06 \times 10^{-9}$.
+
+```{julia}
+#| label: fig-exponential
+#| fig-cap: Decaying exponentials
+
+t = 0:0.001:1
+
+plt = plot(size=(600,300))
+plot!(plt, t, exp.(-2t), label=L"e^{-2t}")
+plot!(plt, t, exp.(-20t), label=L"e^{-20t}")
+```
+
+In this example, we say that in system $G_2(s)$ the pole at $p_1 = -2$ **dominates** the pole at $p_2 = -20$. 
+In this course, we will follow the heuristic that pole $p_1$ dominates pole $p_2$ if
+$$
+\ABS{\text{Re}(p_1)} \ge 
+\frac 1{5} \ABS{\text{Re}(p_2)}.
+$$
+
+**Dominant pole approximation** refers to the approximate system where the _dominated_ poles are removed. In particular, to obtain a dominant pole approximation of a system with poles $\{p_1, \dots, p_n\}$, we split the poles into two sets $\mathcal P_d = \{p_1, \dots, p_k\}$ and $\mathcal P_r = \{p_{k+1}, \dots, p_n\}$ which has the following property: every pole $p_i$ in $\mathcal P_d$ dominates every pole $p_j$ in $\mathcal P_r$. Then, the dominant pole approximation ignores all the poles in the set $\mathcal P_r$. 
+
+:::{#exm-dominant-pole-approximation-1}
+Consider the system
+$$
+  G(s) = \frac{10}{(s+1)(s+2)(s+10)}.
+$$
+In this case, the pole at $-10$ is dominated by both poles $\{-1,-2\}$. Thus, the pole at $-10$ can be ignored and the simplified system is
+$$
+  \tilde G(s) = \frac{1}{(s+1)(s+2)}.
+$$
+
+_Note_: Note that we have picked the gain of $\tilde G(s)$ so that $G(s)$ and $\tilde G(s)$ have the same DC gain.
+:::
+
+:::{#exm-dominant-pole-approximation-2}
+Consider the system
+$$
+  G(s) = \frac{10}{(s+1)(s+4)(s+10)}.
+$$
+In this case, we cannot ignore any pole. Note that the pole at $-1$ **does not dominate** the pole at $-4$, and the pole at $-4$ **does not dominate** the pole at $-10$.  Thus, we cannot partition the poles into two sets such that one set dominates the other. 
+:::
+
+## High-level system design idea
+
+In the next few weeks, we will learn techniques to design system controllers so that we can place the poles of a closed loop system at any desired location. But how do we choose where we want to place the poles of the closed loop system?
+
+Of course, the first objective is to make sure that the closed loop system is stable. However, a practical design goes beyond stability.
+Suppose we are designing the cruise controller of a car and have an option of the following three controllers.
+
+```{julia}
+#| label: fig-cruise-control
+#| fig-cap: Step responses of three different systems
+#| fig-subcap:
+#|      - Pole Zero Plot
+#|      - Step response
+
+function secondOrder(σ,ω)
+  p1 = σ + im*ω
+  p2 = σ - im*ω
+  K  = σ^2 + ω^2
+  zpk([], [p1,p2], K)
+end
+
+G1 = secondOrder(-2,4)
+G2 = secondOrder(-2,10)
+G3 = secondOrder(-0.5,2)
+
+T = 5
+plt = plot(size=(600,300))
+plot!(plt, step(G1, T), label=L"$G_1(s)$")
+plot!(plt, step(G2, T), label=L"$G_2(s)$")
+plot!(plt, step(G3, T), label=L"$G_3(s)$")
+
+```
+
+It is clear from the above plots that the transient response of the system matters as well. For a higer order system, finding the relationship between the location of the poles and the transient response can be difficult. To circumvent this difficulty, our general design philosophy will be as follows:
+
+- We will first understand the relationship between the location of the poles and the transient behavior of a first and second order system.
+- Later, when it comes to system design, we will place the poles of the closed loop system such that the dominant pole approximation of the system is equivalent to a second order system. 
+
+## Time response of first order systems
+
+A general first order system is of the form
+$$
+\dfrac{dc(t)}{dt} + a c(t) = b r(t).
+$$
+By inspection, we know that the transfer function is
+$$
+  \frac{b}{s+a} = \frac{b}{a} \cdot \frac{a}{s+a} 
+  = K \dfrac{a}{s+a}.
+$$
+
+![A general first order system](figures/svg/step-response-block-diagrams2.svg){#fig-first-order-block-diagram}
+
+```{julia}
+
+using ControlSystems, DataFrames
+
+# Use Float16 to reduce the size of data passed to OJS
+df=DataFrame(a=Float16[],time=Float16[],output=Float16[])
+
+for a in 0.5:0.1:2.5
+  G = zpk([],[-a],a)
+  res = step(G,5)
+  N = length(res.t)
+
+  # Subsample by 5 for plotting
+  for n=1:5:N
+    push!(df, (a=Float16(a), time=Float16(res.t[n]), output=Float16(res.y[n])))
+  end
+end
+
+ojs_define(first_order = df)
+```
+
+```{ojs}
+//| layout-ncol: 2
+viewof a_1 = Object.assign(Inputs.range([0.5, 2.5], {label: "a", step: 0.1, value: 1 }), {style: '--label-width:20px'})
+
+viewof K_1 = Object.assign(Inputs.range([0.5, 1.5], {label: "K", step: 0.1, value: 1 }), {style: '--label-width:20px'})
+
+```
+
+```{ojs}
+//| echo: false
+transformed_first_order = first_order.map(d =>({...d, output: d.output*K_1}))
+
+PZplot = function(zeros, poles, xdomain, ydomain) {
+  return Plot.plot({
+    grid: true,
+    x: { domain: xdomain},
+    y: { domain: ydomain},
+
+    marks: [
+      // Axes
+      Plot.ruleX([0]),
+      Plot.ruleY([0]),
+      // Data
+      Plot.dot(zeros, {x:"σ", y:"jω", r: 5}),
+      Plot.dot(poles, {x:"σ", y:"jω", symbol: "times", r: 5}),
+    ]
+  })
+}
+```
+
+```{ojs}
+//| layout-ncol: 2
+//| label: fig-first-order-step-response
+//| fig-cap: Step response of a first order system for different values of the parameters
+
+PZplot(
+       [], 
+       [ {σ: -a_1, jω: 0} ], 
+       [-3, 3],
+       [-3, 3],
+      )
+
+Plot.plot({
+  grid: true,
+  y: { domain: [0, 1.6] },
+  x: { domain: [0,5] },
+  marks: [
+    // Axes
+    Plot.ruleX([0]),
+    Plot.ruleY([0]),
+    // Data
+    // a_1 is still 64 bit float while a is 16 bit float. So we do a crude comparison for equality. 
+    Plot.line(transformed_first_order.filter(d => Math.abs(d.a - a_1) <= 0.01), 
+              {x:"time", y:"output", stroke: "darkblue" })
+  ]
+})
+```
+
+We can compute the step response by the usual partial fraction expansion:
+$$ C(s) = K \frac{a}{s+a} = K \biggl[ \frac{1}{s} - \frac{1}{s+a}\biggr]. $$
+Taking inverse LTs, we get:
+$$ c(t) = K \bigl[ 1 - e^{-at} \bigr] \mathbb{1}(t). $$ 
+
+### Important characteristics of the step response
+
+The response of a first order system has the following features:
+
+- There is no overshoot
+- The initial slope (at $t=0$) is non-zero and equal to $a$. 
+
+#### Time constant $τ$
+
+- The parameter $τ = 1/a$ is called the **time constant** of a first order system. 
+- The intial slope of the step response is $a$ (i.e., $1/τ$).
+- At $t=τ$, $c(τ) = K(1-e^{-1}) \approx 63\%$ of final value.
+
+#### Rise time $T_r$
+
+- The rise time, denoted by $T_r$ is the time to go from $10\%$ to $90\%$ of the final value. 
+
+- To find time $t_1$ when the response reaches $10\%$ of the final value:
+  $$
+    c(t_1) = 1 - e^{-a t_1} = 0.1 
+    \implies
+    t_1 = \frac{0.11}{a}.
+  $$
+
+- Similarly, to find time $t_2$ when the response reaches $90\%$ of the final value:
+  $$
+    c(t_2) = 1 - e^{-a t_2} = 0.9
+    \implies
+    t_2 = \frac{2.31}{a}.
+  $$
+
+- Thus, 
+  $$
+  \bbox[5pt,border: 1px solid]{T_r = \frac{2.31}{a} - \frac{0.11}{a} = \frac{2.2}{a}}
+  $$
+
+#### Settling time $T_s$
+
+- The (2%) setting time is the time required for the step response to reach 2% of its final value. 
+
+- To find $T_s$, we solve
+  $$
+  (1-e^{-a T_s}) = 0.98 
+  \implies
+  \bbox[5pt,border: 1px solid]{T_s = \frac 4a}
+  $$
+
+:::{#exm-first-order}
+Consider the TF $G(s) = \dfrac{100}{s+50}$. Identify the time constant $τ$, rise time $T_r$, and settling time $T_s$. 
+:::
+
+:::{.callout-note collapse="true"} 
+#### Solution
+
+We start by writing the TF in standard form:
+$$
+  G(s) = 2 \frac{50}{s+50}.
+$$
+Comparing from the standard form, we have $K=2$ and $a=50$. Thus,
+
+- $τ = \dfrac{1}{a} = 0.02$.
+- $T_r = \dfrac{2.2}{a} = 2.2 τ = 0.044$ s.
+- $T_s = \dfrac{4}{a} = 4 τ = 0.08$ s.
+
+:::
+
+## Identifying a first-order system via testing
+
+In many applications, we may not know the TF of a system and may need to identify the TF from the measurements of the step response. We will do such an experiment in Lab 3. In such cases, we can identify that the system is first order from the following features:
+
+- no overshoot
+- non-zero initial slope.
+
+
+For a first order system, we need to identify two parameters: $K$ and $a$.
+
+- The gain $K$ is equal to the final value of the step response.
+- To identify $a$, we identify the time constant $τ=1/a$ as the time where the step response is $0.63K$. 
+
+Then, the TF is
+$$ G(s) = K \frac{a}{s+a}. $$
+
+:::{#exm-identify-first-order}
+
+Identify the transfer function from the following step response
+
+```{julia}
+
+using ControlSystems, Plots
+
+G = zpk([],[-4],10)
+
+T = 2 
+
+plt = plot(size=(600,300), gridalpha=0.75, minorgridalpha=0.25)
+plot!(plt, step(G, T))
+```
+:::
+
+:::{.callout-note collapse="true"} 
+### Solution
+
+Since there is no overshoot and the initial slope is non-zero, this is the step response of a first order system.
+
+- The final DC value of response is $2.5$. Thus, $K = 2.5$.
+- Now we search for the time when the response is $0.63K = 1.575$ which happens around $τ=0.25$. Thus, $a = 1/τ = 4$. 
+
+Hence $G(s) = K \dfrac{a}{s+a} = \dfrac{10}{s+4}$.
+
+:::
+
+
+
+## Step response of second order systems
+
+## Identifying an under-damped second order system via testing
+
+## Impact of zeros

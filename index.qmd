@@ -14,6 +14,8 @@ course:
     - "1:35pm–3:25pm Tuesday (TR 4090)"
     - "1:35pm–3:25pm Wednesday (TR 4090)"
     - "1:35pm–3:25pm Friday (TR 4090)"
+format: 
+  html: default
 ---
 
 # Course Outline {.unnumbered}
@@ -74,7 +76,7 @@ Upon the successful completion of this course, the student students will have de
 | Week | Material Covered | 
 |------|:-----------------|
 | 1    | [Review of LTI Systems and Laplace Transforms](freq-modeling.qmd) |
-| 2    | Pole Zero Plot Step response of first and second order systems, dominant pole approximation |
+| 2    | [Pole Zero Plot Step response of first and second order systems, dominant pole approximation](step-response.qmd) |
 | 3    | State-space modeling, canoncial forms, transfer function of state space models |
 | 4    | Matrix exponential and solution of matrix differential equations, time response of state space models | 
 | 5    | Pole placement, controllability, and state feedback |
