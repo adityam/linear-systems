@@ -509,10 +509,165 @@ Hence $G(s) = K \dfrac{a}{s+a} = \dfrac{10}{s+4}$.
 
 :::
 
-
-
 ## Step response of second order systems
 
-## Identifying an under-damped second order system via testing
+A general second order system is of the form
+$$
+\frac{d^2 c(t)}{dt^2} + a_1 \frac{d c(t)}{dt} + a_0 c(t) = b_0 r(t).
+$$
+By inspection, we know that the transfer function is
+$$
+G(s) = \frac{b_0}{s^2 + a_1 s + a_0} 
+=
+K \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2}
+$$
+where $K$ is called the gain, $ω_n$ is called the _natural_ frequency and $ζ$ is called the damping coefficient When $ζ < 0$, the system is unstable and we will not discuss that case. When $ζ \ge 0$, we observe four types of behavior depending on the value of $ζ$. These are called the **categories** of a second order system:
+
+1. **Undamped** $ζ = 0$, in which case the poles are at $\pm j ω_n$.
+2. **Underdamped** $0 < ζ < 1$, in which case the poles are at 
+   $-ω_n( ζ \pm j\sqrt{1 - ζ^2}).$
+3. **Critically damped** $ζ = 1$, in which case there is a double pole at $-ω_n$.
+4. **Overdamped** $ζ > 1$, in which case the poles are at
+   $-ω_n(ζ \pm \sqrt{ζ^2 - 1}).$
+
+@fig-damping illustrates the impact of the damping coefficient on the location of the poles:
+
+```{ojs}
+  viewof zeta_damping = Object.assign(Inputs.range([0, 5.5], {label: "ζ", step: 0.01, value: 0.5 }), {style: '--label-width:20px'})
+```
+
+```{ojs}
+//| label: fig-damping
+//| fig-caption: Location of poles as a function of damping coefficient
+ω_damping = 1
+
+poles_damping = {
+  var factor
+  var poles
+
+  if (zeta_damping == 0) {
+    poles = [ { σ: 0, jω: ω_damping },
+              { σ: 0, jω: -ω_damping } ] 
+  } else if (0 < zeta_damping && zeta_damping < 1) { 
+    factor = Math.sqrt(1-zeta_damping*zeta_damping)
+    poles = [ { σ: -ω_damping*zeta_damping, jω: ω_damping*factor }, 
+              { σ: -ω_damping*zeta_damping, jω: -ω_damping*factor } ] 
+  } else {// zeta_damping > 1
+    factor = Math.sqrt(zeta_damping*zeta_damping-1)
+    poles = [ { σ: -ω_damping*zeta_damping + ω_damping*factor, jω: 0 }, 
+              { σ: -ω_damping*zeta_damping - ω_damping*factor, jω: 0 } ] 
+  }
+  return poles
+}
+
+PZplot(
+       [], 
+       poles_damping,
+       [-4.5*ω_damping, 0.5*ω_damping],
+       [-1.5*ω_damping, 1.5*ω_damping],
+      )
+```
+
+:::{#exr-2nd-order}
+Indentify the category of the following second order systems:
+
+a. $\dfrac{12}{s^2 + 8s + 12}.$
+b. $\dfrac{16}{s^2 + 8s + 16}$.
+c. $\dfrac{20}{s^2 + 8s + 20}$. 
+
+:::
+
+:::{.callout-note collapse="true"} 
+#### Solution
+a. $ζ = \dfrac{8}{2\sqrt{12}} \approx 1.1547$. Thus, the system is overdamped.
+b. $ζ = \dfrac{8}{2\sqrt{16}} = 1$. Thus, the system is critically damped.
+b. $ζ = \dfrac{8}{2\sqrt{20}} \approx 0.8944$. Thus, the system is underdamped.
+:::
+
+## Identifying an underdamped second order system via testing
+
+A second order underdamped system has two characteristics:
+
+- Oscillatory overshoots (can be hard to see for $ζ$ close to 1)
+- Zero initial slope.
+
+Note that all underdamped higher order systems share these characteristics, so it can be sometimes hard to distinguish a second order system from a higher order system. 
+
+For a second order system, we need to identify three parameters: $K$, $ω_n$ and $ζ$. 
+
+- The gain $K$ is equal to the final value of the step response. 
+- To find $ω_n$ and $ζ$, we need to find two out the three features: peak time, percentage overshoot, and setting time. Using these features, we can identify $ω_n$ and $ζ$. 
+
+Then, the TF is given by
+$$ G(s) = K \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2}. $$
+
 
 ## Impact of zeros
+
+In the characterization of the step response of a second order underdamped system above, we assumed that the system had no zeros. The presence of a zero leads to more oscillations. As the zero moves away from the dominant pole, the response approaches that of a system with no zeros.
+
+To undersand this, we compare the response of two systems
+$$
+  \dfrac{8}{s^2 + 4s + 8}
+  \quad\hbox{vs}\quad
+  \dfrac{8}{z} \cdot \dfrac{s+z}{s^2 + 4s + 8}
+$$
+
+```{julia}
+
+using ControlSystems, DataFrames
+
+# Use Float16 to reduce the size of data passed to OJS
+df=DataFrame(z=Int[],time=Float16[],output=Float16[])
+
+for z in 0:6
+  if z == 0 
+    G = tf(8 .* [1], [1,4,8])
+  else
+    G = tf(8/z .* [1,z], [1,4,8])
+  end
+  res = step(G,5)
+  N = length(res.t)
+
+  for n=1:N
+    push!(df, (z=z, time=Float16(res.t[n]), output=Float16(res.y[n])))
+  end
+end
+
+ojs_define(second_order_zero = df)
+```
+
+```{ojs}
+viewof zero = Object.assign(Inputs.range([1,6], {label: "z", step: 1, value: 1 }), {style: '--label-width:20px'})
+```
+```{ojs}
+//| layout-ncol: 2
+//| label: fig-second-order-with-zero
+//| fig-cap: Step response of a seocnd order system for different values zero. The orange curve shows the step response of a system without zero and the blue curve shows the step response of the system with zeros.
+
+PZplot(
+       [ {σ: -zero, jω: 0} ], 
+       [ {σ: -2, jω: 2}, {σ: -2, jω: -2} ],
+       [-6, 2],
+       [-3, 3],
+      )
+
+Plot.plot({
+  grid: true,
+  y: { domain: [0, 1.6] },
+  x: { domain: [0,5] },
+  marks: [
+    // Axes
+    Plot.ruleX([0]),
+    Plot.ruleY([0]),
+    // Data
+    // zero is still 64 bit float while a is 16 bit float. So we do a crude comparison for equality. 
+    Plot.line(second_order_zero.filter(d => d.z == zero), 
+              {x:"time", y:"output", stroke: "darkblue" }),
+    Plot.line(second_order_zero.filter(d => d.z == 0), 
+              {x:"time", y:"output", stroke: "orange" })
+  ]
+})
+```
+
+The impact of zeros means that we will not be able to execute our high-level idea of controller design because we cannot control the zeros of a closed loop system. So, in practice, we need to verify the control design via simulations to make sure that the specs are satisfied. 
