@@ -135,7 +135,7 @@ C_1(s) = \frac{1}{s(s+2)} = \frac{0.5}{s} - \frac{0.5}{s+2}.$
 C_2(s) = \frac{20}{s(s+2)(s+20)}
 = \frac{0.5}{s} - \frac{0.55}{s+2} + \frac{0.055}{s+20}.$
 
-Note that the first two terms of $C_2(s)$ are almost the same as $C_1(s)$. Why is the third term $0.055/(s+20)$ negligible? The factor $0.055$ is small, but that is not the main reason for the third term to be small. To see what is happening, let's do the inverse LTs:
+Note that the first two terms of $C_2(s)$ are almost the same as $C_1(s)$. Why is the third term $0.055/(s+20)$ negligible? The factor $0.055$ is small, but that is not the main reason for the third term to be small. To see what is happening, let's compute the inverse LTs:
 
 - $c_1(t) = [ 0.5 - 0.5 e^{-2t} ] \mathbb{1}(t).$
 - $c_2(t) = [0.5 - 0.55 e^{-2t} + 0.055 e^{-20t}.$
@@ -158,33 +158,112 @@ plot!(plt, t, exp.(-20t), label=L"e^{-20t}")
 
 In this example, we say that in system $G_2(s)$ the pole at $p_1 = -2$ **dominates** the pole at $p_2 = -20$. 
 In this course, we will follow the heuristic that pole $p_1$ dominates pole $p_2$ if
-$$
+\begin{equation}\label{eq:dominant-pole}
 \ABS{\text{Re}(p_1)} \ge 
 \frac 1{5} \ABS{\text{Re}(p_2)}.
-$$
+\end{equation}
 
 **Dominant pole approximation** refers to the approximate system where the _dominated_ poles are removed. In particular, to obtain a dominant pole approximation of a system with poles $\{p_1, \dots, p_n\}$, we split the poles into two sets $\mathcal P_d = \{p_1, \dots, p_k\}$ and $\mathcal P_r = \{p_{k+1}, \dots, p_n\}$ which has the following property: every pole $p_i$ in $\mathcal P_d$ dominates every pole $p_j$ in $\mathcal P_r$. Then, the dominant pole approximation ignores all the poles in the set $\mathcal P_r$. 
 
 :::{#exm-dominant-pole-approximation-1}
 Consider the system
 $$
-  G(s) = \frac{10}{(s+1)(s+2)(s+10)}.
+  G_1(s) = \frac{10}{(s+1)(s+2)(s+10)}.
 $$
 In this case, the pole at $-10$ is dominated by both poles $\{-1,-2\}$. Thus, the pole at $-10$ can be ignored and the simplified system is
 $$
-  \tilde G(s) = \frac{1}{(s+1)(s+2)}.
+  \tilde G_1(s) = \frac{1}{(s+1)(s+2)}.
 $$
 
-_Note_: Note that we have picked the gain of $\tilde G(s)$ so that $G(s)$ and $\tilde G(s)$ have the same DC gain.
+_Note_: Note that we have picked the gain of $\tilde G_1(s)$ so that $G_1(s)$ and $\tilde G_1(s)$ have the same DC gain.
+
+We can confirm this result by comparing the step responses:
+
+```{julia}
+#| label: fig-exm-dominant-pole-1
+#| fig-cap: Step response of $G(s)$ and $\tilde G(s)$ in @exm-dominant-pole-approximation-1
+
+using ControlSystems, Plots
+
+G1 = zpk([],[-1,-2,-10],10)
+G2 = zpk([],[-1,-2],1)
+
+T = 5 
+
+plt = plot(size=(600,300))
+plot!(plt, step(G1, T), label=L"G_1(s)")
+plot!(plt, step(G2, T), label=L"\tilde G_1(s)")
+```
+
 :::
 
 :::{#exm-dominant-pole-approximation-2}
 Consider the system
 $$
-  G(s) = \frac{10}{(s+1)(s+4)(s+10)}.
+  G_2(s) = \frac{10}{(s+1)(s+4)(s+10)}.
 $$
-In this case, we cannot ignore any pole. Note that the pole at $-1$ **does not dominate** the pole at $-4$, and the pole at $-4$ **does not dominate** the pole at $-10$.  Thus, we cannot partition the poles into two sets such that one set dominates the other. 
+In this case, we cannot ignore any pole. Note that the pole at $-1$ **does not dominate** the pole at $-4$, and the pole at $-4$ **does not dominate** the pole at $-10$.  Thus, we cannot partition the poles into two sets such that one set dominates the other. Thus, the above system **cannot** be simplied to
+$$
+  \tilde G_2(s) = \frac{1}{(s+1)(s+4)}.
+$$
+We can confirm this result by comparing the step responses:
+
+```{julia}
+#| label: fig-exm-dominant-pole-2
+#| fig-cap: Step response of $G(s)$ and $\tilde G(s)$ in @exm-dominant-pole-approximation-2
+
+using ControlSystems, Plots
+
+G1 = zpk([],[-1,-4,-10],10)
+G2 = zpk([],[-1,-4],1)
+
+T = 5 
+
+plt = plot(size=(600,300))
+plot!(plt, step(G1, T), label=L"G_2(s)")
+plot!(plt, step(G2, T), label=L"\tilde G_2(s)")
+```
 :::
+
+Wait what? Why is @fig-exm-dominant-pole-1 a good approximation while @fig-exm-dominant-pole-2 is not? Both of them look equally good or bad. This example highlights that we have to be careful with interpretting the dominant pole approximation heuristic. It says that if \eqref{eq:dominant-pole} is satisfied then we expect the approximate system to behave the same as the original system. If \eqref{eq:dominant-pole} is not satisfied, then there might be instances where the approximate system is different from the original system. For example, let's consider:
+$$
+  G_1(s) = \frac{10}{( (s+2)^2 + 4^2 )(s + 10) }
+  \stackrel{?}{\approx}
+  \tilde G_1(s) = \frac{1}{((s+2)^2 + 4^2)}
+$$
+versus
+$$
+  G_2(s) = \frac{10}{( (s+4)^2 + 8^2 )(s + 10) }
+  \stackrel{?}{\approx}
+  \tilde G_2(s) = \frac{1}{((s+4)^2 + 8^2)}
+$$
+The dominant pole approximation heuristic says that the first approximation _should_ a good approximation while the second _may_ not be. We plot the two step responses to evalaute:
+
+```{julia}
+#| label: fig-approximation-comparison
+#| fig-cap: Checking the quality of approximations
+using ControlSystems, Plots
+
+G1 = zpk([],[-2+4im,-2-4im,-10],10)
+G2 = zpk([],[-2+4im,-2-4im],1)
+
+T = 5 
+
+plt1 = plot(size=(600,150))
+plot!(plt1, step(G1, T), label=L"G_1(s)")
+plot!(plt1, step(G2, T), label=L"\tilde G_1(s)")
+
+G3 = zpk([],[-4+8im,-4-8im,-10],10)
+G4 = zpk([],[-4+8im,-4-8im],1)
+
+plt2 = plot(size=(600,150))
+plot!(plt2, step(G3, T), label=L"G_2(s)")
+plot!(plt2, step(G4, T), label=L"\tilde G_2(s)")
+
+plot(plt1, plt2)
+
+```
+
 
 ## High-level system design idea
 
@@ -196,9 +275,6 @@ Suppose we are designing the cruise controller of a car and have an option of th
 ```{julia}
 #| label: fig-cruise-control
 #| fig-cap: Step responses of three different systems
-#| fig-subcap:
-#|      - Pole Zero Plot
-#|      - Step response
 
 function secondOrder(σ,ω)
   p1 = σ + im*ω
