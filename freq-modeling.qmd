@@ -46,17 +46,17 @@ I will not review this material in class. Please go back to your SS notes or rev
 
 In this course, we will work exclusively with LTI systems. Such systems arise in all branches of engineering, e.g., electrical circuits, spring-mass systems, gear systems, and thermodynamics. See Chapter 2 of Nice for detailed modeling examples. 
 
-Consider an LTI system with input $r(t)$ (also called the reference signal sometimes) and output $c(t)$. We can also represent this as the following block diagram:
+Consider an LTI system with input $u(t)$ (also called the reference signal sometimes) and output $y(t)$. We can also represent this as the following block diagram:
 
 ![An LTI System](figures/svg/interconnect1.svg){#fig-LTI}
 
 All such systems can be represented by constant coefficient linear differential equations (LDE) of the form
 $$
-a_n \frac{d^n c(t)}{dt^n}  + a_{n-1} \frac{d^{n-1} c(t)}{dt^{n-1}} + \cdots  a_0 c(t)
-= b_m \frac{d^m r(t)}{dt^m} + b_{m-1} \frac{d^{m-1} r(t)}{dt^{m-1}} + \cdots + b_0 r(t).
+a_n \frac{d^n y(t)}{dt^n}  + a_{n-1} \frac{d^{n-1} y(t)}{dt^{n-1}} + \cdots  a_0 y(t)
+= b_m \frac{d^m u(t)}{dt^m} + b_{m-1} \frac{d^{m-1} u(t)}{dt^{m-1}} + \cdots + b_0 u(t).
 $$
 
-- This differential equation is called **linear** because there are no non-linear or multiplicative terms of the form $\displaystyle \left(\frac{d^3 c(t)}{dt^3}\right)\left(\frac{d^2 c(t)}{dt^2}\right)$. 
+- This differential equation is called **linear** because there are no non-linear or multiplicative terms of the form $\displaystyle \left(\frac{d^3 y(t)}{dt^3}\right)\left(\frac{d^2 y(t)}{dt^2}\right)$. 
 
 - It is called **constant coefficient** because the coefficients $a_n$ and $b_m$ are constants that do not depend on time.
 
@@ -68,30 +68,30 @@ Now an interesting feature of a constant coefficient LDE is that we can identify
 
 ![An LTI System](figures/svg/interconnect2.svg){#fig-LTI-s}
 
-Given an LTI system with input $r(t)$ and output $c(t)$, we know that
-$$C(s) = G(s)R(s).$$
+Given an LTI system with input $u(t)$ and output $y(t)$, we know that
+$$Y(s) = G(s)U(s).$$
 Therefore, if we know the input and output, we can identify the transfer function using
-$$ G(s) = \frac{C(s)}{R(s)}.$$
+$$ G(s) = \frac{Y(s)}{U(s)}.$$
 Now, if we go back to the general formula of a constant coefficient LDE 
 $$
-a_n \frac{d^n c(t)}{dt^n}  + a_{n-1} \frac{d^{n-1} c(t)}{dt^{n-1}} + \cdots  a_0 c(t)
-= b_m \frac{d^m r(t)}{dt^m} + b_{m-1} \frac{d^{m-1} r(t)}{dt^{m-1}} + \cdots + b_0 r(t).
+a_n \frac{d^n y(t)}{dt^n}  + a_{n-1} \frac{d^{n-1} y(t)}{dt^{n-1}} + \cdots  a_0 y(t)
+= b_m \frac{d^m u(t)}{dt^m} + b_{m-1} \frac{d^{m-1} u(t)}{dt^{m-1}} + \cdots + b_0 u(t).
 $$
 and assume that the system starts from zero-initial state and take the LT of both sides, we get
 $$
-a_n s^n C(s) + a_{n-1} s^{n-1} C(s) + \cdots + a_0 C(s)
+a_n s^n Y(s) + a_{n-1} s^{n-1} Y(s) + \cdots + a_0 Y(s)
 =
-b_m s^m R(s) + b_{m-1} s^{m-1} R(s) + \cdots + b_m R(s).
+b_m s^m U(s) + b_{m-1} s^{m-1} U(s) + \cdots + b_m U(s).
 $$
 Rearranging terms, we get
 $$
-(a_n s^n + a_{n-1} s^{n-1} + \cdots + a_0) C(s)
+(a_n s^n + a_{n-1} s^{n-1} + \cdots + a_0) Y(s)
 =
-(b_m s^m + b_{m-1}s^{m-1} + \cdots + b_0) R(s).
+(b_m s^m + b_{m-1}s^{m-1} + \cdots + b_0) U(s).
 $$
 Therefore,
 $$
-G(s) = \frac{C(s)}{R(s)}
+G(s) = \frac{Y(s)}{U(s)}
 = \frac{b_m s^m + b_{m-1} s^{m-1} + \cdots + b_m}
 {a_n s^n + a_{n-1} s^{n-1} + \cdots + a_0}.
 $$
@@ -100,7 +100,7 @@ Thus, we can easily go back and forth between the DE and the transfer function.
 :::{#exr-LDE-TF}
 Find the transfer function corresponding to the following LDE
 $$
-\frac{d}{dt}c(t) + 2 c(t) = r(t)
+\frac{d}{dt}y(t) + 2 y(t) = u(t)
 $$
 :::
 
@@ -121,7 +121,7 @@ $$
 #### Solution
 From inspection, we have
 $$
-\frac{d^2c(t)}{dt} + 2\frac{d c(t)}{dt} + 3c(t) = 2\frac{d r(t)}{dt} + r(t).
+\frac{d^2c(t)}{dt} + 2\frac{d y(t)}{dt} + 3c(t) = 2\frac{d u(t)}{dt} + u(t).
 $$
 :::
 
@@ -266,16 +266,16 @@ $$
 \mathbb{1}(t) \xleftrightarrow{\quad \mathcal L\quad} \frac 1s.
 $$
 
-Thus, $R(s) = 1/s$. We had already identified that $G(s) = 1/(s+2)$. Thus,
+Thus, $U(s) = 1/s$. We had already identified that $G(s) = 1/(s+2)$. Thus,
 \begin{align*}
-C(s) &= G(s) R(s) \\
+Y(s) &= G(s) U(s) \\
      &= \frac{1}{s(s+2)} \\
      &= \frac{ \frac 12 }{s} - \frac{ \frac 12 }{ s + 2 }
      \quad \text{[By partial fraction expansion]}.
 \end{align*}
 Thus,
 $$
-  c(t) = \left[ \frac 12 - \frac 12 e^{-2t} \right] \mathbb{1}(t).
+  y(t) = \left[ \frac 12 - \frac 12 e^{-2t} \right] \mathbb{1}(t).
 $$
 
 ## Interconnection of LTI Systems

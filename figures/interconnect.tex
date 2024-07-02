@@ -90,8 +90,8 @@ enddef ;
     drawarrow LTI.e -- Output;
   endfor;
 
-  label.lft("$r(t)$", Input);
-  label.rt("$c(t)$", Output);
+  label.lft("$u(t)$", Input);
+  label.rt("$y(t)$", Output);
 
   currentpicture := currentpicture scaled 1.5;
 
@@ -126,8 +126,8 @@ enddef ;
     drawarrow LTI.e -- Output;
   endfor;
 
-  label.lft("$R(s)$", Input);
-  label.rt("$C(s)$", Output);
+  label.lft("$U(s)$", Input);
+  label.rt("$Y(s)$", Output);
 
   currentpicture := currentpicture scaled 1.5;
 
@@ -167,8 +167,8 @@ enddef ;
     drawarrow LTI_two.e -- Output;
   endfor;
 
-  label.lft("$R(s)$", Input);
-  label.rt("$C(s)$", Output);
+  label.lft("$U(s)$", Input);
+  label.rt("$Y(s)$", Output);
 
   currentpicture := currentpicture scaled 1.5;
 
@@ -221,8 +221,8 @@ enddef ;
 
   label.urt("\tfx $+$", sum_one.n + (2bp,0) ); 
   label.lrt("\tfx $+$", sum_one.s + (2bp,0) ); 
-  label.lft("$R(s)$", Input);
-  label.rt("$C(s)$", Output);
+  label.lft("$U(s)$", Input);
+  label.rt("$Y(s)$", Output);
 
   currentpicture := currentpicture scaled 1.5;
 
@@ -273,8 +273,8 @@ enddef ;
 
   label.ulft("\tfx $+$", sum_one.w + (2bp,2bp)); 
   label.lrt("\tfx $-$", sum_one.s + (2bp,0) ); 
-  label.lft("$R(s)$", Input);
-  label.rt("$C(s)$", Output);
+  label.lft("$U(s)$", Input);
+  label.rt("$Y(s)$", Output);
 
   currentpicture := currentpicture scaled 1.5;
 
