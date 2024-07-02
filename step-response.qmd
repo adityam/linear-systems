@@ -538,7 +538,7 @@ where $K$ is called the gain, $ω_n$ is called the _natural_ frequency and $ζ$ 
 
 ```{ojs}
 //| label: fig-damping
-//| fig-caption: Location of poles as a function of damping coefficient
+//| fig-cap: Location of poles as a function of damping coefficient
 ω_damping = 1
 
 poles_damping = {
@@ -584,6 +584,9 @@ b. $ζ = \dfrac{8}{2\sqrt{16}} = 1$. Thus, the system is critically damped.
 b. $ζ = \dfrac{8}{2\sqrt{20}} \approx 0.8944$. Thus, the system is underdamped.
 :::
 
+<!-- TODO: Add step response details -->
+
+
 ## Identifying an underdamped second order system via testing
 
 A second order underdamped system has two characteristics:
@@ -601,16 +604,22 @@ For a second order system, we need to identify three parameters: $K$, $ω_n$ and
 Then, the TF is given by
 $$ G(s) = K \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2}. $$
 
+<!-- TODO: Add an exercise -->
+
 
 ## Impact of zeros
 
-In the characterization of the step response of a second order underdamped system above, we assumed that the system had no zeros. The presence of a zero leads to more oscillations. As the zero moves away from the dominant pole, the response approaches that of a system with no zeros.
+In the characterization of the step response of a second order underdamped system above, we assumed that the system had no zeros. The presence of a zero leads to more oscillations and the exact behavior depends on whether the zero is in the left-hand place (called minimum phase system) or right-hand plane (called non-minimum phase system), which we discuss below.
+
+The impact of zeros means that we will not be able to execute our high-level idea of controller design because we cannot control the zeros of a closed loop system. So, in practice, we need to verify the control design via simulations to make sure that the specs are satisfied. 
+
+### Impact of zero in the left-hand plane (minimum-phase system)
 
 To undersand this, we compare the response of two systems
 $$
   \dfrac{8}{s^2 + 4s + 8}
   \quad\hbox{vs}\quad
-  \dfrac{8}{z} \cdot \dfrac{s+z}{s^2 + 4s + 8}
+  8 \cdot \dfrac{1+\frac{s}{z}}{s^2 + 4s + 8}
 $$
 
 ```{julia}
@@ -624,7 +633,7 @@ for z in 0:6
   if z == 0 
     G = tf(8 .* [1], [1,4,8])
   else
-    G = tf(8/z .* [1,z], [1,4,8])
+    G = tf(8 .* [1/z,1], [1,4,8])
   end
   res = step(G,5)
   N = length(res.t)
@@ -634,7 +643,7 @@ for z in 0:6
   end
 end
 
-ojs_define(second_order_zero = df)
+ojs_define(second_order_min_zero = df)
 ```
 
 ```{ojs}
@@ -642,7 +651,7 @@ viewof zero = Object.assign(Inputs.range([1,6], {label: "z", step: 1, value: 1 }
 ```
 ```{ojs}
 //| layout-ncol: 2
-//| label: fig-second-order-with-zero
+//| label: fig-second-order-with-min-zero
 //| fig-cap: Step response of a seocnd order system for different values zero. The orange curve shows the step response of a system without zero and the blue curve shows the step response of the system with zeros.
 
 PZplot(
@@ -654,20 +663,120 @@ PZplot(
 
 Plot.plot({
   grid: true,
-  y: { domain: [0, 1.6] },
+  y: { domain: [0, 1.8] },
   x: { domain: [0,5] },
   marks: [
     // Axes
     Plot.ruleX([0]),
     Plot.ruleY([0]),
     // Data
-    // zero is still 64 bit float while a is 16 bit float. So we do a crude comparison for equality. 
-    Plot.line(second_order_zero.filter(d => d.z == zero), 
+    Plot.line(second_order_min_zero.filter(d => d.z == zero), 
               {x:"time", y:"output", stroke: "darkblue" }),
-    Plot.line(second_order_zero.filter(d => d.z == 0), 
+    Plot.line(second_order_min_zero.filter(d => d.z == 0), 
               {x:"time", y:"output", stroke: "orange" })
   ]
 })
 ```
 
-The impact of zeros means that we will not be able to execute our high-level idea of controller design because we cannot control the zeros of a closed loop system. So, in practice, we need to verify the control design via simulations to make sure that the specs are satisfied. 
+The above example shows that the presence of a zero in the LHP leads to more overshoot and as the zero moves away from the dominant pole, the response approaches that of a system with no zeros. To understand why this is the case, we can view the system as
+$$
+  G(s) = K \frac{ω_n^2 (1 + \frac{s}{z})}{s^2 + 2 ζω_n^2 + ω_n^2}
+  = 
+  K \frac{ω_n^2}{s^2 + 2 ζω_n^2 + ω_n^2}
+  +
+  K \frac{ω_n^2}{s^2 + 2 ζω_n^2 + ω_n^2} \cdot \frac{s}{z}
+  \eqqcolon
+  G_1(s) + G_1(s) \frac{s}{z}
+$$
+where $G_1(s)$ is the standard second-order system without a zero.
+Thus, the step response of the system is
+$$
+  Y(s) = U(s) G(s) 
+  = 
+  U(s) G_1(s) + U(s) G_1(s) \frac{s}{z}
+  =
+  Y_1(s) + Y_1(s) \frac{s}{z}
+$$
+where $Y_1(s)$ is the step response of the TF with no zeros. Hence,
+$$
+  y(t) = y_1(t) + \frac{1}{z} \frac{dy_1(t)}{dt}.
+$$
+Since $y_1(t)$ is increasing for small $t$, the derivative $dy_1(t)/dt$ is positive and therefore the second term leads to a faster and larger overshoot. 
+
+The above formula also shows that when $z$ is large, then $y(t) \approx y_1(t)$.
+
+
+### Impact of zero in the right-hand plane (non-minimum-phase system)
+
+To understand this, we compare the response of two systems
+$$
+  \dfrac{8}{s^2 + 4s + 8}
+  \quad\hbox{vs}\quad
+  8 \cdot \dfrac{1-\frac{s}{z}}{s^2 + 4s + 8}
+$$
+
+```{julia}
+
+using ControlSystems, DataFrames
+
+# Use Float16 to reduce the size of data passed to OJS
+df=DataFrame(z=Int[],time=Float16[],output=Float16[])
+
+for z in 0:6
+  if z == 0 
+    G = tf(8 .* [1], [1,4,8])
+  else
+    G = tf(8 .* [-1/z,1], [1,4,8])
+  end
+  res = step(G,5)
+  N = length(res.t)
+
+  for n=1:N
+    push!(df, (z=z, time=Float16(res.t[n]), output=Float16(res.y[n])))
+  end
+end
+
+ojs_define(second_order_non_min_zero = df)
+```
+
+```{ojs}
+viewof zero_non_min = Object.assign(Inputs.range([1,6], {label: "z", step: 1, value: 1 }), {style: '--label-width:20px'})
+```
+```{ojs}
+//| layout-ncol: 2
+//| label: fig-second-order-with-non-min-zero
+//| fig-cap: Step response of a seocnd order system for different values zero. The orange curve shows the step response of a system without zero and the blue curve shows the step response of the system with zeros.
+
+PZplot(
+       [ {σ: zero_non_min, jω: 0} ], 
+       [ {σ: -2, jω: 2}, {σ: -2, jω: -2} ],
+       [-3, 6.5],
+       [-3, 3],
+      )
+
+Plot.plot({
+  grid: true,
+  y: { domain: [-1.6, 1.2] },
+  x: { domain: [0,5] },
+  marks: [
+    // Axes
+    Plot.ruleX([0]),
+    Plot.ruleY([0]),
+    // Data
+    Plot.line(second_order_non_min_zero.filter(d => d.z == zero_non_min), 
+              {x:"time", y:"output", stroke: "darkblue" }),
+    Plot.line(second_order_non_min_zero.filter(d => d.z == 0), 
+              {x:"time", y:"output", stroke: "orange" })
+  ]
+})
+```
+
+The above example shows that a zero in the RHP leads to _undershoot_ and 
+as the zero moves to infinity, the response approaches that of a system with no zeros. 
+
+To understand why this is the case, we can follow the same analysis as for the minimal phase system to conclude that
+$$
+  y(t) = y_1(t) - \frac{1}{z} \frac{dy_1(t)}{dt}.
+$$
+Since $y_1(t)$ is increasing for small $t$, the derivative $dy_1(t)/dt$ is positive and therefore the second term leads to an undershoot. The above formula also shows that when $z$ is large, then $y(t) \approx y_1(t)$.
+
