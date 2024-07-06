@@ -64,8 +64,85 @@ $$G(s) = \frac{b_m s^m + \cdots + b_0}{s^n + a_{n-1}s^{n-1} + \cdots + a_0}.$$
 
 We will consider three **canoncial** representations of a DE or TF in SS (state space) form:
 
+1. Controllable Canonical Form (CCF)
+2. Observable Canonical Form (OCF)
+3. Diagonal Canonical Form (DCF)
+
+In the discussion below, we assume that the TF is **strictly proper** (i.e., $m < n$). The formulas for the case $m = n$ are a bit different.
+
+
 ### Controllable Canonical Form (CCF)
 
 ### Observable Canonical Form (OCF)
 
 ### Diagonal Canonical Form (DCF)
+
+## From state space models to transfer functions
+
+So far, we have seen how to write different SS representations from a TF. It is also possible to go in the other directions. 
+
+Suppose we have a SS system:
+\begin{align*}
+\dot x(t) &= A x(t) + B u(t) \\
+y(t) &= C x(t)
+\end{align*}
+Then the transfer function is
+$$
+  \bbox[5pt,border: 1px solid]
+  {G(s) = C(sI - A)^{-1} B }
+$$
+
+:::{.callout-note collapse="true"} 
+#### Derivation of the formula
+
+Take LT of the SS model:
+\begin{align*}
+s X(s) &= A X(s) + B U(s) 
+& \implies&&
+X(s) &= (sI - A)^{-1} B U(s) \\
+Y(s) &= C X(s)
+& \implies&&
+Y(s) &= C(sI - A)^{-1} B U(s)
+\end{align*}
+
+Hence,
+$$ G(s) = \frac{Y(s)}{U(s)} = C(sI - A)^{-1} B.$$
+
+:::
+
+We can think of this in terms of the following block diagram. 
+
+<!-- TODO: Add block diagram --> 
+
+The TF can be "read backwards" from the block diagram.
+
+:::{#exm-SS-to-TF-1}
+Let $A = \MATRIX{-1 & 2 \\ 3 & -1}$, $B = \MATRIX{1 \\ 0}$, and $C = \MATRIX{2 & 1}$. Find the TF?
+:::
+
+:::{.callout-note collapse="true"} 
+#### Solution
+
+Note that
+$$sI - A = \MATRIX{s+1 & -2 \\ -3 & s+1}.$$
+
+Therefore,
+$$\det(sI-A) = (s+1)^2 - 6 = s^2 + 2s -5. $$
+
+Hence,
+$$(sI - A)^{-1} = \frac{1}{\det(sI-A)} \MATRIX{s+1 & 2 \\ 3 & s+1}.$$
+
+Finally,
+$$G(s) = C(sI-A)^{-1}B 
+=
+\frac{1}{\det(sI-A)} \MATRIX{2 & 1} \MATRIX{s+1 & 2 \\ 3 & s+1} \MATRIX{1 \\ 0}
+= \frac{2s + 5}{s^2 + 2s - 5}.$$
+:::
+
+Recall that $\det(sI-A)$ is the characteristic equation of $A$ and the roots of the characteristic equation are the eigenvalues of $A$. Therefore, an important implication of the above formula is
+$$\bbox[5pt,border: 1px solid]
+{\text{Poles of $G(s)$} = \text{evals of $A$}}$$
+This means that we can control the poles of the TF by controlling the eigenvalues of $A$. 
+
+**Changing the eigenvalues of the $A$ matrix will be one of the most simple and the most important design methods that we will learn in this course.**
+
