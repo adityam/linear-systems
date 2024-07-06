@@ -604,8 +604,77 @@ For a second order system, we need to identify three parameters: $K$, $ω_n$ and
 Then, the TF is given by
 $$ G(s) = K \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2}. $$
 
-<!-- TODO: Add an exercise -->
+:::{#exm-identify-second-order}
 
+Identify the transfer function from the following step response
+
+```{julia}
+
+using ControlSystems, Plots
+
+G = zpk([],[-2+4im,-2-4im],40)
+
+T = 6 
+
+plt = plot(size=(600,300), gridalpha=0.75, minorgridalpha=0.25)
+plot!(plt, step(G, T))
+```
+:::
+
+:::{.callout-note collapse="true"} 
+### Solution
+
+From the step response, we can infer that this is the step response of an underdapmper second order system, which in general is of the form:
+$$
+  G(s) = K \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2}.
+$$
+
+We now identify the parameters:
+
+- The final DC value of the response is $2$. Thus, $K = 2$. 
+
+- From the plot, we see that $T_p \approx 0.75$. Thus,
+  $$ ω_d = \frac{π}{T_p} = 4.188. $$
+
+- From the plot, we see that $y_{\text{max}} = 2.4$. We have already identified that $y_{\text{final}} = 2$. Thus,
+  $$ \% {\rm OS} = \frac{y_{\text{max}} - y_{\text{final}}}{y_{\text{final}}} \times 100
+  = 20\%
+  $$
+  The formula for $\%{\rm OS}$ can be written as 
+  $$
+  \%{\rm OS} = \exp(-σ T_p) \times 100
+  $$
+
+  Inverting the formula, we get
+  $$
+  σ = \frac{-\ln(\%{\rm OS}/100)}{T_p} = 2.146
+  $$
+
+  Thus, 
+  $$ ω_n^2 = σ^2 + ω_d^2 = 22.151 $$
+
+Hence, the transfer function is 
+$$
+G(s) = 2 \frac{22.151}{s^2 + 4.21s + 22.151}
+= \frac{44.302}{s^2 + 4.21s + 22.151}.
+$$
+
+To confirm, we plot the step response of the above system below. The plotted response is almost identical to the given response.
+
+```{julia}
+
+using ControlSystems, Plots
+
+G = tf([44.302],[1,4.21,22.151])
+
+T = 6 
+
+plt = plot(size=(600,300), gridalpha=0.75, minorgridalpha=0.25)
+plot!(plt, step(G, T))
+```
+
+
+:::
 
 ## Impact of zeros
 
