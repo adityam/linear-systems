@@ -146,3 +146,132 @@ This means that we can control the poles of the TF by controlling the eigenvalue
 
 **Changing the eigenvalues of the $A$ matrix will be one of the most simple and the most important design methods that we will learn in this course.**
 
+## Change of coordinates
+
+A key idea for controller design using state space methods is change of coordinates. To fix ideas, we first review the change of coordinates for vectors and then we will come back to SS models. 
+
+Consider a vector space $\reals^2$. The standard basis for $\reals^2$ is 
+$$
+e_1 = \MATRIX{1 \\ 0}
+\quad\text{and}\quad
+e_2 = \MATRIX{0 \\ 1}.
+$$
+When we write $x = \MATRIX{x_1 \\ x_2} \in \reals^2$, what we really mean is
+$$x = x_1 e_1 + x_2 e_2.$$
+
+What happens if we choose a different basis, say $v_1$ and $v_2$. If the vector
+$$
+  x = \tilde x_1 v_1 + \tilde x_2 v_2
+$$
+then we can say that the vector is equal to $\MATRIX{\tilde x_1 \\ \tilde x_2}$ in the coordinate system $(v_1, v_2)$. Note that the vector hasn't changed, only the coodinate system has.
+
+We use the following example to illustrate how to move from one coordinate system to another
+
+:::{#exm-change-of-coordinates}
+Let $x = \MATRIX{2 \\ 3}$. Find its representation in the coordinate system
+$$v_1 = \MATRIX{1 \\ 0}
+\quad\text{and}\quad
+v_2 = \MATRIX{1 \\ 1}.
+$$
+
+#### Solution
+
+Let the representation in the new coordinate system be $\tilde x = \MATRIX{\tilde x_1 \\ \tilde x_2}$. Thus, we must have
+$$
+2 e_1 + 3 e_2 = \tilde x_1 v_1 + \tilde x_2 v_2.
+$$
+Or, in vector form,
+$$ \MATRIX{1 & 0 \\ 0 & 1} \MATRIX{2 \\ 3}
+=
+\MATRIX{1 & 1 \\ 0 & 1} \MATRIX{\tilde x_1 \\ \tilde x_2}
+$$
+which can be written as
+$$\bbox[5pt,border: 1px solid]
+{ x = T \tilde x}
+$$
+where 
+$$T = \MATRIX{v_1 & v_2} = \MATRIX{1 & 1 \\ 0 & 1}.$$
+The matrix $T$ is full rank (which is always the case if $\text{span}(v_1,v_2) = \reals^2$. Thus, we have
+$$\bbox[5pt,border: 1px solid]
+{ \tilde x = T^{-1} x}
+$$
+
+So, for the above example we have
+$$\tilde x = \MATRIX{1 & 1 \\ 0 & 1}^{-1} \MATRIX{2 \\ 3}
+= \MATRIX{-1 \\ 3}.$$
+
+<!-- TODO: Draw a picture -->
+:::
+
+## Change of coordinates in SS models.
+
+Consider a SS model:
+\begin{align*}
+\dot x(t) &= A x(t) + B u(t) \\
+y(t) &= C x(t)
+\end{align*}
+
+Let $T$ be any invertible $n × n$ matrix. Such a matrix is called a **similarity matrix**. Think of columns of $T$ as the basis of a new coordinate system. Then, the state can be written as
+$$ \tilde x(t) = T^{-1} x(t) $$ 
+in the new coordinate system.
+
+- What are the stae space equations in the new coordinate system?
+- How does the change of coordinates affect the TF?
+
+We look at both these questions in detail. 
+
+Since $\tilde x(t) = T^{-1} x(t)$, we have $x(t) = T \tilde x(t)$. Substituting this in the SS model, we have
+\begin{align*}
+T \dot {\tilde x}(t) &= A T \tilde x(t) + B u(t) \\
+y(t) &= C T \tilde x(t)
+\end{align*}
+
+Pre-multiply the first equation by $T^{-1}$:
+\begin{align*}
+\dot {\tilde x}(t) &= T^{-1} A T \tilde x(t) + T^{-1} B u(t) \\
+y(t) &= C T \tilde x(t)
+\end{align*}
+
+So, we can think of this as a new SS model:
+\begin{align*}
+\dot {\tilde x}(t) &= \tilde A \tilde x(t) + \tilde B u(t) \\
+y(t) &= \tilde C \tilde x(t)
+\end{align*}
+where
+$$\bbox[5pt,border: 1px solid]
+{\tilde A = T^{-1} A T,
+ \quad
+ \tilde B = T^{-1} B,
+ \quad
+ \tilde C = CT}
+$$
+
+The coordinate transformation has the following properties:
+
+1. **Coordinate transformation does not change the characteristic function**
+
+   Note that
+   \begin{align*}
+   (sI - \tilde A) &= sI - T^{-1} A T \\
+   &= s T^{-1} I T - T^{-1} A T \\
+   &= T^{-1} (sI - A) T.
+   \end{align*}
+   Therefore,
+   $$
+   \det(sI - \tilde A) = \det(T^{-1}) \det(sI - A) \det(T) 
+   = \det(sI - A)
+   $$
+   because $\det(T^{-1}) \det(T) = \det(T^{-1} T) = \det(I) = 1$.
+
+2. **Coordinate transformation does not change the TF**
+
+   The transfer function in the new coordinate system is
+   \begin{align*}
+   \tilde G(s) &= \tilde C(sI - \tilde A)^{-1} \tilde B \\
+   &= C T T^{-1} (sI - A)^{-1} T T^{-1} B \\
+   &= C(sI - A)^{-1} B = G(s)
+   \end{align*}
+   
+These properties hold because the change of coordinates (or similarity transformation) does not physically change the state; it only changes the coordinate system that we are using to represent the state. 
+
+Change of coordinates (or similarity transformation) is a very useful tool for control system syntehsis. As we will see later, it is easy to design controllers for systems in CCF. So, when we have to design controllers for systems not in CCF, we first find a similarity transformation that converts the system to CCF; then we design a controller for the system in CCF; and finally we convert the controller back to the original coordinate system. Don't worry if this doesn't make sense notw. We will discuss this in detail in the next few lectures.
