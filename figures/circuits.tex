@@ -1,0 +1,23 @@
+\usepath[/home/adityam/Projects/presentations]
+
+\enablemode[euler]
+\environment env-fonts.tex
+\usemodule[circuitikz]
+\ctikzset{bipoles/thickness=1}
+\starttext
+\startTEXpage[offset=1dk]
+\scale[scale=1500]{\startcircuitikz[american voltages,thick]
+  \draw (0,0) to[V=$v(t)$,invert] (0,3) 
+              to[R=$R$] (3,3)
+              to[L=$L$] (6,3)
+              to[C=$C$] (6,0) -- (0,0);
+  \draw[->,thick] plot [smooth, tension=1] coordinates { (1,2) (4.5,2) (4.5,1) (1,1) };
+
+  \node (label) at (3,1.5) {$i(t)$};
+\stopcircuitikz}
+\stopTEXpage
+
+\startTEXpage
+  Test
+\stopTEXpage
+\stoptext

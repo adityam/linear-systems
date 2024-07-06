@@ -1,0 +1,71 @@
+---
+title: State space models
+---
+
+The main idea behind state space models is to express constant coefficient linear differential equations as a first order **vector** differential equation. This representation allows us to use linear algebra to design controllers.
+
+As an example, let's start with a simple example to understand how state space modeling works. Let's consider an LCR circuit shown in @fig-lcr.
+
+![A simple circuit](figures/svg/circuits1.svg){#fig-lcr}
+
+
+Let $i(t)$ denote the loop current and $q(t)$ denote the charge across the capicitor. 
+
+One way to solve this system is to use Kirchoff's law to get
+\begin{equation}\label{eq:KCL}
+v(t) = Ri(t) + L \frac{di(t)}{dt} + \frac 1C \int i(t) dt.
+\end{equation}
+Then, using $i(t) = dq(t)/dt$, we get
+\begin{equation}\label{eq:2nd-order}
+L\frac{d^2 q(t)}{dt^2} + R \frac{dq(t)}{dt} + \frac 1C q(t) = v(t).
+\end{equation}
+This is a second order linear differential equation, which we can solve in multiple ways. 
+
+An alternative way, instead of using Kirchoff's law to get a second order differetial equation, is two write two coupled first-order differetial equations:
+\begin{align*}
+  \frac{dq(t)}{dt} &= i(t) \\
+  \frac{di(t)}{dt} &= -\frac{R}{L} i(t) - \frac{1}{LC} q(t) + \frac{1}{LC} v(t)
+\end{align*}
+where the second equation is a rearrangement of \eqref{eq:KCL}. We can write these two equations in vector form. In particular, let $x(t) = \MATRIX{q(t) \\ i(t)}$. Then,
+$$
+\dot x(t) = \MATRIX{ \frac{dq(t)}{dt} \\ \frac{di(t)}{dt} }
+     =
+     \MATRIX{0 & 1 \\ \frac{-1}{LC} & \frac{-R}{L}}
+     \MATRIX{q(t) \\ i(t)} 
+     +
+     \MATRIX{0 \\ \frac{1}{L}} v(t).
+$$
+If we think of the voltage across the capacitor as output (and denote it by $y(t)$), then
+$$y(t) = \frac{1}{C} q(t) = \MATRIX{\frac 1C & 0}\MATRIX{q(t) \\ i(t)}.$$
+Thus, we have a system of differential equations (where the input $u(t)$ is equal to the voltage $v(t)$)
+\begin{align}
+\dot x(t) &= A x(t) + B u(t) \label{eq:SS-1}\\
+y(t) &= C x(t) \label{eq:SS-2}
+\end{align}
+Thus, the second-order DE \eqref{eq:2nd-order} is equivalent with a first-order DE \eqref{eq:SS-1}--\eqref{eq:SS-2} with **a state of dimention 2**.
+
+:::{.callout-warning}
+#### Non-uniqueness of the representation
+The state $x(t)$ is not unique. We will show later that there are multiple state space representations corresponding to the same DE.
+:::
+
+## Canoncial representations
+In the previous example, we constructed the state space representation "by hand". We now consider a few "automatic" methods of constructing state space representations from a DE. 
+
+We assume that we are either given a _normalized_ DE (i.e., the leading coefficient is 1):
+$$
+\frac{d^n y(t)}{dt^n} + a_{n-1} \frac{d^{n-1}y(t)}{dt} 
++ \cdots + a_0  y(t)
+=
+b_m \frac{d^m u(t)}{dt^m} + \cdots + b_0 u(t)
+$$
+or a _normalized_ TF
+$$G(s) = \frac{b_m s^m + \cdots + b_0}{s^n + a_{n-1}s^{n-1} + \cdots + a_0}.$$
+
+We will consider three **canoncial** representations of a DE or TF in SS (state space) form:
+
+### Controllable Canonical Form (CCF)
+
+### Observable Canonical Form (OCF)
+
+### Diagonal Canonical Form (DCF)
