@@ -509,7 +509,7 @@ Hence $G(s) = K \dfrac{a}{s+a} = \dfrac{10}{s+4}$.
 
 :::
 
-## Step response of second order systems
+## Types of second order systems
 
 A general second order system is of the form
 $$
@@ -532,33 +532,59 @@ where $K$ is called the gain, $ω_n$ is called the _natural_ frequency and $ζ$ 
 
 @fig-damping illustrates the impact of the damping coefficient on the location of the poles:
 
+```{julia}
+
+using ControlSystems, DataFrames
+
+# Use Float16 to reduce the size of data passed to OJS
+df=DataFrame(ζ=Float16[],time=Float16[],output=Float16[])
+
+for ζ in 0:0.1:5.5
+  ω_d = 1
+  ω_n = sqrt(ω_d^2 + ζ^2)
+  G = tf([ω_n^2],[1,2*ζ*ω_n, ω_n^2])
+  res = step(G,8)
+  N = length(res.t)
+
+  # Subsample by 2 for plotting
+  for n=1:2:N
+    push!(df, (ζ=Float16(ζ), time=Float16(res.t[n]), output=Float16(res.y[n])))
+  end
+end
+
+ojs_define(second_order_zeta = df)
+```
+
+
 ```{ojs}
-  viewof zeta_damping = Object.assign(Inputs.range([0, 5.5], {label: "ζ", step: 0.01, value: 0.5 }), {style: '--label-width:20px'})
+  viewof zeta_damping = Object.assign(Inputs.range([0, 5.5], {label: "ζ", step: 0.1, value: 0.5 }), {style: '--label-width:20px'})
+
+  ω_damping = 1
+
+  poles_damping = {
+    var factor
+    var poles
+
+    if (zeta_damping == 0) {
+      poles = [ { σ: 0, jω: ω_damping },
+                { σ: 0, jω: -ω_damping } ] 
+    } else if (0 < zeta_damping && zeta_damping < 1) { 
+      factor = Math.sqrt(1-zeta_damping*zeta_damping)
+      poles = [ { σ: -ω_damping*zeta_damping, jω: ω_damping*factor }, 
+                { σ: -ω_damping*zeta_damping, jω: -ω_damping*factor } ] 
+    } else {// zeta_damping > 1
+      factor = Math.sqrt(zeta_damping*zeta_damping-1)
+      poles = [ { σ: -ω_damping*zeta_damping + ω_damping*factor, jω: 0 }, 
+                { σ: -ω_damping*zeta_damping - ω_damping*factor, jω: 0 } ] 
+    }
+    return poles
+  }
 ```
 
 ```{ojs}
+//| layout-ncol: 2
 //| label: fig-damping
-//| fig-cap: Location of poles as a function of damping coefficient
-ω_damping = 1
-
-poles_damping = {
-  var factor
-  var poles
-
-  if (zeta_damping == 0) {
-    poles = [ { σ: 0, jω: ω_damping },
-              { σ: 0, jω: -ω_damping } ] 
-  } else if (0 < zeta_damping && zeta_damping < 1) { 
-    factor = Math.sqrt(1-zeta_damping*zeta_damping)
-    poles = [ { σ: -ω_damping*zeta_damping, jω: ω_damping*factor }, 
-              { σ: -ω_damping*zeta_damping, jω: -ω_damping*factor } ] 
-  } else {// zeta_damping > 1
-    factor = Math.sqrt(zeta_damping*zeta_damping-1)
-    poles = [ { σ: -ω_damping*zeta_damping + ω_damping*factor, jω: 0 }, 
-              { σ: -ω_damping*zeta_damping - ω_damping*factor, jω: 0 } ] 
-  }
-  return poles
-}
+//| fig-cap: Step response as a function of damping coefficient
 
 PZplot(
        [], 
@@ -566,6 +592,22 @@ PZplot(
        [-4.5*ω_damping, 0.5*ω_damping],
        [-1.5*ω_damping, 1.5*ω_damping],
       )
+
+Plot.plot({
+  grid: true,
+  y: { domain: [0, 1.6] },
+  x: { domain: [0,8] },
+  marks: [
+    // Axes
+    Plot.ruleX([0]),
+    Plot.ruleY([0]),
+    // Data
+    // zeta_damping is still 64 bit float while a is 16 bit float. So we do a crude comparison for equality. 
+    Plot.line(second_order_zeta.filter(d => Math.abs(d.ζ - zeta_damping) <= 0.01), 
+              {x:"time", y:"output", stroke: "darkblue" }),
+  ]
+})
+
 ```
 
 :::{#exr-2nd-order}
@@ -584,7 +626,213 @@ b. $ζ = \dfrac{8}{2\sqrt{16}} = 1$. Thus, the system is critically damped.
 b. $ζ = \dfrac{8}{2\sqrt{20}} \approx 0.8944$. Thus, the system is underdamped.
 :::
 
+## Step response of undamped second order system
+
+## Step response of underdamped second order system
+
 <!-- TODO: Add step response details -->
+
+### Peak Time
+
+### Percentage overshoot
+
+### Settling time
+
+### Rise time
+
+## Features of time response in terms of location of poles
+
+### Same damped frequency
+
+The peak time depends on the damped frequency. So, if we change $σ$ while keeping $ω_d$ fixed, the peak time of the system remains the same.
+
+```{julia}
+
+using ControlSystems, DataFrames
+
+# Use Float16 to reduce the size of data passed to OJS
+df=DataFrame(σ=Float16[],time=Float16[],output=Float16[])
+
+for σ in 0.1:0.1:4
+  ω_d = 2
+  G = zpk([], [-σ+ω_d*im, -σ-ω_d*im], σ^2 + ω_d^2)
+  res = step(G,5)
+  N = length(res.t)
+
+  # Subsample by 2 for plotting
+  for n=1:2:N
+    push!(df, (σ=Float16(σ), time=Float16(res.t[n]), output=Float16(res.y[n])))
+  end
+end
+
+ojs_define(second_order_sigma = df)
+```
+
+```{ojs}
+//| layout-ncol: 1
+viewof param_sigma = Object.assign(Inputs.range([0.1,4], {label: "σ", step: 0.1, value: 2 }), {style: '--label-width:20px'})
+
+ω_d_sigma = 2
+T_p_sigma = Math.PI/ω_d_sigma
+M_p_sigma = 1 + Math.exp(-param_sigma*T_p_sigma)
+peak_sigma = [ {x: T_p_sigma, y: 0}, {x: T_p_sigma, y: M_p_sigma} ]
+
+```
+
+```{ojs}
+//| layout-ncol: 2
+//| label: fig-second-order-sigma
+//| fig-cap: Step response of a second order system for fixed $ω_d$ and different values $σ$. The red dot shows the peak of the step response.
+
+PZplot(
+       [], 
+       [ {σ: -param_sigma, jω: ω_d_sigma}, {σ: -param_sigma, jω: -ω_d_sigma} ], 
+       [-3, 3],
+       [-5, 5],
+      )
+
+Plot.plot({
+  grid: true,
+  y: { domain: [0, 1.6] },
+  x: { domain: [0,5] },
+  marks: [
+    // Axes
+    Plot.ruleX([0]),
+    Plot.ruleY([0]),
+    // Data
+    // param_sigma is still 64 bit float while a is 16 bit float. So we do a crude comparison for equality. 
+    Plot.line(second_order_sigma.filter(d => Math.abs(d.σ - param_sigma) <= 0.01), 
+              {x:"time", y:"output", stroke: "darkblue" }),
+    Plot.dot([ [T_p_sigma, M_p_sigma] ], {fill: "red", r:4}),
+    Plot.line(peak_sigma, {x: "x", y: "y", stroke: "red"})
+  ]
+})
+```
+
+### Same $σ$
+
+The settling time depends on $σ$. So, if we change $ω_d$ while keeping $σ$ fixed, the settling time of the system remains the same. 
+
+```{julia}
+
+using ControlSystems, DataFrames
+
+# Use Float16 to reduce the size of data passed to OJS
+df=DataFrame(ωd=Float16[],time=Float16[],output=Float16[])
+
+for ωd in 0.1:0.1:4
+  σ = 2
+  G = zpk([], [-σ+ωd*im, -σ-ωd*im], σ^2 + ωd^2)
+  res = step(G,5)
+  N = length(res.t)
+
+  # Subsample by 2 for plotting
+  for n=1:2:N
+    push!(df, (ωd=Float16(ωd), time=Float16(res.t[n]), output=Float16(res.y[n])))
+  end
+end
+
+ojs_define(second_order_ωd = df)
+```
+
+```{ojs}
+//| layout-ncol: 1
+viewof param_ωd = Object.assign(Inputs.range([0.1,4], {label: "ωd", step: 0.1, value: 2 }), {style: '--label-width:20px'})
+
+σ_ωd = 2
+
+```
+
+```{ojs}
+//| layout-ncol: 2
+//| label: fig-second-order-ωd
+//| fig-cap: Step response of a second order system for fixed $ω_d$ and different values $σ$. The red dot shows the peak of the step response.
+
+PZplot(
+       [], 
+       [ {σ: -σ_ωd, jω: param_ωd}, {σ: -σ_ωd, jω: -param_ωd} ], 
+       [-3, 3],
+       [-5, 5],
+      )
+
+Plot.plot({
+  grid: true,
+  y: { domain: [0, 1.6] },
+  x: { domain: [0,5] },
+  marks: [
+    // Axes
+    Plot.ruleX([0]),
+    Plot.ruleY([0]),
+    // Data
+    // param_ωd is still 64 bit float while a is 16 bit float. So we do a crude comparison for equality. 
+    Plot.line(second_order_ωd.filter(d => Math.abs(d.ωd - param_ωd) <= 0.01), 
+              {x:"time", y:"output", stroke: "darkblue" }),
+  ]
+})
+```
+
+### Same damping coefficient
+
+The peak overshoot depends on the damping coefficient. So, if we change $ω_n$ keeping $ζ$ constant, the peak overshoot (and therefore percentage overshoot) remains the same.
+
+```{julia}
+
+using ControlSystems, DataFrames
+
+# Use Float16 to reduce the size of data passed to OJS
+df=DataFrame(ωn=Float16[],time=Float16[],output=Float16[])
+
+for ωn in 0.1:0.1:4
+  ζ = 0.4
+  G = tf([ωn^2],[1,2*ζ*ωn, ωn^2])
+  res = step(G,5)
+  N = length(res.t)
+
+  # Subsample by 2 for plotting
+  for n=1:2:N
+    push!(df, (ωn=Float16(ωn), time=Float16(res.t[n]), output=Float16(res.y[n])))
+  end
+end
+
+ojs_define(second_order_ωn = df)
+```
+
+```{ojs}
+//| layout-ncol: 1
+viewof param_ωn = Object.assign(Inputs.range([0.1,4], {label: "ωn", step: 0.1, value: 2 }), {style: '--label-width:20px'})
+
+ζ_ωn = 0.4
+
+```
+
+```{ojs}
+//| layout-ncol: 2
+//| label: fig-second-order-ωn
+//| fig-cap: Step response of a second order system for fixed $ω_d$ and different values $σ$. The red dot shows the peak of the step response.
+
+PZplot(
+       [], 
+       [ {σ: -param_ωn*ζ_ωn, jω:  param_ωn*Math.sqrt(1 - ζ_ωn**2) },
+         {σ: -param_ωn*ζ_ωn, jω: -param_ωn*Math.sqrt(1 - ζ_ωn**2) } ],
+       [-3, 3],
+       [-5, 5],
+      )
+
+Plot.plot({
+  grid: true,
+  y: { domain: [0, 1.6] },
+  x: { domain: [0,5] },
+  marks: [
+    // Axes
+    Plot.ruleX([0]),
+    Plot.ruleY([0]),
+    // Data
+    // param_ωn is still 64 bit float while a is 16 bit float. So we do a crude comparison for equality. 
+    Plot.line(second_order_ωn.filter(d => Math.abs(d.ωn - param_ωn) <= 0.01), 
+              {x:"time", y:"output", stroke: "darkblue" }),
+  ]
+})
+```
 
 
 ## Identifying an underdamped second order system via testing
@@ -662,6 +910,7 @@ $$
 To confirm, we plot the step response of the above system below. The plotted response is almost identical to the given response.
 
 ```{julia}
+#| echo: true
 
 using ControlSystems, Plots
 
@@ -849,3 +1098,6 @@ $$
 $$
 Since $y_1(t)$ is increasing for small $t$, the derivative $dy_1(t)/dt$ is positive and therefore the second term leads to an undershoot. The above formula also shows that when $z$ is large, then $y(t) \approx y_1(t)$.
 
+## Step response of critically damped second order system
+
+## Step response of overdamped second order system
