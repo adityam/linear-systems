@@ -2,5 +2,6 @@
 *.pdf
 *.tuc
 *.log
+*.pgf
 .jupyter_cache/
 /docs/
