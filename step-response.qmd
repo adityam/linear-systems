@@ -697,21 +697,15 @@ y(t) &= K \biggl[ 1 - e^{-σt} \biggl(\cos ω_d t + \frac{σ}{ω_d} \sin ω_d t\
 \end{align*}
 where as before $φ = \sin^{-1} ζ$. 
 
-```{ojs}
-//| fig-cap: Step response of underdamped system for $ζ = 0.5$
-Plot.plot({
-  grid: true,
-  y: { domain: [0, 1.3] },
-  x: { domain: [0,8] },
-  marks: [
-    // Axes
-    Plot.ruleX([0]),
-    Plot.ruleY([0]),
-    // Data
-    Plot.line(second_order_zeta.filter(d => Math.abs(d.ζ - 0.5) <= 0.01), 
-              {x:"time", y:"output", stroke: "darkblue" }),
-  ]
-})
+```{julia}
+#| label: fig-step-response-components
+#| fig-cap: Step response of underdamped system for $ζ = 0.5$
+using ControlSystems, Plots
+G = tf(1,[1,1,1])
+res = step(G,20)
+si  = stepinfo(res)
+plt = plot(size=(600,300))
+plot!(plt,si)
 ```
 
 ### Important characteristics of the step response
