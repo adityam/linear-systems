@@ -628,17 +628,151 @@ b. $ζ = \dfrac{8}{2\sqrt{20}} \approx 0.8944$. Thus, the system is underdamped.
 
 ## Step response of undamped second order system
 
+For $ζ = 0$, the TF is
+$$
+G(s) = K \frac{ω_n^2}{s^2 + ω_n^2} 
+= K \frac{ω_n^2}{ (s+j ω_n)(s - j ω_n) }.
+$$
+
+This would correspond to a LC circuit (without resistance) or a spring mass system (without damping). These are idealized models, so the step response is mainly for academic interest. Although we derive the step response below, we will not investigate the undamped system in this course.
+
+To find the step response, we observe the following formula from the LT tables:
+$$
+\dfrac{a^2 + b^2}{s( (s+a)^2 + b^2 )}
+\xleftrightarrow{\quad \mathcal L\quad}
+\biggl[ 1 - e^{-at}\bigg( \cos bt + \frac{a}{b}\sin bt \biggr) \biggr].
+\IND(t)
+$$
+
+Choosing $a = 0$ and $b = ω_n$, we get
+$$
+K \frac{1}{s} \cdot \frac{ω_n^2}{s^2 + ω_n^2}
+\xleftrightarrow{\quad \mathcal L\quad}
+K [1 - \cos ω_n t] \IND(t).
+$$
+
+```{ojs}
+//| fig-cap: Step response of undamped system
+Plot.plot({
+  grid: true,
+  y: { domain: [0, 2.2] },
+  x: { domain: [0,8] },
+  marks: [
+    // Axes
+    Plot.ruleX([0]),
+    Plot.ruleY([0]),
+    // Data
+    Plot.line(second_order_zeta.filter(d => Math.abs(d.ζ - 0) <= 0.01), 
+              {x:"time", y:"output", stroke: "darkblue" }),
+  ]
+})
+```
+
 ## Step response of underdamped second order system
 
-<!-- TODO: Add step response details -->
+For the case when $0 < ζ < 1$, we can write the TF as
+$$
+G(s) = \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2}
+= 
+\frac{σ^2 + ω_d^2}{(s+σ)^2 + ω_d^2}
+$$
+where $σ = ζ ω_n$ and $ω_d = \sqrt{1 - ζ^2} ω_n$. Note that we have
+$$ σ^2 + ω_d^2 = ω_n.$$ 
+The parameter $ω_n$ is called the **natural frequency**. It is the frequency at which the system will oscillate when there is no damping. The parameter $ω_d$ is called the **damped frequency**. As we will show below, it is the frequency at which the damped system oscillates. 
 
-### Peak Time
 
-### Percentage overshoot
+The system has two complex conjugate roots. In cartesian coordinates, these roots are at $-σ \pm j ω_d$, while in polar coordinates they are at $ω_n e^{\pm j(π/2 + φ)}$, where $\phi = \sin^{-1}ζ$. 
 
-### Settling time
+To find the step response, we again recall the following LT formula from the LT tables:
+$$
+\dfrac{a^2 + b^2}{s( (s+a)^2 + b^2 )}
+\xleftrightarrow{\quad \mathcal L\quad}
+\biggl[ 1 - e^{-at}\bigg( \cos bt + \frac{a}{b}\sin bt \biggr) \biggr].
+\IND(t)
+$$
+Taking $a = σ$ and $b = ω_d$, we get that the step response is
+\begin{align*}
+y(t) &= K \biggl[ 1 - e^{-σt} \biggl(\cos ω_d t + \frac{σ}{ω_d} \sin ω_d t\biggr)\biggr] \IND(t) \\
+&= K \biggl[ 1 - \frac{1}{\sqrt{1 - ζ^2}} e^{-σ t} \cos(ω_dt - \phi) \biggr] \IND(t)
+\end{align*}
+where as before $φ = \sin^{-1} ζ$. 
 
-### Rise time
+```{ojs}
+//| fig-cap: Step response of underdamped system for $ζ = 0.5$
+Plot.plot({
+  grid: true,
+  y: { domain: [0, 1.3] },
+  x: { domain: [0,8] },
+  marks: [
+    // Axes
+    Plot.ruleX([0]),
+    Plot.ruleY([0]),
+    // Data
+    Plot.line(second_order_zeta.filter(d => Math.abs(d.ζ - 0.5) <= 0.01), 
+              {x:"time", y:"output", stroke: "darkblue" }),
+  ]
+})
+```
+
+### Important characteristics of the step response
+
+The response of an underdamped second order system has the following features:
+
+- The initial slope (at $t=0$) is zero.
+- The output oscillates at frequency $ω_d$. It overshoots and then settles back to the final DC value of $K$.
+
+
+- The **maximum peak**, denoted by $M_p$ is the maximum value of the step response. 
+- Rather than working with maximum peak, we often use **percentage overshoot** which is defined as 
+  $$\% {\rm OS} = \frac{M_p - K}{K} × 100$$
+  which does not depend on the gain $K$. We will show that
+  $$
+  \bbox[5pt,border: 1px solid]
+  {\% {\rm OS} = e^{-π ζ/\sqrt{1 - ζ^2}} × 100 
+  = e^{-π σ/ω_d} × 100}
+  $$
+  where the last equality uses the fact that $ζ/\sqrt{1-ζ^2} = σ/ω_d$. We often use this relationship in the reverse, i.e.,
+  $$
+  ζ = \frac{- \ln(\%{\rm OS}/100)}{\sqrt{π^2 + \ln^2(\%{\rm OS}/100)}}.
+  $$
+- The time needed to reach the maximum overshoot is called **peak time** and denoted by $T_p$. We will show that
+  $$
+  \bbox[5pt,border: 1px solid]
+  {T_p = \frac{π}{ω_d} = \frac{π}{ω_n \sqrt{1 - ζ^2}}}
+  $$
+- The time after which the system stays within $Δ\%$ of the final value is called the $Δ\%$ settling time and denoted by $T_s(Δ\%)$. We will show that
+  - $T_s(1\%) = \dfrac{4.6}{σ}$
+  - $T_s(2\%) = \dfrac{4}{σ}$
+  - $T_s(5\%) = \frac{3}{σ}$.
+  
+- The time required for the response to go from $0.1$ of the final value to $0.9$ of the final value is called **rise time** and denoted by $T_r$. It is difficult to get a closed form expression for $T_r$. It can be verified numerically that $ω_n T_r$ is approximately a constant that depends on $ζ$. So we approximately compute $T_r$ from a look-up table using interpolation:
+
+  | $ζ$       | 0.1   | 0.2   | 0.3   | 0.4   | 0.5   | 0.6   | 0.7   | 0.8   | 0.9   |
+  |:---------:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+  | $ω_n T_r$ | 1.104 | 1.203 | 1.321 | 1.463 | 1.638 | 1.854 | 2.216 | 2.467 | 2.883 |
+
+  : $ω_n T_r$ as a function of $ζ$ {#tbl-rise-time}
+
+
+<!-- TODO: Add derivation --> 
+
+:::{#exm-second-order-response}
+Consider the TF 
+$$ G(s) = \frac{100}{s^2 + 15s + 100}. $$
+Find $T_p$, $\%{\rm OS}$, $T_s(2\%)$, and $T_r$.
+:::
+
+:::{.callout-note collapse="true"} 
+#### Solution
+From inspection, we get that $ω_n^2 = 100$ and $2 ζ ω_n = 15$. Thus, 
+$ω_n = 10$ and $ζ  = 0.75$. Then we have
+
+- $T_p = \dfrac{π}{ω_d} = 0.475$.
+- $\%{\rm OS} = \exp\biggl(\dfrac{π σ}{ω_d}\biggr) × 100 = 2.28\%$.
+- $T_s(2\%) = \dfrac{4}{σ} = 0.533$ sec.
+- From @tbl-rise-time, we get that for $ζ = 0.75$, $ω_n T_r \approx (2.216 + 2.467)/2 = 2.3415$. Thus, $T_r = 2.3415/ω_n = 0.23415$ sec.
+
+:::
 
 ## Features of time response in terms of location of poles
 
@@ -682,7 +816,7 @@ peak_sigma = [ {x: T_p_sigma, y: 0}, {x: T_p_sigma, y: M_p_sigma} ]
 ```{ojs}
 //| layout-ncol: 2
 //| label: fig-second-order-sigma
-//| fig-cap: Step response of a second order system for fixed $ω_d$ and different values $σ$. The red dot shows the peak of the step response.
+//| fig-cap: Step response of a second order system for fixed $ω_d$ and different values $σ$. 
 
 PZplot(
        [], 
@@ -746,7 +880,7 @@ viewof param_ωd = Object.assign(Inputs.range([0.1,4], {label: "ωd", step: 0.1,
 ```{ojs}
 //| layout-ncol: 2
 //| label: fig-second-order-ωd
-//| fig-cap: Step response of a second order system for fixed $ω_d$ and different values $σ$. The red dot shows the peak of the step response.
+//| fig-cap: Step response of a second order system for fixed $ζ$ and different values $ω_n$. 
 
 PZplot(
        [], 
@@ -1100,4 +1234,67 @@ Since $y_1(t)$ is increasing for small $t$, the derivative $dy_1(t)/dt$ is posit
 
 ## Step response of critically damped second order system
 
+For $ζ = 1$, the TF is given by
+$$ G(s) = \frac{ω_n^2}{(s+ω_n)^2}. $$
+From the LT tables, we get that
+$$ y(t) = [ 1 - e^{-ω_n t}(1 + ω_n t) ] \IND(t). $$
+
+Critically damped systems have the fastest settling time among all second order system. The response can be visually differentiated from that of a second order system by noticing that the initial slope (at $t=0$) is zero.
+
+```{ojs}
+//| fig-cap: Step response of critically system for $ζ = 1.0$.
+Plot.plot({
+  grid: true,
+  y: { domain: [0, 1.3] },
+  x: { domain: [0,8] },
+  marks: [
+    // Axes
+    Plot.ruleX([0]),
+    Plot.ruleY([0]),
+    // Data
+    Plot.line(second_order_zeta.filter(d => Math.abs(d.ζ - 1) <= 0.01), 
+              {x:"time", y:"output", stroke: "darkblue" }),
+  ]
+})
+```
+
 ## Step response of overdamped second order system
+
+For $ζ > 1$, the system has two poles at 
+$$
+p_1 = ω_n(ζ + \sqrt{ζ^2 - 1)
+\quad\text{and}\quad
+p_2 = ω_n(ζ - \sqrt{ζ^2 - 1).
+$$
+
+The TF can be written as
+$$ G(s) = \frac{ω_n^2}{(s+p_1)(s+p_2)}.$$
+
+Using partial fraction expansion, we can show that
+$$
+Y(s) = \frac{1}{s}\cdot G(s)
+= \frac{1}{s} - \frac{ω_n^2}{2 (p_1 - p_2) \biggl[ \frac{1/p_1}{s+p_1} + \frac{1/p_2}{s+p_2} \biggr].
+$$
+Therefore,
+$$
+y(t) = \biggl[ 1 - \frac{ω_n^2}{2\sqrt{ζ^2 - 1}} \biggl( \frac{1}{p_1} e^{-p_1t} + \frac{1}{p_2} e^{-p_2t} \biggr) \biggr] \IND(t). 
+$$
+
+
+```{ojs}
+//| fig-cap: Step response of overdamped system for $ζ = 1.5$.
+Plot.plot({
+  grid: true,
+  y: { domain: [0, 1.3] },
+  x: { domain: [0,8] },
+  marks: [
+    // Axes
+    Plot.ruleX([0]),
+    Plot.ruleY([0]),
+    // Data
+    Plot.line(second_order_zeta.filter(d => Math.abs(d.ζ - 1.5) <= 0.01), 
+              {x:"time", y:"output", stroke: "darkblue" }),
+  ]
+})
+```
+
