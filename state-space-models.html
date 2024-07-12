@@ -9,7 +9,7 @@
 <meta name="author" content="Aditya Mahajan">
 <meta name="dcterms.date" content="2024-07-12">
 
-<title>Linear Systems and Control</title>
+<title>State space models – Linear Systems and Control</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -131,6 +131,35 @@ window.MathJax = {
 </script>
 <script async="" data-id="101261731" src="//static.getclicky.com/js"></script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -172,26 +201,24 @@ window.MathJax = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#course-outline" id="toc-course-outline" class="nav-link active" data-scroll-target="#course-outline">Course Outline</a>
+  <li><a href="#canoncial-representations" id="toc-canoncial-representations" class="nav-link active" data-scroll-target="#canoncial-representations">Canoncial representations</a>
   <ul class="collapse">
-  <li><a href="#general-information" id="toc-general-information" class="nav-link" data-scroll-target="#general-information">General Information (Fall 2024)</a></li>
-  <li><a href="#graduate-attributes-and-learning-outcomes" id="toc-graduate-attributes-and-learning-outcomes" class="nav-link" data-scroll-target="#graduate-attributes-and-learning-outcomes">Graduate Attributes and Learning Outcomes</a></li>
-  <li><a href="#course-content" id="toc-course-content" class="nav-link" data-scroll-target="#course-content">Course Content</a></li>
-  <li><a href="#lab-schedule" id="toc-lab-schedule" class="nav-link" data-scroll-target="#lab-schedule">Lab Schedule</a></li>
-  <li><a href="#course-material" id="toc-course-material" class="nav-link" data-scroll-target="#course-material">Course Material</a></li>
-  <li><a href="#evaluation" id="toc-evaluation" class="nav-link" data-scroll-target="#evaluation">Evaluation</a></li>
-  <li><a href="#marking-policy" id="toc-marking-policy" class="nav-link" data-scroll-target="#marking-policy">Marking policy</a></li>
-  <li><a href="#course-delivery" id="toc-course-delivery" class="nav-link" data-scroll-target="#course-delivery">Course delivery</a></li>
-  <li><a href="#additional-notes" id="toc-additional-notes" class="nav-link" data-scroll-target="#additional-notes">Additional Notes</a></li>
+  <li><a href="#controllable-canonical-form-ccf" id="toc-controllable-canonical-form-ccf" class="nav-link" data-scroll-target="#controllable-canonical-form-ccf">Controllable Canonical Form (CCF)</a></li>
+  <li><a href="#observable-canonical-form-ocf" id="toc-observable-canonical-form-ocf" class="nav-link" data-scroll-target="#observable-canonical-form-ocf">Observable Canonical Form (OCF)</a></li>
+  <li><a href="#diagonal-canonical-form-dcf" id="toc-diagonal-canonical-form-dcf" class="nav-link" data-scroll-target="#diagonal-canonical-form-dcf">Diagonal Canonical Form (DCF)</a></li>
   </ul></li>
+  <li><a href="#from-state-space-models-to-transfer-functions" id="toc-from-state-space-models-to-transfer-functions" class="nav-link" data-scroll-target="#from-state-space-models-to-transfer-functions">From state space models to transfer functions</a></li>
+  <li><a href="#change-of-coordinates" id="toc-change-of-coordinates" class="nav-link" data-scroll-target="#change-of-coordinates">Change of coordinates</a></li>
+  <li><a href="#change-of-coordinates-in-ss-models." id="toc-change-of-coordinates-in-ss-models." class="nav-link" data-scroll-target="#change-of-coordinates-in-ss-models.">Change of coordinates in SS models.</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/state-space-models.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
+<h1 class="title">State space models</h1>
 </div>
 
 
@@ -229,335 +256,230 @@ window.MathJax = {
 </header>
 
 
-<section id="course-outline" class="level1 unnumbered">
-<h1 class="unnumbered">Course Outline</h1>
-<section id="general-information" class="level2">
-<h2 class="anchored" data-anchor-id="general-information">General Information (Fall 2024)</h2>
-<dl>
-<dt>Instructor</dt>
-<dd>
-<ul>
-<li>Aditya Mahajan</li>
-<li><em>Office Hours</em>: TBD</li>
-</ul>
-</dd>
-<dt>Teaching Assistants</dt>
-<dd>
-<ul>
-<li><p>TBD</p></li>
-</ul>
-</dd>
-<dt>Lectures</dt>
-<dd>
-<ul>
-<li><p>10:05am–11:25am Tuesday, Thursday (ENGMC 11)</p></li>
-</ul>
-</dd>
-<dt>Tutorials</dt>
-<dd>
-<ul>
-<li><p>8:35am–10:25am Friday, (ENGMC 11)</p></li>
-</ul>
-</dd>
-</dl>
-<p>Everyone <strong>must</strong> be registered for the tutorial. Tutorials start from the <strong>second</strong> week of classes.</p>
-<dl>
-<dt>Labs</dt>
-<dd>
-<ul>
-<li><p>1:35pm-3:25pm Monday (TR 4090)</p></li>
-</ul>
-</dd>
-<dd>
-<ul>
-<li><p>3:35pm–5:25pm Monday (TR 4090)</p></li>
-</ul>
-</dd>
-<dd>
-<ul>
-<li><p>1:35pm–3:25pm Tuesday (TR 4090)</p></li>
-</ul>
-</dd>
-<dd>
-<ul>
-<li><p>1:35pm–3:25pm Wednesday (TR 4090)</p></li>
-</ul>
-</dd>
-<dd>
-<ul>
-<li><p>1:35pm–3:25pm Friday (TR 4090)</p></li>
-</ul>
-</dd>
-</dl>
-<p>Everyone <strong>must</strong> be registered for one lab. Labs start from the <strong>second</strong> week of classes.</p>
-<p>The labs have to be done in groups of two. The groups will be formed in the first week of classs.</p>
-<dl>
-<dt>Prerequisites</dt>
-<dd>
-<ul>
-<li>ECSE 206 (Fundamentals of Signals and Systems)</li>
-<li>ECSE 210 (Electrical Circuits 2)</li>
-</ul>
-</dd>
-<dt>Communication</dt>
-<dd>
-<span class="text-info">Use the discussion board on myCourses</span> for all questions related to the course. Only personal emails related to medical exceptions for missing a deliverable will be answered.
-</dd>
-</dl>
+<p>The main idea behind state space models is to express constant coefficient linear differential equations as a first order <strong>vector</strong> differential equation. This representation allows us to use linear algebra to design controllers.</p>
+<p>As an example, let’s start with a simple example to understand how state space modeling works. Let’s consider an LCR circuit shown in <a href="#fig-lcr" class="quarto-xref">Figure&nbsp;1</a>.</p>
+<div id="fig-lcr" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-lcr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/circuits1.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lcr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: A simple circuit
+</figcaption>
+</figure>
+</div>
+<p>Let <span class="math inline">\(i(t)\)</span> denote the loop current and <span class="math inline">\(q(t)\)</span> denote the charge across the capicitor.</p>
+<p>One way to solve this system is to use Kirchoff’s law to get <span class="math display">\[\begin{equation}\label{eq:KCL}
+v(t) = Ri(t) + L \frac{di(t)}{dt} + \frac 1C \int i(t) dt.
+\end{equation}\]</span> Then, using <span class="math inline">\(i(t) = dq(t)/dt\)</span>, we get <span class="math display">\[\begin{equation}\label{eq:2nd-order}
+L\frac{d^2 q(t)}{dt^2} + R \frac{dq(t)}{dt} + \frac 1C q(t) = v(t).
+\end{equation}\]</span> This is a second order linear differential equation, which we can solve in multiple ways.</p>
+<p>An alternative way, instead of using Kirchoff’s law to get a second order differetial equation, is two write two coupled first-order differetial equations: <span class="math display">\[\begin{align*}
+  \frac{dq(t)}{dt} &amp;= i(t) \\
+  \frac{di(t)}{dt} &amp;= -\frac{R}{L} i(t) - \frac{1}{LC} q(t) + \frac{1}{LC} v(t)
+\end{align*}\]</span> where the second equation is a rearrangement of <span class="math inline">\(\eqref{eq:KCL}\)</span>. We can write these two equations in vector form. In particular, let <span class="math inline">\(x(t) = \MATRIX{q(t) \\ i(t)}\)</span>. Then, <span class="math display">\[
+\dot x(t) = \MATRIX{ \frac{dq(t)}{dt} \\ \frac{di(t)}{dt} }
+     =
+     \MATRIX{0 &amp; 1 \\ \frac{-1}{LC} &amp; \frac{-R}{L}}
+     \MATRIX{q(t) \\ i(t)}
+     +
+     \MATRIX{0 \\ \frac{1}{L}} v(t).
+\]</span> If we think of the voltage across the capacitor as output (and denote it by <span class="math inline">\(y(t)\)</span>), then <span class="math display">\[y(t) = \frac{1}{C} q(t) = \MATRIX{\frac 1C &amp; 0}\MATRIX{q(t) \\ i(t)}.\]</span> Thus, we have a system of differential equations (where the input <span class="math inline">\(u(t)\)</span> is equal to the voltage <span class="math inline">\(v(t)\)</span>) <span class="math display">\[\begin{align}
+\dot x(t) &amp;= A x(t) + B u(t) \label{eq:SS-1}\\
+y(t) &amp;= C x(t) \label{eq:SS-2}
+\end{align}\]</span> Thus, the second-order DE <span class="math inline">\(\eqref{eq:2nd-order}\)</span> is equivalent with a first-order DE <span class="math inline">\(\eqref{eq:SS-1}\)</span>–<span class="math inline">\(\eqref{eq:SS-2}\)</span> with <strong>a state of dimention 2</strong>.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Non-uniqueness of the representation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The state <span class="math inline">\(x(t)\)</span> is not unique. We will show later that there are multiple state space representations corresponding to the same DE.</p>
+</div>
+</div>
+<section id="canoncial-representations" class="level2">
+<h2 class="anchored" data-anchor-id="canoncial-representations">Canoncial representations</h2>
+<p>In the previous example, we constructed the state space representation “by hand”. We now consider a few “automatic” methods of constructing state space representations from a DE.</p>
+<p>We assume that we are either given a <em>normalized</em> DE (i.e., the leading coefficient is 1): <span class="math display">\[
+\frac{d^n y(t)}{dt^n} + a_{n-1} \frac{d^{n-1}y(t)}{dt}
++ \cdots + a_0  y(t)
+=
+b_m \frac{d^m u(t)}{dt^m} + \cdots + b_0 u(t)
+\]</span> or a <em>normalized</em> TF <span class="math display">\[G(s) = \frac{b_m s^m + \cdots + b_0}{s^n + a_{n-1}s^{n-1} + \cdots + a_0}.\]</span></p>
+<p>We will consider three <strong>canoncial</strong> representations of a DE or TF in SS (state space) form:</p>
+<ol type="1">
+<li>Controllable Canonical Form (CCF)</li>
+<li>Observable Canonical Form (OCF)</li>
+<li>Diagonal Canonical Form (DCF)</li>
+</ol>
+<p>In the discussion below, we assume that the TF is <strong>strictly proper</strong> (i.e., <span class="math inline">\(m &lt; n\)</span>). The formulas for the case <span class="math inline">\(m = n\)</span> are a bit different.</p>
+<section id="controllable-canonical-form-ccf" class="level3">
+<h3 class="anchored" data-anchor-id="controllable-canonical-form-ccf">Controllable Canonical Form (CCF)</h3>
 </section>
-<section id="graduate-attributes-and-learning-outcomes" class="level2">
-<h2 class="anchored" data-anchor-id="graduate-attributes-and-learning-outcomes">Graduate Attributes and Learning Outcomes</h2>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Attribute</th>
-<th>Description</th>
-<th>Status</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>KB</td>
-<td>Knowledge Base for Engineering</td>
-<td>Developed</td>
-</tr>
-<tr class="even">
-<td>PA</td>
-<td>Problem Analysis</td>
-<td>Developed</td>
-</tr>
-<tr class="odd">
-<td>IN</td>
-<td>Investigation</td>
-<td>Developed</td>
-</tr>
-<tr class="even">
-<td>DE</td>
-<td>Design</td>
-<td>Introduced</td>
-</tr>
-</tbody>
-</table>
-<p>Upon the successful completion of this course, the student students will have demonstrated the ability to:</p>
-<ul>
-<li>Apply time- and frequency-domain tools to analyze linear time-invariant systems (KB, PA)</li>
-<li>Design controllers based on state-space methods and lead-lag compensators to meet time-response specifications (KB, PA, DE)</li>
-<li>Use Matlab to analyze and synthesize controllers for linear time-invariant systems (DE, IN)</li>
-</ul>
+<section id="observable-canonical-form-ocf" class="level3">
+<h3 class="anchored" data-anchor-id="observable-canonical-form-ocf">Observable Canonical Form (OCF)</h3>
 </section>
-<section id="course-content" class="level2">
-<h2 class="anchored" data-anchor-id="course-content">Course Content</h2>
-<table class="table-striped caption-top table">
-<colgroup>
-<col style="width: 10%">
-<col style="width: 90%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Week</th>
-<th style="text-align: left;">Material Covered</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td style="text-align: left;"><a href="./freq-modeling.html">Review of LTI Systems and Laplace Transforms</a> <br> <em>Reading</em>: Nise Ch. 2</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td style="text-align: left;"><a href="./step-response.html">Pole Zero Plot Step response of first and second order systems, dominant pole approximation</a> <br> <em>Reading</em>: Nise Ch. 4</td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td style="text-align: left;"><a href="./state-space-models.html">State-space modeling, canoncial forms, transfer function of state space models</a> <br> <em>Reading</em>: William and Lawrence Ch. 1 and Ch. 2</td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td style="text-align: left;">Matrix exponential and solution of matrix differential equations, time response of state space models</td>
-</tr>
-<tr class="odd">
-<td>5</td>
-<td style="text-align: left;">Pole placement, controllability, and state feedback</td>
-</tr>
-<tr class="even">
-<td>6</td>
-<td style="text-align: left;">Luenberger observer, observability, output feedback, and separation principle</td>
-</tr>
-<tr class="odd">
-<td>7</td>
-<td style="text-align: left;">Review and Mid-Term</td>
-</tr>
-<tr class="even">
-<td>8</td>
-<td style="text-align: left;">Routh-Hurwitz stability criterion. Special cases: zero in first column, row of zeros.</td>
-</tr>
-<tr class="odd">
-<td>9</td>
-<td style="text-align: left;">Block diagrams, rules for simplifying block diagrams, block diagram implementations of canonical forms of state space models</td>
-</tr>
-<tr class="even">
-<td>10</td>
-<td style="text-align: left;">System type, steady state error, disturbance rejection and sensitivity</td>
-</tr>
-<tr class="odd">
-<td>11</td>
-<td style="text-align: left;">Bode and Nyquist Plots</td>
-</tr>
-<tr class="even">
-<td>12</td>
-<td style="text-align: left;">Nyquist stability criterion, gain and phase margins</td>
-</tr>
-<tr class="odd">
-<td>13</td>
-<td style="text-align: left;">Lead-Lag compensators</td>
-</tr>
-</tbody>
-</table>
+<section id="diagonal-canonical-form-dcf" class="level3">
+<h3 class="anchored" data-anchor-id="diagonal-canonical-form-dcf">Diagonal Canonical Form (DCF)</h3>
 </section>
-<section id="lab-schedule" class="level2">
-<h2 class="anchored" data-anchor-id="lab-schedule">Lab Schedule</h2>
-<table class="table-striped caption-top table">
-<colgroup>
-<col style="width: 10%">
-<col style="width: 90%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Week</th>
-<th style="text-align: left;">Lab</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td style="text-align: left;">No Labs</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td style="text-align: left;">Lab 1 : Introduction to Matlab</td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td style="text-align: left;">Lab 2 : Transfer functions and step response</td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td style="text-align: left;">Lab 3 : System identification via Step Response</td>
-</tr>
-<tr class="odd">
-<td>5</td>
-<td style="text-align: left;">Lab 4 : Eigenvalues and eigenvectors</td>
-</tr>
-<tr class="even">
-<td>6</td>
-<td style="text-align: left;">Lab 5 : State-Feedback Control (in simulation)</td>
-</tr>
-<tr class="odd">
-<td>7</td>
-<td style="text-align: left;">Lab 6 : State-Feedback Control (in hardware)</td>
-</tr>
-<tr class="even">
-<td>8</td>
-<td style="text-align: left;">Lab 7 : Luenberger Observer for State Estimation</td>
-</tr>
-<tr class="odd">
-<td>9</td>
-<td style="text-align: left;">Lab 8 : Output-Feedback Control</td>
-</tr>
-<tr class="even">
-<td>10</td>
-<td style="text-align: left;">Lab 9 : Block Diagram Reduction using Matlab</td>
-</tr>
-<tr class="odd">
-<td>11</td>
-<td style="text-align: left;">Lab 10 : System identification via Bode Plots</td>
-</tr>
-<tr class="even">
-<td>12</td>
-<td style="text-align: left;">Lab 11 : Nyquist stability criterion</td>
-</tr>
-<tr class="odd">
-<td>13</td>
-<td style="text-align: left;">Lab 12 : Lead-Lag compensator design</td>
-</tr>
-</tbody>
-</table>
 </section>
-<section id="course-material" class="level2">
-<h2 class="anchored" data-anchor-id="course-material">Course Material</h2>
-<dl>
-<dt>Textbook</dt>
-<dd>
-<ul>
-<li><p>N. Nise, <em>Control Systems Engineering,</em> 7th Ed., Wiley</p>
-<p>Both paper and electronic versions of the textbook are available from the McGill bookstore. The electronic version of the book is also available from the publisher’s website and Google books.</p></li>
-</ul>
-</dd>
-</dl>
-<ul>
-<li><p>R.L. Williams II and D.A. Lawrence, Linear State‐Space Control Systems, Wiley.</p>
-<p>The <a href="https://onlinelibrary.wiley.com/doi/book/10.1002/9780470117873">electronic version of the book</a> is available the library.</p></li>
-</ul>
-<dl>
-<dt>Reference Books</dt>
-<dd>
-<ul>
-<li>G.F. Franklin, J. Powell, A. Emani-Naeini, <em>Feedback Control of Dynamical Systems</em>, 7th Ed., Pearson.</li>
-<li>K. Oagata, <em>Modern Control Engineering</em>, 5th Ed., Pearson.</li>
-</ul>
-</dd>
-</dl>
+<section id="from-state-space-models-to-transfer-functions" class="level2">
+<h2 class="anchored" data-anchor-id="from-state-space-models-to-transfer-functions">From state space models to transfer functions</h2>
+<p>So far, we have seen how to write different SS representations from a TF. It is also possible to go in the other directions.</p>
+<p>Suppose we have a SS system: <span class="math display">\[\begin{align*}
+\dot x(t) &amp;= A x(t) + B u(t) \\
+y(t) &amp;= C x(t)
+\end{align*}\]</span> Then the transfer function is <span class="math display">\[
+  \bbox[5pt,border: 1px solid]
+  {G(s) = C(sI - A)^{-1} B }
+\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Derivation of the formula
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Take LT of the SS model: <span class="math display">\[\begin{align*}
+s X(s) &amp;= A X(s) + B U(s)
+&amp; \implies&amp;&amp;
+X(s) &amp;= (sI - A)^{-1} B U(s) \\
+Y(s) &amp;= C X(s)
+&amp; \implies&amp;&amp;
+Y(s) &amp;= C(sI - A)^{-1} B U(s)
+\end{align*}\]</span></p>
+<p>Hence, <span class="math display">\[ G(s) = \frac{Y(s)}{U(s)} = C(sI - A)^{-1} B.\]</span></p>
+</div>
+</div>
+</div>
+<p>We can think of this in terms of the following block diagram.</p>
+<!-- TODO: Add block diagram -->
+<p>The TF can be “read backwards” from the block diagram.</p>
+<div id="exm-SS-to-TF-1" class="theorem example">
+<p><span class="theorem-title"><strong>Example 1</strong></span> Let <span class="math inline">\(A = \MATRIX{-1 &amp; 2 \\ 3 &amp; -1}\)</span>, <span class="math inline">\(B = \MATRIX{1 \\ 0}\)</span>, and <span class="math inline">\(C = \MATRIX{2 &amp; 1}\)</span>. Find the TF?</p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Note that <span class="math display">\[sI - A = \MATRIX{s+1 &amp; -2 \\ -3 &amp; s+1}.\]</span></p>
+<p>Therefore, <span class="math display">\[\det(sI-A) = (s+1)^2 - 6 = s^2 + 2s -5. \]</span></p>
+<p>Hence, <span class="math display">\[(sI - A)^{-1} = \frac{1}{\det(sI-A)} \MATRIX{s+1 &amp; 2 \\ 3 &amp; s+1}.\]</span></p>
+<p>Finally, <span class="math display">\[G(s) = C(sI-A)^{-1}B
+=
+\frac{1}{\det(sI-A)} \MATRIX{2 &amp; 1} \MATRIX{s+1 &amp; 2 \\ 3 &amp; s+1} \MATRIX{1 \\ 0}
+= \frac{2s + 5}{s^2 + 2s - 5}.\]</span></p>
+</div>
+</div>
+</div>
+<p>Recall that <span class="math inline">\(\det(sI-A)\)</span> is the characteristic equation of <span class="math inline">\(A\)</span> and the roots of the characteristic equation are the eigenvalues of <span class="math inline">\(A\)</span>. Therefore, an important implication of the above formula is <span class="math display">\[\bbox[5pt,border: 1px solid]
+{\text{Poles of $G(s)$} = \text{evals of $A$}}\]</span> This means that we can control the poles of the TF by controlling the eigenvalues of <span class="math inline">\(A\)</span>.</p>
+<p><strong>Changing the eigenvalues of the <span class="math inline">\(A\)</span> matrix will be one of the most simple and the most important design methods that we will learn in this course.</strong></p>
 </section>
-<section id="evaluation" class="level2">
-<h2 class="anchored" data-anchor-id="evaluation">Evaluation</h2>
-<ul>
-<li><p><strong>Assignments (20%)</strong> Weekly homework assignments. Typically, each assignment will consist of four questions, out of which one or two randomly selected questions will be grader. The lowest two homework assignments will be dropped.</p></li>
-<li><p><strong>Laboratory (20%)</strong> In-person weekly labs, to be conducted in groups of two. At the end of each lab, each group has to submit a lab report by filling in a Matlab Livescript template provided as part of the lab assignment.</p></li>
-<li><p><strong>Mid Term (20%)</strong> Closed book in-class exam. <span class="text-danger"><strong>Oct 10</strong></span> (during class time)</p></li>
-<li><p><strong>Final Exam (40%)</strong> Closed book, in-person exam. Will be scheduled by the exam office and the dates will be announced later.</p>
-<p>The final exam will cover <strong>all</strong> the material seen in the class during the term.</p></li>
-</ul>
+<section id="change-of-coordinates" class="level2">
+<h2 class="anchored" data-anchor-id="change-of-coordinates">Change of coordinates</h2>
+<p>A key idea for controller design using state space methods is change of coordinates. To fix ideas, we first review the change of coordinates for vectors and then we will come back to SS models.</p>
+<p>Consider a vector space <span class="math inline">\(\reals^2\)</span>. The standard basis for <span class="math inline">\(\reals^2\)</span> is <span class="math display">\[
+e_1 = \MATRIX{1 \\ 0}
+\quad\text{and}\quad
+e_2 = \MATRIX{0 \\ 1}.
+\]</span> When we write <span class="math inline">\(x = \MATRIX{x_1 \\ x_2} \in \reals^2\)</span>, what we really mean is <span class="math display">\[x = x_1 e_1 + x_2 e_2.\]</span></p>
+<p>What happens if we choose a different basis, say <span class="math inline">\(v_1\)</span> and <span class="math inline">\(v_2\)</span>. If the vector <span class="math display">\[
+  x = \tilde x_1 v_1 + \tilde x_2 v_2
+\]</span> then we can say that the vector is equal to <span class="math inline">\(\MATRIX{\tilde x_1 \\ \tilde x_2}\)</span> in the coordinate system <span class="math inline">\((v_1, v_2)\)</span>. Note that the vector hasn’t changed, only the coodinate system has.</p>
+<p>We use the following example to illustrate how to move from one coordinate system to another</p>
+<div id="exm-change-of-coordinates" class="theorem example">
+<p><span class="theorem-title"><strong>Example 2</strong></span> Let <span class="math inline">\(x = \MATRIX{2 \\ 3}\)</span>. Find its representation in the coordinate system <span class="math display">\[v_1 = \MATRIX{1 \\ 0}
+\quad\text{and}\quad
+v_2 = \MATRIX{1 \\ 1}.
+\]</span></p>
+<section id="solution-1" class="level4">
+<h4 class="anchored" data-anchor-id="solution-1">Solution</h4>
+<p>Let the representation in the new coordinate system be <span class="math inline">\(\tilde x = \MATRIX{\tilde x_1 \\ \tilde x_2}\)</span>. Thus, we must have <span class="math display">\[
+2 e_1 + 3 e_2 = \tilde x_1 v_1 + \tilde x_2 v_2.
+\]</span> Or, in vector form, <span class="math display">\[ \MATRIX{1 &amp; 0 \\ 0 &amp; 1} \MATRIX{2 \\ 3}
+=
+\MATRIX{1 &amp; 1 \\ 0 &amp; 1} \MATRIX{\tilde x_1 \\ \tilde x_2}
+\]</span> which can be written as <span class="math display">\[\bbox[5pt,border: 1px solid]
+{ x = T \tilde x}
+\]</span> where <span class="math display">\[T = \MATRIX{v_1 &amp; v_2} = \MATRIX{1 &amp; 1 \\ 0 &amp; 1}.\]</span> The matrix <span class="math inline">\(T\)</span> is full rank (which is always the case if <span class="math inline">\(\text{span}(v_1,v_2) = \reals^2\)</span>. Thus, we have <span class="math display">\[\bbox[5pt,border: 1px solid]
+{ \tilde x = T^{-1} x}
+\]</span></p>
+<p>So, for the above example we have <span class="math display">\[\tilde x = \MATRIX{1 &amp; 1 \\ 0 &amp; 1}^{-1} \MATRIX{2 \\ 3}
+= \MATRIX{-1 \\ 3}.\]</span></p>
+<!-- TODO: Draw a picture -->
 </section>
-<section id="marking-policy" class="level2">
-<h2 class="anchored" data-anchor-id="marking-policy">Marking policy</h2>
-<ul>
-<li><p>Assignments must be submitted electronically on myCourses as a PDF. You may write the assignments on paper and then scan them as a PDF (there are several such apps available for all phone platforms), or write on a tablet and convert to PDF, or type using a word processor.</p></li>
-<li><p><strong>There will no make-up examination</strong> for students who miss a mid-term.</p>
-<ul>
-<li><p>Student who miss the exam due to a valid reason (see <a href="https://www.mcgill.ca/engineering/students/undergraduate/courses-registration/exams-assessment/midterms-and-class-tests/adjustments-missed-midterms-and-class-tests">Faculty of Engineering policy</a>) should <strong>notify the instructor within a week</strong> of the exam and provide <strong>necessary documentation</strong>.</p></li>
-<li><p>If, and only if, proper documentation for a missed exam is presented, the marks for the missed exam will be shifted to the final exam.</p></li>
-<li><p>Students who miss the mid-term exam for any other reason (e.g., no medical note, going to the exam at the wrong time, or on the wrong day, etc.) will get zero marks on the exam.</p></li>
-</ul></li>
-<li><p>Any request for reevaluation of a mid-term or an assignment must be made <strong>in writing within a week of its return</strong>. Note that requesting a re-grade will mean that you <strong>WHOLE</strong> assignment or exam will be re-graded.</p></li>
-<li><p><span class="text-danger">Due to paucity of grading hours, only one or two randomly selected questions will be graded in each assignment.</span></p></li>
-<li><p>The lowest two assignments and labs will be dropped. There will be no make-up for missed assignments and labs, <em>even if it is for a valid reason.</em> The whole point of dropping the lowest two assignments/labs is to reduce the administrative overhead of keeping track of such missed assignments/labs.</p></li>
-</ul>
-<dl>
-<dt>Right to submit in English or French written work that is to be graded.</dt>
-<dd>
-In accord with McGill University’s <a href="https://www.mcgill.ca/secretariat/files/secretariat/charter_of_student_rights_last_approved_october_262017.pdf">Charter of Students’ Rights</a>, students in this course have the right to submit in English or in French any written work that is to be graded.
-</dd>
-<dt>Academic Integrity</dt>
-<dd>
-<p>McGill University values academic integrity. Therefore all students must understand the meaning and consequences of cheating, plagiarism and other academic offences under the <a href="https://www.mcgill.ca/secretariat/files/secretariat/code_of_student_conduct_and_disciplinary_procedures.pdf">Code of Student Conduct and Disciplinary Procedures</a> (see McGill’s <a href="http://www.mcgill.ca/students/srr/honest/">guide to academic honesty</a> for more information).</p>
-<p>L’université McGill attache une haute importance à l’honnêteté académique. Il incombe par conséquent à tous les étudiants de comprendre ce que l’on entend par tricherie, plagiat et autres infractions académiques, ainsi que les conséquences que peuvent avoir de telles actions, selon le <a href="https://www.mcgill.ca/secretariat/files/secretariat/code_of_student_conduct_and_disciplinary_procedures.pdf">Code de conduite de l’étudiant et des procédures disciplinaires</a> (pour de plus amples renseignements, veuillez consulter le <a href="http://www.mcgill.ca/students/srr/honest/">guide pour l’honnêteté académique</a> de McGill.)</p>
-</dd>
-</dl>
+</div>
 </section>
-<section id="course-delivery" class="level2">
-<h2 class="anchored" data-anchor-id="course-delivery">Course delivery</h2>
-<p>The course is taught in a “chalk and board” style; there will be no power point presentations. All students are expected to attend lectures and take notes. Partial notes on some of the material will be provided, but are not a substitute for the material covered in class.</p>
-<p>© Instructor-generated course materials (e.g., handouts, notes, summaries, exam questions) are protected by law and may not be copied or distributed in any form or in any medium without explicit permission of the instructor. Note that infringements of copyright can be subject to follow up by the University under the Code of Student Conduct and Disciplinary Procedures.</p>
-</section>
-<section id="additional-notes" class="level2">
-<h2 class="anchored" data-anchor-id="additional-notes">Additional Notes</h2>
+<section id="change-of-coordinates-in-ss-models." class="level2">
+<h2 class="anchored" data-anchor-id="change-of-coordinates-in-ss-models.">Change of coordinates in SS models.</h2>
+<p>Consider a SS model: <span class="math display">\[\begin{align*}
+\dot x(t) &amp;= A x(t) + B u(t) \\
+y(t) &amp;= C x(t)
+\end{align*}\]</span></p>
+<p>Let <span class="math inline">\(T\)</span> be any invertible <span class="math inline">\(n × n\)</span> matrix. Such a matrix is called a <strong>similarity matrix</strong>. Think of columns of <span class="math inline">\(T\)</span> as the basis of a new coordinate system. Then, the state can be written as <span class="math display">\[ \tilde x(t) = T^{-1} x(t) \]</span> in the new coordinate system.</p>
 <ul>
-<li><p>As the instructor of this course I endeavor to provide an inclusive learning environment. However, if you&nbsp;experience barriers to learning in this course, do not hesitate to discuss them with me or contact the office of <a href="https://www.mcgill.ca/access-achieve/">Student Accessibility and Achievement</a>.</p></li>
-<li><p><a href="http://www.mcgill.ca/mercury/">End-of-course evaluations</a> are one of the ways that McGill works towards maintaining and improving the quality of courses and the student’s learning experience. You will be notified by e-mail when the evaluations are available. Please note that a minimum number of responses must be received for results to be available to students.</p></li>
+<li>What are the stae space equations in the new coordinate system?</li>
+<li>How does the change of coordinates affect the TF?</li>
 </ul>
+<p>We look at both these questions in detail.</p>
+<p>Since <span class="math inline">\(\tilde x(t) = T^{-1} x(t)\)</span>, we have <span class="math inline">\(x(t) = T \tilde x(t)\)</span>. Substituting this in the SS model, we have <span class="math display">\[\begin{align*}
+T \dot {\tilde x}(t) &amp;= A T \tilde x(t) + B u(t) \\
+y(t) &amp;= C T \tilde x(t)
+\end{align*}\]</span></p>
+<p>Pre-multiply the first equation by <span class="math inline">\(T^{-1}\)</span>: <span class="math display">\[\begin{align*}
+\dot {\tilde x}(t) &amp;= T^{-1} A T \tilde x(t) + T^{-1} B u(t) \\
+y(t) &amp;= C T \tilde x(t)
+\end{align*}\]</span></p>
+<p>So, we can think of this as a new SS model: <span class="math display">\[\begin{align*}
+\dot {\tilde x}(t) &amp;= \tilde A \tilde x(t) + \tilde B u(t) \\
+y(t) &amp;= \tilde C \tilde x(t)
+\end{align*}\]</span> where <span class="math display">\[\bbox[5pt,border: 1px solid]
+{\tilde A = T^{-1} A T,
+\quad
+\tilde B = T^{-1} B,
+\quad
+\tilde C = CT}
+\]</span></p>
+<p>The coordinate transformation has the following properties:</p>
+<ol type="1">
+<li><p><strong>Coordinate transformation does not change the characteristic function</strong></p>
+<p>Note that <span class="math display">\[\begin{align*}
+(sI - \tilde A) &amp;= sI - T^{-1} A T \\
+&amp;= s T^{-1} I T - T^{-1} A T \\
+&amp;= T^{-1} (sI - A) T.
+\end{align*}\]</span> Therefore, <span class="math display">\[
+\det(sI - \tilde A) = \det(T^{-1}) \det(sI - A) \det(T)
+= \det(sI - A)
+\]</span> because <span class="math inline">\(\det(T^{-1}) \det(T) = \det(T^{-1} T) = \det(I) = 1\)</span>.</p></li>
+<li><p><strong>Coordinate transformation does not change the TF</strong></p>
+<p>The transfer function in the new coordinate system is <span class="math display">\[\begin{align*}
+\tilde G(s) &amp;= \tilde C(sI - \tilde A)^{-1} \tilde B \\
+&amp;= C T T^{-1} (sI - A)^{-1} T T^{-1} B \\
+&amp;= C(sI - A)^{-1} B = G(s)
+\end{align*}\]</span></p></li>
+</ol>
+<p>These properties hold because the change of coordinates (or similarity transformation) does not physically change the state; it only changes the coordinate system that we are using to represent the state.</p>
+<p>Change of coordinates (or similarity transformation) is a very useful tool for control system syntehsis. As we will see later, it is easy to design controllers for systems in CCF. So, when we have to design controllers for systems not in CCF, we first find a similarity transformation that converts the system to CCF; then we design a controller for the system in CCF; and finally we convert the controller back to the original coordinate system. Don’t worry if this doesn’t make sense notw. We will discuss this in detail in the next few lectures.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -1130,5 +1052,5 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div></div></footer><script src="site_libs/quarto-html/zenscroll-min.js"></script>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/state-space-models.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div></div></footer><script src="site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>
