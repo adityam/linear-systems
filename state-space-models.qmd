@@ -53,9 +53,31 @@ where $x(t) \in \reals^n$, $A \in \reals^{n × n}$, $B \in \reals^{n \times 1}$ 
 
 In the next lecture, we will study how to solve such differential equations for a particular choice of input. 
 
-## Convertting DE to SSM
+## Converting DE to SSM {#sec-DE-SSM}
 
-We start with the same 2nd order example used above:
+In this section, we show how to construct SSM from DE. The key point to realize is that the SSM is not unique, so we will consider different representations. Each representation is useful for a specific purpose, as we will see later in the course. 
+
+We assume that we are either given a _normalized_ DE (i.e., the leading coefficient is 1):
+$$
+\frac{d^n y(t)}{dt^n} + a_{n-1} \frac{d^{n-1}y(t)}{dt} 
++ \cdots + a_0  y(t)
+=
+b_m \frac{d^m u(t)}{dt^m} + \cdots + b_0 u(t)
+$$
+or a _normalized_ TF
+$$G(s) = \frac{b_m s^m + \cdots + b_0}{s^n + a_{n-1}s^{n-1} + \cdots + a_0}.$$
+
+We will restrict attention to **proper** TFs, i.e., $m < n$. There are three canoncial realizations, which we illustrate via examples first.
+
+1. Controllable Canonical Form (CCF)
+2. Observable Canonical Form (OCF)
+3. Diagonal Canonical Form (DCF)
+
+## Illustrative Example
+
+### CCF representation
+
+Consider the homogeneous second order DE considered above:
 \begin{equation}\label{eq:2nd-DE}
 \frac{d^2y(t)}{dt^2} + a_1 \frac{dy(t)}{dt} + a_0 y(t) = 0.
 \end{equation}
@@ -78,9 +100,9 @@ y(t) &= \MATRIX{\phantom{-a_0}\llap{1} & \phantom{-a_1}\llap{0} } \MATRIX{x_1(t)
 \end{align*}
 This is called **controllable cannonical form (CCF)** realization of \eqref{eq:2nd-DE}. The meaning of the terminology will become clear later.
 
----
+### OCF representation
 
-Another method to obtain a SSM from the LDE is as follows. Write the LDE \eqref{eq:2nd-DE} as an integro-differential equation:
+The second method to obtain a SSM from the LDE is as follows. Write the LDE \eqref{eq:2nd-DE} as an integro-differential equation:
 \begin{align*}
 \ddot y(t) &= - a_1 \dot y(t) + a_0 y(t)
 \\
@@ -114,7 +136,86 @@ This is called **observable canoncial form (OCF)** realization of \eqref{eq:2nd-
 The above example shows that the same DE can have multiple SSM realizations. 
 :::
 
-We will revisit converting LDEs to SSMs in more details later. First, we present some examples for directly obtaining SSMs for circuits.
+## General form
+
+We now consider a general second order TF:
+$$ G(s) = \frac{b_1 s+b_0}{s^2 + a_1 s + a_0} $$
+
+As an illustration, we will also use the following numerical example:
+
+:::{#exm-SSM-CC}
+$$ G(s) = \frac{s+5}{s^2 + 3s + 2} $$
+:::
+
+### CCF representation
+
+For the generic second order system, the CCF form is
+$$
+A = \MATRIX{ 0 & 1 \\ \textcolor{red}{-a_0} & \textcolor{red}{-a_1} },
+\quad
+B = \MATRIX{ 0 \\ 1},
+\quad
+C = \MATRIX{\textcolor{red}{b_0} & \textcolor{red}{b_1} }
+$$
+This is the general structure of the matrix, where only the red elements have to be filled based on the TF. For example, for the TF in @exm-SSM-CC, we have
+$$
+A = \MATRIX{ 0 & 1 \\ -2 & -3 }
+\quad
+B = \MATRIX{ 0 \\ 1},
+\quad
+C = \MATRIX{5 & 1}
+$$
+
+In general, we have the following:
+<!-- TODO: Add figure -->
+
+
+### OCF representation
+
+For the generic second order system, the OCF form is
+$$
+A = \MATRIX{ 0 & \textcolor{red}{-a_0} \\ 1 & \textcolor{red}{-a_1} },
+\quad
+B = \MATRIX{\textcolor{red}{b_0} \\ \textcolor{red}{b_1} },
+\quad
+C = \MATRIX{ 0 & 1}
+$$
+This is the general structure of the matrix, where only the red elements have to be filled based on the TF. For example, for the TF in @exm-SSM-CC, we have
+$$
+A = \MATRIX{ 0 & -2 \\ 1 & -3 }
+\quad
+B = \MATRIX{5 \\ 1},
+\quad
+C = \MATRIX{ 0 & 1},
+$$
+
+In general, we have the following:
+<!-- TODO: Add figure -->
+
+### DCF representation
+
+This representation is special and only applicable when the system has distinct real roots. Then, using the partial fraction expansion, the TF may be written as
+$$
+G(s) = \frac{c_1}{s+p_1} + \frac{c_2}{s + p_2} + \dots + \frac{c_n}{s+p_n}
+$$
+In DCF, the system matrices are given by
+<!-- TODO: Add figure -->
+
+In particular, for the TF in @exm-SSM-CC, we have
+$$
+G(s) = \frac{s+5}{s^2 + 3s + 2} = \frac{4}{s+1} - \frac{3}{s+2}. $$
+
+Thus,
+$$
+A = \MATRIX{-1 & 0 \\ 0 & -2},
+\quad
+B = \MATRIX{ 1 \\ 1 },
+\quad
+C = \MATRIX{4 & -3}.
+$$
+
+In general, the poles will be complex and have multiplicity. In this setting, a generalization of DCF known as Jordan canconical form (JCF) is used. We will not consider JCF in this course.
+
 
 ## SSMs for circuits
 
@@ -193,102 +294,6 @@ B =
 \quad
 C = \MATRIX{1 & 0 }
 $$
-
-## Converting DE/TF to SSM
-
-In the previous sections, we constructed the state space representations "by hand". We now consider a few "automatic" methods of constructing state space representations from a DE (or equivalently a TF).
-
-We assume that we are either given a _normalized_ DE (i.e., the leading coefficient is 1):
-$$
-\frac{d^n y(t)}{dt^n} + a_{n-1} \frac{d^{n-1}y(t)}{dt} 
-+ \cdots + a_0  y(t)
-=
-b_m \frac{d^m u(t)}{dt^m} + \cdots + b_0 u(t)
-$$
-or a _normalized_ TF
-$$G(s) = \frac{b_m s^m + \cdots + b_0}{s^n + a_{n-1}s^{n-1} + \cdots + a_0}.$$
-
-We will restrict attention to **proper** TFs, i.e., $m < n$. There are three canoncial realizations, which we illustrate via examples first.
-
-1. Controllable Canonical Form (CCF)
-2. Observable Canonical Form (OCF)
-3. Diagonal Canonical Form (DCF)
-
-:::{#exm-SSM-CC}
-Consider a generic second order TF:
-$$ G(s) = \frac{b_1 s+b_0}{s^2 + a_1 s + a_0} $$
-In parrticular, we will consider
-$$ G(s) = \frac{s+5}{s^2 + 3s + 2} $$
-Find the different canconical form representations of this system.
-:::
-
-### CCF representation
-For the generic second order system, the CCF form is
-$$
-A = \MATRIX{ 0 & 1 \\ \textcolor{red}{-a_0} & \textcolor{red}{-a_1} },
-\quad
-B = \MATRIX{ 0 \\ 1},
-\quad
-C = \MATRIX{\textcolor{red}{b_0} & \textcolor{red}{b_1} }
-$$
-This is the general structure of the matrix, where only the red elements have to be filled based on the TF. For example, for the TF in @exm-SSM-CC, we have
-$$
-A = \MATRIX{ 0 & 1 \\ -2 & -3 }
-\quad
-B = \MATRIX{ 0 \\ 1},
-\quad
-C = \MATRIX{5 & 1}
-$$
-
-In general, we have the following:
-<!-- TODO: Add figure -->
-
-
-### OCF representation
-For the generic second order system, the OCF form is
-$$
-A = \MATRIX{ 0 & \textcolor{red}{-a_0} \\ 1 & \textcolor{red}{-a_1} },
-\quad
-B = \MATRIX{\textcolor{red}{b_0} \\ \textcolor{red}{b_1} },
-\quad
-C = \MATRIX{ 0 & 1}
-$$
-This is the general structure of the matrix, where only the red elements have to be filled based on the TF. For example, for the TF in @exm-SSM-CC, we have
-$$
-A = \MATRIX{ 0 & -2 \\ 1 & -3 }
-\quad
-B = \MATRIX{5 \\ 1},
-\quad
-C = \MATRIX{ 0 & 1},
-$$
-
-In general, we have the following:
-<!-- TODO: Add figure -->
-
-### DCF representation
-
-This representation is special and only applicable when the system has distinct real roots. Then, using the partial fraction expansion, the TF may be written as
-$$
-G(s) = \frac{c_1}{s+p_1} + \frac{c_2}{s + p_2} + \dots + \frac{c_n}{s+p_n}
-$$
-In DCF, the system matrices are given by
-<!-- TODO: Add figure -->
-
-In particular, for the TF in @exm-SSM-CC, we have
-$$
-G(s) = \frac{s+5}{s^2 + 3s + 2} = \frac{4}{s+1} - \frac{3}{s+2}. $$
-
-Thus,
-$$
-A = \MATRIX{-1 & 0 \\ 0 & -2},
-\quad
-B = \MATRIX{ 1 \\ 1 },
-\quad
-C = \MATRIX{4 & -3}.
-$$
-
-In general, the poles will be complex and have multiplicity. In this setting, a generalization of DCF known as Jordan canconical form (JCF) is used. We will not consider JCF in this course.
-
 
 
 ## From state space models to transfer functions
