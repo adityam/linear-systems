@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2024-07-12">
+<meta name="dcterms.date" content="2024-07-13">
 
 <title>State space models – Linear Systems and Control</title>
 <style>
@@ -201,15 +201,25 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#canoncial-representations" id="toc-canoncial-representations" class="nav-link active" data-scroll-target="#canoncial-representations">Canoncial representations</a>
+  <li><a href="#sec-DE-SSM" id="toc-sec-DE-SSM" class="nav-link active" data-scroll-target="#sec-DE-SSM"><span class="header-section-number">1</span> Converting DE to SSM</a></li>
+  <li><a href="#illustrative-example" id="toc-illustrative-example" class="nav-link" data-scroll-target="#illustrative-example"><span class="header-section-number">2</span> Illustrative Example</a>
   <ul class="collapse">
-  <li><a href="#controllable-canonical-form-ccf" id="toc-controllable-canonical-form-ccf" class="nav-link" data-scroll-target="#controllable-canonical-form-ccf">Controllable Canonical Form (CCF)</a></li>
-  <li><a href="#observable-canonical-form-ocf" id="toc-observable-canonical-form-ocf" class="nav-link" data-scroll-target="#observable-canonical-form-ocf">Observable Canonical Form (OCF)</a></li>
-  <li><a href="#diagonal-canonical-form-dcf" id="toc-diagonal-canonical-form-dcf" class="nav-link" data-scroll-target="#diagonal-canonical-form-dcf">Diagonal Canonical Form (DCF)</a></li>
+  <li><a href="#ccf-representation" id="toc-ccf-representation" class="nav-link" data-scroll-target="#ccf-representation"><span class="header-section-number">2.1</span> CCF representation</a></li>
+  <li><a href="#ocf-representation" id="toc-ocf-representation" class="nav-link" data-scroll-target="#ocf-representation"><span class="header-section-number">2.2</span> OCF representation</a></li>
   </ul></li>
-  <li><a href="#from-state-space-models-to-transfer-functions" id="toc-from-state-space-models-to-transfer-functions" class="nav-link" data-scroll-target="#from-state-space-models-to-transfer-functions">From state space models to transfer functions</a></li>
-  <li><a href="#change-of-coordinates" id="toc-change-of-coordinates" class="nav-link" data-scroll-target="#change-of-coordinates">Change of coordinates</a></li>
-  <li><a href="#change-of-coordinates-in-ss-models." id="toc-change-of-coordinates-in-ss-models." class="nav-link" data-scroll-target="#change-of-coordinates-in-ss-models.">Change of coordinates in SS models.</a></li>
+  <li><a href="#general-form" id="toc-general-form" class="nav-link" data-scroll-target="#general-form"><span class="header-section-number">3</span> General form</a>
+  <ul class="collapse">
+  <li><a href="#ccf-representation-1" id="toc-ccf-representation-1" class="nav-link" data-scroll-target="#ccf-representation-1"><span class="header-section-number">3.1</span> CCF representation</a></li>
+  <li><a href="#ocf-representation-1" id="toc-ocf-representation-1" class="nav-link" data-scroll-target="#ocf-representation-1"><span class="header-section-number">3.2</span> OCF representation</a></li>
+  <li><a href="#dcf-representation" id="toc-dcf-representation" class="nav-link" data-scroll-target="#dcf-representation"><span class="header-section-number">3.3</span> DCF representation</a></li>
+  </ul></li>
+  <li><a href="#ssms-for-circuits" id="toc-ssms-for-circuits" class="nav-link" data-scroll-target="#ssms-for-circuits"><span class="header-section-number">4</span> SSMs for circuits</a>
+  <ul class="collapse">
+  <li><a href="#example-1" id="toc-example-1" class="nav-link" data-scroll-target="#example-1"><span class="header-section-number">4.1</span> Example 1</a></li>
+  </ul></li>
+  <li><a href="#from-state-space-models-to-transfer-functions" id="toc-from-state-space-models-to-transfer-functions" class="nav-link" data-scroll-target="#from-state-space-models-to-transfer-functions"><span class="header-section-number">5</span> From state space models to transfer functions</a></li>
+  <li><a href="#change-of-coordinates" id="toc-change-of-coordinates" class="nav-link" data-scroll-target="#change-of-coordinates"><span class="header-section-number">6</span> Change of coordinates</a></li>
+  <li><a href="#change-of-coordinates-in-ssms" id="toc-change-of-coordinates-in-ssms" class="nav-link" data-scroll-target="#change-of-coordinates-in-ssms"><span class="header-section-number">7</span> Change of coordinates in SSMs</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/state-space-models.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -244,7 +254,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 12, 2024</p>
+      <p class="date">July 13, 2024</p>
     </div>
   </div>
   
@@ -256,81 +266,277 @@ window.Quarto = {
 </header>
 
 
-<p>The main idea behind state space models is to express constant coefficient linear differential equations as a first order <strong>vector</strong> differential equation. This representation allows us to use linear algebra to design controllers.</p>
-<p>As an example, let’s start with a simple example to understand how state space modeling works. Let’s consider an LCR circuit shown in <a href="#fig-lcr" class="quarto-xref">Figure&nbsp;1</a>.</p>
-<div id="fig-lcr" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-lcr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figures/svg/circuits1.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lcr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: A simple circuit
-</figcaption>
-</figure>
-</div>
-<p>Let <span class="math inline">\(i(t)\)</span> denote the loop current and <span class="math inline">\(q(t)\)</span> denote the charge across the capicitor.</p>
-<p>One way to solve this system is to use Kirchoff’s law to get <span class="math display">\[\begin{equation}\label{eq:KCL}
-v(t) = Ri(t) + L \frac{di(t)}{dt} + \frac 1C \int i(t) dt.
-\end{equation}\]</span> Then, using <span class="math inline">\(i(t) = dq(t)/dt\)</span>, we get <span class="math display">\[\begin{equation}\label{eq:2nd-order}
-L\frac{d^2 q(t)}{dt^2} + R \frac{dq(t)}{dt} + \frac 1C q(t) = v(t).
-\end{equation}\]</span> This is a second order linear differential equation, which we can solve in multiple ways.</p>
-<p>An alternative way, instead of using Kirchoff’s law to get a second order differetial equation, is two write two coupled first-order differetial equations: <span class="math display">\[\begin{align*}
-  \frac{dq(t)}{dt} &amp;= i(t) \\
-  \frac{di(t)}{dt} &amp;= -\frac{R}{L} i(t) - \frac{1}{LC} q(t) + \frac{1}{LC} v(t)
-\end{align*}\]</span> where the second equation is a rearrangement of <span class="math inline">\(\eqref{eq:KCL}\)</span>. We can write these two equations in vector form. In particular, let <span class="math inline">\(x(t) = \MATRIX{q(t) \\ i(t)}\)</span>. Then, <span class="math display">\[
-\dot x(t) = \MATRIX{ \frac{dq(t)}{dt} \\ \frac{di(t)}{dt} }
-     =
-     \MATRIX{0 &amp; 1 \\ \frac{-1}{LC} &amp; \frac{-R}{L}}
-     \MATRIX{q(t) \\ i(t)}
-     +
-     \MATRIX{0 \\ \frac{1}{L}} v(t).
-\]</span> If we think of the voltage across the capacitor as output (and denote it by <span class="math inline">\(y(t)\)</span>), then <span class="math display">\[y(t) = \frac{1}{C} q(t) = \MATRIX{\frac 1C &amp; 0}\MATRIX{q(t) \\ i(t)}.\]</span> Thus, we have a system of differential equations (where the input <span class="math inline">\(u(t)\)</span> is equal to the voltage <span class="math inline">\(v(t)\)</span>) <span class="math display">\[\begin{align}
-\dot x(t) &amp;= A x(t) + B u(t) \label{eq:SS-1}\\
-y(t) &amp;= C x(t) \label{eq:SS-2}
-\end{align}\]</span> Thus, the second-order DE <span class="math inline">\(\eqref{eq:2nd-order}\)</span> is equivalent with a first-order DE <span class="math inline">\(\eqref{eq:SS-1}\)</span>–<span class="math inline">\(\eqref{eq:SS-2}\)</span> with <strong>a state of dimention 2</strong>.</p>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Non-uniqueness of the representation
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The state <span class="math inline">\(x(t)\)</span> is not unique. We will show later that there are multiple state space representations corresponding to the same DE.</p>
-</div>
-</div>
-<section id="canoncial-representations" class="level2">
-<h2 class="anchored" data-anchor-id="canoncial-representations">Canoncial representations</h2>
-<p>In the previous example, we constructed the state space representation “by hand”. We now consider a few “automatic” methods of constructing state space representations from a DE.</p>
+<p>The main idea behind state space models is to express constant coefficient linear differential equations as a first order <strong>vector</strong> differential equation. This representation allows us to use linear algebra to design controllers. To understand this, let’s start with a homogeneous first-order LDE: <span class="math display">\[
+\frac{dy(t)}{dt} = a y(t)
+\]</span> with the initial condition <span class="math inline">\(y(0) = y_0\)</span>. We will write this equation as <span class="math display">\[\bbox[5pt,border: 1px solid]
+{\dot y(t) = a y(t), \quad y(0) = y_0}
+\]</span> By inspection, we know that the solution is <span class="math display">\[y(t) = e^{at} y_0.\]</span></p>
+<p>However, we lose this simplicity if we go to second or higher order LDEs. For example, consider the LDE: <span class="math display">\[\frac{d^2y(t)}{dt^2} + a_1 \frac{dy(t)}{dt} + a_0 y(t) = 0\]</span> which known initial conditions <span class="math inline">\(y(0)\)</span> and <span class="math inline">\(\dot y(0)\)</span>.</p>
+<p>How can we find the solution? A commonly used method is to to use (one-sideded) Laplace transforms (with initial conditions) to compute the output. Recall <span class="math display">\[\begin{align*}
+\dot x(t) &amp;\xleftrightarrow{\quad \mathcal L\quad} s X(s) - x(0) \\
+\ddot x(t) &amp;\xleftrightarrow{\quad \mathcal L\quad} s^2 X(s) - sx(0) - \dot x(0).
+\end{align*}\]</span></p>
+<p>So, if we take the LT of the DE, we get <span class="math display">\[\begin{equation*}
+\bigl[ s^2 Y(s) - s y(0) - \dot y(0) \bigr]
++
+a_1 \bigl[s Y(s) - y(0) \bigr]
++
+a_2 Y_0(s) = 0
+\end{equation*}\]</span> Hence, <span class="math display">\[
+Y(s) = \frac{y(0) s + (a_1 y(0) + \dot y(0))}{s^2 + a_1 s + a_0}.
+\]</span> We can now simplify the above using partial fractions expansion to compute <span class="math inline">\(y(t)\)</span>.</p>
+<p>State space models provide a nicer way to solve such DEs. In particular, we will provide a method to convert general <span class="math inline">\(2\)</span>-nd order LDE into a vector equation <span class="math display">\[\begin{align*}
+\dot x(t) &amp;= A x(t) \\
+y(t) &amp;= C x(t)
+\end{align*}\]</span> where <span class="math inline">\(x(t) \in \reals^2\)</span>, <span class="math inline">\(A \in \reals^{2 × 2}\)</span> and <span class="math inline">\(C \in \reals^{1 \times 2}\)</span>.</p>
+<p>We will then look at general LTI systems and show that any <span class="math inline">\(n\)</span>-th order TF can be written as a SSM: <span class="math display">\[\begin{align*}
+\dot x(t) &amp;= A x(t) + B u(t) \\
+y(t) &amp;= C x(t)
+\end{align*}\]</span> where <span class="math inline">\(x(t) \in \reals^n\)</span>, <span class="math inline">\(A \in \reals^{n × n}\)</span>, <span class="math inline">\(B \in \reals^{n \times 1}\)</span> and <span class="math inline">\(C \in \reals^{1 \times n}\)</span>.</p>
+<p>In the next lecture, we will study how to solve such differential equations for a particular choice of input.</p>
+<section id="sec-DE-SSM" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="sec-DE-SSM"><span class="header-section-number">1</span> Converting DE to SSM</h2>
+<p>In this section, we show how to construct SSM from DE. The key point to realize is that the SSM is not unique, so we will consider different representations. Each representation is useful for a specific purpose, as we will see later in the course.</p>
 <p>We assume that we are either given a <em>normalized</em> DE (i.e., the leading coefficient is 1): <span class="math display">\[
 \frac{d^n y(t)}{dt^n} + a_{n-1} \frac{d^{n-1}y(t)}{dt}
 + \cdots + a_0  y(t)
 =
 b_m \frac{d^m u(t)}{dt^m} + \cdots + b_0 u(t)
 \]</span> or a <em>normalized</em> TF <span class="math display">\[G(s) = \frac{b_m s^m + \cdots + b_0}{s^n + a_{n-1}s^{n-1} + \cdots + a_0}.\]</span></p>
-<p>We will consider three <strong>canoncial</strong> representations of a DE or TF in SS (state space) form:</p>
+<p>We will restrict attention to <strong>proper</strong> TFs, i.e., <span class="math inline">\(m &lt; n\)</span>. There are three canoncial realizations, which we illustrate via examples first.</p>
 <ol type="1">
 <li>Controllable Canonical Form (CCF)</li>
 <li>Observable Canonical Form (OCF)</li>
 <li>Diagonal Canonical Form (DCF)</li>
 </ol>
-<p>In the discussion below, we assume that the TF is <strong>strictly proper</strong> (i.e., <span class="math inline">\(m &lt; n\)</span>). The formulas for the case <span class="math inline">\(m = n\)</span> are a bit different.</p>
-<section id="controllable-canonical-form-ccf" class="level3">
-<h3 class="anchored" data-anchor-id="controllable-canonical-form-ccf">Controllable Canonical Form (CCF)</h3>
 </section>
-<section id="observable-canonical-form-ocf" class="level3">
-<h3 class="anchored" data-anchor-id="observable-canonical-form-ocf">Observable Canonical Form (OCF)</h3>
+<section id="illustrative-example" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="illustrative-example"><span class="header-section-number">2</span> Illustrative Example</h2>
+<section id="ccf-representation" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="ccf-representation"><span class="header-section-number">2.1</span> CCF representation</h3>
+<p>Consider the homogeneous second order DE considered above: <span class="math display">\[\begin{equation}\label{eq:2nd-DE}
+\frac{d^2y(t)}{dt^2} + a_1 \frac{dy(t)}{dt} + a_0 y(t) = 0.
+\end{equation}\]</span></p>
+<p>We consider a state vector: <span class="math display">\[
+x(t) = \MATRIX{x_1(t) \\ x_2(t)} = \MATRIX{y(t) \\ \dot y(t)}. \]</span> Then, we can write <span class="math inline">\(\eqref{eq:2nd-DE}\)</span> as follows: <span class="math display">\[\begin{align*}
+  \dot x_1(t) &amp;= x_2(t) \\
+  \dot x_2(t) &amp;= - a_0 x_1(t) - a_1 x_2(t)
+\end{align*}\]</span> This equation can be written in vector form as follows: <span class="math display">\[\begin{align*}
+\MATRIX{\dot x_1(t) \\ \dot x_2(t) }
+&amp;=
+\MATRIX{0 &amp; 1 \\ -a_0 &amp; -a_1} \MATRIX{x_1(t) \\ x_2(t) },
+\\
+y(t) &amp;= \MATRIX{\phantom{-a_0}\llap{1} &amp; \phantom{-a_1}\llap{0} } \MATRIX{x_1(t) \\ x_2(t)}.
+\end{align*}\]</span> This is called <strong>controllable cannonical form (CCF)</strong> realization of <span class="math inline">\(\eqref{eq:2nd-DE}\)</span>. The meaning of the terminology will become clear later.</p>
 </section>
-<section id="diagonal-canonical-form-dcf" class="level3">
-<h3 class="anchored" data-anchor-id="diagonal-canonical-form-dcf">Diagonal Canonical Form (DCF)</h3>
+<section id="ocf-representation" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="ocf-representation"><span class="header-section-number">2.2</span> OCF representation</h3>
+<p>The second method to obtain a SSM from the LDE is as follows. Write the LDE <span class="math inline">\(\eqref{eq:2nd-DE}\)</span> as an integro-differential equation: <span class="math display">\[\begin{align*}
+\ddot y(t) &amp;= - a_1 \dot y(t) + a_0 y(t)
+\\
+\implies \quad
+\dot y(t) &amp;= - a_1  y(t) + a_0 \int_{0^-}^t y(\tau)d\tau
+\end{align*}\]</span> Now define <span class="math display">\[\begin{align*}
+x_1(t) &amp;= -a_0\int_{0^-}^t y(\tau) d\tau ,
+&amp;
+x_2(t) &amp;= y(t)
+\end{align*}\]</span> Then, <span class="math display">\[\begin{align*}
+\dot x_1(t) &amp;= -a_0 y(t) = -a_0 x_2(t) \\
+\dot x_2(t) &amp;= \dot y(t) = x_1(t) - a_1 x_2(t)
+\end{align*}\]</span> This equation can be written in vector form as follows: <span class="math display">\[\begin{align*}
+\MATRIX{\dot x_1(t) \\ \dot x_2(t) }
+&amp;=
+\MATRIX{0 &amp; -a_0 \\ 1 &amp; -a_1} \MATRIX{x_1(t) \\ x_2(t) },
+\\
+y(t) &amp;= \MATRIX{0 &amp; \phantom{-a_1}\llap{1} } \MATRIX{x_1(t) \\ x_2(t)}.
+\end{align*}\]</span> This is called <strong>observable canoncial form (OCF)</strong> realization of <span class="math inline">\(\eqref{eq:2nd-DE}\)</span>. Again, the reason for the terminolgy will become clear later.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Non-uniqueness of the SSM realization
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The above example shows that the same DE can have multiple SSM realizations.</p>
+</div>
+</div>
 </section>
 </section>
-<section id="from-state-space-models-to-transfer-functions" class="level2">
-<h2 class="anchored" data-anchor-id="from-state-space-models-to-transfer-functions">From state space models to transfer functions</h2>
-<p>So far, we have seen how to write different SS representations from a TF. It is also possible to go in the other directions.</p>
-<p>Suppose we have a SS system: <span class="math display">\[\begin{align*}
+<section id="general-form" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="general-form"><span class="header-section-number">3</span> General form</h2>
+<p>We now consider a general second order TF: <span class="math display">\[ G(s) = \frac{b_1 s+b_0}{s^2 + a_1 s + a_0} \]</span></p>
+<p>As an illustration, we will also use the following numerical example:</p>
+<div id="exm-SSM-CC" class="theorem example">
+<p><span class="theorem-title"><strong>Example 1</strong></span> <span class="math display">\[ G(s) = \frac{s+5}{s^2 + 3s + 2} \]</span></p>
+</div>
+<section id="ccf-representation-1" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="ccf-representation-1"><span class="header-section-number">3.1</span> CCF representation</h3>
+<p>For the generic second order system, the CCF form is <span class="math display">\[
+A = \MATRIX{ 0 &amp; 1 \\ \textcolor{red}{-a_0} &amp; \textcolor{red}{-a_1} },
+\quad
+B = \MATRIX{ 0 \\ 1},
+\quad
+C = \MATRIX{\textcolor{red}{b_0} &amp; \textcolor{red}{b_1} }
+\]</span> This is the general structure of the matrix, where only the red elements have to be filled based on the TF. For example, for the TF in <a href="#exm-SSM-CC" class="quarto-xref">Example&nbsp;1</a>, we have <span class="math display">\[
+A = \MATRIX{ 0 &amp; 1 \\ -2 &amp; -3 }
+\quad
+B = \MATRIX{ 0 \\ 1},
+\quad
+C = \MATRIX{5 &amp; 1}
+\]</span></p>
+<p>In general, we have the following: <!-- TODO: Add figure --></p>
+</section>
+<section id="ocf-representation-1" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="ocf-representation-1"><span class="header-section-number">3.2</span> OCF representation</h3>
+<p>For the generic second order system, the OCF form is <span class="math display">\[
+A = \MATRIX{ 0 &amp; \textcolor{red}{-a_0} \\ 1 &amp; \textcolor{red}{-a_1} },
+\quad
+B = \MATRIX{\textcolor{red}{b_0} \\ \textcolor{red}{b_1} },
+\quad
+C = \MATRIX{ 0 &amp; 1}
+\]</span> This is the general structure of the matrix, where only the red elements have to be filled based on the TF. For example, for the TF in <a href="#exm-SSM-CC" class="quarto-xref">Example&nbsp;1</a>, we have <span class="math display">\[
+A = \MATRIX{ 0 &amp; -2 \\ 1 &amp; -3 }
+\quad
+B = \MATRIX{5 \\ 1},
+\quad
+C = \MATRIX{ 0 &amp; 1},
+\]</span></p>
+<p>In general, we have the following: <!-- TODO: Add figure --></p>
+</section>
+<section id="dcf-representation" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="dcf-representation"><span class="header-section-number">3.3</span> DCF representation</h3>
+<p>This representation is special and only applicable when the system has distinct real roots. Then, using the partial fraction expansion, the TF may be written as <span class="math display">\[
+G(s) = \frac{c_1}{s+p_1} + \frac{c_2}{s + p_2} + \dots + \frac{c_n}{s+p_n}
+\]</span> In DCF, the system matrices are given by <!-- TODO: Add figure --></p>
+<p>In particular, for the TF in <a href="#exm-SSM-CC" class="quarto-xref">Example&nbsp;1</a>, we have <span class="math display">\[
+G(s) = \frac{s+5}{s^2 + 3s + 2} = \frac{4}{s+1} - \frac{3}{s+2}. \]</span></p>
+<p>Thus, <span class="math display">\[
+A = \MATRIX{-1 &amp; 0 \\ 0 &amp; -2},
+\quad
+B = \MATRIX{ 1 \\ 1 },
+\quad
+C = \MATRIX{4 &amp; -3}.
+\]</span></p>
+<p>In general, the poles will be complex and have multiplicity. In this setting, a generalization of DCF known as Jordan canconical form (JCF) is used. We will not consider JCF in this course.</p>
+</section>
+</section>
+<section id="ssms-for-circuits" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="ssms-for-circuits"><span class="header-section-number">4</span> SSMs for circuits</h2>
+<p>We will use the following notation in this section: <span class="math inline">\(v(t)\)</span> denotes voltage, <span class="math inline">\(i(t)\)</span> denotes current, and <span class="math inline">\(q(t)\)</span> denotes charge.</p>
+<p>For the three main circuit elements, we have the following relationship:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 22%">
+<col style="width: 22%">
+<col style="width: 22%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Relationship</th>
+<th style="text-align: center;">Resistor</th>
+<th style="text-align: center;">Capcitor</th>
+<th style="text-align: center;">Inductor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"></td>
+<td style="text-align: center;"><img src="figures/svg/circuits1.svg" class="img-fluid"></td>
+<td style="text-align: center;"><img src="figures/svg/circuits2.svg" class="img-fluid"></td>
+<td style="text-align: center;"><img src="figures/svg/circuits3.svg" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">voltage-current</td>
+<td style="text-align: center;"><span class="math inline">\(v(t) = R i(t)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\displaystyle v(t) = \frac{1}{C} \int_{0}^t i(τ) d τ\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\displaystyle \bbox[5pt, background-color:lightgray]{v(t) = L \frac{di(t)}{dt}}\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">current-voltage</td>
+<td style="text-align: center;"><span class="math inline">\(\displaystyle i(t) = \frac{1}{R} v(t)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\bbox[5pt, background-color:lightgray]{\displaystyle i(t) = C \frac{dv(t)}{dt}}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(i(t) = \displaystyle \frac 1L \int_{0}^t v(τ) d τ\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">voltage-charge</td>
+<td style="text-align: center;"><span class="math inline">\(v(t) = R \dfrac{dq(t)}{dt}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(v(t) = \dfrac{1}{C} q(t)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(v(t) = L \dfrac{d^2q(t)}{dt^2}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Each energy storage element (i.e., capacitor and inductor) gives rise to a state variable. We want to avoid integral equations, so for capacitor we choose voltage as state and for inductor we choose current as state.</p>
+<section id="example-1" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="example-1"><span class="header-section-number">4.1</span> Example 1</h3>
+<p>As an example, let’s start with a simple example to understand how state space modeling works. Let’s consider an RCL circuit shown in <a href="#fig-lcr" class="quarto-xref">Figure&nbsp;1</a>.</p>
+<div id="fig-lcr" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-lcr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/circuits4.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lcr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: A simple circuit
+</figcaption>
+</figure>
+</div>
+<p>We construct the state space model as follows.</p>
+<section id="step-1-select-the-state-variables" class="level4" data-number="4.1.1">
+<h4 data-number="4.1.1" class="anchored" data-anchor-id="step-1-select-the-state-variables"><span class="header-section-number">4.1.1</span> Step 1: Select the state variables</h4>
+<p>We write the appropriate relation for the two energy storage elements: <span class="math display">\[\begin{align*}
+C \frac{d v_C(t)}{dt} &amp;= i_C(t) = i_L(t) \\
+L \frac{d i_L(t)}{dt} &amp;= v_L(t)
+\end{align*}\]</span></p>
+<p>Thus, we use <span class="math inline">\(\MATRIX{ v_C(t) \\ i_L(t) }\)</span> as state.</p>
+</section>
+<section id="step-2-use-kclkvl-to-simplify-the-rhs-of-step-1" class="level4" data-number="4.1.2">
+<h4 data-number="4.1.2" class="anchored" data-anchor-id="step-2-use-kclkvl-to-simplify-the-rhs-of-step-1"><span class="header-section-number">4.1.2</span> Step 2: Use KCL/KVL to simplify the RHS of step 1</h4>
+<p>We want a relationship between input <span class="math inline">\(u(t)\)</span> and output <span class="math inline">\(v_C(t)\)</span>. So, we use KCL/KVL to find a relationship between them. In this example, we use KVL: <span class="math display">\[\begin{align*}
+u(t) &amp;= v_R(t) + v_L(t) + v_C(t) \\
+&amp;= R i_L(t) - L \frac{di_L(t)}{dt} + v_C(t)
+\end{align*}\]</span></p>
+<p>Thus, we have <span class="math display">\[\begin{align*}
+\frac{d v_C(t)}{dt} &amp;= \frac{1}{C} i_L(t) \\
+\frac{d i_L(t)}{dt} &amp;= - \frac{1}{L} v_C(t) + \frac{R}{L} i_L(t) + \frac{1}{L} u(t)
+\end{align*}\]</span></p>
+<p>Thus, the SSM is: <span class="math display">\[
+\def\1{\vphantom{\dfrac{d}{dt}}}
+\bbox[5pt,background-color: lightgray]
+{
+\begin{align*}
+\MATRIX{ \dfrac{d v_C(t)}{dt} \\ \dfrac {d i_L(t)}{dt} }
+&amp;=
+\MATRIX{0 &amp; \dfrac{1}{C} \\ -\dfrac{1}{L} &amp; - \dfrac{R}{L} }
+\MATRIX{ \1 v_C(t) \\  \1 i_L(t) }
++
+\MATRIX{\1 0 \\ \dfrac{1}{L}} u(t)
+\\
+y(t) &amp;= \MATRIX{1 &amp; 0}
+\MATRIX{ \1 v_C(t) \\  \1 i_L(t) }
+\end{align*}
+}
+\]</span></p>
+<p>Thus, we have <span class="math display">\[
+\def\1{\vphantom{\dfrac{d}{dt}}}
+A =
+\MATRIX{0 &amp; \dfrac{1}{C} \\ -\dfrac{1}{L} &amp; - \dfrac{R}{L} }
+,
+\quad
+B =
+\MATRIX{\1 0 \\ \dfrac{1}{L}},
+\quad
+C = \MATRIX{1 &amp; 0 }
+\]</span></p>
+</section>
+</section>
+</section>
+<section id="from-state-space-models-to-transfer-functions" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="from-state-space-models-to-transfer-functions"><span class="header-section-number">5</span> From state space models to transfer functions</h2>
+<p>So far, we have seen how to write different SSM representations from a TF. It is also possible to go in the other directions.</p>
+<p>Suppose we have a SSM: <span class="math display">\[\begin{align*}
 \dot x(t) &amp;= A x(t) + B u(t) \\
 y(t) &amp;= C x(t)
 \end{align*}\]</span> Then the transfer function is <span class="math display">\[
@@ -349,7 +555,7 @@ Derivation of the formula
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Take LT of the SS model: <span class="math display">\[\begin{align*}
+<p>Take LT of the SSM: <span class="math display">\[\begin{align*}
 s X(s) &amp;= A X(s) + B U(s)
 &amp; \implies&amp;&amp;
 X(s) &amp;= (sI - A)^{-1} B U(s) \\
@@ -361,11 +567,14 @@ Y(s) &amp;= C(sI - A)^{-1} B U(s)
 </div>
 </div>
 </div>
-<p>We can think of this in terms of the following block diagram.</p>
-<!-- TODO: Add block diagram -->
-<p>The TF can be “read backwards” from the block diagram.</p>
+<!-- TODO: Add block diagram 
+We can think of this in terms of the following block diagram. 
+
+
+The TF can be "read backwards" from the block diagram.
+-->
 <div id="exm-SS-to-TF-1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 1</strong></span> Let <span class="math inline">\(A = \MATRIX{-1 &amp; 2 \\ 3 &amp; -1}\)</span>, <span class="math inline">\(B = \MATRIX{1 \\ 0}\)</span>, and <span class="math inline">\(C = \MATRIX{2 &amp; 1}\)</span>. Find the TF?</p>
+<p><span class="theorem-title"><strong>Example 2</strong></span> Let <span class="math inline">\(A = \MATRIX{-1 &amp; 2 \\ 3 &amp; -1}\)</span>, <span class="math inline">\(B = \MATRIX{1 \\ 0}\)</span>, and <span class="math inline">\(C = \MATRIX{2 &amp; 1}\)</span>. Find the TF?</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
@@ -393,9 +602,9 @@ Solution
 {\text{Poles of $G(s)$} = \text{evals of $A$}}\]</span> This means that we can control the poles of the TF by controlling the eigenvalues of <span class="math inline">\(A\)</span>.</p>
 <p><strong>Changing the eigenvalues of the <span class="math inline">\(A\)</span> matrix will be one of the most simple and the most important design methods that we will learn in this course.</strong></p>
 </section>
-<section id="change-of-coordinates" class="level2">
-<h2 class="anchored" data-anchor-id="change-of-coordinates">Change of coordinates</h2>
-<p>A key idea for controller design using state space methods is change of coordinates. To fix ideas, we first review the change of coordinates for vectors and then we will come back to SS models.</p>
+<section id="change-of-coordinates" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="change-of-coordinates"><span class="header-section-number">6</span> Change of coordinates</h2>
+<p>A key idea for controller design using state space methods is change of coordinates. To fix ideas, we first review the change of coordinates for vectors and then we will come back to SSMs.</p>
 <p>Consider a vector space <span class="math inline">\(\reals^2\)</span>. The standard basis for <span class="math inline">\(\reals^2\)</span> is <span class="math display">\[
 e_1 = \MATRIX{1 \\ 0}
 \quad\text{and}\quad
@@ -406,12 +615,23 @@ e_2 = \MATRIX{0 \\ 1}.
 \]</span> then we can say that the vector is equal to <span class="math inline">\(\MATRIX{\tilde x_1 \\ \tilde x_2}\)</span> in the coordinate system <span class="math inline">\((v_1, v_2)\)</span>. Note that the vector hasn’t changed, only the coodinate system has.</p>
 <p>We use the following example to illustrate how to move from one coordinate system to another</p>
 <div id="exm-change-of-coordinates" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2</strong></span> Let <span class="math inline">\(x = \MATRIX{2 \\ 3}\)</span>. Find its representation in the coordinate system <span class="math display">\[v_1 = \MATRIX{1 \\ 0}
+<p><span class="theorem-title"><strong>Example 3</strong></span> Let <span class="math inline">\(x = \MATRIX{2 \\ 3}\)</span>. Find its representation in the coordinate system <span class="math display">\[v_1 = \MATRIX{1 \\ 0}
 \quad\text{and}\quad
 v_2 = \MATRIX{1 \\ 1}.
 \]</span></p>
-<section id="solution-1" class="level4">
-<h4 class="anchored" data-anchor-id="solution-1">Solution</h4>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
 <p>Let the representation in the new coordinate system be <span class="math inline">\(\tilde x = \MATRIX{\tilde x_1 \\ \tilde x_2}\)</span>. Thus, we must have <span class="math display">\[
 2 e_1 + 3 e_2 = \tilde x_1 v_1 + \tilde x_2 v_2.
 \]</span> Or, in vector form, <span class="math display">\[ \MATRIX{1 &amp; 0 \\ 0 &amp; 1} \MATRIX{2 \\ 3}
@@ -425,12 +645,13 @@ v_2 = \MATRIX{1 \\ 1}.
 <p>So, for the above example we have <span class="math display">\[\tilde x = \MATRIX{1 &amp; 1 \\ 0 &amp; 1}^{-1} \MATRIX{2 \\ 3}
 = \MATRIX{-1 \\ 3}.\]</span></p>
 <!-- TODO: Draw a picture -->
-</section>
+</div>
+</div>
 </div>
 </section>
-<section id="change-of-coordinates-in-ss-models." class="level2">
-<h2 class="anchored" data-anchor-id="change-of-coordinates-in-ss-models.">Change of coordinates in SS models.</h2>
-<p>Consider a SS model: <span class="math display">\[\begin{align*}
+<section id="change-of-coordinates-in-ssms" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="change-of-coordinates-in-ssms"><span class="header-section-number">7</span> Change of coordinates in SSMs</h2>
+<p>Consider a SSM: <span class="math display">\[\begin{align*}
 \dot x(t) &amp;= A x(t) + B u(t) \\
 y(t) &amp;= C x(t)
 \end{align*}\]</span></p>
@@ -440,7 +661,7 @@ y(t) &amp;= C x(t)
 <li>How does the change of coordinates affect the TF?</li>
 </ul>
 <p>We look at both these questions in detail.</p>
-<p>Since <span class="math inline">\(\tilde x(t) = T^{-1} x(t)\)</span>, we have <span class="math inline">\(x(t) = T \tilde x(t)\)</span>. Substituting this in the SS model, we have <span class="math display">\[\begin{align*}
+<p>Since <span class="math inline">\(\tilde x(t) = T^{-1} x(t)\)</span>, we have <span class="math inline">\(x(t) = T \tilde x(t)\)</span>. Substituting this in the SSM, we have <span class="math display">\[\begin{align*}
 T \dot {\tilde x}(t) &amp;= A T \tilde x(t) + B u(t) \\
 y(t) &amp;= C T \tilde x(t)
 \end{align*}\]</span></p>
@@ -448,7 +669,7 @@ y(t) &amp;= C T \tilde x(t)
 \dot {\tilde x}(t) &amp;= T^{-1} A T \tilde x(t) + T^{-1} B u(t) \\
 y(t) &amp;= C T \tilde x(t)
 \end{align*}\]</span></p>
-<p>So, we can think of this as a new SS model: <span class="math display">\[\begin{align*}
+<p>So, we can think of this as a new SSM: <span class="math display">\[\begin{align*}
 \dot {\tilde x}(t) &amp;= \tilde A \tilde x(t) + \tilde B u(t) \\
 y(t) &amp;= \tilde C \tilde x(t)
 \end{align*}\]</span> where <span class="math display">\[\bbox[5pt,border: 1px solid]

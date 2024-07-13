@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2024-07-12">
+<meta name="dcterms.date" content="2024-07-13">
 
 <title>Frequency domain modeling – Linear Systems and Control</title>
 <style>
@@ -237,12 +237,13 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#unilateral-laplace-transforms" id="toc-unilateral-laplace-transforms" class="nav-link active" data-scroll-target="#unilateral-laplace-transforms">Unilateral Laplace Transforms</a></li>
-  <li><a href="#the-transfer-function" id="toc-the-transfer-function" class="nav-link" data-scroll-target="#the-transfer-function">The Transfer Function</a></li>
-  <li><a href="#poles-and-zeros-of-a-transfer-function" id="toc-poles-and-zeros-of-a-transfer-function" class="nav-link" data-scroll-target="#poles-and-zeros-of-a-transfer-function">Poles and Zeros of a Transfer Function</a></li>
-  <li><a href="#bibo-stability" id="toc-bibo-stability" class="nav-link" data-scroll-target="#bibo-stability">BIBO Stability</a></li>
-  <li><a href="#step-response" id="toc-step-response" class="nav-link" data-scroll-target="#step-response">Step Response</a></li>
-  <li><a href="#interconnection-of-lti-systems" id="toc-interconnection-of-lti-systems" class="nav-link" data-scroll-target="#interconnection-of-lti-systems">Interconnection of LTI Systems</a></li>
+  <li><a href="#unilateral-laplace-transforms" id="toc-unilateral-laplace-transforms" class="nav-link active" data-scroll-target="#unilateral-laplace-transforms"><span class="header-section-number">1</span> Unilateral Laplace Transforms</a></li>
+  <li><a href="#the-transfer-function" id="toc-the-transfer-function" class="nav-link" data-scroll-target="#the-transfer-function"><span class="header-section-number">2</span> The Transfer Function</a></li>
+  <li><a href="#poles-and-zeros-of-a-transfer-function" id="toc-poles-and-zeros-of-a-transfer-function" class="nav-link" data-scroll-target="#poles-and-zeros-of-a-transfer-function"><span class="header-section-number">3</span> Poles and Zeros of a Transfer Function</a></li>
+  <li><a href="#bibo-stability" id="toc-bibo-stability" class="nav-link" data-scroll-target="#bibo-stability"><span class="header-section-number">4</span> BIBO Stability</a></li>
+  <li><a href="#step-response" id="toc-step-response" class="nav-link" data-scroll-target="#step-response"><span class="header-section-number">5</span> Step Response</a></li>
+  <li><a href="#interconnection-of-lti-systems" id="toc-interconnection-of-lti-systems" class="nav-link" data-scroll-target="#interconnection-of-lti-systems"><span class="header-section-number">6</span> Interconnection of LTI Systems</a></li>
+  <li><a href="#time-delay-systems" id="toc-time-delay-systems" class="nav-link" data-scroll-target="#time-delay-systems"><span class="header-section-number">7</span> Time-delay systems</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/freq-modeling.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -277,7 +278,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 12, 2024</p>
+      <p class="date">July 13, 2024</p>
     </div>
   </div>
   
@@ -303,8 +304,8 @@ window.Quarto = {
 </div>
 </div>
 <p>In this lecture, we will review frequency domain modeling of LTI (linear and time invariant) systems. You have seen this material in Signals and Systems. The purpose of this review is to simply introduce the notation used in this course, in case it happens to be different from the notation used in Signals and Systems. You are strongly encouraged to review your notes on this topic.</p>
-<section id="unilateral-laplace-transforms" class="level2">
-<h2 class="anchored" data-anchor-id="unilateral-laplace-transforms">Unilateral Laplace Transforms</h2>
+<section id="unilateral-laplace-transforms" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="unilateral-laplace-transforms"><span class="header-section-number">1</span> Unilateral Laplace Transforms</h2>
 <p>Recall that there are two types of Laplace transforms (LTs): bi-lateral or two-sided LTs and unilateral or one-sided LTs. In this course, we will work exclusively with unilateral LTs.</p>
 <p>Also recall that for two-sided LTs, we need to worry about the ROC (region of convergence). For one-sided LTs, we never explicitly mention the ROC since it is always the right hand plane right to the rightmost pole.</p>
 <p>We will use the notation <span class="math display">\[f(t) \xleftrightarrow{\quad\mathcal L\quad} F(s)\]</span> to denote a LT-pair. We will also use <span class="math display">\[F(s) = \mathcal{L}\{ f(t)\}\]</span> or <span class="math display">\[f(t) = \mathcal L^{-1}\{F(s)\}\]</span> when we want to explicitly write the LT or the inverse LT of a signal.</p>
@@ -318,8 +319,8 @@ window.Quarto = {
 <li>Roots of the denominator are real and repeated.</li>
 </ol>
 </section>
-<section id="the-transfer-function" class="level2">
-<h2 class="anchored" data-anchor-id="the-transfer-function">The Transfer Function</h2>
+<section id="the-transfer-function" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="the-transfer-function"><span class="header-section-number">2</span> The Transfer Function</h2>
 <p>In this course, we will work exclusively with LTI systems. Such systems arise in all branches of engineering, e.g., electrical circuits, spring-mass systems, gear systems, and thermodynamics. See Chapter 2 of Nice for detailed modeling examples.</p>
 <p>Consider an LTI system with input <span class="math inline">\(u(t)\)</span> (also called the reference signal sometimes) and output <span class="math inline">\(y(t)\)</span>. We can also represent this as the following block diagram:</p>
 <div id="fig-LTI" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -417,8 +418,8 @@ Solution
 <p>We present an alternative representation of the TF (pole-zero plot) in the next section. Later in the course we will also study other equivalent forms of representing the system such as state space equations and Bode plots.</p>
 <p>A final remark. In all the systems that we consider in this course, we will assume that <span class="math inline">\(m &lt; n\)</span>. So, the denominator of the TF has a strictly higher degree than the numerator. Such transfer functions are called <strong>proper</strong>. It is possible to have causal systems where <span class="math inline">\(m=n\)</span> but we will not consider that in this course. As a consequence, when we consider state space representation in future lectures, we will get formulas which are simpler than more general formulas which you may find at other sources.</p>
 </section>
-<section id="poles-and-zeros-of-a-transfer-function" class="level2">
-<h2 class="anchored" data-anchor-id="poles-and-zeros-of-a-transfer-function">Poles and Zeros of a Transfer Function</h2>
+<section id="poles-and-zeros-of-a-transfer-function" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="poles-and-zeros-of-a-transfer-function"><span class="header-section-number">3</span> Poles and Zeros of a Transfer Function</h2>
 <p>The TF of an LTI system is always of the form: <span class="math display">\[
 G(s)
 = \frac{b_m s^m + b_{m-1} s^{m-1} + \cdots + b_m}
@@ -473,8 +474,8 @@ G(s)
 <p>Since the polynomials in the numerator and denominator of <span class="math inline">\(G(s)\)</span> have real coefficients, the roots are either real or occur in complex conjugate pairs. So, the poles and zeros either lie on the <span class="math inline">\(σ\)</span>-axis or are symmetric about the <span class="math inline">\(σ\)</span>-axis.</p>
 <p>Note that the pole-zero plot does not capture the gain of the TF.</p>
 </section>
-<section id="bibo-stability" class="level2">
-<h2 class="anchored" data-anchor-id="bibo-stability">BIBO Stability</h2>
+<section id="bibo-stability" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="bibo-stability"><span class="header-section-number">4</span> BIBO Stability</h2>
 <p>Recall from Signals and Systems that an LTI system with impulse response <span class="math inline">\(g(t)\)</span> is BIBO stable if <span class="math display">\[
 \int_{-∞}^{∞} |g(t)| dt &lt; \infty.
 \]</span></p>
@@ -584,8 +585,8 @@ Figure&nbsp;3: Illustration of stable and unstable systems
 <p>If there are poles on the <span class="math inline">\(j ω\)</span> axis and the poles have multiplicity 1, then the system is <strong>marginally stable</strong>; if poles have multiplicity greater than 1, then the system is unstable.</p>
 <p>In the next lecture, we will see how to use the poles to identify the step response of the system.</p>
 </section>
-<section id="step-response" class="level2">
-<h2 class="anchored" data-anchor-id="step-response">Step Response</h2>
+<section id="step-response" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="step-response"><span class="header-section-number">5</span> Step Response</h2>
 <p>One of the configurations that we will really focus on in the course is the output of a <em>stable</em> system when the <strong>input is a step function.</strong> This is often the case when we specify a reference input such as the desired temperature of a room or the desired speed in cruise control of a car, and are interested in seeing if we get a “good” output. Note that this question is only of interest for stable systems. If the system is unstable, then the output will go to infinity.</p>
 <p>As an example, consider the system of <a href="#exr-LDE-TF" class="quarto-xref">Exercise&nbsp;2</a>. What is the output when the input is a step function (assuming that the system starts from a zero initial state)?</p>
 <p>To compute this, recall <span class="math display">\[
@@ -600,8 +601,8 @@ Y(s) &amp;= G(s) U(s) \\
   y(t) = \left[ \frac 12 - \frac 12 e^{-2t} \right] \mathbb{1}(t).
 \]</span></p>
 </section>
-<section id="interconnection-of-lti-systems" class="level2">
-<h2 class="anchored" data-anchor-id="interconnection-of-lti-systems">Interconnection of LTI Systems</h2>
+<section id="interconnection-of-lti-systems" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="interconnection-of-lti-systems"><span class="header-section-number">6</span> Interconnection of LTI Systems</h2>
 <p>There are three common ways to inter connect LTI systems shown below.</p>
 <div id="fig-series" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -633,6 +634,18 @@ Figure&nbsp;6: Feedback Connection equivalent to <span class="math inline">\(\di
 </figcaption>
 </figure>
 </div>
+</section>
+<section id="time-delay-systems" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="time-delay-systems"><span class="header-section-number">7</span> Time-delay systems</h2>
+<p>In a real system, there is often a delay between input and output, which is often modeled by a delay block whose output <span class="math inline">\(y(t)\)</span> is a delayed version of the input <span class="math inline">\(u(t)\)</span>, by a delay time <span class="math inline">\(τ\)</span>, that is <span class="math display">\[
+  y(t) = u(t-τ).
+\]</span> Taking the Laplace transform of both sides, we get <span class="math display">\[
+Y(s) = e^{-τs}U(s).
+\]</span> Therefore, the TF of time-delay unit is <span class="math inline">\(e^{-τs}\)</span>, which is different from the TFs studied so far as it is not a rational polynomial of <span class="math inline">\(s\)</span>. It is possible to approximate <span class="math inline">\(e^{-τs}\)</span> using a rational polynomial using what is called <a href="https://en.wikipedia.org/wiki/Pad%C3%A9_approximant"><strong>Padé approximation</strong></a>:</p>
+<ul>
+<li><p><strong>First-order Padé approximation:</strong> <span class="math display">\[ e^{-τs} \approx \dfrac{1 - τs/2}{1 + τs/2}. \]</span></p></li>
+<li><p><strong>Second-order Padé approximation:</strong> <span class="math display">\[ e^{-τs} \approx \dfrac{1 - τs/2 + (τs)^2/12}{1 + τs/2 + (τs)^2/12}. \]</span></p></li>
+</ul>
 
 
 </section>
