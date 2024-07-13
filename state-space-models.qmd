@@ -2,55 +2,201 @@
 title: State space models
 ---
 
-The main idea behind state space models is to express constant coefficient linear differential equations as a first order **vector** differential equation. This representation allows us to use linear algebra to design controllers.
+The main idea behind state space models is to express constant coefficient linear differential equations as a first order **vector** differential equation. This representation allows us to use linear algebra to design controllers. To understand this, let's start with a homogeneous first-order LDE:
+$$
+\frac{dy(t)}{dt} = a y(t)
+$$
+with the initial condition $y(0) = y_0$. We will write this equation as
+$$\bbox[5pt,border: 1px solid]
+{\dot y(t) = a y(t), \quad y(0) = y_0}
+$$
+By inspection, we know that the solution is 
+$$y(t) = e^{at} y_0.$$
+
+However, we lose this simplicity if we go to second or higher order LDEs. For example, consider the LDE:
+$$\frac{d^2y(t)}{dt^2} + a_1 \frac{dy(t)}{dt} + a_0 y(t) = 0$$
+which known initial conditions $y(0)$ and $\dot y(0)$. 
+
+How can we find the solution? A commonly used method is to to use (one-sideded) Laplace transforms (with initial conditions) to compute the output. Recall
+\begin{align*}
+\dot x(t) &\xleftrightarrow{\quad \mathcal L\quad} s X(s) - x(0) \\
+\ddot x(t) &\xleftrightarrow{\quad \mathcal L\quad} s^2 X(s) - sx(0) - \dot x(0).
+\end{align*}
+
+So, if we take the LT of the DE, we get
+\begin{equation*}
+\bigl[ s^2 Y(s) - s y(0) - \dot y(0) \bigr] 
++ 
+a_1 \bigl[s Y(s) - y(0) \bigr]
++
+a_2 Y_0(s) = 0
+\end{equation*}
+Hence,
+$$
+Y(s) = \frac{y(0) s + (a_1 y(0) + \dot y(0))}{s^2 + a_1 s + a_0}.
+$$
+We can now simplify the above using partial fractions expansion to compute $y(t)$. 
+
+State space models provide a nicer way to solve such DEs. In particular, we will provide a method to convert general $2$-nd order LDE into a vector equation
+\begin{align*}
+\dot x(t) &= A x(t) \\
+y(t) &= C x(t)
+\end{align*}
+where $x(t) \in \reals^2$, $A \in \reals^{2 × 2}$ and $C \in \reals^{1 \times 2}$. 
+
+We will then look at general LTI systems and show that any $n$-th order TF can be written as a SSM:
+\begin{align*}
+\dot x(t) &= A x(t) + B u(t) \\
+y(t) &= C x(t)
+\end{align*}
+where $x(t) \in \reals^n$, $A \in \reals^{n × n}$, $B \in \reals^{n \times 1}$ and $C \in \reals^{1 \times n}$. 
+
+In the next lecture, we will study how to solve such differential equations for a particular choice of input. 
+
+## Convertting DE to SSM
+
+We start with the same 2nd order example used above:
+\begin{equation}\label{eq:2nd-DE}
+\frac{d^2y(t)}{dt^2} + a_1 \frac{dy(t)}{dt} + a_0 y(t) = 0.
+\end{equation}
+
+We consider a state vector:
+$$
+x(t) = \MATRIX{x_1(t) \\ x_2(t)} = \MATRIX{y(t) \\ \dot y(t)}. $$
+Then, we can write \eqref{eq:2nd-DE} as follows:
+\begin{align*}
+  \dot x_1(t) &= x_2(t) \\
+  \dot x_2(t) &= - a_0 x_1(t) - a_1 x_2(t)
+\end{align*}
+This equation can be written in vector form as follows:
+\begin{align*}
+\MATRIX{\dot x_1(t) \\ \dot x_2(t) }
+&=
+\MATRIX{0 & 1 \\ -a_0 & -a_1} \MATRIX{x_1(t) \\ x_2(t) },
+\\
+y(t) &= \MATRIX{\phantom{-a_0}\llap{1} & \phantom{-a_1}\llap{0} } \MATRIX{x_1(t) \\ x_2(t)}.
+\end{align*}
+This is called **controllable cannonical form (CCF)** realization of \eqref{eq:2nd-DE}. The meaning of the terminology will become clear later.
+
+---
+
+Another method to obtain a SSM from the LDE is as follows. Write the LDE \eqref{eq:2nd-DE} as an integro-differential equation:
+\begin{align*}
+\ddot y(t) &= - a_1 \dot y(t) + a_0 y(t)
+\\
+\implies \quad
+\dot y(t) &= - a_1  y(t) + a_0 \int_{0^-}^t y(\tau)d\tau
+\end{align*}
+Now define
+\begin{align*}
+x_1(t) &= -a_0\int_{0^-}^t y(\tau) d\tau ,
+&
+x_2(t) &= y(t)
+\end{align*}
+Then,
+\begin{align*}
+\dot x_1(t) &= -a_0 y(t) = -a_0 x_2(t) \\
+\dot x_2(t) &= \dot y(t) = x_1(t) - a_1 x_2(t)
+\end{align*}
+This equation can be written in vector form as follows:
+\begin{align*}
+\MATRIX{\dot x_1(t) \\ \dot x_2(t) }
+&=
+\MATRIX{0 & -a_0 \\ 1 & -a_1} \MATRIX{x_1(t) \\ x_2(t) },
+\\
+y(t) &= \MATRIX{0 & \phantom{-a_1}\llap{1} } \MATRIX{x_1(t) \\ x_2(t)}.
+\end{align*}
+This is called **observable canoncial form (OCF)** realization of \eqref{eq:2nd-DE}. Again, the reason for the terminolgy will become clear later. 
+
+:::{.callout-warning}
+#### Non-uniqueness of the SSM realization
+
+The above example shows that the same DE can have multiple SSM realizations. 
+:::
+
+We will revisit converting LDEs to SSMs in more details later. First, we present some examples for directly obtaining SSMs for circuits.
+
+## SSMs for circuits
+
+We will use the following notation in this section: $v(t)$ denotes voltage, $i(t)$ denotes current, and $q(t)$ denotes charge. 
+
+For the three main circuit elements, we have the following relationship:
+
+| Relationship | Resistor | Capcitor | Inductor |
+|:------------:|:--------:|:--------:|:--------:|
+|    | ![](figures/svg/circuits1.svg) | ![](figures/svg/circuits2.svg) | ![](figures/svg/circuits3.svg) | 
+| voltage-current | $v(t) = R i(t)$ | $\displaystyle v(t) = \frac{1}{C} \int_{0}^t i(τ) d τ$ | $\displaystyle \bbox[5pt, background-color:lightgray]{v(t) = L \frac{di(t)}{dt}}$ |
+| current-voltage | $\displaystyle i(t) = \frac{1}{R} v(t)$ | $\bbox[5pt, background-color:lightgray]{\displaystyle i(t) = C \frac{dv(t)}{dt}}$ | $i(t) = \displaystyle \frac 1L \int_{0}^t v(τ) d τ$ |
+| voltage-charge | $v(t) = R \dfrac{dq(t)}{dt}$ | $v(t) = \dfrac{1}{C} q(t)$ | $v(t) = L \dfrac{d^2q(t)}{dt^2}$ |
+
+Each energy storage element (i.e., capacitor and inductor) gives rise to a state variable. We want to avoid integral equations, so for capacitor we choose voltage as state and for inductor we choose current as state. 
+
+### Example 1
 
 As an example, let's start with a simple example to understand how state space modeling works. Let's consider an LCR circuit shown in @fig-lcr.
 
-![A simple circuit](figures/svg/circuits1.svg){#fig-lcr}
+![A simple circuit](figures/svg/circuits4.svg){#fig-lcr}
 
+We construct the state space model as follows.
 
-Let $i(t)$ denote the loop current and $q(t)$ denote the charge across the capicitor. 
-
-One way to solve this system is to use Kirchoff's law to get
-\begin{equation}\label{eq:KCL}
-v(t) = Ri(t) + L \frac{di(t)}{dt} + \frac 1C \int i(t) dt.
-\end{equation}
-Then, using $i(t) = dq(t)/dt$, we get
-\begin{equation}\label{eq:2nd-order}
-L\frac{d^2 q(t)}{dt^2} + R \frac{dq(t)}{dt} + \frac 1C q(t) = v(t).
-\end{equation}
-This is a second order linear differential equation, which we can solve in multiple ways. 
-
-An alternative way, instead of using Kirchoff's law to get a second order differetial equation, is two write two coupled first-order differetial equations:
+#### Step 1: Select the state variables
+We write the appropriate relation for the two energy storage elements:
 \begin{align*}
-  \frac{dq(t)}{dt} &= i(t) \\
-  \frac{di(t)}{dt} &= -\frac{R}{L} i(t) - \frac{1}{LC} q(t) + \frac{1}{LC} v(t)
+C \frac{d v_C(t)}{dt} &= i_C(t) = i_L(t) \\
+L \frac{d i_L(t)}{dt} &= v_L(t)
 \end{align*}
-where the second equation is a rearrangement of \eqref{eq:KCL}. We can write these two equations in vector form. In particular, let $x(t) = \MATRIX{q(t) \\ i(t)}$. Then,
-$$
-\dot x(t) = \MATRIX{ \frac{dq(t)}{dt} \\ \frac{di(t)}{dt} }
-     =
-     \MATRIX{0 & 1 \\ \frac{-1}{LC} & \frac{-R}{L}}
-     \MATRIX{q(t) \\ i(t)} 
-     +
-     \MATRIX{0 \\ \frac{1}{L}} v(t).
-$$
-If we think of the voltage across the capacitor as output (and denote it by $y(t)$), then
-$$y(t) = \frac{1}{C} q(t) = \MATRIX{\frac 1C & 0}\MATRIX{q(t) \\ i(t)}.$$
-Thus, we have a system of differential equations (where the input $u(t)$ is equal to the voltage $v(t)$)
-\begin{align}
-\dot x(t) &= A x(t) + B u(t) \label{eq:SS-1}\\
-y(t) &= C x(t) \label{eq:SS-2}
-\end{align}
-Thus, the second-order DE \eqref{eq:2nd-order} is equivalent with a first-order DE \eqref{eq:SS-1}--\eqref{eq:SS-2} with **a state of dimention 2**.
 
-:::{.callout-warning}
-#### Non-uniqueness of the representation
-The state $x(t)$ is not unique. We will show later that there are multiple state space representations corresponding to the same DE.
-:::
+Thus, we use $\MATRIX{ v_C(t) \\ i_L(t) }$ as state.
 
-## Canoncial representations
-In the previous example, we constructed the state space representation "by hand". We now consider a few "automatic" methods of constructing state space representations from a DE. 
+#### Step 2: Use KCL/KVL to simplify the RHS of step 1
+
+We want a relationship between input $u(t)$ and output $v_C(t)$. So, we use KCL/KVL to find a relationship between them. In this example, we use KVL:
+\begin{align*}
+u(t) &= v_R(t) + v_L(t) + v_C(t) \\
+&= R i_L(t) - L \frac{di_L(t)}{dt} + v_C(t)
+\end{align*}
+
+Thus, we have
+\begin{align*}
+\frac{d v_C(t)}{dt} &= \frac{1}{C} i_L(t) \\
+\frac{d i_L(t)}{dt} &= - \frac{1}{L} v_C(t) + \frac{R}{L} i_L(t) + \frac{1}{L} u(t) 
+\end{align*}
+
+Thus, the SSM is:
+$$
+\def\1{\vphantom{\dfrac{d}{dt}}}
+\bbox[5pt,background-color: lightgray]
+{
+\begin{align*}
+\MATRIX{ \dfrac{d v_C(t)}{dt} \\ \dfrac {d i_L(t)}{dt} }
+&=
+\MATRIX{0 & \dfrac{1}{C} \\ -\dfrac{1}{L} & - \dfrac{R}{L} }
+\MATRIX{ \1 v_C(t) \\  \1 i_L(t) }
++
+\MATRIX{\1 0 \\ \dfrac{1}{L}} u(t)
+\\
+y(t) &= \MATRIX{1 & 0} 
+\MATRIX{ \1 v_C(t) \\  \1 i_L(t) }
+\end{align*}
+}
+$$
+
+Thus, we have
+$$
+\def\1{\vphantom{\dfrac{d}{dt}}}
+A = 
+\MATRIX{0 & \dfrac{1}{C} \\ -\dfrac{1}{L} & - \dfrac{R}{L} }
+,
+\quad
+B = 
+\MATRIX{\1 0 \\ \dfrac{1}{L}},
+\quad
+C = \MATRIX{1 & 0 }
+$$
+
+## Converting DE/TF to SSM
+
+In the previous sections, we constructed the state space representations "by hand". We now consider a few "automatic" methods of constructing state space representations from a DE (or equivalently a TF).
 
 We assume that we are either given a _normalized_ DE (i.e., the leading coefficient is 1):
 $$
@@ -62,26 +208,94 @@ $$
 or a _normalized_ TF
 $$G(s) = \frac{b_m s^m + \cdots + b_0}{s^n + a_{n-1}s^{n-1} + \cdots + a_0}.$$
 
-We will consider three **canoncial** representations of a DE or TF in SS (state space) form:
+We will restrict attention to **proper** TFs, i.e., $m < n$. There are three canoncial realizations, which we illustrate via examples first.
 
 1. Controllable Canonical Form (CCF)
 2. Observable Canonical Form (OCF)
 3. Diagonal Canonical Form (DCF)
 
-In the discussion below, we assume that the TF is **strictly proper** (i.e., $m < n$). The formulas for the case $m = n$ are a bit different.
+:::{#exm-SSM-CC}
+Consider a generic second order TF:
+$$ G(s) = \frac{b_1 s+b_0}{s^2 + a_1 s + a_0} $$
+In parrticular, we will consider
+$$ G(s) = \frac{s+5}{s^2 + 3s + 2} $$
+Find the different canconical form representations of this system.
+:::
+
+### CCF representation
+For the generic second order system, the CCF form is
+$$
+A = \MATRIX{ 0 & 1 \\ \textcolor{red}{-a_0} & \textcolor{red}{-a_1} },
+\quad
+B = \MATRIX{ 0 \\ 1},
+\quad
+C = \MATRIX{\textcolor{red}{b_0} & \textcolor{red}{b_1} }
+$$
+This is the general structure of the matrix, where only the red elements have to be filled based on the TF. For example, for the TF in @exm-SSM-CC, we have
+$$
+A = \MATRIX{ 0 & 1 \\ -2 & -3 }
+\quad
+B = \MATRIX{ 0 \\ 1},
+\quad
+C = \MATRIX{5 & 1}
+$$
+
+In general, we have the following:
+<!-- TODO: Add figure -->
 
 
-### Controllable Canonical Form (CCF)
+### OCF representation
+For the generic second order system, the OCF form is
+$$
+A = \MATRIX{ 0 & \textcolor{red}{-a_0} \\ 1 & \textcolor{red}{-a_1} },
+\quad
+B = \MATRIX{\textcolor{red}{b_0} \\ \textcolor{red}{b_1} },
+\quad
+C = \MATRIX{ 0 & 1}
+$$
+This is the general structure of the matrix, where only the red elements have to be filled based on the TF. For example, for the TF in @exm-SSM-CC, we have
+$$
+A = \MATRIX{ 0 & -2 \\ 1 & -3 }
+\quad
+B = \MATRIX{5 \\ 1},
+\quad
+C = \MATRIX{ 0 & 1},
+$$
 
-### Observable Canonical Form (OCF)
+In general, we have the following:
+<!-- TODO: Add figure -->
 
-### Diagonal Canonical Form (DCF)
+### DCF representation
+
+This representation is special and only applicable when the system has distinct real roots. Then, using the partial fraction expansion, the TF may be written as
+$$
+G(s) = \frac{c_1}{s+p_1} + \frac{c_2}{s + p_2} + \dots + \frac{c_n}{s+p_n}
+$$
+In DCF, the system matrices are given by
+<!-- TODO: Add figure -->
+
+In particular, for the TF in @exm-SSM-CC, we have
+$$
+G(s) = \frac{s+5}{s^2 + 3s + 2} = \frac{4}{s+1} - \frac{3}{s+2}. $$
+
+Thus,
+$$
+A = \MATRIX{-1 & 0 \\ 0 & -2},
+\quad
+B = \MATRIX{ 1 \\ 1 },
+\quad
+C = \MATRIX{4 & -3}.
+$$
+
+In general, the poles will be complex and have multiplicity. In this setting, a generalization of DCF known as Jordan canconical form (JCF) is used. We will not consider JCF in this course.
+
+
 
 ## From state space models to transfer functions
 
-So far, we have seen how to write different SS representations from a TF. It is also possible to go in the other directions. 
+So far, we have seen how to write different SSM representations from a TF. It is also possible to go in the other directions. 
 
-Suppose we have a SS system:
+Suppose we have a SSM:
 \begin{align*}
 \dot x(t) &= A x(t) + B u(t) \\
 y(t) &= C x(t)
@@ -95,7 +309,7 @@ $$
 :::{.callout-note collapse="true"} 
 #### Derivation of the formula
 
-Take LT of the SS model:
+Take LT of the SSM:
 \begin{align*}
 s X(s) &= A X(s) + B U(s) 
 & \implies&&
@@ -110,11 +324,12 @@ $$ G(s) = \frac{Y(s)}{U(s)} = C(sI - A)^{-1} B.$$
 
 :::
 
+<!-- TODO: Add block diagram 
 We can think of this in terms of the following block diagram. 
 
-<!-- TODO: Add block diagram --> 
 
 The TF can be "read backwards" from the block diagram.
+-->
 
 :::{#exm-SS-to-TF-1}
 Let $A = \MATRIX{-1 & 2 \\ 3 & -1}$, $B = \MATRIX{1 \\ 0}$, and $C = \MATRIX{2 & 1}$. Find the TF?
@@ -148,7 +363,7 @@ This means that we can control the poles of the TF by controlling the eigenvalue
 
 ## Change of coordinates
 
-A key idea for controller design using state space methods is change of coordinates. To fix ideas, we first review the change of coordinates for vectors and then we will come back to SS models. 
+A key idea for controller design using state space methods is change of coordinates. To fix ideas, we first review the change of coordinates for vectors and then we will come back to SSMs. 
 
 Consider a vector space $\reals^2$. The standard basis for $\reals^2$ is 
 $$
@@ -203,9 +418,9 @@ $$\tilde x = \MATRIX{1 & 1 \\ 0 & 1}^{-1} \MATRIX{2 \\ 3}
 <!-- TODO: Draw a picture -->
 :::
 
-## Change of coordinates in SS models.
+## Change of coordinates in SSMs
 
-Consider a SS model:
+Consider a SSM:
 \begin{align*}
 \dot x(t) &= A x(t) + B u(t) \\
 y(t) &= C x(t)
@@ -220,7 +435,7 @@ in the new coordinate system.
 
 We look at both these questions in detail. 
 
-Since $\tilde x(t) = T^{-1} x(t)$, we have $x(t) = T \tilde x(t)$. Substituting this in the SS model, we have
+Since $\tilde x(t) = T^{-1} x(t)$, we have $x(t) = T \tilde x(t)$. Substituting this in the SSM, we have
 \begin{align*}
 T \dot {\tilde x}(t) &= A T \tilde x(t) + B u(t) \\
 y(t) &= C T \tilde x(t)
@@ -232,7 +447,7 @@ Pre-multiply the first equation by $T^{-1}$:
 y(t) &= C T \tilde x(t)
 \end{align*}
 
-So, we can think of this as a new SS model:
+So, we can think of this as a new SSM:
 \begin{align*}
 \dot {\tilde x}(t) &= \tilde A \tilde x(t) + \tilde B u(t) \\
 y(t) &= \tilde C \tilde x(t)

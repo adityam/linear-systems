@@ -7,17 +7,33 @@
 \starttext
 \startTEXpage[offset=1dk]
 \scale[scale=1500]{\startcircuitikz[american voltages,thick]
-  \draw (0,0) to[V=$v(t)$,invert] (0,3) 
-              to[R=$R$] (3,3)
-              to[L=$L$] (6,3)
-              to[C=$C$] (6,0) -- (0,0);
-  \draw[->,thick] plot [smooth, tension=1] coordinates { (1,2) (4.5,2) (4.5,1) (1,1) };
-
-  \node (label) at (3,1.5) {$i(t)$};
+  \draw (0,0) to[R=$R$] (2,0) ;
+\stopcircuitikz}
+\stopTEXpage
+\startTEXpage[offset=1dk]
+\scale[scale=1500]{\startcircuitikz[american voltages,thick]
+  \draw (0,0) to[C=$C$] (2,0) ;
 \stopcircuitikz}
 \stopTEXpage
 
-\startTEXpage
-  Test
+\startTEXpage[offset=1dk]
+\scale[scale=1500]{\startcircuitikz[american voltages,thick]
+  \draw (0,0) to[L=$L$] (2,0) ;
+\stopcircuitikz}
 \stopTEXpage
+
+\startTEXpage[offset=1dk]
+\scale[scale=1500]{\startcircuitikz[american voltages,thick]
+  \draw (0,0) to[V=$u(t)$,invert] (0,3) 
+              to[R=$R$] (3,3) 
+              to[L=$L$,-*] (6,3)
+              node[label={[font=\tfxx]right:$v_C(t)$}] {}
+              to[C=$C$] (6,0) -- (0,0);
+  \draw[->,thick] plot [smooth, tension=1] coordinates { (1,2) (4.5,2) (4.5,1) (1,1) };
+
+  \node (label) at (3,1.5) {$i_L(t)$};
+\stopcircuitikz}
+\stopTEXpage
+
+
 \stoptext
