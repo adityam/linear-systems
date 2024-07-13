@@ -234,7 +234,7 @@ Each energy storage element (i.e., capacitor and inductor) gives rise to a state
 
 ### Example 1
 
-As an example, let's start with a simple example to understand how state space modeling works. Let's consider an LCR circuit shown in @fig-lcr.
+As an example, let's start with a simple example to understand how state space modeling works. Let's consider an RCL circuit shown in @fig-lcr.
 
 ![A simple circuit](figures/svg/circuits4.svg){#fig-lcr}
 
@@ -393,7 +393,9 @@ $$v_1 = \MATRIX{1 \\ 0}
 \quad\text{and}\quad
 v_2 = \MATRIX{1 \\ 1}.
 $$
+:::
 
+:::{.callout-note collapse="false"} 
 #### Solution
 
 Let the representation in the new coordinate system be $\tilde x = \MATRIX{\tilde x_1 \\ \tilde x_2}$. Thus, we must have
