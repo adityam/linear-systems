@@ -15,7 +15,8 @@ course:
     - "1:35pm–3:25pm Wednesday (TR 4090)"
     - "1:35pm–3:25pm Friday (TR 4090)"
 format: 
-  html: default
+  html: 
+    number-sections: false
 ---
 
 # Course Outline {.unnumbered}
@@ -84,7 +85,7 @@ Upon the successful completion of this course, the student students will have de
 | 7    | Review and Mid-Term | 
 | 8    | Routh-Hurwitz stability criterion. Special cases: zero in first column, row of zeros. |
 | 9    | Block diagrams, rules for simplifying block diagrams, block diagram implementations of canonical forms of state space models | 
-| 10   | System type, steady state error, disturbance rejection and sensitivity |
+| 10   | [System type, steady state error, disturbance rejection and sensitivity](steady-state-errors.qmd) <br /> _Reading_: Nise Ch. 7|
 | 11   | Bode and Nyquist Plots |
 | 12   | Nyquist stability criterion, gain and phase margins |
 | 13   | Lead-Lag compensators

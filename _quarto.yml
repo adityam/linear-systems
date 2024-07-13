@@ -63,3 +63,5 @@ format:
     freeze: true
 
     toc: true
+    number-sections: true
+
