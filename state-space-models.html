@@ -415,13 +415,33 @@ B = \MATRIX{5 \\ 1},
 \quad
 C = \MATRIX{ 0 &amp; 1},
 \]</span></p>
-<p>In general, we have the following: <img src="figures/svg/canonical-forms2.svg" id="fig-OCF" class="img-fluid" alt="Structure of OCF representation"></p>
+<p>In general, we have the following:</p>
+<div id="fig-OCF" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-OCF-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/canonical-forms2.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-OCF-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Structure of OCF representation
+</figcaption>
+</figure>
+</div>
 </section>
 <section id="dcf-representation" class="level3" data-number="3.3">
 <h3 data-number="3.3" class="anchored" data-anchor-id="dcf-representation"><span class="header-section-number">3.3</span> DCF representation</h3>
 <p>This representation is special and only applicable when the system has distinct real roots. Then, using the partial fraction expansion, the TF may be written as <span class="math display">\[
 G(s) = \frac{c_1}{s+p_1} + \frac{c_2}{s + p_2} + \dots + \frac{c_n}{s+p_n}
-\]</span> In DCF, the system matrices are given by <img src="figures/svg/canonical-forms3.svg" id="fig-DCF" class="img-fluid" alt="Structure of DCF representation"></p>
+\]</span> In DCF, the system matrices are given by</p>
+<div id="fig-DCF" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-DCF-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/canonical-forms3.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-DCF-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Structure of DCF representation
+</figcaption>
+</figure>
+</div>
 <p>In particular, for the TF in <a href="#exm-SSM-CC" class="quarto-xref">Example&nbsp;1</a>, we have <span class="math display">\[
 G(s) = \frac{s+5}{s^2 + 3s + 2} = \frac{4}{s+1} - \frac{3}{s+2}. \]</span></p>
 <p>Thus, <span class="math display">\[
@@ -483,14 +503,14 @@ C = \MATRIX{4 &amp; -3}.
 <p>Each energy storage element (i.e., capacitor and inductor) gives rise to a state variable. We want to avoid integral equations, so for capacitor we choose voltage as state and for inductor we choose current as state.</p>
 <section id="example-1" class="level3" data-number="4.1">
 <h3 data-number="4.1" class="anchored" data-anchor-id="example-1"><span class="header-section-number">4.1</span> Example 1</h3>
-<p>As an example, let’s start with a simple example to understand how state space modeling works. Let’s consider an RCL circuit shown in <a href="#fig-rcl" class="quarto-xref">Figure&nbsp;2</a>.</p>
+<p>As an example, let’s start with a simple example to understand how state space modeling works. Let’s consider an RCL circuit shown in <a href="#fig-rcl" class="quarto-xref">Figure&nbsp;4</a>.</p>
 <div id="fig-rcl" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rcl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/svg/circuits4.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rcl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: A simple circuit
+Figure&nbsp;4: A simple circuit
 </figcaption>
 </figure>
 </div>
@@ -545,14 +565,14 @@ C = \MATRIX{1 &amp; 0 }
 </section>
 <section id="example-2" class="level3" data-number="4.2">
 <h3 data-number="4.2" class="anchored" data-anchor-id="example-2"><span class="header-section-number">4.2</span> Example 2</h3>
-<p>Now consider the example shown in <a href="#fig-rcl2" class="quarto-xref">Figure&nbsp;3</a></p>
+<p>Now consider the example shown in <a href="#fig-rcl2" class="quarto-xref">Figure&nbsp;5</a></p>
 <div id="fig-rcl2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rcl2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/svg/circuits5.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rcl2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: An RCL circuit
+Figure&nbsp;5: An RCL circuit
 </figcaption>
 </figure>
 </div>
@@ -655,7 +675,7 @@ Y(s) &amp;= C(sI - A)^{-1} B U(s)
 <img src="figures/svg/circuits6.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-block-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: Block diagram of SSM
+Figure&nbsp;6: Block diagram of SSM
 </figcaption>
 </figure>
 </div>
@@ -754,7 +774,7 @@ Solution
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-change-of-coordinates-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: Vector <span class="math inline">\(x\)</span> in different coordinate systems
+Figure&nbsp;7: Vector <span class="math inline">\(x\)</span> in different coordinate systems
 </figcaption>
 </figure>
 </div>
