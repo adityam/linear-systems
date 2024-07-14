@@ -362,6 +362,32 @@ $$
 
 Thus,
 $$ K_v \ge 10 \implies K \ge 40. $$
+
+We now test if the specified value of the gain works.
+
+```{julia}
+#| echo: true
+
+using ControlSystems, Plots
+using Printf
+
+K = 40
+
+P = zpk([-5],[-2,-10],1.0)
+C = tf(K,[1.0,0])
+
+T_cl = feedback(C*P)
+ramp(x,t) = [t] # Input needs to be a vector
+
+res = lsim(T_cl, ramp, 5)
+e   = res.u .- res.y
+
+plt = plot(size=(600,300))
+plot!(plt, res.t, [res.y' res.u'], label=["y(t)" "u(t)"])
+plot!(plt, res.t[end]*ones(2), [res.y[end], res.u[end]], 
+           label=@sprintf("e(∞) = %.2f%%", e[end]*100))
+
+```
 :::
 
 ## Steady-state errors for non-unity feedback systems
