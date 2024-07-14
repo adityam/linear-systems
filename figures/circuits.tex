@@ -2,8 +2,33 @@
 
 \enablemode[euler]
 \environment env-fonts.tex
+\usemodule[tikz,pgfplots]
 \usemodule[circuitikz]
+
+%\pgfplotsset{compat=1.11}
 \ctikzset{bipoles/thickness=1}
+
+\usetikzlibrary[shapes,arrows,arrows.meta,decorations.markings]
+\usetikzlibrary[positioning,intersections]
+
+\tikzstyle{block} = [draw, rectangle, 
+    minimum height=3em, minimum width=6em, inner sep=2ex]
+\tikzstyle{tightblock} = [draw, rectangle, 
+    minimum height=3em, minimum width=3em, inner sep=2ex]
+\tikzstyle{sum} = [draw, circle]
+\tikzstyle{input} = []
+\tikzstyle{output} = []
+
+
+\tikzstyle{vecArrow} = [thick, decoration={markings,mark=at position
+   1 with {\arrow[semithick]{open triangle 60}}},
+   double distance=1.4pt, shorten >= 5.5pt,
+   preaction = {decorate},
+   postaction = {draw,line width=1.4pt, white,shorten >= 4.5pt}]
+
+\tikzstyle{innerWhite} = [semithick, white,line width=1.4pt, shorten >= 4.5pt]
+
+
 \starttext
 \startTEXpage[offset=1dk]
 \scale[scale=1500]{\startcircuitikz[american voltages,thick]
@@ -33,6 +58,106 @@
 
   \node (label) at (3,1.5) {$i_L(t)$};
 \stopcircuitikz}
+\stopTEXpage
+
+\define\SMALL{\switchtobodyfont[10pt]}
+
+\startTEXpage[offset=1dk]
+\scale[scale=1500]{\startcircuitikz[american voltages,thick]
+  \draw (0,0) to[V=$u(t)$,invert] (0,3) 
+              to[L=$L$,i=\SMALL $i_L(t)$, -*] (3,3) 
+              to[R=$R$,i=\SMALL $i_R(t)$] (3,0)
+              to (0,0);
+  \draw (3,3) to (5,3)
+              node[label={[font=\SMALL]right:$v_C(t)$}] {}
+              to[C=$C$,i=\SMALL $i_C(t)$,*-] (5,0)
+              to (3,0);
+
+\stopcircuitikz}
+\stopTEXpage
+
+\startTEXpage
+\scale[scale=1500]{\starttikzpicture[thick]
+      \node [input] (input) {$u(t)$};
+      \node [tightblock, right=of input] (B) {$B$};
+      \node [sum, right=of B] (sum1) {\tfc $+$};
+      \node [tightblock, right=of sum1] (integrator) {$\dfrac{1}{s}$};
+      \node [tightblock, below=8mm of integrator] (A) {$A$};
+      \node [tightblock, right=16mm of integrator] (C) {$C$};
+      \node [output, right=8mm of C] (output) {$y(t)$};
+
+      \draw [->] (input) -- (B);
+      \draw [vecArrow] (B) -- (sum1.west) node[left=5pt, above] {$+$};
+      \draw [vecArrow] (sum1) -- (integrator);
+      \draw [->] (C) -- (output);
+      \draw [vecArrow] (A) -| (sum1.south) node[below=5pt, left] {$+$};
+      \draw [vecArrow] (integrator) -- node[midway, coordinate, name=bend, label={[font=\SMALL]above:$x(t)$}] {} (C);
+      \draw [vecArrow] (bend) |- (A);
+
+      % 2nd pass
+      \draw [innerWhite] (integrator) -- (C);
+      \draw [innerWhite] (bend) |- (A);
+
+    \stoptikzpicture}
+\stopTEXpage
+
+\startTEXpage[offset=1dk]
+\scale[scale=1500]{\starttikzpicture[thick]
+    \startaxis
+        [xmin=-4, xmax=4,
+         ymin=-4, ymax=4,
+         grid=both,
+         axis lines=middle,
+         axis line style={latex-latex},
+         ticklabel style={font=\SMALL,fill=white},
+         minor tick num=1,
+        ]
+
+    \draw[-latex,very thick] (axis cs:0,0) -- (axis cs:2,3);
+    \draw[-latex,red] (axis cs: 0,0) -- (axis cs:2, 0);
+    \draw[-latex,red] (axis cs: 2,0) -- (axis cs:2, 3);
+    \stopaxis
+    \stoptikzpicture}
+\stopTEXpage
+
+\startTEXpage[offset=1dk]
+\scale[scale=1500]{\starttikzpicture[thick]
+    \startaxis
+        [xmin=-4, xmax=4,
+         ymin=-4, ymax=4,
+         grid=both,
+         axis x line=middle,
+         axis y line=none,
+         axis line style={latex-latex},
+         ticklabel style={font=\SMALL,fill=white},
+         minor tick num=1,
+        ]
+
+
+    \draw[latex-latex,thin,draw=darkgray] (axis cs:-4,-4) -- (axis cs: 4,4);
+    \draw[thin,draw=black!20!white] (axis cs:-3,-4) -- (axis cs: 5,4);
+    \draw[thin,draw=black!20!white] (axis cs:-2,-4) -- (axis cs: 6,4);
+    \draw[thin,draw=black!20!white] (axis cs:-1,-4) -- (axis cs: 7,4);
+    \draw[thin,draw=black!20!white] (axis cs:0,-4) -- (axis cs: 8,4);
+    \draw[thin,draw=black!20!white] (axis cs:1,-4) -- (axis cs: 9,4);
+    \draw[thin,draw=black!20!white] (axis cs:2,-4) -- (axis cs: 10,4);
+    \draw[thin,draw=black!20!white] (axis cs:3,-4) -- (axis cs: 11,4);
+    \draw[thin,draw=black!20!white] (axis cs:4,-4) -- (axis cs: 12,4);
+
+    \draw[thin,draw=black!20!white] (axis cs:-5,-4) -- (axis cs: 3,4);
+    \draw[thin,draw=black!20!white] (axis cs:-6,-4) -- (axis cs: 2,4);
+    \draw[thin,draw=black!20!white] (axis cs:-7,-4) -- (axis cs: 1,4);
+    \draw[thin,draw=black!20!white] (axis cs:-8,-4) -- (axis cs: 0,4);
+    \draw[thin,draw=black!20!white] (axis cs:-9,-4) -- (axis cs: -1,4);
+    \draw[thin,draw=black!20!white] (axis cs:-10,-4) -- (axis cs: -2,4);
+    \draw[thin,draw=black!20!white] (axis cs:-11,-4) -- (axis cs: -3,4);
+    \draw[thin,draw=black!20!white] (axis cs:-12,-4) -- (axis cs: -4,4);
+
+    \draw[-latex,very thick] (axis cs:0,0) -- (axis cs:2,3);
+    \draw[-latex,red] (axis cs: 0,0) -- (axis cs:3, 3);
+    \draw[-latex,red] (axis cs: 3,3) -- (axis cs:2, 3);
+    \stopaxis
+    \stoptikzpicture}
 \stopTEXpage
 
 
