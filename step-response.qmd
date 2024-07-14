@@ -897,6 +897,7 @@ PZplot(
 
 Plot.plot({
   grid: true,
+  clip: true,
   y: { domain: [0, 1.6] },
   x: { domain: [0,5] },
   marks: [
@@ -905,6 +906,9 @@ Plot.plot({
     Plot.ruleY([0]),
     // Data
     // param_ωd is still 64 bit float while a is 16 bit float. So we do a crude comparison for equality. 
+    Plot.area([ {x1:4/σ_ωd, y1: 1.02, x2:4/σ_ωd, y2: 0.98}, 
+                {x1:8, y1: 1.02, x2:8, y2: 0.98}],
+              {x1: "x1", y1: "y1", x2: "x2", y2: "y2", fill:"pink"}),
     Plot.line(second_order_ωd.filter(d => Math.abs(d.ωd - param_ωd) <= 0.01), 
               {x:"time", y:"output", stroke: "darkblue" }),
   ]
@@ -942,6 +946,7 @@ ojs_define(second_order_ωn = df)
 viewof param_ωn = Object.assign(Inputs.range([0.1,4], {label: "ωn", step: 0.1, value: 2 }), {style: '--label-width:20px'})
 
 ζ_ωn = 0.4
+M_p_zeta = 1 + Math.exp(-Math.PI*ζ_ωn/Math.sqrt(1 - ζ_ωn**2))
 
 ```
 
@@ -960,6 +965,7 @@ PZplot(
 
 Plot.plot({
   grid: true,
+  clip: true,
   y: { domain: [0, 1.6] },
   x: { domain: [0,5] },
   marks: [
@@ -968,6 +974,7 @@ Plot.plot({
     Plot.ruleY([0]),
     // Data
     // param_ωn is still 64 bit float while a is 16 bit float. So we do a crude comparison for equality. 
+    Plot.line([{x:0, y: M_p_zeta}, {x:8, y: M_p_zeta}], {x:"x", y:"y", stroke:"red"}),
     Plot.line(second_order_ωn.filter(d => Math.abs(d.ωn - param_ωn) <= 0.01), 
               {x:"time", y:"output", stroke: "darkblue" }),
   ]
