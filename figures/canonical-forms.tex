@@ -1,0 +1,165 @@
+\usepath[/home/adityam/Projects/presentations]
+
+\enablemode[lucida]
+\environment env-fonts.tex
+\setupbodyfont[slidefont,20pt]
+
+\definecolor[lightgray][b=0.8]
+\definecolor[darkgray][b=0.8]
+
+\define\1{\mframed[width=3em, height=1.5em,frame=off]}
+
+\starttext
+
+\startTEXpage[width=27cm]
+  \startboxanchoring[+]
+  \connectboxanchors[rightedge][middle:top][alternative=top,distance=0pt,linecolor=lightgray]{zeros-1}{zeros-2}
+  \connectboxanchors[rightedge][middle:top][alternative=top,distance=0pt,linecolor=lightgray]{identity-1}{identity-2}
+  \connectboxanchors[right:bottom][rightedge][alternative=bottom,distance=0pt,linecolor=lightgray,xoffset=-1em][xoffset=0.5em]{last-1}{last-2}
+  \connectboxanchors[bottom][top][alternative=top,distance=0pt,linecolor=lightgray,xoffset=1.05em]{B-1}{B-2}
+  \connectboxanchors[bottom][bottom][alternative=bottom,linecolor=lightgray]{C-1}{C-2}
+
+  \startformula \startalign[m=2]
+    \NC   \NC \hskip 5em \llap{\mathboxanchored{zeros-1}{\text[color=darkgray,style={\small}]{Column of zeros}}} 
+    \hskip 4.5em 
+    \mathboxanchored{identity-1}{\text[color=darkgray,style={\small}]{Identity matrix}}
+    \hskip 2.5em 
+    \mathboxanchored{last-1}{\text[color=darkgray,style={\small}]{Row of coefficients}}
+    \NC 
+    \rlap{\mathboxanchored{B-1}{\text[color=darkgray,style={\small}]{Always this form}}}
+    \NR
+    \NC 
+        A \EQ 
+       \startmatrix[fences=bracket,
+                    rulecolor=lightgray,
+                    rulethickness=1pt,
+                   ]
+        \NC \NC \mathboxanchored{zeros-2}{\1 0} \NC \GL[1][t] \NC \1 1 \NC \1 0 \NC \mathboxanchored{identity-2}{\1 \cdots} \NC \1 0 \NC \NR
+        \NC \NC \1 \vdots \NC \NC \1 0 \NC \1 \ddots \NC \1 \ddots \NC \1 \vdots \NC \NR
+        \NC \NC \1 \vdots \NC \NC \1 \vdots \NC \1 \ddots \NC \1 \ddots \NC \1 0 \NC \NR
+        \NC \GL[2][d] \NC \1 0 \NC \GL[1][d,e] \NC \1 0 \NC \1 \cdots \NC \1 0 \NC \1 1 \NC \GL[2][d,e] \NR
+        \NC \NC \1{-a_0} \NC \NC \1{-a_1} \NC \1 \cdots \NC \1 \cdots \NC \mathboxanchored{last-2}{\1{-a_{n-1}}} \NC \NR
+      \stopmatrix
+    \NC B \EQ 
+        \startmatrix[fences=bracket,
+                    rulecolor=lightgray,
+                    rulethickness=1pt,
+                   ]
+          \NC \mathboxanchored{B-2}{\1{0}} \NR
+          \NC \1{\vdots} \NR
+          \NC \1{\vdots} \NR
+          \NC \1{0} \NR
+          \NC \1{1} \NR
+        \stopmatrix
+    \NR
+  \NC \NC \NR
+  \NC C \EQ 
+        \startmatrix[fences=bracket,
+                    rulecolor=white,
+                    rulethickness=1pt,
+                   ]
+          \NC \1{b_0} \NC \GL[3][t] \GL[3][d,e]\NC \1{b_1} \NC \1{\cdots} \NC \1{\cdots} \NC \mathboxanchored{C-2}{\1{b_{n-1}}} \NC \NR
+        \stopmatrix
+        \qquad
+        \rlap{\mathboxanchored{C-1}{\text[color=darkgray,style=\small]{Coeff are zero after a while}}}
+    \NR
+  \stopalign \stopformula
+  \stopboxanchoring
+\stopTEXpage
+
+\startTEXpage[width=27cm]
+  \startboxanchoring[+]
+  \connectboxanchors[leftedge][middle:top][alternative=top,distance=0pt,linecolor=lightgray]{zeros-1}{zeros-2}
+  \connectboxanchors[bottom][leftedge][alternative=left,distance=0pt,linecolor=lightgray]{identity-1}{identity-2}
+  \connectboxanchors[bottom][top][alternative=top,distance=0pt,linecolor=lightgray,xoffset=0.9em]{last-1}{last-2}
+  \connectboxanchors[bottom][top][alternative=middle,distance=0pt,linecolor=lightgray]{B-1}{B-2}
+  \connectboxanchors[bottom][bottom][alternative=bottom,linecolor=lightgray]{C-1}{C-2}
+
+  \startformula \startalign[m=2]
+    \NC   \NC \hskip 2em \llap{\mathboxanchored{identity-1}{\text[color=darkgray,style={\small}]{Identity matrix}}} 
+    \hskip 2.75em 
+    \mathboxanchored{zeros-1}{\text[color=darkgray,style={\small}]{Row of zeros}}
+    \hskip 4.5em 
+    \mathboxanchored{last-1}{\text[color=darkgray,style={\small}]{Col of coefficients}}
+    \NC 
+    \rlap{\hskip 1.4em \mathboxanchored{B-1}{\text[color=darkgray,style={\small}]{\framed[frame=off,align=middle]{Coeffs are zero \\ after a while}}}}
+    \NR
+    \NC 
+        A \EQ 
+       \startmatrix[fences=bracket,
+                    rulecolor=lightgray,
+                    rulethickness=1pt,
+                   ]
+        \NC \GL[1][d] \NC \mathboxanchored{zeros-2}{\1 0}  \NC \1 \cdots \NC \1 \cdots \NC \mathboxanchored{zeros-3}{\1 0} \NC \GL[1][d,c] \setstrut\strutht1.5\strutht\strutdp\strutdp\relax \GL[2][t] \NC \mathboxanchored{last-2}{\1{-a_0}} \NR
+        \NC \NC \1 1 \NC 0 \NC \cdots \NC 0 \NC \NC -a_1 \NC \NR
+        \NC \NC \1 0 \NC \ddots \NC \ddots \NC \vdots \NC \NC \vdots \NC \NR
+        \NC \NC \mathboxanchored{identity-2}{\1 \vdots} \NC \ddots \NC \ddots \NC 0\NC \NC \vdots \NC \NR
+        \NC \NC \1 0 \NC \cdots \NC 0 \NC 1\NC \GL[2][d,e] \NC -a_{n-1} \NC \NR
+      \stopmatrix
+    \NC B \EQ 
+        \startmatrix[fences=bracket,
+                    rulecolor=lightgray,
+                    rulethickness=1pt,
+                   ]
+          \NC \mathboxanchored{B-2}{\1 {b_0}} \NR
+          \NC \1{b_1} \NR
+          \NC \1 \vdots \NR
+          \NC \1 \vdots \NR
+          \NC \1{b_n} \NR
+        \stopmatrix
+    \NR
+  \NC \NC \NR
+  \NC C \EQ 
+        \startmatrix[fences=bracket,
+                    rulecolor=white,
+                    rulethickness=1pt,
+                   ]
+           \NC \NC \1 0 \NC \1 \cdots \NC \1 \cdots \NC \1 0 \NC \GL[3][t] \GL[3][d,e] \NC \mathboxanchored{C-2}{\1 1} \NR
+        \stopmatrix
+        \qquad
+        \rlap{\mathboxanchored{C-1}{\text[color=darkgray,style=\small]{Always this form}}}
+    \NR
+  \stopalign \stopformula
+  \stopboxanchoring
+\stopTEXpage
+\define\1{\mframed[width=2em, height=1.5em,frame=off]}
+
+\startTEXpage[width=20cm,offset=1dk]
+  \startformula \startalign[m=2,distance=2em]
+    \NC 
+        A \EQ 
+       \startmatrix[fences=bracket,
+                    rulecolor=lightgray,
+                    rulethickness=1pt,
+                   ]
+          \NC \1{\mathord{-}p_1} \NC \1{0} \NC \1{\cdots} \NC \1{0} \NR
+          \NC \1{0} \NC \1{\ddots} \NC \1{\ddots} \NC \1{\vdots} \NR
+          \NC \1{\vdots} \NC \1{\ddots} \NC \1{\ddots} \NC \1{0} \NR
+          \NC \1{0} \NC \1{\cdots} \NC \1{0} \NC \1{-p_n} \NR
+      \stopmatrix
+    \NC B \EQ 
+        \startmatrix[fences=bracket,
+                    rulecolor=lightgray,
+                    rulethickness=1pt,
+                   ]
+          \NC \1{1} \NR
+          \NC \1{1} \NR
+          \NC \1{\vdots} \NR
+          \NC \1{1} \NR
+        \stopmatrix
+    \NR
+  \NC \NC \NR
+  \NC C \EQ 
+        \startmatrix[fences=bracket,
+                    rulecolor=lightgray,
+                    rulethickness=1pt,
+                   ]
+            \NC \1{c_1} \NC \1{c_2} \NC \1{\cdots} \NC \1{c_n} \NR
+        \stopmatrix
+    \NR
+  \stopalign \stopformula
+  \stopboxanchoring
+\stopTEXpage
+\stoptext
+ 
+ 
