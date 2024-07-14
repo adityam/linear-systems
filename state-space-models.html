@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2024-07-13">
+<meta name="dcterms.date" content="2024-07-14">
 
 <title>State space models – Linear Systems and Control</title>
 <style>
@@ -216,6 +216,7 @@ window.Quarto = {
   <li><a href="#ssms-for-circuits" id="toc-ssms-for-circuits" class="nav-link" data-scroll-target="#ssms-for-circuits"><span class="header-section-number">4</span> SSMs for circuits</a>
   <ul class="collapse">
   <li><a href="#example-1" id="toc-example-1" class="nav-link" data-scroll-target="#example-1"><span class="header-section-number">4.1</span> Example 1</a></li>
+  <li><a href="#example-2" id="toc-example-2" class="nav-link" data-scroll-target="#example-2"><span class="header-section-number">4.2</span> Example 2</a></li>
   </ul></li>
   <li><a href="#from-state-space-models-to-transfer-functions" id="toc-from-state-space-models-to-transfer-functions" class="nav-link" data-scroll-target="#from-state-space-models-to-transfer-functions"><span class="header-section-number">5</span> From state space models to transfer functions</a></li>
   <li><a href="#change-of-coordinates" id="toc-change-of-coordinates" class="nav-link" data-scroll-target="#change-of-coordinates"><span class="header-section-number">6</span> Change of coordinates</a></li>
@@ -254,7 +255,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 13, 2024</p>
+      <p class="date">July 14, 2024</p>
     </div>
   </div>
   
@@ -472,13 +473,13 @@ C = \MATRIX{4 &amp; -3}.
 <p>Each energy storage element (i.e., capacitor and inductor) gives rise to a state variable. We want to avoid integral equations, so for capacitor we choose voltage as state and for inductor we choose current as state.</p>
 <section id="example-1" class="level3" data-number="4.1">
 <h3 data-number="4.1" class="anchored" data-anchor-id="example-1"><span class="header-section-number">4.1</span> Example 1</h3>
-<p>As an example, let’s start with a simple example to understand how state space modeling works. Let’s consider an RCL circuit shown in <a href="#fig-lcr" class="quarto-xref">Figure&nbsp;1</a>.</p>
-<div id="fig-lcr" class="quarto-float quarto-figure quarto-figure-center anchored">
+<p>As an example, let’s start with a simple example to understand how state space modeling works. Let’s consider an RCL circuit shown in <a href="#fig-rcl" class="quarto-xref">Figure&nbsp;1</a>.</p>
+<div id="fig-rcl" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-lcr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="fig-rcl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/svg/circuits4.svg" class="img-fluid figure-img">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lcr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rcl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: A simple circuit
 </figcaption>
 </figure>
@@ -494,7 +495,7 @@ L \frac{d i_L(t)}{dt} &amp;= v_L(t)
 </section>
 <section id="step-2-use-kclkvl-to-simplify-the-rhs-of-step-1" class="level4" data-number="4.1.2">
 <h4 data-number="4.1.2" class="anchored" data-anchor-id="step-2-use-kclkvl-to-simplify-the-rhs-of-step-1"><span class="header-section-number">4.1.2</span> Step 2: Use KCL/KVL to simplify the RHS of step 1</h4>
-<p>We want a relationship between input <span class="math inline">\(u(t)\)</span> and output <span class="math inline">\(v_C(t)\)</span>. So, we use KCL/KVL to find a relationship between them. In this example, we use KVL: <span class="math display">\[\begin{align*}
+<p>We want the RHS of the above equations to be expressed in terms of input <span class="math inline">\(u(t)\)</span> and state <span class="math inline">\((v_C(t), i_L(t))\)</span>. Note that <span class="math inline">\(dv_C(t)/dt\)</span> is already in terms of <span class="math inline">\(i_L(t)\)</span>. We now use KVL to find an expression for <span class="math inline">\(di_L(t)/dt\)</span> in terms of the other variables: <span class="math display">\[\begin{align*}
 u(t) &amp;= v_R(t) + v_L(t) + v_C(t) \\
 &amp;= R i_L(t) - L \frac{di_L(t)}{dt} + v_C(t)
 \end{align*}\]</span></p>
@@ -532,10 +533,80 @@ C = \MATRIX{1 &amp; 0 }
 \]</span></p>
 </section>
 </section>
+<section id="example-2" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="example-2"><span class="header-section-number">4.2</span> Example 2</h3>
+<p>Now consider the example shown in <a href="#fig-rcl2" class="quarto-xref">Figure&nbsp;2</a></p>
+<div id="fig-rcl2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rcl2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/circuits5.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rcl2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: An RCL circuit
+</figcaption>
+</figure>
+</div>
+<p>We construct the state space model as follows.</p>
+<section id="step-1-select-the-state-variables-1" class="level4" data-number="4.2.1">
+<h4 data-number="4.2.1" class="anchored" data-anchor-id="step-1-select-the-state-variables-1"><span class="header-section-number">4.2.1</span> Step 1: Select the state variables</h4>
+<p>We write the appropriate relation for the two energy storage elements: <span class="math display">\[\begin{align*}
+C \frac{d v_C(t)}{dt} &amp;= i_C(t) \\
+L \frac{d i_L(t)}{dt} &amp;= v_L(t)
+\end{align*}\]</span></p>
+<p>Thus, we use <span class="math inline">\(\MATRIX{ v_C(t) \\ i_L(t) }\)</span> as state.</p>
+</section>
+<section id="step-2-use-kclkvl-to-simplify-the-rhs-of-step-1-1" class="level4" data-number="4.2.2">
+<h4 data-number="4.2.2" class="anchored" data-anchor-id="step-2-use-kclkvl-to-simplify-the-rhs-of-step-1-1"><span class="header-section-number">4.2.2</span> Step 2: Use KCL/KVL to simplify the RHS of step 1</h4>
+<p>We use KCL/KVL to write the right hand side of Step 1 as a linear combination of state and input. From KCL we have <span class="math display">\[\begin{align*}
+i_L(t) &amp;= i_R(t) + i_C(t) \\
+\implies i_C(t) &amp;= i_L(t) - i_R(t) \\
+&amp;= i_L(t) - \frac{1}{R} v_C(t)
+\qquad [\because v_C(t) = v_R(t)]
+\end{align*}\]</span></p>
+<p>Moreover, from KVL we have <span class="math display">\[\begin{align*}
+u(t) &amp;= v_L(t) + v_C(t) \\
+\implies v_L(t) &amp;= -v_C(t) + u(t)
+\end{align*}\]</span></p>
+<p>Thus, we have <span class="math display">\[\begin{align*}
+\dfrac{d v_C(t)}{dt} &amp;= \frac{1}{C} i_c(t)
+= \frac{1}{C} i_L(t) - \frac{1}{RC} v_C(t) \\
+\dfrac{d i_L(t)}{dt} &amp;= \frac{1}{L} v_L(t)
+= -\frac{1}{L} v_C(t) + \frac{1}{L} u(t)
+\end{align*}\]</span></p>
+<p>Thus, the SSM is: <span class="math display">\[
+\def\1{\vphantom{\dfrac{d}{dt}}}
+\bbox[5pt,background-color: lightgray]
+{
+\begin{align*}
+\MATRIX{ \dfrac{d v_C(t)}{dt} \\ \dfrac {d i_L(t)}{dt} }
+&amp;=
+\MATRIX{-\dfrac{1}{RC} &amp; \dfrac{1}{C} \\ -\dfrac{1}{L} &amp; 0 }
+\MATRIX{ \1 v_C(t) \\  \1 i_L(t) }
++
+\MATRIX{\1 0 \\ \dfrac{1}{L}} u(t)
+\\
+y(t) &amp;= \MATRIX{1 &amp; 0}
+\MATRIX{ \1 v_C(t) \\  \1 i_L(t) }
+\end{align*}
+}
+\]</span></p>
+<p>Thus, we have <span class="math display">\[
+\def\1{\vphantom{\dfrac{d}{dt}}}
+A =
+\MATRIX{-\dfrac{1}{RC} &amp; \dfrac{1}{C} \\ -\dfrac{1}{L} &amp; 0 }
+,
+\quad
+B =
+\MATRIX{\1 0 \\ \dfrac{1}{L}},
+\quad
+C = \MATRIX{1 &amp; 0 }
+\]</span></p>
+</section>
+</section>
 </section>
 <section id="from-state-space-models-to-transfer-functions" class="level2" data-number="5">
 <h2 data-number="5" class="anchored" data-anchor-id="from-state-space-models-to-transfer-functions"><span class="header-section-number">5</span> From state space models to transfer functions</h2>
-<p>So far, we have seen how to write different SSM representations from a TF. It is also possible to go in the other directions.</p>
+<p>So far, we have seen how to write different SSM representations from a TF. It is also possible to go in the other direction.</p>
 <p>Suppose we have a SSM: <span class="math display">\[\begin{align*}
 \dot x(t) &amp;= A x(t) + B u(t) \\
 y(t) &amp;= C x(t)
@@ -567,12 +638,18 @@ Y(s) &amp;= C(sI - A)^{-1} B U(s)
 </div>
 </div>
 </div>
-<!-- TODO: Add block diagram 
-We can think of this in terms of the following block diagram. 
-
-
-The TF can be "read backwards" from the block diagram.
--->
+<p>We can think of this in terms of the following block diagram.</p>
+<div id="fig-block" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-block-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/circuits6.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-block-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Block diagram of SSM
+</figcaption>
+</figure>
+</div>
+<p>The TF can be “read backwards” from the block diagram.</p>
 <div id="exm-SS-to-TF-1" class="theorem example">
 <p><span class="theorem-title"><strong>Example 2</strong></span> Let <span class="math inline">\(A = \MATRIX{-1 &amp; 2 \\ 3 &amp; -1}\)</span>, <span class="math inline">\(B = \MATRIX{1 \\ 0}\)</span>, and <span class="math inline">\(C = \MATRIX{2 &amp; 1}\)</span>. Find the TF?</p>
 </div>
@@ -644,7 +721,33 @@ Solution
 \]</span></p>
 <p>So, for the above example we have <span class="math display">\[\tilde x = \MATRIX{1 &amp; 1 \\ 0 &amp; 1}^{-1} \MATRIX{2 \\ 3}
 = \MATRIX{-1 \\ 3}.\]</span></p>
-<!-- TODO: Draw a picture -->
+<div id="fig-change-of-coordinates" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-change-of-coordinates-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/svg/circuits7.svg" class="img-fluid figure-img"></p>
+<figcaption>(a) Vector <span class="math inline">\(x\)</span> in standard coordinate system</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/svg/circuits8.svg" class="img-fluid figure-img"></p>
+<figcaption>(b) Vector <span class="math inline">\(x\)</span> in oblique coordinate system</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-change-of-coordinates-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Vector <span class="math inline">\(x\)</span> in different coordinate systems
+</figcaption>
+</figure>
+</div>
 </div>
 </div>
 </div>
