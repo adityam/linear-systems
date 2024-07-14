@@ -312,7 +312,13 @@ $$
   = K \dfrac{a}{s+a}.
 $$
 
+Examples of first order systems include circuits with only one energy storage element, e.g., an RC circuit or an RL circuit or a DC-motor when mechanical aspects such as friction and inertia are also considered. 
+
+
+The step response of a first order system is shown below.
+
 ![A general first order system](figures/svg/step-response-block-diagrams2.svg){#fig-first-order-block-diagram}
+
 
 ```{julia}
 
@@ -521,7 +527,12 @@ G(s) = \frac{b_0}{s^2 + a_1 s + a_0}
 =
 K \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2}
 $$
-where $K$ is called the gain, $ω_n$ is called the _natural_ frequency and $ζ$ is called the damping coefficient When $ζ < 0$, the system is unstable and we will not discuss that case. When $ζ \ge 0$, we observe four types of behavior depending on the value of $ζ$. These are called the **categories** of a second order system:
+where $K$ is called the gain, $ω_n$ is called the _natural_ frequency and $ζ$ is called the damping coefficient.
+
+Examples of second order system include circuits with two energy storage elements such as an RCL circuit or a DC-motor with voltage as an input and angular position as the output when the mechanical aspects such as inertia and friction are ignored. 
+
+The step response of a second order system is illustrated below in @fig-damping. 
+When $ζ < 0$, the system is unstable and we will not discuss that case. When $ζ \ge 0$, we observe four types of behavior depending on the value of $ζ$. These are called the **categories** of a second order system:
 
 1. **Undamped** $ζ = 0$, in which case the poles are at $\pm j ω_n$.
 2. **Underdamped** $0 < ζ < 1$, in which case the poles are at 
@@ -697,6 +708,8 @@ y(t) &= K \biggl[ 1 - e^{-σt} \biggl(\cos ω_d t + \frac{σ}{ω_d} \sin ω_d t\
 \end{align*}
 where as before $φ = \sin^{-1} ζ$. 
 
+### Important characteristics of the step response
+
 ```{julia}
 #| label: fig-step-response-components
 #| fig-cap: Step response of underdamped system for $ζ = 0.5$
@@ -708,7 +721,6 @@ plt = plot(size=(600,300))
 plot!(plt,si)
 ```
 
-### Important characteristics of the step response
 
 The response of an underdamped second order system has the following features:
 
@@ -737,7 +749,7 @@ The response of an underdamped second order system has the following features:
 - The time after which the system stays within $Δ\%$ of the final value is called the $Δ\%$ settling time and denoted by $T_s(Δ\%)$. We will show that
   - $T_s(1\%) = \dfrac{4.6}{σ}$
   - $T_s(2\%) = \dfrac{4}{σ}$
-  - $T_s(5\%) = \frac{3}{σ}$.
+  - $T_s(5\%) = \dfrac{3}{σ}$.
   
 - The time required for the response to go from $0.1$ of the final value to $0.9$ of the final value is called **rise time** and denoted by $T_r$. It is difficult to get a closed form expression for $T_r$. It can be verified numerically that $ω_n T_r$ is approximately a constant that depends on $ζ$. So we approximately compute $T_r$ from a look-up table using interpolation:
 
@@ -962,6 +974,84 @@ Plot.plot({
 })
 ```
 
+:::{#exr-specifications}
+For a generic second order system, where should the poles lie in the $s$-plane to meet the following specifications:
+
+- $\%{\rm OS} \le 10\%$
+- $T_s (2\%) \le 4$ sec.
+
+:::
+
+:::{.callout-note collapse="true"} 
+#### Solution
+
+The $\%{\rm OS}$ depends only on the damping coefficient $ζ$. 
+The values of $ζ$ for which $\%{\rm OS} \le 10\%$ is given by $ζ \ge ζ_\circ$ where
+$$
+ζ_\circ = \frac{-\ln(\%{\rm OS})}{\sqrt{π^2 + \ln^2(\%{\rm OS}/100)}}
+= 0.5912.
+$$
+Thus, the angle $φ$ of the poles from the $j ω$ axis should be $φ \ge φ_\circ$, where $φ_\circ = \sin^{-1}(ζ_\circ) = 36.23^∘$. This is shown in @fig-specs.
+
+The settling time $σ$ only depends on the coefficient $σ$. The values of $σ$ for which $T_s \le 4$ is given by $σ \ge σ_\circ$ where
+$$
+σ_\circ = \frac{4}{T_s} = 1.
+$$
+This is shown in @fig-specs.
+
+The region where both specs are active is the intersection of these two regions.
+
+```{ojs}
+viewof spec_choice = Inputs.radio(specs, {label: "Spec", value:specs[0], format: x => x.name})
+
+theta = Math.asin(0.5912)
+specs = [
+        { name:"%OS",
+          shaded:[{x1: 0, y1: 0, x2: 0, y2: 0},
+                  {x1: -4.1, y1:  4.1*Math.tan(Math.PI/2 - theta),
+                  x2: -4.1, y2: -4.1*Math.tan(Math.PI/2 - theta)} ],
+          left:[{x:0, y:0}, {x:0,y:0}]
+        },
+        {name:"Ts",
+          shaded:[{x1: -1, y1: 6, x2: -1, y2: -6},
+                  {x1: -4.1, y1: 6,
+                  x2: -4.1, y2: -6} ],
+          left:[{x:-1, y:6}, {x:-1,y:-6}]
+        },
+        {name:"both",
+          shaded:[{x1: -1, y1: 1*Math.tan(Math.PI/2 - theta),
+                   x2: -1, y2: -1*Math.tan(Math.PI/2 - theta)},
+                  {x1: -4.1, y1:  4.1*Math.tan(Math.PI/2 - theta),
+                  x2: -4.1, y2: -4.1*Math.tan(Math.PI/2 - theta)} ],
+          left:[{x: -1, y: 1*Math.tan(Math.PI/2 - theta)},
+                {x: -1, y: -1*Math.tan(Math.PI/2 - theta)} ],
+        }
+        ]
+```
+
+```{ojs}
+//| label: fig-specs
+//| fig-cap: Location of poles that meet the specifications
+Plot.plot({
+  grid: true,
+  clip: true,
+  y: { domain: [-5,5] },
+  x: { domain: [-4,1] },
+  marks: [
+    // Axes
+    Plot.ruleX([0]),
+    Plot.ruleY([0]),
+    // Data
+    Plot.line(spec_choice.left, {x: "x", y: "y"}),
+    Plot.line(spec_choice.shaded, {x: "x1", y: "y1"}),
+    Plot.line(spec_choice.shaded, {x: "x2", y: "y2"}),
+    Plot.area(spec_choice.shaded, {x1: "x1", y1: "y1", x2: "x2", y2: "y2", fill:"lightblue"}),
+  ]
+})
+```
+
+
+:::
 
 ## Identifying an underdamped second order system via testing
 
