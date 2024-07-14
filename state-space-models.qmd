@@ -196,6 +196,7 @@ C = \MATRIX{ 0 & 1},
 $$
 
 In general, we have the following:
+
 ![Structure of OCF representation](figures/svg/canonical-forms2.svg){#fig-OCF}
 
 ### DCF representation
@@ -205,6 +206,7 @@ $$
 G(s) = \frac{c_1}{s+p_1} + \frac{c_2}{s + p_2} + \dots + \frac{c_n}{s+p_n}
 $$
 In DCF, the system matrices are given by
+
 ![Structure of DCF representation](figures/svg/canonical-forms3.svg){#fig-DCF}
 
 In particular, for the TF in @exm-SSM-CC, we have
