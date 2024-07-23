@@ -1,0 +1,553 @@
+---
+title: Nyquist Stability Criterion
+
+execute:
+  echo: false
+  freeze: true
+  cache: true
+---
+
+```{julia}
+#| output: false
+# Install packages
+
+# using Pkg; Pkg.activate(".")
+# for pkg in ["IJulia", "Revise", "ControlSystems", "Plots", "LaTeXStrings", "DataFrames", "JSON"]
+#    Pkg.add(pkg)
+# end
+# 
+# # Installing Jupyter Cache
+# Pkg.add("Conda")
+# using Conda
+# Conda.add("jupyter-cache")
+
+using Revise
+
+using ControlSystems, Plots, LaTeXStrings
+
+current_theme = :bright
+current_colors = theme_palette(current_theme)
+theme(current_theme)
+default(linewidth=2)
+
+```
+
+Nyquist stability criterion is a graphical method to check the stability of a feedback control system. Consider the following closed loop transfer function
+
+![A feedback control system](figures/svg/steady-state-error-block-diagrams4.svg){#fig-feedback}
+
+For simplicity, we do not write the argument $(s)$ in the discussion below and write the closed loop TF as
+$$ T(s) = \frac{G}{1 + GH}. $$
+
+Observe that $T(s)$ is stable if
+
+- $T(s)$ has no poles in the ORHP
+- Or equivalently, $1 + GH$ has no zeros in the ORHP. 
+
+:::{.callout-tip appearance="simple"}
+Thus, we can determine the stability of $T(s)$ if we know the number of zeros of $1 + GH$ in the ORHP.
+:::
+
+Now suppose 
+$$
+G(s) = \frac{N_G(s)}{D_G(s)}
+\quad\text{and}\quad
+H(s) = \frac{N_H(s)}{D_H(s)}
+$$
+Then,
+$$ GH = \frac{N_G N_H}{D_G D_H}. $$
+Hence,
+$$ 1 + GH = \frac{D_G D_H + N_G N_H}{D_G D_H}. $$
+Thus, $1 + GH$ and $GH$ have the same poles. 
+
+:::{.callout-tip appearance="simple"}
+Hence, $1 + GH$ and $GH$ have the same number of poles in the ORHP. 
+:::
+
+We now ask the following question: [If we know the number of poles of $1 + GH$ in ORHP (e.g., by knowing the number of poles of GH in ORHP), can we fine the number of zeros of $1 + GH$ in ORHP? If so, we can determine the stability of $T(s)$.]{.text-primary}
+
+It turns our that there is an answer to this question using what is called **Cauchy's Argument Principle**, which we explain below.
+
+## Cauchy's Argument Principle
+
+We can think of any transfer function $G$ as a mapping from $\mathbb{C}$ (the set of complex numbers) to $\mathbb{C}$. 
+
+:::{#exm-complex-mapping}
+Consider the transfer function
+$$
+G(s) = \frac{s+1}{s+2}.
+$$
+This is a function from $\mathbb{C}$ to $\mathbb{C}$ that maps every point in the "$s$-plane" to a point in the "$G$-plane". For instance, 
+$$
+G \colon -1 + j \mapsto \frac{j}{1 + j} = \frac{j+1}{2}.
+$$
+
+```{ojs}
+//| layout-ncol: 2 
+//| fig-cap: A transfer function maps every point in the $s$-plane to a point in the $G$-plane
+//| fig-subcap:
+//|     - $s$-plane
+//|     - $G$-plane
+
+Plot.plot({
+  grid: true,
+  clip: true,
+  y: { domain: [-2, 2] },
+  x: { domain: [-2, 2] },
+  marks: [
+    // Axes
+    Plot.ruleX([0]),
+    Plot.ruleY([0]),
+    // Data
+    Plot.dot([{σ: -1, jω: 1}], {x: "σ", y: "jω", r: 5, fill: "black"}),
+  ]
+})
+
+Plot.plot({
+  grid: true,
+  clip: true,
+  y: { domain: [-2, 2] },
+  x: { domain: [-2, 2] },
+  marks: [
+    // Axes
+    Plot.ruleX([0]),
+    Plot.ruleY([0]),
+    // Data
+    Plot.dot([{σ: 0.5, jω: 0.5}], {x: "σ", y: "jω", r: 5, fill: "black"}),
+  ]
+})
+```
+:::
+
+```{julia}
+function sGplane(sCurve,G,filename; fps=30, show_critical=false, show_poles=true, GLabel=L"$G$-plane")
+  GCurve = G.(sCurve)
+
+  default(size=(750,375), framestyle=:origin)
+
+  anim = @animate for n in 1:length(sCurve)
+    plt1 = plot(real(sCurve), imag(sCurve), legend=false, title=L"$s$-plane", aspect_ratio=1)
+    scatter!(plt1, real(sCurve[n:n]), imag(sCurve[n:n]), legend=false)
+    if show_poles
+      # Assume fixed poles and zeros
+      scatter!(plt1, [-1], [0], legend=false, color=:black, marker=:circle)
+      scatter!(plt1, [-2], [0], legend=false, color=:black, marker=:xcross)
+    end
+
+    plt2 = plot(real(GCurve), imag(GCurve), legend=false, title=GLabel,aspect_ratio=1) 
+    scatter!(plt2, real(GCurve[n:n]), imag(GCurve[n:n]), legend=false)
+    if show_critical
+      scatter!(plt2, [-1], [0], legend=false, color=:red, marker=:cross)
+    end
+
+    plot(plt1, plt2)
+  end
+
+  gif(anim, filename, fps=fps, show_msg=false)
+end
+```
+
+If we exclude the poles of $G$, then $G$ is a continuous function. Thus, if we take any curve in the $s$-plane that doesn't pass through a pole of $G$, then $G$ will map that to a curve in the $G$-plane. As an instance, @fig-curve shows how a curve in $s$-plane gets mapped to a curve in the $G$-plane for @exm-complex-mapping
+
+```{julia}
+#| label: fig-curve
+#| fig-cap: A curve in $s$-plane for @exm-complex-mapping
+
+N = 50
+sCurve = vcat(range(-1.0+im, 1.0+im, N), 
+              range( 1.0+im,-1.0+im, N))
+G(s) = (s+1)/(s+2)
+sGplane(sCurve, G, "figures/nyquist-example1.gif")
+```
+
+A curve which starts and ends at the same point is called a **contour**. So if we take a contour in $s$-plane that doesn't pass through a pole of $G$, then $G$ will map that contour to a countor in the $G$-plane. As an instance, @fig-contour-1 shows how a contour in $s$-plane gets mapped to a countour in the $G$-plane for @exm-complex-mapping.
+
+```{julia}
+#| label: fig-contour-1
+#| fig-cap: A contour in $s$-plane for @exm-complex-mapping that does not encircle any poles or zeros
+N = 50
+sCurve = 0.5 .* vcat(range(-1.0+im, 1.0+im, N), 
+              range( 1.0+im, 1.0-im, N),
+              range( 1.0-im,-1.0-im, N),
+              range(-1.0-im,-1.0+im, N))
+G(s) = (s+1)/(s+2)
+sGplane(sCurve, G, "figures/nyquist-example2.gif")
+```
+
+We will think of contours as having a direction and, by convention, assume that the contour in the $s$-plane is clockwise. Then, depending on the TF $G$, the contour in the $G$-plane may be clockwise or counter-clockwise. As can be seen in @fig-contour-1, a clockwise contour in $s$-plane gets mapped to a clockwise contour in the $G$-plane. 
+
+Another important aspect is whether the contour in the $G$-plane encircles the origin. Let's consider a few other contours in the $s$-plane and their mappings in the $G$-plane in @fig-contour-2, @fig-contour-3, and @fig-contour-4.
+
+```{julia}
+#| label: fig-contour-2
+#| fig-cap: A contour in $s$-plane for @exm-complex-mapping that encircles a zero
+N = 50
+sCurve = 1.5 .* vcat(range(-1.0+im, 1.0+im, N), 
+              range( 1.0+im, 1.0-im, N),
+              range( 1.0-im,-1.0-im, N),
+              range(-1.0-im,-1.0+im, N))
+G(s) = (s+1)/(s+2)
+sGplane(sCurve, G, "figures/nyquist-example3.gif")
+```
+
+```{julia}
+#| label: fig-contour-3
+#| fig-cap: A contour in $s$-plane for @exm-complex-mapping that encircles a poles and a zero
+N = 50
+sCurve = 3 .* vcat(range(-1.0+im, 1.0+im, N), 
+              range( 1.0+im, 1.0-im, N),
+              range( 1.0-im,-1.0-im, N),
+              range(-1.0-im,-1.0+im, N))
+G(s) = (s+1)/(s+2)
+sGplane(sCurve, G, "figures/nyquist-example4.gif")
+```
+
+```{julia}
+#| label: fig-contour-4
+#| fig-cap: A contour in $s$-plane for @exm-complex-mapping that encircles a pole 
+N = 50
+sCurve = 0.5 .* vcat(range(-1.0+im, 1.0+im, N), 
+              range( 1.0+im, 1.0-im, N),
+              range( 1.0-im,-1.0-im, N),
+              range(-1.0-im,-1.0+im, N)) .- 2
+G(s) = (s+1)/(s+2)
+sGplane(sCurve, G, "figures/nyquist-example5.gif")
+```
+
+We can understand what is happening using the **Cauchy's Argument Principle**.
+
+:::{.callout-tip }
+#### Cauchy's Argument Principle
+
+$$ N = Z - P $$
+
+where
+
+- $N$: number of encirclements of origin in the $G$-plane in clockwise direction (encirclements in the counter-clockwise direction are counted with negative signs)
+
+- $Z$: number of zeros inside the contour in the $s$-plane
+
+- $P$: number of poles inside the contour in the $G$-plane
+
+:::
+
+We check Cauchy's Argument principle for the examples presented earlier.
+
+| Contour | $N$ | $Z$ | $P$ |
+|:-------:|:---:|:---:|:---:|
+|@fig-contour-1| 0 | 0 | 0 |
+|@fig-contour-2| 1 | 1 | 0 |
+|@fig-contour-3| 0 | 1 | 1 |
+|@fig-contour-4| -1 | 0 | 1 |
+
+## Nyquist Stability Criterion
+
+Now suppose that we start with the contour in $s$-plane shown in @fig-half-plane and the limit as $R \to ∞$. Then, the contour encloses the entire $s$-plane. 
+
+```{julia}
+#| label: fig-half-plane
+#| fig-cap: A contour in $s$-plane
+N = 10
+R = 5
+sCurve = vcat(range(0.0+0im, 0.0+R*im, N),
+              [R*cis(θ) for θ in range(π/2, -π/2, 5N)],
+             range(0.0-R*im, 0.0+im, N))
+
+default(size=(200,400), framestyle=:origin)
+
+anim = @animate for n in 1:length(sCurve)
+  plt1 = plot(real(sCurve), imag(sCurve), legend=false, title=L"$s$-plane")
+  scatter!(plt1, real(sCurve[n:n]), imag(sCurve[n:n]), legend=false)
+end
+
+gif(anim, "figures/nyquist-half-plane.gif", fps=30, show_msg=false)
+```
+
+The $G$-map of this contour traces the function $G(s)$ for $s$ ranging from $0 - j ∞$ to $0 + j ∞$ (and then a circle at infinity). This is precisely the Nyquist plot of $G$!
+
+Now let's go back to our feedback control system:
+
+![A feedback control system](figures/svg/steady-state-error-block-diagrams4.svg){#fig-feedback-2}
+
+Consider the TF $1 + GH$. For example, for $G(s) 1/(s+2)$ and $H(s) = 1$, the map of $1 + GH = 1 + 1/(s+2)$ is shown in @fig-nyquist
+
+```{julia}
+#| label: fig-nyquist
+#| fig-cap: Mapping of the contour in $s$-plane to the $1 + GH$-plane. Note that there is slight "kink" in the curve in the $1+GH$ plane near $1 + j0$ which corresponds to the semi-circle of radius $R$ in the $s$-plane. This kink will collapse to a point as $R \to ∞$. 
+
+N = 50
+R = 50
+Z = 10 
+sCurve = vcat(range(0.0+0im, 0.0+Z*im, N),
+              range(0.0+Z*im, 0.0+R*im, N),
+              [R*cis(θ) for θ in range(π/2, -π/2, N)],
+              range(0.0-R*im, 0.0-Z*im, N),
+              range(0.0-Z*im, 0.0-0*im, N))
+one_plus_GH(s) = 1 + 1/(s+2)
+sGplane(sCurve, one_plus_GH, "figures/nyquist-NP-1.gif", show_poles=false, GLabel=L"$1+GH$-plane")
+```
+
+Then by Cauchy's argument principle, we have
+$$
+\bbox[5pt,border: 1px solid]
+{\begin{array}{@{}c@{}}
+\text{Zeros of $1 + GH$} \\
+\text{in ORHP}
+\end{array}} = 
+\bbox[5pt,border: 1px solid]
+{\begin{array}{c}
+\text{Number of clockwise} \\
+\text{encirclements of origin}\\
+\text{in NP of $1 + GH$}
+\end{array}}
++
+\bbox[5pt,border: 1px solid]
+{\begin{array}{c}
+\text{Number of poles} \\
+\text{of $1+GH$}\\
+\text{in the ORHP}
+\end{array}} 
+$$
+
+Thus, we have answered our original question. The only catch is that we need to draw the Nyquist plot of $1 + GH$ (rather than $GH$). But this can be remidied easily by the observation that **the Nyquist plot of $1 + GH$ is the Nyquist plot of $GH$ shifted by $1$. Therefore,
+$$
+\bbox[5pt,border: 1px solid]
+{\begin{array}{@{}c@{}}
+\text{Number of clockwise encirclements}\\
+\text{of \textbf{origin} in the} \\
+\text{Nyquist plot of $1 + GH$}
+\end{array}} = 
+\bbox[5pt,border: 1px solid]
+{\begin{array}{@{}c@{}}
+\text{Number of clockwise encirclements}\\
+\text{of \textbf{$-1 + j0$} in the} \\
+\text{Nyquist plot of $GH$}
+\end{array}} 
+$$
+
+This gives us the Nyquist formula.
+
+:::{.callout-tip appearance="simple"}
+#### Nyquist formula
+$$ Z = N - P $$
+where
+
+- $Z = $ number of zeros of $1 + GH$ in ORHP
+- $N = $ number of clockwise encirclements of $-1$ in the Nyquist plot of $GH$
+- $P = $ number of poles of $1 + GH$ in ORHP.
+
+:::
+
+Thus, we can proceed as follows:
+
+1. Count the number of poles of $GH$ in the ORHP (e.g., using [Routh-Hurwitz](routh-hurwitz.qmd))
+2. Draw the Nyquist plot of $GH$ and count the number of clockwise encirclements of $-1$
+3. $Z = N - P$ gives the number of zeros of $1 + GH$ in the ORHP
+4. System is stable if and only if $Z = 0$.
+
+## Examples
+
+:::{#exm-nquist-1}
+
+Consider 
+$$
+GH(s) = \dfrac{K}{(s-2)(s+6)(s+8)}
+$$
+for different values of $K$.
+
+:::
+
+:::{.callout-note collapse="true"} 
+#### Condition for stability
+
+From observation we not that system $GH$ is stable and $P = 0$. Thus, for stability (i.e., $Z = 0$), we want $N = 0$, i.e., the Nyquist plot should have **zero** encirclements of $-1$.
+
+:::
+
+::: {.panel-tabset}
+
+#### $K=50$
+
+```{julia}
+#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. 
+
+K = 50
+
+N = 50
+R = 50
+Z = 10 
+sCurve = vcat(range(0.0+0im, 0.0+Z*im, N),
+              range(0.0+Z*im, 0.0+R*im, N),
+              [R*cis(θ) for θ in range(π/2, -π/2, N)],
+              range(0.0-R*im, 0.0-Z*im, N),
+              range(0.0-Z*im, 0.0-0*im, N))
+GH(s) = K/((s-2)*(s+6)*(s+8))
+sGplane(sCurve, GH, "figures/nyquist-NP-2.gif", show_poles=false, show_critical=true, GLabel=L"$GH$-plane")
+```
+#### $K=100$
+
+```{julia}
+#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. 
+
+K = 100
+
+N = 50
+R = 50
+Z = 10 
+sCurve = vcat(range(0.0+0im, 0.0+Z*im, N),
+              range(0.0+Z*im, 0.0+R*im, N),
+              [R*cis(θ) for θ in range(π/2, -π/2, N)],
+              range(0.0-R*im, 0.0-Z*im, N),
+              range(0.0-Z*im, 0.0-0*im, N))
+GH(s) = K/((s-2)*(s+6)*(s+8))
+sGplane(sCurve, GH, "figures/nyquist-NP-3.gif", show_poles=false, show_critical=true,  GLabel=L"$GH$-plane")
+```
+
+#### $K=336$
+
+```{julia}
+#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. 
+
+K = 336
+
+N = 50
+R = 50
+Z = 10 
+sCurve = vcat(range(0.0+0im, 0.0+Z*im, N),
+              range(0.0+Z*im, 0.0+R*im, N),
+              [R*cis(θ) for θ in range(π/2, -π/2, N)],
+              range(0.0-R*im, 0.0-Z*im, N),
+              range(0.0-Z*im, 0.0-0*im, N))
+GH(s) = K/((s-2)*(s+6)*(s+8))
+sGplane(sCurve, GH, "figures/nyquist-NP-4.gif", show_poles=false, show_critical=true,  GLabel=L"$GH$-plane")
+```
+
+#### $K=500$
+
+```{julia}
+#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. 
+
+K = 500
+
+N = 50
+R = 50
+Z = 10 
+sCurve = vcat(range(0.0+0im, 0.0+Z*im, N),
+              range(0.0+Z*im, 0.0+R*im, N),
+              [R*cis(θ) for θ in range(π/2, -π/2, N)],
+              range(0.0-R*im, 0.0-Z*im, N),
+              range(0.0-Z*im, 0.0-0*im, N))
+GH(s) = K/((s-2)*(s+6)*(s+8))
+sGplane(sCurve, GH, "figures/nyquist-NP-5.gif", show_poles=false, show_critical=true,  GLabel=L"$GH$-plane")
+```
+:::
+
+
+:::{#exm-nyquist-2}
+Consider 
+$$
+GH(s) = K \dfrac{(s+1)(s+2)}{(s-3)(s-4)}
+$$
+for different values of $K$.
+:::
+
+:::{.callout-note collapse="true"} 
+#### Condition for stability
+
+From observation we not that system $GH$ is unstable and $P = 2$. Thus, for stability (i.e., $Z = 0$), we want $N = 0$, i.e., the Nyquist plot should have **two** encirclements of $-1$.
+
+:::
+
+::: {.panel-tabset}
+
+#### $K=1$
+
+```{julia}
+#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. The kink around $10+j$ in the $GH$-plane will become a point as $R \to ∞$ in the $s$-plane.
+
+K = 1
+
+N = 50
+R = 50
+Z = 10 
+sCurve = vcat(range(0.0+0im, 0.0+Z*im, N),
+              range(0.0+Z*im, 0.0+R*im, N),
+              [R*cis(θ) for θ in range(π/2, -π/2, N)],
+              range(0.0-R*im, 0.0-Z*im, N),
+              range(0.0-Z*im, 0.0-0*im, N))
+GH(s) = K*(s+1)*(s+2)/((s-3)*(s-4))
+sGplane(sCurve, GH, "figures/nyquist-NP-6.gif", show_poles=false, show_critical=true, GLabel=L"$GH$-plane")
+```
+
+#### $K=10$
+
+```{julia}
+#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. The kink around $10+j$ in the $GH$-plane will become a point as $R \to ∞$ in the $s$-plane.
+
+K = 10
+
+N = 50
+R = 50
+Z = 10 
+sCurve = vcat(range(0.0+0im, 0.0+Z*im, N),
+              range(0.0+Z*im, 0.0+R*im, N),
+              [R*cis(θ) for θ in range(π/2, -π/2, N)],
+              range(0.0-R*im, 0.0-Z*im, N),
+              range(0.0-Z*im, 0.0-0*im, N))
+GH(s) = K*(s+1)*(s+2)/((s-3)*(s-4))
+sGplane(sCurve, GH, "figures/nyquist-NP-7.gif", show_poles=false, show_critical=true, GLabel=L"$GH$-plane")
+```
+:::
+
+
+## Values of gain $K$ for stability
+
+:::{.callout-important appearance="simple"}
+Rather than redrawing the Nyquist plot for different values of $K$, we can draw the Nyquist plot for $K=1$ and count the encirclements of $-1/K$. This also enables us to find the values of $K$ for which the system is stable.
+:::
+
+## Poles on the $j ω$-axis
+
+Recall that the Nyquist stability criterion relies on Cauchy's argument principle, which is valid when the contour in the $s$-plane doesn't pass through a pole. This assumption is violated if there is a pole on the $jω$-axis, as illustrated in @fig-pole which shows the Nyquist plot of $GH(s) = 1/(s(s+1))$. 
+
+The TF has no poles in the ORHP, so $P = 0$. For stability (i.e., $Z=0$), we need $N = 0$, i.e., there should be **zero** encirclements of $-1$ in the $GH$-plane.
+
+```{julia}
+#| label: fig-pole
+#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. 
+
+N = 50
+R = 20
+Z = 10 
+sCurve = vcat(range(0.0+0im, 0.0+Z*im, N),
+              range(0.0+Z*im, 0.0+R*im, N),
+              [R*cis(θ) for θ in range(π/2, -π/2, N)],
+              range(0.0-R*im, 0.0-Z*im, N),
+              range(0.0-Z*im, 0.0-0*im, N))
+GH(s) = 1/(s*(s+1))
+sGplane(sCurve, GH, "figures/nyquist-NP-8.gif", show_poles=false, show_critical=true, GLabel=L"$GH$-plane")
+```
+
+In this case, the Nyquist plot is not a closed curve so we cannot count the number of encirclements of $-1$. We need to fix this manually. Consider the contour shown in @fig-pole-fix, which skips the pole at origin by travesing a small semi-circle $r e^{j θ}$, $θ \in [-π/2, π/2]$, and then take $r \to 0$
+
+```{julia}
+#| label: fig-pole-fix
+#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. Although it is not visitble at this scale, the contour skips the pole at origin by going around a semi-circle of radius $0.1$. 
+
+N = 50
+R = 20
+r = 0.1
+Z = 10 
+sCurve = vcat([r*cis(θ) for θ in range(0.0, π/2, N ÷ 2)],
+              range(0.0+r*im, 0.0+Z*im, N),
+              range(0.0+Z*im, 0.0+R*im, N),
+              [R*cis(θ) for θ in range(π/2, -π/2, N)],
+              range(0.0-R*im, 0.0-Z*im, N),
+              range(0.0-Z*im, 0.0-r*im, N),
+             [r*cis(θ) for θ in range(-π/2, 0.0, N ÷ 2)])
+GH(s) = 1/(s*(s+1))
+sGplane(sCurve, GH, "figures/nyquist-NP-9.gif", show_poles=false, show_critical=true, GLabel=L"$GH$-plane")
+```
+:::
+
+However, standard software for drawing Nyquist plot does not circumvent the poles. In this section, we will learn how to determine how to close the contour of @fig-pole
