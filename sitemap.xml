@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://adityam.github.io/linear-systems/index.html</loc>
-    <lastmod>2024-07-14T21:57:51.958Z</lastmod>
-  </url>
-  <url>
-    <loc>https://adityam.github.io/linear-systems/step-response.html</loc>
-    <lastmod>2024-07-14T21:57:51.958Z</lastmod>
-  </url>
-  <url>
-    <loc>https://adityam.github.io/linear-systems/steady-state-errors.html</loc>
-    <lastmod>2024-07-14T21:57:51.958Z</lastmod>
+    <loc>https://adityam.github.io/linear-systems/freq-modeling.html</loc>
+    <lastmod>2024-07-26T23:04:15.584Z</lastmod>
   </url>
   <url>
     <loc>https://adityam.github.io/linear-systems/state-space-models.html</loc>
-    <lastmod>2024-07-14T21:57:51.958Z</lastmod>
+    <lastmod>2024-07-26T23:04:15.584Z</lastmod>
   </url>
   <url>
-    <loc>https://adityam.github.io/linear-systems/freq-modeling.html</loc>
-    <lastmod>2024-07-14T21:57:51.958Z</lastmod>
+    <loc>https://adityam.github.io/linear-systems/nyquist-stability.html</loc>
+    <lastmod>2024-07-26T23:04:15.584Z</lastmod>
+  </url>
+  <url>
+    <loc>https://adityam.github.io/linear-systems/step-response.html</loc>
+    <lastmod>2024-07-26T23:04:15.584Z</lastmod>
+  </url>
+  <url>
+    <loc>https://adityam.github.io/linear-systems/steady-state-errors.html</loc>
+    <lastmod>2024-07-26T23:04:15.584Z</lastmod>
+  </url>
+  <url>
+    <loc>https://adityam.github.io/linear-systems/index.html</loc>
+    <lastmod>2024-07-26T23:04:15.584Z</lastmod>
   </url>
 </urlset>
