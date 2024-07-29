@@ -532,11 +532,11 @@ In this case, the Nyquist plot is not a closed curve so we cannot count the numb
 
 ```{julia}
 #| label: fig-pole-fix
-#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. Although it is not visitble at this scale, the contour skips the pole at origin by going around a semi-circle of radius $0.1$. 
+#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. Although it is not visitble at this scale, the contour skips the pole at origin by going around a semi-circle of radius $0.2$. 
 
 N = 50
 R = 20
-r = 0.1
+r = 0.2
 Z = 10 
 sCurve = vcat([r*cis(θ) for θ in range(0.0, π/2, N ÷ 2)],
               range(0.0+r*im, 0.0+Z*im, N),
@@ -548,6 +548,178 @@ sCurve = vcat([r*cis(θ) for θ in range(0.0, π/2, N ÷ 2)],
 GH(s) = 1/(s*(s+1))
 sGplane(sCurve, GH, "figures/nyquist-NP-9.gif", show_poles=false, show_critical=true, GLabel=L"$GH$-plane")
 ```
+
+However, standard software for drawing Nyquist plot does not circumvent the poles. In this section, we will learn how to determine how to close the contour of @fig-pole.
+
+Recall that the transfer function is 
+$$
+  GH(s) = \dfrac{1}{s(s+1)}.
+$$
+For any point along the small circle around the pole, we have $s = r e^{j θ}$. Thus,
+$$
+  GH(r e^{j θ}) = \dfrac{1}{r e^{j θ}(1 + re^{j θ})}
+  \approx
+  \dfrac{1}{r e^{j θ}}
+$$
+Thus, we have the following:
+
+|$θ$| $\lvert GH(re^{j θ}) \rvert$ | $\angle GH(r e^{j θ})$ |
+|:-:|:------------------:|:----------------------:|
+|$-90^∘$| $\dfrac 1r$ | $90^∘$  |
+|$-45^∘$| $\dfrac 1r$ | $45^∘$  |
+|$0^∘$  | $\dfrac 1r$ | $0^∘$   |
+|$45^∘$ | $\dfrac 1r$ | $-45^∘$ |
+|$90^∘$ | $\dfrac 1r$ | $-90^∘$ |
+
+This is consistent with the contour in @fig-pole-fix. Thus, there are no encirclements of $-1$ in the $GH$-plane. Hence, $N = 0$, which implies, $Z = 0$. Hence, the system is stable.
+
+We now do a few practise exercises.
+
+:::{#exr-nyquist-fix-pole-1}
+Consider $GH = \dfrac{K}{s(s+1)(2s+1)}$. The Nyquist plot for $K=1$ is shown in @fig-pole-1. Find the values of $K$ for which the closed loop system is stable. 
+
+```{julia}
+#| label: fig-pole-1
+#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. 
+
+N = 50
+R = 20
+Z = 10 
+sCurve = vcat(range(0.0+0im, 0.0+Z*im, N),
+              range(0.0+Z*im, 0.0+R*im, N),
+              [R*cis(θ) for θ in range(π/2, -π/2, N)],
+              range(0.0-R*im, 0.0-Z*im, N),
+              range(0.0-Z*im, 0.0-0*im, N))
+GH(s) = 1/(s*(s+1)*(2s+1))
+sGplane(sCurve, GH, "figures/nyquist-pole-1.gif", show_poles=false, show_critical=true, GLabel=L"$GH$-plane")
+```
+
+Note that the Nyquist plot interests the $σ$-axis at two points: $s = 0$ and $s = -2/3$.
+
 :::
 
-However, standard software for drawing Nyquist plot does not circumvent the poles. In this section, we will learn how to determine how to close the contour of @fig-pole
+:::{.callout-note collapse="true"} 
+#### Solution
+We simplify $GH(s)$ along the contour $s = re^{j θ}$:
+$$
+  GH(re^{j θ}) = \dfrac{K}{re^{j θ}(re^{j θ} + 1)(2re^{j θ} + 1)}
+  \approx
+  \dfrac{K}{re^{j θ}}.
+$$
+Thus, we have the following
+
+|$θ$| $\lvert GH(re^{j θ}) \rvert$ | $\angle GH(r e^{j θ})$ |
+|:-:|:------------------:|:----------------------:|
+|$-90^∘$| $\dfrac Kr$ | $90^∘$  |
+|$-45^∘$| $\dfrac Kr$ | $45^∘$  |
+|$0^∘$  | $\dfrac Kr$ | $0^∘$   |
+|$45^∘$ | $\dfrac Kr$ | $-45^∘$ |
+|$90^∘$ | $\dfrac Kr$ | $-90^∘$ |
+
+The the two arms of the Nyquist plot in @fig-pole-1 are connected via a semi-circle in closewise direction, as shown in @fig-pole-1-fixed
+
+```{julia}
+#| label: fig-pole-1-fixed
+#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. Although it is not visitble at this scale, the contour skips the pole at origin by going around a semi-circle of radius $0.2$. 
+
+N = 50
+R = 20
+r = 0.2
+Z = 10 
+sCurve = vcat([r*cis(θ) for θ in range(0.0, π/2, N ÷ 2)],
+              range(0.0+r*im, 0.0+Z*im, N),
+              range(0.0+Z*im, 0.0+R*im, N),
+              [R*cis(θ) for θ in range(π/2, -π/2, N)],
+              range(0.0-R*im, 0.0-Z*im, N),
+              range(0.0-Z*im, 0.0-r*im, N),
+             [r*cis(θ) for θ in range(-π/2, 0.0, N ÷ 2)])
+GH(s) = 1/(s*(s+1)*(2s+1))
+sGplane(sCurve, GH, "figures/nyquist-pole-1-fixed.gif", show_poles=false, show_critical=true, GLabel=L"$GH$-plane")
+```
+
+First observe that $P = 0$. Thus, for stability (i.e. $Z = 0$), we want $N = 0$. The Nyquist plot intersects the $σ$ axis at $-2/3$. So, we have the following cases.
+
+| Case | Range for $K$ | $N$ | Stable? |
+|:----:|:-------------:|:---:|:-------:|
+| $-∞ < \dfrac 1K < -\dfrac{2}{3}$ | $(0, 1.5)$ | $0$ | Yes |
+| $-\dfrac{2}{3} < \dfrac 1K < 0$ | $(1.5, ∞)$ | $2$ | No |
+| $0 < \dfrac 1K < ∞$ | $(-∞,0)$ | $1$ | No |
+
+Thus, the system is stable for $K \in (0, 1.5)$. 
+
+:::
+
+:::{#exr-nyquist-fix-pole-2}
+Consider $GH = \dfrac{K}{s^2(s+1)}$. Find the values of $K$ for which the closed loop system is stable. 
+
+```{julia}
+#| label: fig-pole-2
+#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. 
+
+N = 50
+R = 20
+Z = 10 
+sCurve = vcat(range(0.0+0im, 0.0+Z*im, N),
+              range(0.0+Z*im, 0.0+R*im, N),
+              [R*cis(θ) for θ in range(π/2, -π/2, N)],
+              range(0.0-R*im, 0.0-Z*im, N),
+              range(0.0-Z*im, 0.0-0*im, N))
+GH(s) = 1/(s^2*(s+1))
+sGplane(sCurve, GH, "figures/nyquist-fix-pole-2.gif", show_poles=false, show_critical=true, GLabel=L"$GH$-plane")
+```
+:::
+
+:::{.callout-note collapse="true"} 
+#### Solution
+We simplify $GH(s)$ along the contour $s = re^{j θ}$:
+$$
+  GH(re^{j θ}) = \dfrac{K}{r^2e^{j 2θ}(re^{j θ} + 1)}
+  \approx
+  \dfrac{K}{r^2e^{j 2θ}}.
+$$
+Thus, we have the following
+
+|$θ$| $\lvert GH(re^{j θ}) \rvert$ | $\angle GH(r e^{j θ})$ |
+|:-:|:------------------:|:----------------------:|
+|$-90^∘$| $\dfrac K{2r^2}$ | $180^∘$  |
+|$-45^∘$| $\dfrac K{2r^2}$ | $90^∘$  |
+|$0^∘$  | $\dfrac K{2r^2}$ | $0^∘$   |
+|$45^∘$ | $\dfrac K{2r^2}$ | $-90^∘$ |
+|$90^∘$ | $\dfrac K{2r^2}$ | $-180^∘$ |
+
+The the two arms of the Nyquist plot in @fig-pole-2 are connected via a circle in closewise direction, as shown in @fig-pole-2-fixed.
+
+
+```{julia}
+#| label: fig-pole-2-fixed
+#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. Although it is not visitble at this scale, the contour skips the pole at origin by going around a semi-circle of radius $0.2$. 
+
+N = 50
+R = 20
+r = 0.2
+Z = 10 
+sCurve = vcat([r*cis(θ) for θ in range(0.0, π/2, N ÷ 2)],
+              range(0.0+r*im, 0.0+Z*im, N),
+              range(0.0+Z*im, 0.0+R*im, N),
+              [R*cis(θ) for θ in range(π/2, -π/2, N)],
+              range(0.0-R*im, 0.0-Z*im, N),
+              range(0.0-Z*im, 0.0-r*im, N),
+             [r*cis(θ) for θ in range(-π/2, 0.0, N ÷ 2)])
+GH(s) = 1/(s^2*(s+1))
+sGplane(sCurve, GH, "figures/nyquist-pole-2-fixed.gif", show_poles=false, show_critical=true, GLabel=L"$GH$-plane")
+```
+
+Thus, irrespective of the value of $K$, $N=2$. Since $P = 0$, we have $Z = 0$. Thus, the system is not stable for any values of $K$.
+:::
+
+:::{.callout-warning}
+#### What about other poles on the $j ω$ axis
+
+Consider the TF
+$$
+GH(s) = \dfrac{1}{(s^2 + 1)(s+1)}.
+$$
+
+In this case, there are two poles on the $j ω$ axis. We can follow the same idea as before and circumvent them via small semi-circles of radius $r$ at $\pm j$. However, we will not study this case in detail in class. 
+
+:::
