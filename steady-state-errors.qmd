@@ -288,7 +288,7 @@ Find the steady state errors to step, ramp, and parabola inputs.
 
 ### Summary
 
-In summary, the steady-state error of different types of system for different types of inputs is shown in @tbl:summary
+In summary, the steady-state error of different types of system for different types of inputs is shown in @tbl-summary
 
 | Type | $e_{\rm step}(∞)$ | $e_{\rm ramp}(∞)$ | $e_{\rm para}(∞)$ |
 |:----:|:-----------------:|:-----------------:|:-----------------:|
