@@ -120,6 +120,7 @@ Plot.plot({
 :::
 
 ```{julia}
+#| output: false
 function sGplane(sCurve,G,filename; fps=30, show_critical=false, show_poles=true, GLabel=L"$G$-plane")
   GCurve = G.(sCurve)
 
@@ -227,7 +228,7 @@ where
 
 - $Z$: number of zeros inside the contour in the $s$-plane
 
-- $P$: number of poles inside the contour in the $G$-plane
+- $P$: number of poles inside the contour in the $s$-plane
 
 :::
 
@@ -309,7 +310,7 @@ $$
 \end{array}} 
 $$
 
-Thus, we have answered our original question. The only catch is that we need to draw the Nyquist plot of $1 + GH$ (rather than $GH$). But this can be remidied easily by the observation that **the Nyquist plot of $1 + GH$ is the Nyquist plot of $GH$ shifted by $1$. Therefore,
+Thus, we have answered our original question. The only catch is that we need to draw the Nyquist plot of $1 + GH$ (rather than $GH$). But this can be remidied easily by the observation that **the Nyquist plot of $1 + GH$ is the Nyquist plot of $GH$ shifted by $1$**. Therefore,
 $$
 \bbox[5pt,border: 1px solid]
 {\begin{array}{@{}c@{}}
@@ -325,29 +326,57 @@ $$
 \end{array}} 
 $$
 
+Moreover, we have already shown that
+$$
+\bbox[5pt,border: 1px solid]
+{\begin{array}{@{}c@{}}
+\text{Zeros of $1 + GH$} \\
+\text{in ORHP}
+\end{array}} = 
+\bbox[5pt,border: 1px solid]
+{\begin{array}{@{}c@{}}
+\text{Number of poles} \\
+\text{of $T$ in ORHP}
+\end{array}}
+$$
+and
+$$
+\bbox[5pt,border: 1px solid]
+{\begin{array}{c}
+\text{Number of poles} \\
+\text{of $1+GH$}\\
+\text{in the ORHP}
+\end{array}} =
+\bbox[5pt,border: 1px solid]
+{\begin{array}{@{}c@{}}
+\text{Number of poles}\\
+\text{of $GH$ in ORHP}
+\end{array}}
+$$
+
 This gives us the Nyquist formula.
 
 :::{.callout-tip appearance="simple"}
 #### Nyquist formula
-$$ Z = N - P $$
+$$ Z = N + P $$
 where
 
-- $Z = $ number of zeros of $1 + GH$ in ORHP
+- $Z = $ number of zeros of $1 + GH$ in ORHP (which equals poles of $T$ in ORHP)
 - $N = $ number of clockwise encirclements of $-1$ in the Nyquist plot of $GH$
-- $P = $ number of poles of $1 + GH$ in ORHP.
+- $P = $ number of poles of $1 + GH$ in ORHP (which equals number of poles of $GH$ in ORHP)
 
 :::
 
 Thus, we can proceed as follows:
 
-1. Count the number of poles of $GH$ in the ORHP (e.g., using [Routh-Hurwitz](routh-hurwitz.qmd))
-2. Draw the Nyquist plot of $GH$ and count the number of clockwise encirclements of $-1$
-3. $Z = N - P$ gives the number of zeros of $1 + GH$ in the ORHP
+1. Count the number of poles of $GH$ in the ORHP (e.g., using [Routh-Hurwitz](routh-hurwitz.qmd)). This gives the value of $P$
+2. Draw the Nyquist plot of $GH$ and count the number of clockwise encirclements of $-1$. This gives the value of $N$.
+3. $Z = N + P$ gives the number of poles of $T$ in the ORHP
 4. System is stable if and only if $Z = 0$.
 
 ## Examples
 
-:::{#exm-nquist-1}
+:::{#exm-nyquist-1}
 
 Consider 
 $$
@@ -506,6 +535,127 @@ sGplane(sCurve, GH, "figures/nyquist-NP-7.gif", show_poles=false, show_critical=
 Rather than redrawing the Nyquist plot for different values of $K$, we can draw the Nyquist plot for $K=1$ and count the encirclements of $-1/K$. This also enables us to find the values of $K$ for which the system is stable.
 :::
 
+We illustrate this via some examples.
+
+:::{#exm-nyquist-gain-1}
+Find the values of $K$ for which the following system is stable.
+$$
+GH(s) = \dfrac{K}{(s+1)(s+2)}.
+$$
+The Nyquist plot for $K=1$ is shown in @fig-nyquist-gain-1.
+
+```{julia}
+#| label: fig-nyquist-gain-1
+#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. 
+
+N = 50
+R = 20
+Z = 5 
+sCurve = vcat(range(0.0+0im, 0.0+Z*im, N),
+              range(0.0+Z*im, 0.0+R*im, N),
+              [R*cis(θ) for θ in range(π/2, -π/2, N)],
+              range(0.0-R*im, 0.0-Z*im, N),
+              range(0.0-Z*im, 0.0-0*im, N))
+GH(s) = 1/((s+1)*(s+2))
+sGplane(sCurve, GH, "figures/nyquist-NP-gain-1.gif", show_poles=false, show_critical=false, GLabel=L"$GH$-plane")
+```
+:::
+
+:::{.callout-note collapse="true"} 
+#### Solution
+
+First observe that $P=0$. Therefore, for stability (i.e., for $Z=0$), we need $N=0$. The Nyquist plot intersets the $σ$-axis at $0$ and $0.5$. So, we have the following cases.
+
+| Case | Range for $K$ | $N$ | Stable? |
+|:----:|:-------------:|:---:|:-------:|
+| $-∞ < -\dfrac 1K < 0$ | $(0, ∞)$ | $0$ | Yes |
+| $0 < -\dfrac 1K < \dfrac 12$ | $(-∞,-2)$ | $1$ | No |
+| $\dfrac 12 < -\dfrac 1K < ∞$ | $(-2,0)$ | $0$ | Yes |
+
+Thus, the system is stable for $K > 0$ or $K \in (-2,0)$. 
+:::
+
+:::{#exm-nyquist-gain-2}
+Find the values of $K$ for which the following system is stable.
+$$
+GH(s) = \dfrac{6K}{(s+1)(s+2)(s+3)}.
+$$
+The Nyquist plot for $K=1$ is shown in @fig-nyquist-gain-2,
+which intersets the $σ$-axis at $-0.1$, $0$, $1$. 
+
+```{julia}
+#| label: fig-nyquist-gain-2
+#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. 
+
+N = 50
+R = 20
+Z = 2 
+sCurve = vcat(range(0.0+0im, 0.0+Z*im, N),
+              range(0.0+Z*im, 0.0+R*im, N),
+              [R*cis(θ) for θ in range(π/2, -π/2, N)],
+              range(0.0-R*im, 0.0-Z*im, N),
+              range(0.0-Z*im, 0.0-0*im, N))
+GH(s) = 6/((s+1)*(s+2)*(s+3))
+sGplane(sCurve, GH, "figures/nyquist-NP-gain-2.gif", show_poles=false, show_critical=false, GLabel=L"$GH$-plane")
+```
+:::
+
+:::{.callout-note collapse="true"} 
+#### Solution
+
+First observe that $P=0$. Therefore, for stability (i.e., for $Z=0$), we need $N=0$. The Nyquist plot intersets the $σ$-axis at $-0.1$, $0$, $1$. So, we have the following cases.
+
+| Case | Range for $K$ | $N$ | Stable? |
+|:----:|:-------------:|:---:|:-------:|
+| $-∞ < -\dfrac 1K < -\dfrac 1{10}$ | $(0, 10)$ | $0$ | Yes |
+| $-\dfrac{1}{10} < -\dfrac 1K < 0$ | $(10, ∞)$ | $2$ | No |
+| $0 < -\dfrac 1K < 1$ | $(-∞,-1)$ | $1$ | No |
+| $1 < -\dfrac 1K < ∞$ | $(-1,0)$ | $0$ | Yes |
+
+Thus, the system is stable for $K > 10$ or $K \in (-1,0)$. 
+:::
+
+:::{#exm-nyquist-gain-3}
+Find the values of $K$ for which the following system is stable.
+$$
+GH(s) = \dfrac{K(s-1)}{s^3 + s^2 - s + 2}
+= \dfrac{K(s-1)}{(s+2)(s^2-s+1)}
+$$
+The Nyquist plot for $K=1$ is shown in @fig-nyquist-gain-2,
+which intersets the $σ$-axis at $-2/3$, $-1/2$, $0$. 
+
+```{julia}
+#| label: fig-nyquist-gain-3
+#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. 
+
+N = 50
+R = 20
+Z = 2 
+sCurve = vcat(range(0.0+0im, 0.0+Z*im, N),
+              range(0.0+Z*im, 0.0+R*im, N),
+              [R*cis(θ) for θ in range(π/2, -π/2, N)],
+              range(0.0-R*im, 0.0-Z*im, N),
+              range(0.0-Z*im, 0.0-0*im, N))
+GH(s) = (s-1)/(s^3+s^2-s+2)
+sGplane(sCurve, GH, "figures/nyquist-NP-gain-3.gif", show_poles=false, show_critical=false, GLabel=L"$GH$-plane")
+```
+:::
+
+:::{.callout-note collapse="true"} 
+#### Solution
+
+First observe that $s^2 - s + 1$ has two ORHP. Thus, $P=0$ and for stability (i.e., for $Z=0$), we need $N=-2$. The Nyquist plot intersets the $σ$-axis at $-2/3$, $-1/2$, $0$. So, we have the following cases.
+
+| Case | Range for $K$ | $N$ | Stable? |
+|:----:|:-------------:|:---:|:-------:|
+| $-∞ < -\dfrac 1K < -\dfrac 2{3}$ | $(0, 1.5)$ | $0$ | No |
+| $-\dfrac{2}{3} < -\dfrac 1K < -\dfrac{1}{2}$ | $(1.5, 2)$ | $-2$ | Yes |
+| $-\dfrac{1}{2} < -\dfrac 1K < 0$ | $(2,∞)$ | $-1$ | No |
+| $0 < -\dfrac 1K < ∞$ | $(-∞,0)$ | $0$ | No |
+
+Thus, the system is stable for $K \in (1.5, 2)$. 
+:::
+
 ## Poles on the $j ω$-axis
 
 Recall that the Nyquist stability criterion relies on Cauchy's argument principle, which is valid when the contour in the $s$-plane doesn't pass through a pole. This assumption is violated if there is a pole on the $jω$-axis, as illustrated in @fig-pole which shows the Nyquist plot of $GH(s) = 1/(s(s+1))$. 
@@ -637,13 +787,13 @@ GH(s) = 1/(s*(s+1)*(2s+1))
 sGplane(sCurve, GH, "figures/nyquist-pole-1-fixed.gif", show_poles=false, show_critical=true, GLabel=L"$GH$-plane")
 ```
 
-First observe that $P = 0$. Thus, for stability (i.e. $Z = 0$), we want $N = 0$. The Nyquist plot intersects the $σ$ axis at $-2/3$. So, we have the following cases.
+First observe that $P = 0$. Therefore, for stability (i.e. $Z = 0$), we need $N = 0$. The Nyquist plot intersects the $σ$-axis at $0$ and $-2/3$. So, we have the following cases.
 
 | Case | Range for $K$ | $N$ | Stable? |
 |:----:|:-------------:|:---:|:-------:|
-| $-∞ < \dfrac 1K < -\dfrac{2}{3}$ | $(0, 1.5)$ | $0$ | Yes |
-| $-\dfrac{2}{3} < \dfrac 1K < 0$ | $(1.5, ∞)$ | $2$ | No |
-| $0 < \dfrac 1K < ∞$ | $(-∞,0)$ | $1$ | No |
+| $-∞ < -\dfrac 1K < -\dfrac{2}{3}$ | $(0, 1.5)$ | $0$ | Yes |
+| $-\dfrac{2}{3} < -\dfrac 1K < 0$ | $(1.5, ∞)$ | $2$ | No |
+| $0 < -\dfrac 1K < ∞$ | $(-∞,0)$ | $1$ | No |
 
 Thus, the system is stable for $K \in (0, 1.5)$. 
 
