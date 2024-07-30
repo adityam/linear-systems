@@ -252,7 +252,7 @@ N = 10
 R = 5
 sCurve = vcat(range(0.0+0im, 0.0+R*im, N),
               [R*cis(θ) for θ in range(π/2, -π/2, 5N)],
-             range(0.0-R*im, 0.0+im, N))
+             range(0.0-R*im, 0.0+0im, N))
 
 default(size=(200,400), framestyle=:origin)
 
@@ -815,7 +815,7 @@ sCurve = vcat(range(0.0+0im, 0.0+Z*im, N),
               range(0.0-R*im, 0.0-Z*im, N),
               range(0.0-Z*im, 0.0-0*im, N))
 GH(s) = 1/(s^2*(s+1))
-sGplane(sCurve, GH, "figures/nyquist-fix-pole-2.gif", show_poles=false, show_critical=true, GLabel=L"$GH$-plane")
+sGplane(sCurve, GH, "figures/nyquist-pole-2.gif", show_poles=false, show_critical=true, GLabel=L"$GH$-plane")
 ```
 :::
 
