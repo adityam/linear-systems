@@ -483,7 +483,7 @@ for different values of $K$.
 :::{.callout-note collapse="true"} 
 #### Condition for stability
 
-From observation we not that system $GH$ is unstable and $P = 2$. Thus, for stability (i.e., $Z = 0$), we want $N = 0$, i.e., the Nyquist plot should have **two** encirclements of $-1$.
+From observation we not that system $GH$ is unstable and $P = 2$. Thus, for stability (i.e., $Z = 0$), we want $N = -2$, i.e., the Nyquist plot should have **two** (counter-clockwise) encirclements of $-1$.
 
 :::
 
