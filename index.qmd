@@ -87,7 +87,7 @@ Upon the successful completion of this course, the student students will have de
 | 9    | Block diagrams, rules for simplifying block diagrams, block diagram implementations of canonical forms of state space models | 
 | 10   | [System type, steady state error, and disturbance rejection](steady-state-errors.qmd) <br /> _Reading_: Nise Ch. 7|
 | 11   | Bode and Nyquist Plots <br /> _Reading_: Nise Ch. 10 |
-| 12   | [Nyquist stability criterion](nyquist-stability.qmd), gain and phase margins <br /> _Reading_: Nise Ch. 10 |
+| 12   | [Nyquist stability criterion](nyquist-stability.qmd), [gain and phase margins](safety-margins.qmd) <br /> _Reading_: Nise Ch. 10 |
 | 13   | Lead-Lag compensators
 
 : {tbl-colwidths="[10,90]" .striped}

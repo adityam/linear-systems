@@ -1,0 +1,248 @@
+---
+title: Gain and Phase margins
+
+execute:
+  echo: false
+  freeze: true
+  cache: true
+---
+
+In practice, we never know the transfer function perfectly. So, it is important to understand the effect of model uncertainty on system stability. This is called the **robustness** of the stability of the system
+
+Using Nyquist plots, we can define two qualitative measures of how "close" the system is from unstability. The usual practice is to measure this closeness in terms of **gain margin (GM)** and **phase margin (PM)**. 
+
+In this section, we will restrict to minimal phase systems, that is systems that don't have any poles or zeros in the ORHP. 
+The general idea is that for a minimal phase system, the closer the Nyquist plot is to the $-1 + j0$ point, the closer the system is to unstability. So, we can use the closeness of $G(jω)$ to the $-1 + j0$ point as a measure of stability of the system. 
+
+The GM and PM are easier to compute proxies for the distance of $G(jω)$ from the $-1 + j0$ point. 
+The reason that GM and PM are used as a proxy is that a minimal phase system is stable if and only if **both GM and PM are positive** (this can be inferred from Nyquist stability criterion). However, GM and PM are a crude proxy for robustness, but we will not study more nuanced techniques in this course. 
+
+```{julia}
+#| output: false
+# Install packages
+
+# using Pkg; Pkg.activate(".")
+# for pkg in ["IJulia", "Revise", "ControlSystems", "Plots", "StatsPlots", "LaTeXStrings", "DataFrames", "JSON"]
+#    Pkg.add(pkg)
+# end
+# 
+# # Installing Jupyter Cache
+# Pkg.add("Conda")
+# using Conda
+# Conda.add("jupyter-cache")
+
+using Revise
+using DataFrames
+
+using ControlSystems, StatsPlots, LaTeXStrings
+
+include("julia/bode.jl")
+
+current_theme = :bright
+current_colors = theme_palette(current_theme)
+theme(current_theme)
+default(linewidth=2)
+```
+
+
+## The gain and phase margins
+
+:::{.callout-tip appearance="simple"} 
+The **gain margin (GM)** is the factor by which the gain can be increased before the system becomes unstable. It is the reciprocal of the magnitude of $|G(jω)|$ at when the Nyquist plot intersects the negative real-axis. 
+:::
+
+Formally, let $ω_{\rm pc}$ denote the **phase crossover frequency**, i.e., the frequency at which $\angle G(jω) = -180^∘$ (so the Nyquist plot intersects the negative real-axis at $ω_{\rm pc}$. Then, 
+$$
+  \text{GM} = \frac{1}{|G(jω_{\rm pc})|}
+$$
+Typically, we express GM in decibels (dB), so
+$$
+  \text{GM} = - 20\log |G(jω_{\rm pc})|\, \text{dB}
+$$
+
+:::{.callout-tip appearance="simple"}
+The **phase margin (PM)** is the amount by which the phase can be increased before the system becomes unstable. It is the angle (as measured from the negative real-axis) at which the Nyquist plot intersects a circle of unit radium.
+:::
+
+Formally, let $ω_{\rm gc}$ denote the **gain crossover frequency**, i.e., the frequency at which $|G(jω)| = 1$ (so the Nyquist plot intersects the unit circle at $ω_{\rm gc}$). Then,
+$$
+   \text{PM} = 180^∘ + \angle G(jω_{\rm gc})
+$$
+For non-minimal phase systems, there may be multiple frequencies at which $|G(jω)|=1$ or $\angle G(jω) = 180^∘$. In such systems, we need to look at the highest and the lowest crossover frequencies. However, we will not study such systems in this course.
+
+## Some examples
+
+Although GM and PM are defined based on Nyquist stability criterion, we will use Bode plots to determine them. We present some examples to show how to "read" GM and PM from the Bode plot. 
+
+:::{#exm-margins-1}
+Find the crossover frequencies and GM and PM of the following system:
+$$
+  G(s) = \dfrac{100}{s(s+1)(s+100)}
+$$
+using the straight-line approximation Bode plots.
+:::
+
+:::{.callout-note collapse="true"} 
+#### Solution
+We first draw the straight line approximation of the Bode plot.
+
+```{julia}
+G = zpk([], [0, -1, -100], 100.0)
+bp = bodeplot_SL(G)
+
+plt1 = @df bp plot(:log10ω, :gain,  title="Gain plot")
+plot!(plt1, xticks=get_xticks(bp), yticks=get_yticks(bp, :gain, 20, " dB"), legend=false)
+hline!(plt1, [0], linestyle=:dash, linewidth=1)
+
+plt2 = @df bp plot(:log10ω, :phase, title="Phase plot")
+plot!(plt2, xticks=get_xticks(bp), yticks=get_yticks(bp, :phase, 45, "°"), legend=false)
+hline!(plt2, [-180], linestyle=:dash, linewidth=1)
+
+plot(plt1, plt2, layout=(2,1))
+```
+
+We first compute the GM. From the plot we see that the phase plot intersects the $-180 ^∘$ line at $ω_{\rm pc} = 10$ rad/s. At $ω_{\rm pc} = 10$, we have $|G(j ω_{\rm pc})| = -40$ dB. Thus, ${\rm GM} = 40$ dB. 
+
+We now compute the PM. From the plot, we can see that the gain plot intersects the 0dB line at $ω = 1$. Thus, $ω_{\rm gc} = 1$ rad/s. At $ω_{\rm gc} = 1$, we have $\angle G(j ω_{\rm gc}) = -135 ^∘$. Thus, $\text{PM} = 180 ^∘ - 135 ^∘ = 45 ^∘$.
+:::
+
+
+:::{#exm-margins-2}
+Find the crossover frequencies and GM and PM of the following system:
+$$
+  G(s) = \dfrac{10}{(s+1)(s+100)}
+$$
+using the straight-line approximation Bode plots.
+:::
+
+:::{.callout-note collapse="true"} 
+#### Solution
+We first draw the straight line approximation of the Bode plot.
+
+```{julia}
+G = zpk([], [-1, -100], 10.0)
+bp = bodeplot_SL(G)
+
+plt1 = @df bp plot(:log10ω, :gain,  title="Gain plot")
+plot!(plt1, xticks=get_xticks(bp), yticks=get_yticks(bp, :gain, 20, " dB"), legend=false)
+hline!(plt1, [0], linestyle=:dash, linewidth=1)
+
+plt2 = @df bp plot(:log10ω, :phase, title="Phase plot")
+plot!(plt2, xticks=get_xticks(bp), yticks=get_yticks(bp, :phase, 45, "°"), legend=false)
+hline!(plt2, [-180], linestyle=:dash, linewidth=1)
+
+plot(plt1, plt2, layout=(2,1))
+```
+
+We first compute the GM. From the plot we see that the phase plot intersects the $-180 ^∘$ line at $ω_{\rm pc} = 10^3$ rad/s. At $ω_{\rm pc} = 10^3$, we have $|G(j ω_{\rm pc})| = -100$ dB. Thus, ${\rm GM} = 100$ dB. 
+
+We now compute the PM. From the plot, we can see that the gain plot does not intersect the 0dB line!. Thus, the PM is infinity. 
+
+**Note**: The above calculations are done using straight-line approximations. If we use the actual Bode plot, then the phase plot never actually reaches $-180 ^∘$, so the GM is also infinity. Nonetheless, in this course, we will only work with straight-line approximations.
+:::
+
+:::{#exm-margins-3}
+Find the crossover frequencies and GM and PM of the following system:
+$$
+  G(s) = \dfrac{100}{(s+10)}
+$$
+using the straight-line approximation Bode plots.
+:::
+
+:::{.callout-note collapse="true"} 
+#### Solution
+We first draw the straight line approximation of the Bode plot.
+
+```{julia}
+G = zpk([], [-10], 100.0)
+bp = bodeplot_SL(G)
+
+plt1 = @df bp plot(:log10ω, :gain,  title="Gain plot")
+plot!(plt1, xticks=get_xticks(bp), yticks=get_yticks(bp, :gain, 20, " dB"), legend=false)
+hline!(plt1, [0], linestyle=:dash, linewidth=1)
+
+plt2 = @df bp plot(:log10ω, :phase, title="Phase plot")
+plot!(plt2, xticks=get_xticks(bp), yticks=get_yticks(bp, :phase, 45, "°"), legend=false)
+hline!(plt2, [-180], linestyle=:dash, linewidth=1)
+
+plot(plt1, plt2, layout=(2,1))
+```
+
+We first compute the GM. From the plot we see that the phase plot does not intersect the $-180 ^∘$. Therefore, the GM is infinity.
+
+We now compute the PM. From the plot, we can see that the gain plot intersects the 0dB line at $ω = 10^2$. Thus, $ω_{\rm gc} = 10^2$ rad/s. At $ω_{\rm gc} = 10^2$, we have $\angle G(j ω_{\rm gc}) = -90 ^∘$. Thus, $\text{PM} = 180 ^∘ - 90 ^∘ = 90 ^∘$.
+:::
+
+
+
+## Relationship between phase margin and damping ratio
+
+We can relate the PM of an open loop system with the damping ratio of the unity feedback closed loop system. This enables us to evaluate the percentage overshoot of the closed loop system the PM of the open loop system.
+
+Consider a unity feedback system with open-loop transfer function
+$$
+G(s) = \frac{ω_n^2}{s(s+2 ζ ω_n)}.
+$$
+The closed-loop transfer function of this system is
+$$
+T(s) = \frac{G(s)}{(1 + G(s)} = \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2}.
+$$
+In order to find the PM, we first find the gain crossover frequency $ω_{\rm gc}$. We know that $|G(j ω_{\rm gc})| = 1$. Thus,
+$$
+1 = |G(j ω_{\rm gc})|^2 = 
+\frac{ω_n^2}{ω_{\rm gc}^4 + 2 ζ^2 ω_n^2 ω_{\rm gc}^2}
+$$
+This gives a quadatic in $ω_{\rm gc}$. Solving for the positive root, we get
+$$
+ω_{\rm gc} = ω_c \sqrt{ 2 ζ^2 + \sqrt{ 1 + 4 ζ^4 } }.
+$$
+The phase at this frequency is
+$$
+\angle G(j ω_{\rm gc}) = -90 - \tan^{-1} \frac{ω_{\rm gc}}{2 ζ ω_n }
+$$
+Thus,
+$$
+\bbox[5pt,border: 1px solid]
+{\begin{align*}
+\text{PM} &= 180 + \angle G(j ω_{\rm gc}) 
+= 90 - \tan^{-1} \frac{ω_{\rm gc}}{2 ζ ω_n }
+= \tan^{-1} \frac{2 ζ ω_n}{ω_{\rm rc}}
+\\
+&= \tan^{-1} \frac{2 ζ}{ \sqrt{ -2 ζ^2 + \sqrt{1 + 4 ζ^4} } }.
+\end{align*}}
+$$
+
+This is a complicated looking formula, but we can simply plot it and read the values from the plot, shown in @fig-pm-from-damping.
+
+```{julia}
+PM_values = DataFrame(zeta=Float64[], PM=Float64[])
+
+for zeta in range(0,1.5,length=100)
+  num = 2*zeta
+  den = sqrt(-2 * zeta^2 + sqrt(1 + 4 * zeta^4))
+  PM  = atan(num/den) * (180/π)
+  push!(PM_values, (zeta=zeta, PM=PM))
+end
+
+ojs_define(PM_values=PM_values)
+```
+
+```{ojs}
+//| fig-cap: Phase margin as a function of damping ratio
+//| label: fig-pm-from-damping
+
+Plot.plot({
+    grid: true,
+  marks: [
+    // Axes
+    Plot.ruleX([0]),
+    Plot.ruleY([0]),
+    // Data
+    Plot.line(PM_values, {x:"zeta", y:"PM"})
+  ]
+})
+```
+
+::: {#exm-PM-from-daming}
+Find the PM needed to ensure that the percentage overshoot is less than 10%.
+:::
