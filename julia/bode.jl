@@ -85,6 +85,92 @@ function bodeplot_SL(G)
                    renamecols = false)
 end
 
+function gain_crossover(df)
+    initial_gain = df[1, :gain]
+    compare = (initial_gain ≥ 0) ? (<) : (≥)
+
+    done = false
+    ω_lower = df[1, :log10ω]
+    g_lower = df[1, :gain]
+
+    ω_upper = df[end, :log10ω]
+    g_upper = df[end, :gain]
+    for (log10ω, gain, phase) = eachrow(df)
+        if compare(gain,0)
+            ω_upper = log10ω
+            g_upper = gain
+            done = true
+            break
+        end
+        ω_lower = log10ω
+        g_lower = gain
+    end
+
+    if (!done)
+        @debug("0dB line does not intersect in the range of dataframe")
+        return nothing
+    end
+
+    slope = (g_lower - g_upper)/(ω_lower - ω_upper)
+    ω = ω_upper - g_upper/slope
+end
+
+function phase_crossover(df)
+    initial_phase = df[1, :phase]
+    compare = (initial_phase ≥ -180) ? (≤) : (≥)
+
+    done = false
+    ω_lower = df[1, :log10ω]
+    ϕ_lower = df[1, :phase]
+
+    ω_upper = df[end, :log10ω]
+    ϕ_upper = df[end, :phase]
+    for (log10ω, gain, phase) = eachrow(df)
+        if compare(phase,-180)
+            ω_upper = log10ω
+            ϕ_upper = phase
+            done = true
+            break
+        end
+        ω_lower = log10ω
+        ϕ_lower = phase
+    end
+
+    if (!done)
+        @debug("-180° line does not intersect in the range of dataframe")
+        return nothing
+    end
+
+    slope = (ϕ_lower - ϕ_upper)/(ω_lower - ω_upper)
+    ω = ω_upper + (-180 - ϕ_upper)/slope
+end
+
+function get_value(df, ω)
+    result = searchsorted(df.log10ω, ω)
+    
+    idx_lower = last(result)
+    idx_upper = first(result)
+
+    if (idx_lower == 0 || idx_upper > nrow(df))
+        @debug("ω not in range")
+        return (nothing, nothing)
+    end
+
+    (ω_lower, g_lower, ϕ_lower) = df[idx_lower, :]
+    (ω_upper, g_upper, ϕ_upper) = df[idx_upper, :]
+
+    if (idx_lower == idx_upper)
+        return (g_lower, ϕ_lower)
+    end
+
+    g_slope = (g_lower - g_upper)/(ω_lower - ω_upper)
+    ϕ_slope = (ϕ_lower - ϕ_upper)/(ω_lower - ω_upper)
+
+    g = g_lower - g_slope*(ω_lower - ω) 
+    ϕ = ϕ_lower - ϕ_slope*(ω_lower - ω) 
+    return (g, ϕ)
+end
+
 function get_yticks(df, col, step, suffix)
     data_max = maximum(df[!, col])
     data_min = minimum(df[!, col])

@@ -42,6 +42,7 @@ current_theme = :bright
 current_colors = theme_palette(current_theme)
 theme(current_theme)
 default(linewidth=2)
+
 ```
 
 
@@ -86,6 +87,8 @@ using the straight-line approximation Bode plots.
 #### Solution
 We first draw the straight line approximation of the Bode plot.
 
+::: {.panel-tabset}
+#### Bode plot
 ```{julia}
 G = zpk([], [0, -1, -100], 100.0)
 bp = bodeplot_SL(G)
@@ -94,6 +97,7 @@ plt1 = @df bp plot(:log10ω, :gain,  title="Gain plot")
 plot!(plt1, xticks=get_xticks(bp), yticks=get_yticks(bp, :gain, 20, " dB"), legend=false)
 hline!(plt1, [0], linestyle=:dash, linewidth=1)
 
+
 plt2 = @df bp plot(:log10ω, :phase, title="Phase plot")
 plot!(plt2, xticks=get_xticks(bp), yticks=get_yticks(bp, :phase, 45, "°"), legend=false)
 hline!(plt2, [-180], linestyle=:dash, linewidth=1)
@@ -101,9 +105,54 @@ hline!(plt2, [-180], linestyle=:dash, linewidth=1)
 plot(plt1, plt2, layout=(2,1))
 ```
 
-We first compute the GM. From the plot we see that the phase plot intersects the $-180 ^∘$ line at $ω_{\rm pc} = 10$ rad/s. At $ω_{\rm pc} = 10$, we have $|G(j ω_{\rm pc})| = -40$ dB. Thus, ${\rm GM} = 40$ dB. 
+#### GM-PM Calcs
 
-We now compute the PM. From the plot, we can see that the gain plot intersects the 0dB line at $ω = 1$. Thus, $ω_{\rm gc} = 1$ rad/s. At $ω_{\rm gc} = 1$, we have $\angle G(j ω_{\rm gc}) = -135 ^∘$. Thus, $\text{PM} = 180 ^∘ - 135 ^∘ = 45 ^∘$.
+```{julia}
+G = zpk([], [0, -1, -100], 100.0)
+bp = bodeplot_SL(G)
+
+plt1 = @df bp plot(:log10ω, :gain,  title="Gain plot")
+plot!(plt1, xticks=get_xticks(bp), yticks=get_yticks(bp, :gain, 20, " dB"), legend=false)
+hline!(plt1, [0], linestyle=:dash, linewidth=1)
+
+
+plt2 = @df bp plot(:log10ω, :phase, title="Phase plot")
+plot!(plt2, xticks=get_xticks(bp), yticks=get_yticks(bp, :phase, 45, "°"), legend=false)
+hline!(plt2, [-180], linestyle=:dash, linewidth=1)
+
+# GM-calculations
+ω_pc = phase_crossover(bp)
+
+if (!isnothing(ω_pc))
+  scatter!(plt2, [ω_pc], [-180], color=current_colors[4])
+  vline!(plt1, [ω_pc], linestyle=:dashdotdot, linewidth=1, color=current_colors[4]) 
+  vline!(plt2, [ω_pc], linestyle=:dashdotdot, linewidth=1, color=current_colors[4]) 
+
+  G, _ = get_value(bp, ω_pc)
+  plot!(plt1, [ω_pc, ω_pc], [0, G], color=current_colors[4])
+  annotate!(plt1, ω_pc + 0.05, G/2, text("GM", :left, 8, current_colors[4]))
+end
+
+# PM-calculations
+ω_gc = gain_crossover(bp)
+
+if (!isnothing(ω_gc))
+  scatter!(plt1, [ω_gc], [0], color=current_colors[3])
+  vline!(plt1, [ω_gc], linestyle=:dashdotdot, linewidth=1, color=current_colors[3]) 
+  vline!(plt2, [ω_gc], linestyle=:dashdotdot, linewidth=1, color=current_colors[3]) 
+
+  _, Φ = get_value(bp, ω_gc)
+  plot!(plt2, [ω_gc, ω_gc], [-180, Φ], color=current_colors[3])
+  annotate!(plt2, ω_gc - 0.05, (Φ - 180)/2, text("PM", :right, 8, current_colors[3]))
+end
+
+plot(plt1, plt2, layout=(2,1))
+```
+:::
+
+We first compute the GM. From the plot we see that the phase plot intersects the $-180 ^∘$ line at $ω_{\rm pc} = 10$ rad/s (the yellow circle). At $ω_{\rm pc} = 10$, we have $|G(j ω_{\rm pc})| = -40$ dB. Thus, ${\rm GM} = 40$ dB. 
+
+We now compute the PM. From the plot, we can see that the gain plot intersects the 0dB line at $ω = 1$ (the green circle). Thus, $ω_{\rm gc} = 1$ rad/s. At $ω_{\rm gc} = 1$, we have $\angle G(j ω_{\rm gc}) = -135 ^∘$. Thus, $\text{PM} = 180 ^∘ - 135 ^∘ = 45 ^∘$.
 :::
 
 
@@ -118,6 +167,9 @@ using the straight-line approximation Bode plots.
 :::{.callout-note collapse="true"} 
 #### Solution
 We first draw the straight line approximation of the Bode plot.
+
+::: {.panel-tabset}
+#### Bode plot
 
 ```{julia}
 G = zpk([], [-1, -100], 10.0)
@@ -134,7 +186,51 @@ hline!(plt2, [-180], linestyle=:dash, linewidth=1)
 plot(plt1, plt2, layout=(2,1))
 ```
 
-We first compute the GM. From the plot we see that the phase plot intersects the $-180 ^∘$ line at $ω_{\rm pc} = 10^3$ rad/s. At $ω_{\rm pc} = 10^3$, we have $|G(j ω_{\rm pc})| = -100$ dB. Thus, ${\rm GM} = 100$ dB. 
+#### GM-PM Calcs
+
+```{julia}
+G = zpk([], [-1, -100], 10.0)
+bp = bodeplot_SL(G)
+
+plt1 = @df bp plot(:log10ω, :gain,  title="Gain plot")
+plot!(plt1, xticks=get_xticks(bp), yticks=get_yticks(bp, :gain, 20, " dB"), legend=false)
+hline!(plt1, [0], linestyle=:dash, linewidth=1)
+
+plt2 = @df bp plot(:log10ω, :phase, title="Phase plot")
+plot!(plt2, xticks=get_xticks(bp), yticks=get_yticks(bp, :phase, 45, "°"), legend=false)
+hline!(plt2, [-180], linestyle=:dash, linewidth=1)
+
+# GM-calculations
+ω_pc = phase_crossover(bp)
+
+if (!isnothing(ω_pc))
+  scatter!(plt2, [ω_pc], [-180], color=current_colors[4])
+  vline!(plt1, [ω_pc], linestyle=:dashdotdot, linewidth=1, color=current_colors[4]) 
+  vline!(plt2, [ω_pc], linestyle=:dashdotdot, linewidth=1, color=current_colors[4]) 
+
+  G, _ = get_value(bp, ω_pc)
+  plot!(plt1, [ω_pc, ω_pc], [0, G], color=current_colors[4])
+  annotate!(plt1, ω_pc + 0.05, G/2, text("GM", :left, 8, current_colors[4]))
+end
+
+# PM-calculations
+ω_gc = gain_crossover(bp)
+
+if (!isnothing(ω_gc))
+  scatter!(plt1, [ω_gc], [0], color=current_colors[3])
+  vline!(plt1, [ω_gc], linestyle=:dashdotdot, linewidth=1, color=current_colors[3]) 
+  vline!(plt2, [ω_gc], linestyle=:dashdotdot, linewidth=1, color=current_colors[3]) 
+
+  _, Φ = get_value(bp, ω_gc)
+  plot!(plt2, [ω_gc, ω_gc], [-180, Φ], color=current_colors[3])
+  annotate!(plt2, ω_gc - 0.05, (Φ - 180)/2, text("PM", :right, 8, current_colors[3]))
+end
+
+plot(plt1, plt2, layout=(2,1))
+```
+:::
+
+We first compute the GM. From the plot we see that the phase plot intersects the $-180 ^∘$ line at $ω_{\rm pc} = 10^3$ rad/s (the yellow point). At $ω_{\rm pc} = 10^3$, we have $|G(j ω_{\rm pc})| = -100$ dB. Thus, ${\rm GM} = 100$ dB. 
 
 We now compute the PM. From the plot, we can see that the gain plot does not intersect the 0dB line!. Thus, the PM is infinity. 
 
@@ -153,6 +249,9 @@ using the straight-line approximation Bode plots.
 #### Solution
 We first draw the straight line approximation of the Bode plot.
 
+::: {.panel-tabset}
+#### Bode plot
+
 ```{julia}
 G = zpk([], [-10], 100.0)
 bp = bodeplot_SL(G)
@@ -167,10 +266,55 @@ hline!(plt2, [-180], linestyle=:dash, linewidth=1)
 
 plot(plt1, plt2, layout=(2,1))
 ```
+#### GM-PM Calcs
+
+```{julia}
+G = zpk([], [-10], 100.0)
+bp = bodeplot_SL(G)
+
+plt1 = @df bp plot(:log10ω, :gain,  title="Gain plot")
+plot!(plt1, xticks=get_xticks(bp), yticks=get_yticks(bp, :gain, 20, " dB"), legend=false)
+hline!(plt1, [0], linestyle=:dash, linewidth=1)
+
+plt2 = @df bp plot(:log10ω, :phase, title="Phase plot")
+plot!(plt2, xticks=get_xticks(bp), yticks=get_yticks(bp, :phase, 45, "°"), legend=false)
+hline!(plt2, [-180], linestyle=:dash, linewidth=1)
+
+# GM-calculations
+ω_pc = phase_crossover(bp)
+
+if (!isnothing(ω_pc))
+  scatter!(plt2, [ω_pc], [-180], color=current_colors[4])
+  vline!(plt1, [ω_pc], linestyle=:dashdotdot, linewidth=1, color=current_colors[4]) 
+  vline!(plt2, [ω_pc], linestyle=:dashdotdot, linewidth=1, color=current_colors[4]) 
+
+  G, _ = get_value(bp, ω_pc)
+  plot!(plt1, [ω_pc, ω_pc], [0, G], color=current_colors[4])
+  annotate!(plt1, ω_pc + 0.05, G/2, text("GM", :left, 8, current_colors[4]))
+end
+
+# PM-calculations
+ω_gc = gain_crossover(bp)
+
+if (!isnothing(ω_gc))
+  scatter!(plt1, [ω_gc], [0], color=current_colors[3])
+  vline!(plt1, [ω_gc], linestyle=:dashdotdot, linewidth=1, color=current_colors[3]) 
+  vline!(plt2, [ω_gc], linestyle=:dashdotdot, linewidth=1, color=current_colors[3]) 
+
+  _, Φ = get_value(bp, ω_gc)
+  plot!(plt2, [ω_gc, ω_gc], [-180, Φ], color=current_colors[3])
+  annotate!(plt2, ω_gc - 0.05, (Φ - 180)/2, text("PM", :right, 8, current_colors[3]))
+end
+
+
+plot(plt1, plt2, layout=(2,1))
+```
+:::
+
 
 We first compute the GM. From the plot we see that the phase plot does not intersect the $-180 ^∘$. Therefore, the GM is infinity.
 
-We now compute the PM. From the plot, we can see that the gain plot intersects the 0dB line at $ω = 10^2$. Thus, $ω_{\rm gc} = 10^2$ rad/s. At $ω_{\rm gc} = 10^2$, we have $\angle G(j ω_{\rm gc}) = -90 ^∘$. Thus, $\text{PM} = 180 ^∘ - 90 ^∘ = 90 ^∘$.
+We now compute the PM. From the plot, we can see that the gain plot intersects the 0dB line at $ω = 10^2$. Thus, $ω_{\rm gc} = 10^2$ rad/s (the green circle). At $ω_{\rm gc} = 10^2$, we have $\angle G(j ω_{\rm gc}) = -90 ^∘$. Thus, $\text{PM} = 180 ^∘ - 90 ^∘ = 90 ^∘$.
 :::
 
 
@@ -242,6 +386,8 @@ Plot.plot({
   ]
 })
 ```
+
+@fig-pm-from-damping shows that PM increases with damping ratio. Thus, increasing the PM makes the response less oscillatory. 
 
 ::: {#exm-PM-from-daming}
 Find the PM needed to ensure that the percentage overshoot is less than 10%.
