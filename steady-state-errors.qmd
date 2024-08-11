@@ -185,13 +185,13 @@ G(s) = K_p \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
 - Type 1: 
 $\def\1#1{\Bigl(1 + \dfrac{s}{#1}\Bigr)}
 \quad
-G(s) = K_v \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
+G(s) = \dfrac{K_v}{s} \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
       {\1{p_1}\1{p_2}\cdots\1{p_n}}$
 
 - Type 2: 
 $\def\1#1{\Bigl(1 + \dfrac{s}{#1}\Bigr)}
 \quad
-G(s) = K_a \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
+G(s) = \dfrac{K_a}{s^2} \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
       {\1{p_1}\1{p_2}\cdots\1{p_n}}$
 
 For historical reasons, the gain corresponding to the different system types are called:
