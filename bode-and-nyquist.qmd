@@ -146,8 +146,8 @@ plt = bodeplot(G,w, label="Bode plot")
 
 xticks=exp10.( [-2,-1,0,1,2] )
 
-plot!(plt[1], xticks=xticks )
-plot!(plt[2], xticks=xticks, yticks=360:-45:-360)
+plot!(plt[1], xticks=xticks, ylims=(0,30) )
+plot!(plt[2], xticks=xticks, ylims=(-45,45), yticks=360:-45:-360)
 display(plt)
 ```
 
@@ -202,8 +202,8 @@ plt = bodeplot(G,w, label="Bode plot")
 xticks=exp10.( [-2,-1,0,1,2] )
 xlabels=[L"\frac{a}{100}", L"\frac{a}{10}", L"a", L"10a", L"100a"]
 
-plot!(plt[1], xticks=(xticks, xlabels), ylims=(0,30) )
-plot!(plt[2], xticks=(xticks, xlabels), ylims=(-45,45), yticks=360:-45:-360)
+plot!(plt[1], xticks=(xticks, xlabels) )
+plot!(plt[2], xticks=(xticks, xlabels), yticks=360:-45:-360)
 display(plt)
 ```
 
