@@ -1,0 +1,736 @@
+---
+title: Bode and Nyquist plots
+
+execute:
+  echo: false
+  freeze: true
+  cache: true
+---
+
+## Frequency response
+
+The frequency response refers to the Fourier transform of the impulse response; or equivalently, the trasfer function evaluated at $jω$, which we will denote by $G(jω)$. We can think of it as a function that maps the frequency $ω$ to a complex number $G(jω)$. 
+
+Frequency response can be determined experimentally. Recall that complex exponentials are eigenfunctions of LTI systems. Thus, when the input to a LTI system is $e^{jω}$, the output is $G(jω)e^{jω}$. Therefore, when the input is $A\cos ωt = A(e^{jω} + e^{-jω})/2$, the output is 
+\begin{align*}
+\frac A2 G(jω)e^{jω} + \frac A2 G(-jω)e^{-jω} &=
+\frac A2 |G(jω)|e^{jω + \angle G(jω)} + \frac A2 |G(jω)|e^{-jω - \angle G(jω)} \\
+&= A|G(jω)| \cos (ωt + \angle G(jω)) 
+\end{align*}
+where the first equality uses the fact that for a real signal $g(t)$, the Fourier transform has the property that $G(-jω) = G^*(jω)$.
+
+:::{.callout-tip appearance="simple"}
+If we input a cosine at frequency $ω$, the output is also a cosine of the same frequency with magnitude scaled by $|G(jω)|$ and shifted by $\angle G(jω)$.
+:::
+
+```{julia}
+#| output: false
+# Install packages
+
+# using Pkg; Pkg.activate(".")
+# for pkg in ["IJulia", "Revise", "ControlSystems", "Plots", "StatsPlots", "LaTeXStrings", "DataFrames", "JSON"]
+#    Pkg.add(pkg)
+# end
+# 
+# # Installing Jupyter Cache
+# Pkg.add("Conda")
+# using Conda
+# Conda.add("jupyter-cache")
+
+using Revise
+using DataFrames
+
+using ControlSystems, StatsPlots, LaTeXStrings, Plots.PlotMeasures
+setPlotScale("dB")
+
+include("julia/bode.jl")
+
+current_theme = :bright
+current_colors = theme_palette(current_theme)
+theme(current_theme)
+default(linewidth=2, gridalpha=0.5, minorgridalpha=0.25)
+```
+
+There are two ways to plot the frequency response:
+
+1. **Bode plot** where we plot two separate plots: a magitude plot which is the plot of $|G(jω)|$ vs $ω$ and a phase plot which is a plot of $\angle G(jω)$ vs $ω$.
+
+   ```{julia}
+   #| fig-cap: Bode plot of $G(s) = \dfrac{1}{s^2 + s + 1}$.
+   #| label: fig-bode
+
+   begin
+   G = tf([1],[1,1,1])
+
+   plt = bodeplot(G,legend=false)
+   plot!(plt[2], yticks=360:-45:-360)
+   display(plt)
+   end
+   ```
+
+2. **Nyquist plot** which is a parametric polar plot of $G(jω)$.
+
+   ```{julia}
+   #| fig-cap: Nyquist plot of $G(s) = \dfrac{1}{s^2 + s + 1}$.
+   #| label: fig-nyquist
+
+    begin
+    N = 100
+    R = 50
+    Z = 5
+    sCurve = vcat(range(0.0+0im, 0.0+Z*im, N),
+                  range(0.0+Z*im, 0.0+R*im, N),
+                  [R*cis(θ) for θ in range(π/2, -π/2, N)],
+                  range(0.0-R*im, 0.0-Z*im, N),
+                  range(0.0-Z*im, 0.0-0*im, N))
+   GG(s) = 1/(s^2 + s + 1)
+   GCurve = GG.(sCurve)
+
+   plot(size=(750,375), framestyle=:origin)
+   plot!(real(GCurve), imag(GCurve), legend=false,aspect_ratio=1) 
+   end
+   ```
+
+
+We will first understand how to draw these plots and then use them as a tool to design controllers.
+
+## Bode Plots
+
+As mentioned earlier, Bode plot refers to a combination of two plots: magnitude vs frequency and phase vs frequency. It is named after [:Hendrik Bode](https://en.wikipedia.org/wiki/Hendrik_Wade_Bode)
+
+There are two features of these plots:
+
+- In the magnitude plot, we plot $\log |G(jω)|$ vs $ω$ (rather than $|G(jω)|$ vs $ω$. This is useful for the following reason. Consider a series interconnection: $G(s) = G_1(s)G_2(s)$. Then, we have
+  $$
+    \log |G(jω)| = \log |G_1(jω)| + \log |G_2(jω)|
+  $$
+  and
+  $$
+    \angle |G(jω)| = \angle |G_1(jω)| + \angle |G_2(jω)|.
+  $$
+  Thus, the Bode plot of $G(s)$ is simply the sum of the Bode plots of $G_1(s)$ and $G_2(s)$. 
+
+  For historical reasosn, we plot the magnitude square (which corresponds to power at a particular frequency) on the [:decibel](https://en.wikipedia.org/wiki/Decibel) scale, i.e., we plot
+  $20 \log |G(jω)|$ vs $ω$. 
+
+- The key insight of Bode was that if we plot the frequency plot on the logarithmic scale on the $ω$-axis, then both the magnitude and phase plot can be easily approximated. This allows us to easily plot the Bode plot of any transfer function and understand the impact of adding a controller on the Bode plot.
+
+From properties of Fourier transforms, we know that if the impulse response $g(t)$ is real, then $|G(jω)|$ is even and $\angle G(jω)$ is an odd function of $ω$. 
+
+For this reason, Bode plots are drawn only for $ω > 0$. We now illustrate how to draw Bode plots of simple terms.
+
+:::{.callout-important appearance="simple"}
+In this course, we only consider Bode plot of **minimum phase systems** (i.e., all poles and zeros are in the LHP). Non-minimum phase systems have the same magnitude plot, but the phase plots are inverted.
+:::
+
+### Bode plot of a constant term
+
+Consider the constant term
+$$ G(s) = K $$
+Clearly, the magnitude is a constant
+$$ 20 \log |G(jω)| = 20 \log K $$
+and the phase is a constant
+$$ \angle G(jω) = \begin{cases}
+0^∘ & K > 0 \\
+\pm 180 ^∘ & K < 0
+\end{cases}$$
+
+```{julia}
+#| fig-cap: Bode plot of $G(s) = 10$.
+
+G = tf([10], [1.0])
+w = exp10.(vcat(range(-3,-1,10), range(-1,1,100), range(1,3,10)) )
+
+plt = bodeplot(G,w, label="Bode plot")
+
+xticks=exp10.( [-2,-1,0,1,2] )
+
+plot!(plt[1], xticks=xticks )
+plot!(plt[2], xticks=xticks, yticks=360:-45:-360)
+display(plt)
+```
+
+:::{.callout-tip appearance="simple"}
+- For a constant term, the magnitude plot is a straight line.
+- The phase plot is also a striaght line, either at $0 ^∘$ (when the gain is positive) or at $\pm 180 ^∘$ (when the gain is negative).
+:::
+
+### Bode plot of first order term
+
+Consider a _normalized_ first order system
+$$
+    G(s) = \frac{a}{s + a} = \frac{1}{1 + \dfrac{s}{a}}.
+$$
+The frequency $a$ is called the corner frequency (the reason for the name will become clear when we plot the magnitude plot).
+
+The magnitude and phase are:
+$$|G(jω)|^2 = \frac{1}{1 + \dfrac{ω^2}{a^2}}
+\quad\text{and}\quad
+\angle G(jω) = -\tan^{-1}\frac{ω}{a}.$$
+
+Observe the following:
+
+- For $ω/a \ll 1$, (i.e., $ω \ll a$)
+  $$20 \log |G(jω)| \approx 10 \log \frac{1}{1} = 0
+  \quad\text{and}\quad
+  \angle \log G(jω) \approx -\tan^{-1} 0 = 0^∘$$
+
+  Thus, the magnitude is $0$ dB and the phase is $0^∘$.
+
+- For $ω/a \gg 1$, (i.e., $ω \gg a$)
+  $$20 \log |G(jω)| \approx 10 \log \frac{1}{\dfrac{ω}{a}} = -20 \log ω + 20 \log ω
+  \quad\text{and}\quad
+  \angle \log G(jω) \approx -\tan^{-1} ∞ = 90^∘$$
+
+  Thus, the magnitude is a straight line with a slope of $-20$ dB/decade and the phase is $-90^∘$.
+
+Thus, the Bode plot is a straight line for low and high frequencies. We will approximate it by a straight line in the intermediate range as well as shown below.
+
+::: {.panel-tabset}
+
+### Bode Plot
+
+```{julia}
+#| fig-cap: Bode plot of $G(s) = \dfrac{1}{1 + \dfrac{s}{a}}$.
+
+G = tf([1],[1,1])
+w = exp10.(vcat(range(-3,-1,10), range(-1,1,100), range(1,3,10)) )
+
+plt = bodeplot(G,w, label="Bode plot")
+
+xticks=exp10.( [-2,-1,0,1,2] )
+xlabels=[L"\frac{a}{100}", L"\frac{a}{10}", L"a", L"10a", L"100a"]
+
+plot!(plt[1], xticks=(xticks, xlabels), ylims=(0,30) )
+plot!(plt[2], xticks=(xticks, xlabels), ylims=(-45,45), yticks=360:-45:-360)
+display(plt)
+```
+
+
+### Straight line approximation
+
+```{julia}
+#| fig-cap: Bode plot of $G(s) = \dfrac{1}{1 + \dfrac{s}{a}}$.
+
+G = tf([1],[1,1])
+w = exp10.(vcat(range(-3,-1,10), range(-1,1,100), range(1,3,10)) )
+
+plt = bodeplot(G,w, label="Bode plot")
+
+annotate!(plt[1], exp10.([-0.5]), [-20], text("corner freq", :right, 8))
+annotate!(plt[1], exp10.([-2]), [-10], text("0dB slope", :top , 8))
+annotate!(plt[1], exp10.([1]), [-40], text("-20dB/dec slope", :right , 8))
+
+plot!(plt[1], [exp10.(-0.5), 1], [-20, 0], linewidth=0.5, color="black", label=false)
+plot!(plt[1], [1e-2, 1e-2], [-10, 0], linewidth=0.5, color="black", label=false)
+plot!(plt[1], [1e1, 1e2], [-40, -40], linewidth=0.5, color="black", label=false)
+
+plot!(plt[1], exp10.([-3, 0, 3]), [0, 0, -60],
+      label="Approximation", color=current_colors[2], linestyle=:dash)
+
+annotate!(plt[2], exp10.([-1]), [-25], text("1 dec before corner freq", :top, :right, 8))
+annotate!(plt[2], exp10.([1]), [-65], text("1 dec after corner freq", :left, :bottom, 8))
+annotate!(plt[2], exp10.([-0.5]), [-65], text("-45°/dec slope", :right, 8))
+
+plot!(plt[2], [1e-1, 1e-1], [-25, 0], linewidth=0.5, color="black", label=false)
+plot!(plt[2], [1e1, 1e1], [-65, -90], linewidth=0.5, color="black", label=false)
+plot!(plt[2], [exp10(-0.5), 1], [-65, -45], linewidth=0.5, color="black", label=false)
+
+plot!(plt[2], exp10.([-3,-1,0,1,3]), [0,0,-45,-90,-90],
+      label="Approximation", color=current_colors[2], linestyle=:dash)
+
+xticks=exp10.( [-2,-1,0,1,2] )
+xlabels=[L"\frac{a}{100}", L"\frac{a}{10}", L"a", L"10a", L"100a"]
+
+plot!(plt[1], xticks=(xticks, xlabels) )
+plot!(plt[2], xticks=(xticks, xlabels), yticks=360:-45:-360)
+
+
+display(plt)
+```
+:::
+
+:::{.callout-tip appearance="simple"}
+- For a pole at $a$, the straight line approximation of the magnitude Bode plot starts at 0 dB until the corner frequency $a$ and then decreases at a slope of -20 dB/decade. 
+- The phase plot starts at 0° until one decade before the corner frequency (i.e., until $a/10$, then goes down at a slope of -45°/decade for two decades (i.e., until $10a$) and then remains constant at -90°.
+- If the pole has multiplicity $n$, then the slopes are $-20n$ dB/decade and $-45n^∘$/decade. 
+:::
+
+### Bode plot of a second order term
+
+Consider a  _normalized_ second order term is of the form:
+
+$$
+G(s) = \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2}.
+$$
+
+In this course, we will ignore the impact of damping coefficient on the Bode plot approximate **any** second order system as
+$$
+G(s) = \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2} \approx 
+\frac{ω_n^2}{(s+ω_n)^2}.
+$$
+
+The reason for ignoring the damping coefficient is as follows. In this course, we are using the straight line approximation of Bode plot to understand how to use them for control design. It is possible to develop rules that capture the impact of damping coefficient on the Bode plot (and the textbook presents such rules!), but in my opinion, there is very little value in remembering such rules. In practice, if you need an accurate Bode plot, it is much simpler to just plot it via MATLAB. 
+
+::: {.panel-tabset}
+
+### Bode Plot
+
+```{julia}
+#| fig-cap: Bode plot of $G(s) = \dfrac{1}{s^2+s+1}$.
+
+G = tf([1],[1,1,1])
+w = exp10.(vcat(range(-3,-1,10), range(-1,1,100), range(1,3,10)) )
+
+plt = bodeplot(G,w, label="Bode plot")
+
+xticks=exp10.( [-2,-1,0,1,2] )
+xlabels=[L"\frac{a}{100}", L"\frac{a}{10}", L"a", L"10a", L"100a"]
+
+plot!(plt[1], xticks=(xticks, xlabels) )
+plot!(plt[2], xticks=(xticks, xlabels), yticks=360:-45:-360)
+display(plt)
+```
+
+
+### Straight line approximation
+
+```{julia}
+#| fig-cap: Bode plot of $G(s) = \dfrac{1}{s^2+s+1}$.
+
+G = tf([1],[1,1,1])
+w = exp10.(vcat(range(-3,-1,10), range(-1,1,100), range(1,3,10)) )
+
+plt = bodeplot(G,w, label="Bode plot")
+
+annotate!(plt[1], exp10.([-0.5]), [-40], text("corner freq", :right, 8))
+annotate!(plt[1], exp10.([-2]), [-20], text("0dB slope", :top , 8))
+annotate!(plt[1], exp10.([1]), [-80], text("-40dB/dec slope", :right , 8))
+
+plot!(plt[1], [exp10.(-0.5), 1], [-40, 0], linewidth=0.5, color="black", label=false)
+plot!(plt[1], [1e-2, 1e-2], [-20, 0], linewidth=0.5, color="black", label=false)
+plot!(plt[1], [1e1, 1e2], [-80, -80], linewidth=0.5, color="black", label=false)
+
+plot!(plt[1], exp10.([-3, 0, 3]), [0, 0, -120],
+      label="Approximation", color=current_colors[2], linestyle=:dash)
+
+annotate!(plt[2], exp10.([-1]), [-50], text("1 dec before corner freq", :top, :right, 8))
+annotate!(plt[2], exp10.([1]), [-130], text("1 dec after corner freq", :left, :bottom, 8))
+annotate!(plt[2], exp10.([-0.5]), [-130], text("-90°/dec slope", :right, 8))
+
+plot!(plt[2], [1e-1, 1e-1], [-50, 0], linewidth=0.5, color="black", label=false)
+plot!(plt[2], [1e1, 1e1], [-130, -180], linewidth=0.5, color="black", label=false)
+plot!(plt[2], [exp10(-0.5), 1], [-130, -90], linewidth=0.5, color="black", label=false)
+
+plot!(plt[2], exp10.([-3,-1,0,1,3]), [0,0,-90,-180,-180],
+      label="Approximation", color=current_colors[2], linestyle=:dash)
+
+xticks=exp10.( [-2,-1,0,1,2] )
+xlabels=[L"\frac{a}{100}", L"\frac{a}{10}", L"a", L"10a", L"100a"]
+
+plot!(plt[1], xticks=(xticks, xlabels) )
+plot!(plt[2], xticks=(xticks, xlabels), yticks=360:-45:-360)
+
+
+display(plt)
+```
+:::
+
+:::{.callout-tip appearance="simple"}
+- For the purpose of this course, we will treat a second order term $ω_n^2/(s^2 + 2 ζ ω_n s + ω_n^2)$ as a repeated root at $ω_n$.
+:::
+
+### Poles at origin
+
+Consider the TF with a pole at origin:
+$$
+G(s) = \frac 1s
+$$
+
+Thus,
+$$
+|G(jω)|^2 = \frac{1}{ω^2}
+\quad{hence}
+20 \log |G(jω)| = -20 \log ω
+$$
+and
+$$
+\angle G(jω) = - 90^∘
+$$
+
+```{julia}
+#| fig-cap: Bode plot of $G(s) = \dfrac{1}{s}$.
+
+G = tf([1],[1,0])
+w = exp10.(vcat(range(-3,-1,10), range(-1,1,100), range(1,3,10)) )
+
+plt = bodeplot(G,w, label="Bode plot")
+
+xticks=exp10.( [-2,-1,0,1,2] )
+
+plot!(plt[1], xticks=xticks, ylims=(-50,50), yticks=100:-20:-100 )
+plot!(plt[2], xticks=xticks, ylims=(-150,40), yticks=360:-45:-360)
+display(plt)
+```
+
+:::{.callout-tip appearance="simple"}
+- For a pole at origin, the magnitude Bode plot is a straight line with -20 dB/decade slope. The line passes through 0 dB at $ω=1$ rad/sec.
+- The phase is constant at -90°.
+- If the pole has multiplicity $n$, then the slope of the magnitude plot is $-20n$ dB/decade and the constant phase is $-90n^∘$.
+:::
+
+
+### The impact of zeros
+
+Consider the transfer function
+$$
+G(s) = 1 + \frac{s}{a}.
+$$
+
+The Bode plot of this is simply the "flipped" version of $1/(1 + s/a)$.
+
+::: {.panel-tabset}
+
+### Bode Plot
+
+```{julia}
+#| fig-cap: Bode plot of $G(s) = {1 + \dfrac{s}{a}}$.
+
+G = tf([1,1],[1])
+w = exp10.(vcat(range(-3,-1,10), range(-1,1,100), range(1,3,10)) )
+
+plt = bodeplot(G,w, label="Bode plot", legend=:bottomright)
+
+xticks=exp10.( [-2,-1,0,1,2] )
+xlabels=[L"\frac{a}{100}", L"\frac{a}{10}", L"a", L"10a", L"100a"]
+
+plot!(plt[1], xticks=(xticks, xlabels) )
+plot!(plt[2], xticks=(xticks, xlabels), yticks=360:-45:-360)
+display(plt)
+```
+
+
+### Straight line approximation
+
+```{julia}
+#| fig-cap: Bode plot of $G(s) = {1 + \dfrac{s}{a}}$.
+
+G = tf([1,1],[1])
+w = exp10.(vcat(range(-3,-1,10), range(-1,1,100), range(1,3,10)) )
+
+plt = bodeplot(G,w, label="Bode plot", legend=:bottomright)
+
+annotate!(plt[1], exp10.([-0.5]), [20], text("corner freq", :right, 8))
+annotate!(plt[1], exp10.([-2]), [10], text("0dB slope", :bottom , 8))
+annotate!(plt[1], exp10.([1]), [40], text("+20dB/dec slope", :right , 8))
+
+plot!(plt[1], [exp10.(-0.5), 1], [20, 0], linewidth=0.5, color="black", label=false)
+plot!(plt[1], [1e-2, 1e-2], [10, 0], linewidth=0.5, color="black", label=false)
+plot!(plt[1], [1e1, 1e2], [40, 40], linewidth=0.5, color="black", label=false)
+
+plot!(plt[1], exp10.([-3, 0, 3]), [0, 0, 60],
+      label="Approximation", color=current_colors[2], linestyle=:dash)
+
+annotate!(plt[2], exp10.([-1]), [25], text("1 dec before corner freq", :bottom, :right, 8))
+annotate!(plt[2], exp10.([1]), [65], text("1 dec after corner freq", :left, :top, 8))
+annotate!(plt[2], exp10.([-0.5]), [65], text("+45°/dec slope", :right, 8))
+
+plot!(plt[2], [1e-1, 1e-1], [25, 0], linewidth=0.5, color="black", label=false)
+plot!(plt[2], [1e1, 1e1], [65, 90], linewidth=0.5, color="black", label=false)
+plot!(plt[2], [exp10(-0.5), 1], [65, 45], linewidth=0.5, color="black", label=false)
+
+plot!(plt[2], exp10.([-3,-1,0,1,3]), [0,0,45,90,90],
+      label="Approximation", color=current_colors[2], linestyle=:dash)
+
+xticks=exp10.( [-2,-1,0,1,2] )
+xlabels=[L"\frac{a}{100}", L"\frac{a}{10}", L"a", L"10a", L"100a"]
+
+plot!(plt[1], xticks=(xticks, xlabels) )
+plot!(plt[2], xticks=(xticks, xlabels), yticks=360:-45:-360)
+
+
+display(plt)
+```
+:::
+
+:::{.callout-tip appearance="simple"}
+- A zero is similar to a pole but the plots are mirrored around 0dB or 0°.
+:::
+
+### Bode plot of general transfer functions
+
+We now explain how to plot the Bode plots of a general transfer function via an example. Consider
+$$
+G(s) = \frac{100 (s+10)}{ (s+1)(s+100) }
+$$
+
+**Step 1**: Normalize the transfer function and break it into first or second order terms.
+
+$$
+G(s) = \frac{1}{10} \left( \frac{1}{1 + s} \right)
+\left( 1 + \frac{s}{10} \right)
+\left( \frac 1{1 + \dfrac{s}{100}} \right)
+$$
+
+**Step 2**
+Separately plot the straight-line Bode plot approximation for each of the terms
+
+```{julia}
+w = exp10.([-2,-1,0,1,2,3,4])
+
+### Plot 1
+G1 = [-20,-20,-20,-20,-20,-20, -20]
+P1 = [0, 0, 0, 0, 0, 0, 0]
+
+mag_plt1 = plot( w, G1, xaxis=:log,
+                 ylims = (-60, 40), yguide = "Magnitude [dB]")
+
+pha_plt1 = plot( w, P1, xaxis=:log,
+                 ylims = (-95,95), yguide = "Phase [deg]", yticks=360:-45:-360)
+
+plt1 = plot( mag_plt1, pha_plt1, legend=false, bottom_margin=1cm, left_margin=1cm,
+             title=L"TF = $\frac{1}{10}$", xticks=w)
+
+### Plot 2
+G2 = [0, 0, 0, -20, -40, -60, -80]
+P2 = [0, 0, -45, -90, -90, -90, -90]
+
+mag_plt2 = plot( w, G2, xaxis=:log,
+                 ylims = (-60, 40), yguide = "Magnitude [dB]")
+
+pha_plt2 = plot( w, P2, xaxis=:log,
+                 ylims = (-95,95), yguide = "Phase [deg]", yticks=360:-45:-360)
+
+plt2 = plot( mag_plt2, pha_plt2, legend=false, bottom_margin=1cm, left_margin=1cm,
+             title=L"TF = $\frac{1}{1+s}$", xticks=w)
+
+### Plot 3
+G3 = [0, 0, 0, 0, 20, 40, 60]
+P3 = [0, 0, 0, 45, 90, 90, 90]
+
+mag_plt3 = plot( w, G3, xaxis=:log,
+                 ylims = (-60, 40), yguide = "Magnitude [dB]")
+
+pha_plt3 = plot( w, P3, xaxis=:log,
+                 ylims = (-95,95), yguide = "Phase [deg]", yticks=360:-45:-360)
+
+plt3 = plot( mag_plt3, pha_plt3, legend=false, bottom_margin=1cm, left_margin=1cm,
+             title=L"TF = $1 + \frac{s}{10}$", xticks=w)
+
+
+### Plot 4
+G4 = [0, 0, 0, 0, 0, -20, -40]
+P4 = [0, 0, 0, 0, -45, -90, -90]
+
+mag_plt4 = plot( w, G4, xaxis=:log,
+                 ylims = (-60, 40), yguide = "Magnitude [dB]")
+
+pha_plt4 = plot( w, P4, xaxis=:log,
+                 ylims = (-95,95), yguide = "Phase [deg]", yticks=360:-45:-360)
+
+plt4 = plot( mag_plt4, pha_plt4, legend=false, bottom_margin=1cm, left_margin=1cm,
+             title=L"TF = $\frac{1}{1+s/100}$", xticks=w)
+
+plot(plt1, plt2, plt3, plt4, layout=(4,1), size=(800,4*300))
+```
+
+**Step 3**: Add all the individual terms to plot the combined Bode plot.
+
+```{julia}
+G = sum([G1 G2 G3 G4], dims=2)
+P = sum([P1 P2 P3 P4], dims=2)
+
+mag_plt = plot( w, G, xaxis=:log,
+                ylims = (-60, 40), yguide = "Magnitude [dB]")
+
+pha_plt = plot( w, P, xaxis=:log,
+                ylims = (-95,95), yguide = "Phase [deg]", yticks=360:-45:-360)
+plt = plot( mag_plt, pha_plt, legend=false, size=(800,300), left_margin=1cm,
+             title=L"TF = $G(s)$", xticks=w)
+```
+
+### System type and steady state errors
+
+It is possible to identify the system type and the corresponding error constant from Bode plots. Recall that a general TF of type $k$ can be written as
+$$
+\def\1#1{\Bigl(1 + \dfrac{s}{#1}\Bigr)}
+G(s) = \dfrac{K}{s^k} \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
+      {\1{p_1}\1{p_2}\cdots\1{p_n}}
+$$
+
+#### Position constant of type 0 system
+
+The TF of a type 0 system is:
+$$
+\def\1#1{\Bigl(1 + \dfrac{s}{#1}\Bigr)}
+G(s) = K_p \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
+      {\1{p_1}\1{p_2}\cdots\1{p_n}}
+$$
+
+Thus, $\lim_{s \to 0} G(s) = K_p$. This means that at low frequency (i.e., $s \to 0$), the magnitude Bode plot is straight line with 0 dB/decade slope and has a y-offset of $20 \log K_p$. So, we can find the position constant by inspection.
+
+An illustration of the Bode plot of a type 0 system is shown in @fig-type-0.
+
+```{julia}
+#| label: fig-type-0
+#| fig-cap: Bode plot of type 0 system. The magnitude at low frequencies is equal to $20 \log K_p$. 
+
+w = exp10.([1,2,3,4])
+G = [0, 0, -20, -20]
+
+mag_plt = plot( w, G, xaxis=:log, legend=false,
+                xticks=(w, ["", "", "", ""]), 
+                yticks=([-30,-20,-10,0,10],["","","",L"20\log K_p", ""]),
+                ylims = (-30, 10), yguide = "Magnitude [dB]")
+```
+
+#### Velocity constant of type 1 system
+
+The TF of a type 1 system is:
+$$
+\def\1#1{\Bigl(1 + \dfrac{s}{#1}\Bigr)}
+G(s) = \dfrac{K_v}{s} \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
+      {\1{p_1}\1{p_2}\cdots\1{p_n}}
+$$
+
+Thus, $\lim_{s \to 0} s G(s) = K_v$. This means that at low frequency (i.e., $s \to 0$), the magnitude Bode plot is straight line with -20 dB/decade slope. One can identify the velocity constant $K_v$ by extending the initial -20 dB line until it hits 0 dB. The frequency at which it happens is $ω = K_v$ (because at that frequency |K_v/j ω| = 1). So, we can find the velocity constant by inspection.
+
+An illustration of the Bode plot of a type 1 system is shown in @fig-type-1.
+
+```{julia}
+#| label: fig-type-1
+#| fig-cap: Bode plot of type 1 system. The initial slope of -20 dB/dec intercepts the 0 dB line at $K_v$.
+
+w = exp10.([1,2,3,4])
+G = [40, 20, 20, 0]
+H = [40, 20, 0, -20]
+
+mag_plt = plot( w, G, xaxis=:log, legend=false,
+                xticks=(w, ["", "", L"K_v", ""]), 
+                yticks=([-40,-20,0,20,40],["","","0","",""]),
+                ylims = (-30, 50), yguide = "Magnitude [dB]")
+plot!(mag_plt, [1e1, 1e4], [0, 0])
+plot!(mag_plt, w, H, linestyle=:dash)
+
+annotate!(mag_plt, [exp10(1.5)], [-10], 
+          text("0 dB line", :top, 8))
+annotate!(mag_plt, [exp10(2)], [30],  
+          text("Initial -20 dB/dec slope", :left, 8))
+annotate!(mag_plt, [exp10(2.25)], [10],
+          text("Extended initial slope (if needed)", :right, 8))
+
+plot!(mag_plt, exp10.([1.5, 1.5]), [-10, 0],
+      linewidth=0.5, color="black")
+plot!(mag_plt, exp10.([2, 1.5]), [30, 30],
+      linewidth=0.5, color="black")
+plot!(mag_plt, exp10.([2.25, 2.5]), [10, 10],
+      linewidth=0.5, color="black")
+scatter!(mag_plt, [1e3], [0], color="gray")
+plot!(mag_plt, [1e3, 1e3], [0, -30], linewidth=1, color="gray")
+```
+
+#### Acceleration constant of type 2 system
+
+The TF of a type 1 system is:
+$$
+\def\1#1{\Bigl(1 + \dfrac{s}{#1}\Bigr)}
+G(s) = \dfrac{K_a}{s^2} \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
+      {\1{p_1}\1{p_2}\cdots\1{p_n}}
+$$
+
+Thus, $\lim_{s \to 0} s^2 G(s) = K_a$. This means that at low frequency (i.e., $s \to 0$), the magnitude Bode plot is straight line with -40 dB/decade slope. One can identify the acceleration constant $K_v$ by extending the initial -40 dB line until it hits 0 dB. The frequency at which it happens is $ω = \sqrt{K_a}$ (because at that frequency |K_a/(j ω)^2| = 1). So, we can find the acceleration constant by inspection.
+
+An illustration of the Bode plot of a type 2 system is shown in @fig-type-2.
+
+```{julia}
+#| label: fig-type-2
+#| fig-cap: Bode plot of type 2 system. The initial slope of -40 dB/dec intercepts the 0 dB line at $\sqrt{K_a}$.
+
+w = exp10.([1,2,3,4])
+G = [40, 20, 20, 0]
+H = [40, 20, 0, -20]
+
+mag_plt = plot( w, G, xaxis=:log, legend=false,
+                xticks=(w, ["", "", L"\sqrt{K_a}", ""]), 
+                yticks=([-40,-20,0,20,40],["","","0","",""]),
+                ylims = (-30, 50), yguide = "Magnitude [dB]")
+plot!(mag_plt, [1e1, 1e4], [0, 0])
+plot!(mag_plt, w, H, linestyle=:dash)
+
+annotate!(mag_plt, [exp10(1.5)], [-10], 
+          text("0 dB line", :top, 8))
+annotate!(mag_plt, [exp10(2)], [30],  
+          text("Initial -40 dB/dec slope", :left, 8))
+annotate!(mag_plt, [exp10(2.25)], [10],
+          text("Extended initial slope (if needed)", :right, 8))
+
+plot!(mag_plt, exp10.([1.5, 1.5]), [-10, 0],
+      linewidth=0.5, color="black")
+plot!(mag_plt, exp10.([2, 1.5]), [30, 30],
+      linewidth=0.5, color="black")
+plot!(mag_plt, exp10.([2.25, 2.5]), [10, 10],
+      linewidth=0.5, color="black")
+scatter!(mag_plt, [1e3], [0], color="gray")
+plot!(mag_plt, [1e3, 1e3], [0, -30], linewidth=1, color="gray")
+```
+
+:::{#exr-system-type}
+For each of the following systems, identify the system type and the corresponding error constant.
+
+```{julia}
+w = exp10.([1,2,3,4])
+G1 = [25, 25, 5,   -15]
+G2 = [15, -5, -45, -85]
+G3 = [60, 20, 0, -20]
+
+mag_plt1 = plot( w, G1, xaxis=:log, legend=false,
+                 xticks=w, yticks=-20:10:30,
+                 ylims = (-20, 30), yguide = "Magnitude [dB]",
+                 title="(a)")
+
+mag_plt2 = plot( w, G2, xaxis=:log, legend=false,
+                 xticks=w, yticks=-90:10:20,
+                 ylims = (-90, 20), yguide = "Magnitude [dB]",
+                 title="(b)")
+
+mag_plt3 = plot( w, G3, xaxis=:log, legend=false,
+                 xticks=w, yticks=-30:10:70,
+                 ylims = (-30, 70), yguide = "Magnitude [dB]",
+                 title="(c)")
+
+plot(mag_plt1, mag_plt2, mag_plt3, legend=false,                
+     bottom_margin=1cm, left_margin=1cm,
+     layout=(3,1), size=(750,3*300))
+```
+:::
+
+
+### System identification via Bode plots
+
+Since there is a one-to-one correspondence between transfer functions and Bode plots, we can identify a system transfer function from its Bode plot. We illustrate this via an example. 
+
+:::{#exr-sys-id-bode}
+
+Find the minimum phase transfer function which has a magnitude Bode plot as shown below.
+
+```{julia}
+w = exp10.([0, 1,2,3,4])
+G = [-10, -10, 10, 10, -10]
+
+mag_plt = plot( w, G, xaxis=:log, legend=false,
+                xticks=w, yticks=-20:10:30,
+                ylims = (-20, 20), yguide = "Magnitude [dB]",
+                size = (750,300))
+```
+:::
+
+:::{.callout-note collapse="true"} 
+### Solution
+
+This is the Bode plot of a type 0 systems, since the magnitude Bode plot is a constant at low frequencies. The position constant is $K_p = -10$dB or equivalently $\sqrt{10}$. There is then a zero at $10$ rad/s, a pole at $100$ rad/sec, and a second pole at $1000$ rad/sec. Thus, the TF is
+$$
+  G(s) = \sqrt{10} \frac{ \biggl(1+\dfrac{s}{10}\biggr) }
+{ \biggl(1 + \dfrac{s}{100} \biggr) \biggl(1 + \dfrac{s}{1000} \biggr) } =
+\frac{1}{1000\sqrt{10}} \frac{ (s+10) }{ (s + 100) (s + 1000) }.
+$$
+:::
