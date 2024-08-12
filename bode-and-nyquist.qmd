@@ -88,6 +88,7 @@ There are two ways to plot the frequency response:
 
    plot(size=(750,375), framestyle=:origin)
    plot!(real(GCurve), imag(GCurve), legend=false,aspect_ratio=1) 
+     plot!(real(GCurve[[1,4]]), imag(GCurve[[1,4]]), arrow=true, color=current_colors[1])
    end
    ```
 
@@ -350,7 +351,7 @@ $$
 Thus,
 $$
 |G(jω)|^2 = \frac{1}{ω^2}
-\quad{hence}
+\quad\hbox{hence}\quad
 20 \log |G(jω)| = -20 \log ω
 $$
 and
@@ -734,3 +735,8 @@ $$
 \frac{1}{1000\sqrt{10}} \frac{ (s+10) }{ (s + 100) (s + 1000) }.
 $$
 :::
+
+## Nyquist plots
+
+Nquist plot is a polar plot of the frequency response, that is, we plot $G(jω)$ as a complex number for different values of $ω$. Unlike the Bode plot, we plot the Nyquist plot for all $ω \in (-∞, ∞)$ and usually also draw an arrow indicating the direction. An example is shown in @fig-nyquist. In the [next lecture](nyquist-stability.qmd), we will show how to use Nyquist plot to determine stability of a unity feedback system.
+
