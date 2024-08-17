@@ -1,0 +1,306 @@
+---
+title: Time response of state space models
+---
+
+## Solution to matrix differential equations
+
+Recall that for a scalar differential equation (i.e., $x(t) \in \reals$):
+$$
+\dot x(t) = a x(t), \quad
+\hbox{initial condition } x(0)=x_0
+$$
+has the solution
+$$ x(t) = e^{at} x_0. $$
+
+Can we say the same for vector systems? That is, can we define **matrix exponential** $e^{At}$ in such a way that the matrix differential equation (i.e., $x(t) \in \reals^n$):
+$$
+\dot x(t) = A x(t), \quad
+\hbox{initial condition } x(0) = x_0
+$$
+where $A \in \reals^{n × n}$ has the solution
+$$ x(t) = e^{At} x_0? $$
+
+Mathematically, it turns out that this is straight forward. Recall that for a scalar $a$, we have
+$$e^{at} = 1 + at + \frac{(at)^2}{2!} + \frac{(at)^3}{3!} + \cdots$$
+So, a natural choice is to define matrix exponential as
+\begin{align*}
+e^{At} &= I + At + \frac{(At)^2}{2!} + \frac{(At)^3}{3!} + \cdots\\
+       &= I + At + \frac{A^2t^2}{2!} + \frac{A^3t^3}{3!} + \cdots
+\end{align*}
+where the second equation uses the fact that $(At)^2 = At At = A^2 t^2$ because $t$ is a scalar.
+
+With this definition, we have
+\begin{align*}
+\frac{d}{dt} e^{At} &= A + A^2 t + \frac{A^3 t^2}{2!} + \cdots \\
+&= A[I + At + \frac{A^2t^2}{2!} + \frac{A^3t^3}{3!} + \cdots] \\
+&= A e^{At}.
+\end{align*}
+
+Thus, if we take the candidate solution $x(t) = e^{At} x_0$, we have that
+$$
+\frac{d}{dt} x(t) =
+\left[ \frac{d}{dt} e^{At} \right] x_0 = 
+A e^{At} x_0 = A x(t).
+$$
+Thus, our candidate solution satisfies the matrix differential equation!
+
+:::{.callout-tip appearance="simple"}
+If we define $e^{At}$ as
+\begin{equation}\label{eq:matrix-exponential}
+e^{At} = I + At + \frac{A^2t^2}{2!} + \frac{A^3t^3}{3!} + \cdots
+\end{equation}
+
+Then, we can write the solution of the matrix differential equation (i.e., $x(t) \in \reals^n$)
+$$
+\dot x(t) = A x(t), \quad
+\hbox{initial condition } x(0) = x_0
+$$
+where $A \in \reals^{n × n}$ as
+$$ x(t) = e^{At} x_0. $$
+:::
+
+We now present some examples where the matrix exponential can be computed easily. 
+
+:::{#exm-matrix-exponential-finite}
+Compute $e^{At}$ for 
+$$A = \MATRIX{0 & 1 & 0 \\ 0 & 0 & 1 \\ 0 & 0 & 0}. $$
+:::
+
+:::{.callout-note collapse="true"} 
+#### Solution
+We compute the terms of \eqref{eq:matrix-exponential}:
+
+- $A^2 = \MATRIX{0 & 0 & 1 \\ 0 & 0 & 0 \\ 0 & 0 & 0 }$.
+- $A^3 = \MATRIX{0 & 0 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & 0 }$.
+
+which means that $A^k = 0$ for $k \ge 0$. Thus, the right hand side of \eqref{eq:matrix-exponential} contains only a finite number of nonzero terms:
+\begin{align*}
+e^{At} &= I + At + \frac 12 A^2 t^2 \\
+&= 
+\MATRIX{1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 }
++
+\MATRIX{0 & t & 0 \\ 0 & 0 & t \\ 0 & 0 & 0}
++
+\frac 12
+\MATRIX{0 & 0 & t^2 \\ 0 & 0 & 0 \\ 0 & 0 & 0 }
+\\
+&=\MATRIX{1 & t & \frac 12 t^2 \\ 0 & 1 & t \\ 0 & 0 & 1}.
+\end{align*}
+:::
+
+:::{#exm-matrix-exponential-diagonal}
+Compute $e^{At}$ for 
+$$A = \MATRIX{λ_1 & 0 & 0 \\ 0 & λ_2 & 0 \\ 0 & 0 & λ_3}. $$
+:::
+
+:::{.callout-note collapse="true"} 
+#### Solution
+We compute the terms of \eqref{eq:matrix-exponential}:
+
+- $A^2 = \MATRIX{λ_1^2 & 0 & 0 \\ 0 & λ_2^2 & 0 \\ 0 & 0 & λ_3^2}.$
+- $A^3 = \MATRIX{λ_1^3 & 0 & 0 \\ 0 & λ_2^3 & 0 \\ 0 & 0 & λ_3^3}.$
+- and so on. 
+
+Thus, we have
+\begin{align*}
+e^{At} &= I + At + \frac{A^2t^2}{2!} + \frac{A^3t^3}{3!} + \cdots \\
+&= \MATRIX{1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1} 
++ \MATRIX{λ_1 t & 0 & 0 \\ 0 & λ_2 t & 0 \\ 0 & 0 & λ_3 t}
++ \frac 12 \MATRIX{λ_1^2 t^2 & 0 & 0 \\ 0 & λ_2^2 t^2 & 0 \\ 0 & 0 & λ_3^2 t^2}
++ \cdots \\[10pt]
+&= \MATRIX{1 + λ_1 t + \frac 12 λ_1^2 t^2 + \cdots & 0 & 0 \\
+           0 & 1 + λ_2 t + \frac 12 λ_2^2 t^2 + \cdots & 0 \\
+           0 & 0 & 1 + λ_3 t + \frac 12 λ_3^2 t^2 + \cdots} \\[10pt]
+&= \MATRIX{e^{λ_1t} & 0 & 0 \\ 0 & e^{λ_2 t} & 0 \\ 0 & 0 & e^{λ_3 t}}
+\end{align*}
+:::
+
+But outside of such few special cases, computing $e^{At}$ via definition \eqref{eq:matrix-exponential} is not computationally feasible. We now present computationally efficient methods to compute the matrix exponential. 
+
+## Computing matrix exponential
+
+### Method 1: Eigenvalue diagonalization method
+
+As illustrated by @exm-matrix-exponential-diagonal, compute matrix exponential is easy for diagonal matrix. So, if the matrix $A$ is diagonalizable (i.e., has distinct eigenvalues) we can do a change of coordinates and compute the matrix exponential in the eigen-coordinates.
+
+In particular, suppose $A$ has distinct eivenvalues $λ_1, \dots, λ_n$ and $v_1, \dots, v_n$ are the corresponding eigvenvectors. Thus,
+$ A v_k = λ_k v_k$ for all $k \in \{1,\dots, n\}$. Writing this in matrix form, we have
+\begin{align*}
+A \MATRIX{v_1 & v_2 & \cdots & v_n} &= 
+\MATRIX{A v_1 & A v_2 & \cdots & A v_n} \\
+&= \MATRIX{λ_1 v_1 & λ_2 v_2 & \cdots & λ_n v_n} \\
+&= \MATRIX{v_1 & v_2 & \cdots & v_n} 
+\MATRIX{
+λ_1 & 0 & \cdots & 0 \\
+0 & λ_2 &  \ddots & 0 \\
+0 & \cdots & \ddots & 0 \\
+0 & \cdots & \cdots & λ_n}
+\end{align*}
+Now define 
+$$T = \MATRIX{v_1 & v_2 & \cdots & v_n} 
+\quad\text{and}\quad
+Λ = \MATRIX{
+λ_1 & 0 & \cdots & 0 \\
+0 & λ_2 &  \ddots & 0 \\
+0 & \cdots & \ddots & 0 \\
+0 & \cdots & \cdots & λ_n}.
+$$
+So, the above equation can be writen as $AT = T Λ$ or
+$$
+\bbox[5pt,border: 1px solid]
+{T^{-1} A T = Λ}
+$$
+Observe that
+
+- $A = T Λ T^{-1}$
+- $A^2 = T Λ^2 T^{-1}$
+- $A^3 = T Λ^3 T^{-1}$
+- and so on.
+
+Therefore,
+\begin{align*}
+e^{At} &= I + At + \frac{A^2 t^2}{2!} + \frac{A^3 t^3}{3!} + \cdots \\
+&= I + T Λ T^{-1} t + \frac{T Λ^2 T^{-1} t^2}{2!} + \frac{T Λ^3 T^{-1} t^3}{3!} + \cdots \\
+&= T\bigl( I + Λt + \frac{Λ^2 t^2}{2!} + \frac{Λ^3 t^3}{3!} + \cdots\bigr) T^{-1} \\
+&= T e^{Λ t} T^{-1}
+\end{align*}
+
+Thus, once we know the eigenvalues and eigenvectors of $A$ (and if all eigenvalues are distinct), then
+$$
+\bbox[5pt,border: 1px solid]
+{e^{At} = T e^{Λt} T^{-1}}
+$$
+
+::: {#exr-diagonalization}
+Use the eigenvalue diagonalizable method to compute $e^{At}$ for $A = \MATRIX{-6 & 4 \\ -5 & 3 }$.
+:::
+
+:::{.callout-note collapse="true"} 
+#### Solution
+
+We start by computing the eigenvalues and eigenvectors of $A$. 
+
+To compute the eigenvalues: 
+$$sI - A = \MATRIX{s + 6 & -4 \\ 5 & s-3 }$$
+Therefore, the characteristic equation is
+$$\det(sI - A) = s^2 + 3s + 2 = (s+1)(s+2) $$
+Hence, the eigenvalues of $A$ are $λ_1 = -1$ and $λ_2 = -2$. 
+
+We now compute the eigenvalues. For $λ_1 = -1$, we have
+$$
+\MATRIX{-6 & 4 \\ -5 & 3 } \MATRIX{ v_{11} \\ v_{12} }
+= -1 \MATRIX{ v_{11} \\ v_{12} }
+$$
+Thus, the eigen-subspace corresponding to $λ_1 = -1$ is:
+$$ -5 v_{11} + 4 v_{12} = 0. $$
+We can pick any vector in this sub-space as $v_1$. For convenience, we pick
+$$ v_1 = \MATRIX{ 4 \\ 5}. $$
+
+Similarly, for $λ_2 = -2$, we have
+$$
+\MATRIX{-6 & 4 \\ -5 & 3 } \MATRIX{ v_{21} \\ v_{22} }
+= -2 \MATRIX{ v_{21} \\ v_{22} }
+$$
+Thus, the eigen-subspace corresponding to $λ_2 = -2$ is:
+$$ -4 v_{11} + 4 v_{12} = 0. $$
+We can pick any vector in this sub-space as $v_2$. For convenience, we pick
+$$ v_2 = \MATRIX{ 1 \\ 1}. $$
+
+Thus, $T = \MATRIX{ 4 & 1 \\ 5 & 1 }$ and therefore $T^{-1} = \MATRIX{-1 & 1 \\ 5 & -4 }$. Hence,
+$$
+e^{At} = \MATRIX{ 4 & 1 \\ 5 & 1 }
+\MATRIX{e^{-t} & 0 \\ 0 & e^{-2t} }
+\MATRIX{-1 & 1 \\ 5 & -4 } =
+\MATRIX{ -4 e^{-t} + 5 e^{-2t} & 4 e^{-t} - 4 e^{-2t} \\
+         -5 e^{-t} + 5 e^{-2t} & 5 e^{-t} - 4 e^{-2t} }
+$$
+:::
+
+### Method 2: Laplace transform method
+
+Recall that we have
+$$ \dot x(t) = A x(t). $$
+Taking (unilateral) Laplace transforms of both sides gives
+$$ s X(s) - x_0 = A X(s). $$
+Rearranging terms, we get
+$$ (sI - A)X(s) = x_0
+\implies X(s) = (sI-A)^{-1} x_0. $$
+Taking inverse Laplace transforms, we get
+$$x(t) = \mathcal L^{-1}( (sI - A)^{-1} ) x_0. $$
+Comparing it with the solution obtained earlier, we get
+$$
+ \bbox[5pt,border: 1px solid]
+{ e^{At} = \mathcal L^{-1}( (sI - A)^{-1} ).}
+$$
+In the above, we interpret the inverse Laplace transform of a matrix to mean the inverse Laplace transform of each entry. 
+
+::: {#exr-laplace}
+Use the Laplace transform method to compute $e^{At}$ for $A = \MATRIX{-6 & 4 \\ -5 & 3 }$.
+:::
+
+:::{.callout-note collapse="true"} 
+#### Solution
+
+We first compute
+$$sI - A = \MATRIX{s + 6 & -4 \\ 5 & s-3 }$$
+Therefore,
+$$\det(sI - A) = s^2 + 3s + 2 = (s+1)(s+2) $$
+and
+$$ (sI - A)^{-1} = 
+\MATRIX{ 
+\dfrac{s-3}{(s+1)(s+2)} &
+\dfrac{4}{(s+1)(s+2)} \\
+\dfrac{-5}{(s+1)(s+2)} &
+\dfrac{s+6}{(s+1)(s+2)} 
+}
+$$
+We now do partial fraction expansion of each term:
+$$ (sI - A)^{-1} = 
+\MATRIX{ 
+\dfrac{-4}{s+1} + \dfrac{5}{s+2}} &
+\dfrac{ 4}{s+1} - \dfrac{4}{s+2} \\
+\dfrac{-5}{s+1} + \dfrac{5}{s+2} & 
+\dfrac{5}{s+1} - \dfrac{4}{s+2} 
+$$
+Taking the inverse Laplace transform of each term, we get
+$$ e^{At} = \mathcal L^{-1}(sI - A)^{-1} = 
+\MATRIX{
+-4 e^{-t} + 5 e^{-2t} &
+4 e^{-t} - 4 e^{-2t} \\
+-5 e^{-t} + 5 e^{-2t} &
+5 e^{-t} - 4 e^{-2t}}
+$$
+:::
+
+## Time response of state space models
+
+Now consider a SSM given by
+\begin{align*}
+\dot x(t) &= A x(t) + B u(t) \\
+y(t) &= C x(t)
+\end{align*}
+
+Suppose the system starts at $t=0$ with an initial state $x(0) = x_0$ and we apply the input $u(t)$. How do we find the output?
+
+Taking Laplace transform of the SSM, we get:
+\begin{align*}
+sX(s) - x_0 &= A X(s) + B U(s) \\
+Y(s) &= C X(s)
+\end{align*}
+Solving for $X(s)$, we get
+$$X(s) = (sI - A)^{-1} x_0 + (sI - A)^{-1} B U(s). $$
+Substituting in $Y(s) = C X(s)$, we get
+$$
+\bbox[5pt,border: 1px solid]
+{Y(s) = \underbrace{C (sI - A)^{-1} x_0}_{\text{zero-input response}}
++ \underbrace{C (sI - A)^{-1} B U(s)}_{\text{zero-state response}}}
+$$
+We can the use the above expression compute $y(t)$ by taking the inverse Laplace transform.
+
+It is sometimes useful to write the expression in time domain (but we will not use this expression for computations). To do so, recall that $C(sI - A)^{-1}B$ is the transfer function $G(s)$ of the system. Therefore, its inverse Laplace transform is the impulse response:
+$$ g(t) = C e^{At} B. $$
+Then, we can compute the inverse Laplace transform of $G(s) U(s)$ using the convolution formula and write
+$$
+\bbox[5pt,border: 1px solid]
+{y(t) = C e^{At} x_0 + \int_{0}^t C e^{A (t-τ) } B u(τ) d τ}
+$$
