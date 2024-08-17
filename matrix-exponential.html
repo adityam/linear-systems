@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.56">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Aditya Mahajan">
+<meta name="dcterms.date" content="2024-08-17">
+
+<title>Time response of state space models – Linear Systems and Control</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="site_libs/quarto-contrib/nutshell-1.0.6/nutshell.js"></script>
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script>
+// https://github.com/mathjax/MathJax/issues/2744#issuecomment-1658624747
+// To fix the bug that uppercase unicode letters are shown in italic
+window.MathJax = {
+  startup: {
+    ready() {
+      const {RANGES} = MathJax._.core.MmlTree.OperatorDictionary;
+      const {TEXCLASS} = MathJax._.core.MmlTree.MmlNode;
+      RANGES.splice(4, 1,
+        [0x0370, 0x0385, TEXCLASS.ORD, 'mi'],
+        [0x0386, 0x3AB, TEXCLASS.ORD, 'mi', 'normal'],
+        [0x03AC, 0x1A20, TEXCLASS.ORD, 'mi']
+      );
+      MathJax.startup.defaultReady();
+    }
+  },
+  tex: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+    processEscapes: true,
+    tags: "ams",
+    macros: {
+      PR: "\\mathbb{P}",
+      EXP: "\\mathbb{E}",
+      IND: "\\mathbb{1}",
+      ONES: "\\mathbb{1}",
+      reals: "\\mathbb{R}",
+      integers: "\\mathbb{Z}",
+      BLANK: "\\mathfrak{E}",
+      TRANS: "\\intercal",
+      BELLMAN: "\\mathcal{B}",
+      RICCATI: "\\mathcal{R}",
+      GAIN: "\\mathcal{G}",
+      GREEDY: "\\mathcal{G}",
+      MISMATCH: "\\mathcal{D}",
+      VEC: "\\operatorname{vec}",
+      diag: "\\operatorname{diag}",
+      ROWS: "\\operatorname{vec}",
+      TR: "\\operatorname{Tr}",   
+      SPAN: "\\operatorname{sp}",   
+      DRE: "\\operatorname{DRE}",   
+      DARE: "\\operatorname{DARE}",   
+      LQR: "\\operatorname{LQR}",   
+      ALPHABET: ["\\mathcal{#1}", 1],
+      MATRIX: ["\\begin{bmatrix} #1 \\end{bmatrix}", 1],
+      NORM: ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1],
+      ABS: ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1],
+      GRAD: "\\nabla",
+      IP: ["\\left\\langle #1, #2 \\right\\rangle", 2]
+    },
+  },
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  },
+};
+</script>
+<script async="" data-id="101261731" src="//static.getclicky.com/js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./../linear-systems/index.html"> 
+<span class="menu-text">Linear Control Systems</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#solution-to-matrix-differential-equations" id="toc-solution-to-matrix-differential-equations" class="nav-link active" data-scroll-target="#solution-to-matrix-differential-equations"><span class="header-section-number">1</span> Solution to matrix differential equations</a></li>
+  <li><a href="#computing-matrix-exponential" id="toc-computing-matrix-exponential" class="nav-link" data-scroll-target="#computing-matrix-exponential"><span class="header-section-number">2</span> Computing matrix exponential</a>
+  <ul class="collapse">
+  <li><a href="#method-1-eigenvalue-diagonalization-method" id="toc-method-1-eigenvalue-diagonalization-method" class="nav-link" data-scroll-target="#method-1-eigenvalue-diagonalization-method"><span class="header-section-number">2.1</span> Method 1: Eigenvalue diagonalization method</a></li>
+  <li><a href="#method-2-laplace-transform-method" id="toc-method-2-laplace-transform-method" class="nav-link" data-scroll-target="#method-2-laplace-transform-method"><span class="header-section-number">2.2</span> Method 2: Laplace transform method</a></li>
+  </ul></li>
+  <li><a href="#time-response-of-state-space-models" id="toc-time-response-of-state-space-models" class="nav-link" data-scroll-target="#time-response-of-state-space-models"><span class="header-section-number">3</span> Time response of state space models</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/matrix-exponential.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Time response of state space models</h1>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://adityam.github.io">Aditya Mahajan</a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="http://www.mcgill.ca/ece">
+            McGill University
+            </a>
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Updated</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 17, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="solution-to-matrix-differential-equations" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="solution-to-matrix-differential-equations"><span class="header-section-number">1</span> Solution to matrix differential equations</h2>
+<p>Recall that for a scalar differential equation (i.e., <span class="math inline">\(x(t) \in \reals\)</span>): <span class="math display">\[
+\dot x(t) = a x(t), \quad
+\hbox{initial condition } x(0)=x_0
+\]</span> has the solution <span class="math display">\[ x(t) = e^{at} x_0. \]</span></p>
+<p>Can we say the same for vector systems? That is, can we define <strong>matrix exponential</strong> <span class="math inline">\(e^{At}\)</span> in such a way that the matrix differential equation (i.e., <span class="math inline">\(x(t) \in \reals^n\)</span>): <span class="math display">\[
+\dot x(t) = A x(t), \quad
+\hbox{initial condition } x(0) = x_0
+\]</span> where <span class="math inline">\(A \in \reals^{n × n}\)</span> has the solution <span class="math display">\[ x(t) = e^{At} x_0? \]</span></p>
+<p>Mathematically, it turns out that this is straight forward. Recall that for a scalar <span class="math inline">\(a\)</span>, we have <span class="math display">\[e^{at} = 1 + at + \frac{(at)^2}{2!} + \frac{(at)^3}{3!} + \cdots\]</span> So, a natural choice is to define matrix exponential as <span class="math display">\[\begin{align*}
+e^{At} &amp;= I + At + \frac{(At)^2}{2!} + \frac{(At)^3}{3!} + \cdots\\
+       &amp;= I + At + \frac{A^2t^2}{2!} + \frac{A^3t^3}{3!} + \cdots
+\end{align*}\]</span> where the second equation uses the fact that <span class="math inline">\((At)^2 = At At = A^2 t^2\)</span> because <span class="math inline">\(t\)</span> is a scalar.</p>
+<p>With this definition, we have <span class="math display">\[\begin{align*}
+\frac{d}{dt} e^{At} &amp;= A + A^2 t + \frac{A^3 t^2}{2!} + \cdots \\
+&amp;= A[I + At + \frac{A^2t^2}{2!} + \frac{A^3t^3}{3!} + \cdots] \\
+&amp;= A e^{At}.
+\end{align*}\]</span></p>
+<p>Thus, if we take the candidate solution <span class="math inline">\(x(t) = e^{At} x_0\)</span>, we have that <span class="math display">\[
+\frac{d}{dt} x(t) =
+\left[ \frac{d}{dt} e^{At} \right] x_0 =
+A e^{At} x_0 = A x(t).
+\]</span> Thus, our candidate solution satisfies the matrix differential equation!</p>
+<div class="callout callout-style-simple callout-tip">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>If we define <span class="math inline">\(e^{At}\)</span> as <span class="math display">\[\begin{equation}\label{eq:matrix-exponential}
+e^{At} = I + At + \frac{A^2t^2}{2!} + \frac{A^3t^3}{3!} + \cdots
+\end{equation}\]</span></p>
+<p>Then, we can write the solution of the matrix differential equation (i.e., <span class="math inline">\(x(t) \in \reals^n\)</span>) <span class="math display">\[
+\dot x(t) = A x(t), \quad
+\hbox{initial condition } x(0) = x_0
+\]</span> where <span class="math inline">\(A \in \reals^{n × n}\)</span> as <span class="math display">\[ x(t) = e^{At} x_0. \]</span></p>
+</div>
+</div>
+</div>
+<p>We now present some examples where the matrix exponential can be computed easily.</p>
+<div id="exm-matrix-exponential-finite" class="theorem example">
+<p><span class="theorem-title"><strong>Example 1</strong></span> Compute <span class="math inline">\(e^{At}\)</span> for <span class="math display">\[A = \MATRIX{0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \\ 0 &amp; 0 &amp; 0}. \]</span></p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We compute the terms of&nbsp;<span class="math inline">\(\eqref{eq:matrix-exponential}\)</span>:</p>
+<ul>
+<li><span class="math inline">\(A^2 = \MATRIX{0 &amp; 0 &amp; 1 \\ 0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 0 }\)</span>.</li>
+<li><span class="math inline">\(A^3 = \MATRIX{0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 0 }\)</span>.</li>
+</ul>
+<p>which means that <span class="math inline">\(A^k = 0\)</span> for <span class="math inline">\(k \ge 0\)</span>. Thus, the right hand side of&nbsp;<span class="math inline">\(\eqref{eq:matrix-exponential}\)</span> contains only a finite number of nonzero terms: <span class="math display">\[\begin{align*}
+e^{At} &amp;= I + At + \frac 12 A^2 t^2 \\
+&amp;=
+\MATRIX{1 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 }
++
+\MATRIX{0 &amp; t &amp; 0 \\ 0 &amp; 0 &amp; t \\ 0 &amp; 0 &amp; 0}
++
+\frac 12
+\MATRIX{0 &amp; 0 &amp; t^2 \\ 0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 0 }
+\\
+&amp;=\MATRIX{1 &amp; t &amp; \frac 12 t^2 \\ 0 &amp; 1 &amp; t \\ 0 &amp; 0 &amp; 1}.
+\end{align*}\]</span></p>
+</div>
+</div>
+</div>
+<div id="exm-matrix-exponential-diagonal" class="theorem example">
+<p><span class="theorem-title"><strong>Example 2</strong></span> Compute <span class="math inline">\(e^{At}\)</span> for <span class="math display">\[A = \MATRIX{λ_1 &amp; 0 &amp; 0 \\ 0 &amp; λ_2 &amp; 0 \\ 0 &amp; 0 &amp; λ_3}. \]</span></p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We compute the terms of&nbsp;<span class="math inline">\(\eqref{eq:matrix-exponential}\)</span>:</p>
+<ul>
+<li><span class="math inline">\(A^2 = \MATRIX{λ_1^2 &amp; 0 &amp; 0 \\ 0 &amp; λ_2^2 &amp; 0 \\ 0 &amp; 0 &amp; λ_3^2}.\)</span></li>
+<li><span class="math inline">\(A^3 = \MATRIX{λ_1^3 &amp; 0 &amp; 0 \\ 0 &amp; λ_2^3 &amp; 0 \\ 0 &amp; 0 &amp; λ_3^3}.\)</span></li>
+<li>and so on.</li>
+</ul>
+<p>Thus, we have <span class="math display">\[\begin{align*}
+e^{At} &amp;= I + At + \frac{A^2t^2}{2!} + \frac{A^3t^3}{3!} + \cdots \\
+&amp;= \MATRIX{1 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1}
++ \MATRIX{λ_1 t &amp; 0 &amp; 0 \\ 0 &amp; λ_2 t &amp; 0 \\ 0 &amp; 0 &amp; λ_3 t}
++ \frac 12 \MATRIX{λ_1^2 t^2 &amp; 0 &amp; 0 \\ 0 &amp; λ_2^2 t^2 &amp; 0 \\ 0 &amp; 0 &amp; λ_3^2 t^2}
++ \cdots \\[10pt]
+&amp;= \MATRIX{1 + λ_1 t + \frac 12 λ_1^2 t^2 + \cdots &amp; 0 &amp; 0 \\
+           0 &amp; 1 + λ_2 t + \frac 12 λ_2^2 t^2 + \cdots &amp; 0 \\
+           0 &amp; 0 &amp; 1 + λ_3 t + \frac 12 λ_3^2 t^2 + \cdots} \\[10pt]
+&amp;= \MATRIX{e^{λ_1t} &amp; 0 &amp; 0 \\ 0 &amp; e^{λ_2 t} &amp; 0 \\ 0 &amp; 0 &amp; e^{λ_3 t}}
+\end{align*}\]</span></p>
+</div>
+</div>
+</div>
+<p>But outside of such few special cases, computing <span class="math inline">\(e^{At}\)</span> via definition <span class="math inline">\(\eqref{eq:matrix-exponential}\)</span> is not computationally feasible. We now present computationally efficient methods to compute the matrix exponential.</p>
+</section>
+<section id="computing-matrix-exponential" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="computing-matrix-exponential"><span class="header-section-number">2</span> Computing matrix exponential</h2>
+<section id="method-1-eigenvalue-diagonalization-method" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="method-1-eigenvalue-diagonalization-method"><span class="header-section-number">2.1</span> Method 1: Eigenvalue diagonalization method</h3>
+<p>As illustrated by <a href="#exm-matrix-exponential-diagonal" class="quarto-xref">Example&nbsp;2</a>, compute matrix exponential is easy for diagonal matrix. So, if the matrix <span class="math inline">\(A\)</span> is diagonalizable (i.e., has distinct eigenvalues) we can do a change of coordinates and compute the matrix exponential in the eigen-coordinates.</p>
+<p>In particular, suppose <span class="math inline">\(A\)</span> has distinct eivenvalues <span class="math inline">\(λ_1, \dots, λ_n\)</span> and <span class="math inline">\(v_1, \dots, v_n\)</span> are the corresponding eigvenvectors. Thus, $ A v_k = λ_k v_k$ for all <span class="math inline">\(k \in \{1,\dots, n\}\)</span>. Writing this in matrix form, we have <span class="math display">\[\begin{align*}
+A \MATRIX{v_1 &amp; v_2 &amp; \cdots &amp; v_n} &amp;=
+\MATRIX{A v_1 &amp; A v_2 &amp; \cdots &amp; A v_n} \\
+&amp;= \MATRIX{λ_1 v_1 &amp; λ_2 v_2 &amp; \cdots &amp; λ_n v_n} \\
+&amp;= \MATRIX{v_1 &amp; v_2 &amp; \cdots &amp; v_n}
+\MATRIX{
+λ_1 &amp; 0 &amp; \cdots &amp; 0 \\
+0 &amp; λ_2 &amp;  \ddots &amp; 0 \\
+0 &amp; \cdots &amp; \ddots &amp; 0 \\
+0 &amp; \cdots &amp; \cdots &amp; λ_n}
+\end{align*}\]</span> Now define <span class="math display">\[T = \MATRIX{v_1 &amp; v_2 &amp; \cdots &amp; v_n}
+\quad\text{and}\quad
+Λ = \MATRIX{
+λ_1 &amp; 0 &amp; \cdots &amp; 0 \\
+0 &amp; λ_2 &amp;  \ddots &amp; 0 \\
+0 &amp; \cdots &amp; \ddots &amp; 0 \\
+0 &amp; \cdots &amp; \cdots &amp; λ_n}.
+\]</span> So, the above equation can be writen as <span class="math inline">\(AT = T Λ\)</span> or <span class="math display">\[
+\bbox[5pt,border: 1px solid]
+{T^{-1} A T = Λ}
+\]</span> Observe that</p>
+<ul>
+<li><span class="math inline">\(A = T Λ T^{-1}\)</span></li>
+<li><span class="math inline">\(A^2 = T Λ^2 T^{-1}\)</span></li>
+<li><span class="math inline">\(A^3 = T Λ^3 T^{-1}\)</span></li>
+<li>and so on.</li>
+</ul>
+<p>Therefore, <span class="math display">\[\begin{align*}
+e^{At} &amp;= I + At + \frac{A^2 t^2}{2!} + \frac{A^3 t^3}{3!} + \cdots \\
+&amp;= I + T Λ T^{-1} t + \frac{T Λ^2 T^{-1} t^2}{2!} + \frac{T Λ^3 T^{-1} t^3}{3!} + \cdots \\
+&amp;= T\bigl( I + Λt + \frac{Λ^2 t^2}{2!} + \frac{Λ^3 t^3}{3!} + \cdots\bigr) T^{-1} \\
+&amp;= T e^{Λ t} T^{-1}
+\end{align*}\]</span></p>
+<p>Thus, once we know the eigenvalues and eigenvectors of <span class="math inline">\(A\)</span> (and if all eigenvalues are distinct), then <span class="math display">\[
+\bbox[5pt,border: 1px solid]
+{e^{At} = T e^{Λt} T^{-1}}
+\]</span></p>
+<div id="exr-diagonalization" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 1</strong></span> Use the eigenvalue diagonalizable method to compute <span class="math inline">\(e^{At}\)</span> for <span class="math inline">\(A = \MATRIX{-6 &amp; 4 \\ -5 &amp; 3 }\)</span>.</p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We start by computing the eigenvalues and eigenvectors of <span class="math inline">\(A\)</span>.</p>
+<p>To compute the eigenvalues: <span class="math display">\[sI - A = \MATRIX{s + 6 &amp; -4 \\ 5 &amp; s-3 }\]</span> Therefore, the characteristic equation is <span class="math display">\[\det(sI - A) = s^2 + 3s + 2 = (s+1)(s+2) \]</span> Hence, the eigenvalues of <span class="math inline">\(A\)</span> are <span class="math inline">\(λ_1 = -1\)</span> and <span class="math inline">\(λ_2 = -2\)</span>.</p>
+<p>We now compute the eigenvalues. For <span class="math inline">\(λ_1 = -1\)</span>, we have <span class="math display">\[
+\MATRIX{-6 &amp; 4 \\ -5 &amp; 3 } \MATRIX{ v_{11} \\ v_{12} }
+= -1 \MATRIX{ v_{11} \\ v_{12} }
+\]</span> Thus, the eigen-subspace corresponding to <span class="math inline">\(λ_1 = -1\)</span> is: <span class="math display">\[ -5 v_{11} + 4 v_{12} = 0. \]</span> We can pick any vector in this sub-space as <span class="math inline">\(v_1\)</span>. For convenience, we pick <span class="math display">\[ v_1 = \MATRIX{ 4 \\ 5}. \]</span></p>
+<p>Similarly, for <span class="math inline">\(λ_2 = -2\)</span>, we have <span class="math display">\[
+\MATRIX{-6 &amp; 4 \\ -5 &amp; 3 } \MATRIX{ v_{21} \\ v_{22} }
+= -2 \MATRIX{ v_{21} \\ v_{22} }
+\]</span> Thus, the eigen-subspace corresponding to <span class="math inline">\(λ_2 = -2\)</span> is: <span class="math display">\[ -4 v_{11} + 4 v_{12} = 0. \]</span> We can pick any vector in this sub-space as <span class="math inline">\(v_2\)</span>. For convenience, we pick <span class="math display">\[ v_2 = \MATRIX{ 1 \\ 1}. \]</span></p>
+<p>Thus, <span class="math inline">\(T = \MATRIX{ 4 &amp; 1 \\ 5 &amp; 1 }\)</span> and therefore <span class="math inline">\(T^{-1} = \MATRIX{-1 &amp; 1 \\ 5 &amp; -4 }\)</span>. Hence, <span class="math display">\[
+e^{At} = \MATRIX{ 4 &amp; 1 \\ 5 &amp; 1 }
+\MATRIX{e^{-t} &amp; 0 \\ 0 &amp; e^{-2t} }
+\MATRIX{-1 &amp; 1 \\ 5 &amp; -4 } =
+\MATRIX{ -4 e^{-t} + 5 e^{-2t} &amp; 4 e^{-t} - 4 e^{-2t} \\
+         -5 e^{-t} + 5 e^{-2t} &amp; 5 e^{-t} - 4 e^{-2t} }
+\]</span></p>
+</div>
+</div>
+</div>
+</section>
+<section id="method-2-laplace-transform-method" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="method-2-laplace-transform-method"><span class="header-section-number">2.2</span> Method 2: Laplace transform method</h3>
+<p>Recall that we have <span class="math display">\[ \dot x(t) = A x(t). \]</span> Taking (unilateral) Laplace transforms of both sides gives <span class="math display">\[ s X(s) - x_0 = A X(s). \]</span> Rearranging terms, we get <span class="math display">\[ (sI - A)X(s) = x_0
+\implies X(s) = (sI-A)^{-1} x_0. \]</span> Taking inverse Laplace transforms, we get <span class="math display">\[x(t) = \mathcal L^{-1}( (sI - A)^{-1} ) x_0. \]</span> Comparing it with the solution obtained earlier, we get <span class="math display">\[
+\bbox[5pt,border: 1px solid]
+{ e^{At} = \mathcal L^{-1}( (sI - A)^{-1} ).}
+\]</span> In the above, we interpret the inverse Laplace transform of a matrix to mean the inverse Laplace transform of each entry.</p>
+<div id="exr-laplace" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 2</strong></span> Use the Laplace transform method to compute <span class="math inline">\(e^{At}\)</span> for <span class="math inline">\(A = \MATRIX{-6 &amp; 4 \\ -5 &amp; 3 }\)</span>.</p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We first compute <span class="math display">\[sI - A = \MATRIX{s + 6 &amp; -4 \\ 5 &amp; s-3 }\]</span> Therefore, <span class="math display">\[\det(sI - A) = s^2 + 3s + 2 = (s+1)(s+2) \]</span> and <span class="math display">\[ (sI - A)^{-1} =
+\MATRIX{
+\dfrac{s-3}{(s+1)(s+2)} &amp;
+\dfrac{4}{(s+1)(s+2)} \\
+\dfrac{-5}{(s+1)(s+2)} &amp;
+\dfrac{s+6}{(s+1)(s+2)}
+}
+\]</span> We now do partial fraction expansion of each term: <span class="math display">\[ (sI - A)^{-1} =
+\MATRIX{
+\dfrac{-4}{s+1} + \dfrac{5}{s+2}} &amp;
+\dfrac{ 4}{s+1} - \dfrac{4}{s+2} \\
+\dfrac{-5}{s+1} + \dfrac{5}{s+2} &amp;
+\dfrac{5}{s+1} - \dfrac{4}{s+2}
+\]</span> Taking the inverse Laplace transform of each term, we get <span class="math display">\[ e^{At} = \mathcal L^{-1}(sI - A)^{-1} =
+\MATRIX{
+-4 e^{-t} + 5 e^{-2t} &amp;
+4 e^{-t} - 4 e^{-2t} \\
+-5 e^{-t} + 5 e^{-2t} &amp;
+5 e^{-t} - 4 e^{-2t}}
+\]</span></p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="time-response-of-state-space-models" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="time-response-of-state-space-models"><span class="header-section-number">3</span> Time response of state space models</h2>
+<p>Now consider a SSM given by <span class="math display">\[\begin{align*}
+\dot x(t) &amp;= A x(t) + B u(t) \\
+y(t) &amp;= C x(t)
+\end{align*}\]</span></p>
+<p>Suppose the system starts at <span class="math inline">\(t=0\)</span> with an initial state <span class="math inline">\(x(0) = x_0\)</span> and we apply the input <span class="math inline">\(u(t)\)</span>. How do we find the output?</p>
+<p>Taking Laplace transform of the SSM, we get: <span class="math display">\[\begin{align*}
+sX(s) - x_0 &amp;= A X(s) + B U(s) \\
+Y(s) &amp;= C X(s)
+\end{align*}\]</span> Solving for <span class="math inline">\(X(s)\)</span>, we get <span class="math display">\[X(s) = (sI - A)^{-1} x_0 + (sI - A)^{-1} B U(s). \]</span> Substituting in <span class="math inline">\(Y(s) = C X(s)\)</span>, we get <span class="math display">\[
+\bbox[5pt,border: 1px solid]
+{Y(s) = \underbrace{C (sI - A)^{-1} x_0}_{\text{zero-input response}}
++ \underbrace{C (sI - A)^{-1} B U(s)}_{\text{zero-state response}}}
+\]</span> We can the use the above expression compute <span class="math inline">\(y(t)\)</span> by taking the inverse Laplace transform.</p>
+<p>It is sometimes useful to write the expression in time domain (but we will not use this expression for computations). To do so, recall that <span class="math inline">\(C(sI - A)^{-1}B\)</span> is the transfer function <span class="math inline">\(G(s)\)</span> of the system. Therefore, its inverse Laplace transform is the impulse response: <span class="math display">\[ g(t) = C e^{At} B. \]</span> Then, we can compute the inverse Laplace transform of <span class="math inline">\(G(s) U(s)\)</span> using the convolution formula and write <span class="math display">\[
+\bbox[5pt,border: 1px solid]
+{y(t) = C e^{At} x_0 + \int_{0}^t C e^{A (t-τ) } B u(τ) d τ}
+\]</span></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/adityam\.github\.io\/linear-systems\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/matrix-exponential.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div></div></footer><script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
