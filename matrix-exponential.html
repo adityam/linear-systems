@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2024-08-17">
+<meta name="dcterms.date" content="2024-08-18">
 
 <title>Time response of state space models – Linear Systems and Control</title>
 <style>
@@ -242,7 +242,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">August 17, 2024</p>
+      <p class="date">August 18, 2024</p>
     </div>
   </div>
   
@@ -426,14 +426,13 @@ Solution
 <div class="callout-body-container callout-body">
 <p>We start by computing the eigenvalues and eigenvectors of <span class="math inline">\(A\)</span>.</p>
 <p>To compute the eigenvalues: <span class="math display">\[sI - A = \MATRIX{s + 6 &amp; -4 \\ 5 &amp; s-3 }\]</span> Therefore, the characteristic equation is <span class="math display">\[\det(sI - A) = s^2 + 3s + 2 = (s+1)(s+2) \]</span> Hence, the eigenvalues of <span class="math inline">\(A\)</span> are <span class="math inline">\(λ_1 = -1\)</span> and <span class="math inline">\(λ_2 = -2\)</span>.</p>
-<p>We now compute the eigenvalues. For <span class="math inline">\(λ_1 = -1\)</span>, we have <span class="math display">\[
-\MATRIX{-6 &amp; 4 \\ -5 &amp; 3 } \MATRIX{ v_{11} \\ v_{12} }
-= -1 \MATRIX{ v_{11} \\ v_{12} }
-\]</span> Thus, the eigen-subspace corresponding to <span class="math inline">\(λ_1 = -1\)</span> is: <span class="math display">\[ -5 v_{11} + 4 v_{12} = 0. \]</span> We can pick any vector in this sub-space as <span class="math inline">\(v_1\)</span>. For convenience, we pick <span class="math display">\[ v_1 = \MATRIX{ 4 \\ 5}. \]</span></p>
+<p>We now compute the eigenvalues. Recall that for any eigenvalue <span class="math inline">\(λ\)</span>, the eigen-vector satisfies <span class="math inline">\((λI - A) v = 0\)</span>. We start wtih <span class="math inline">\(λ_1 = -1\)</span>. Then, <span class="math display">\[
+\MATRIX{5 &amp; -4 \\ 5 &amp; -4 } \MATRIX{ v_{11} \\ v_{12} } = 0
+\]</span> We set <span class="math inline">\(v_{11} = 4\)</span>. Then, <span class="math inline">\(v_{12} = 5\)</span>. Thus, the eigenvector <span class="math display">\[ v_1 = \MATRIX{ 4 \\ 5}. \]</span></p>
 <p>Similarly, for <span class="math inline">\(λ_2 = -2\)</span>, we have <span class="math display">\[
-\MATRIX{-6 &amp; 4 \\ -5 &amp; 3 } \MATRIX{ v_{21} \\ v_{22} }
+\MATRIX{4 &amp; -4 \\ 5 &amp; -5 } \MATRIX{ v_{21} \\ v_{22} }
 = -2 \MATRIX{ v_{21} \\ v_{22} }
-\]</span> Thus, the eigen-subspace corresponding to <span class="math inline">\(λ_2 = -2\)</span> is: <span class="math display">\[ -4 v_{11} + 4 v_{12} = 0. \]</span> We can pick any vector in this sub-space as <span class="math inline">\(v_2\)</span>. For convenience, we pick <span class="math display">\[ v_2 = \MATRIX{ 1 \\ 1}. \]</span></p>
+\]</span> We set <span class="math inline">\(v_{21} = 1\)</span>. Then, <span class="math inline">\(v_{22} = 1\)</span>. Thus, the eigenvector <span class="math display">\[ v_2 = \MATRIX{ 1 \\ 1}. \]</span></p>
 <p>Thus, <span class="math inline">\(T = \MATRIX{ 4 &amp; 1 \\ 5 &amp; 1 }\)</span> and therefore <span class="math inline">\(T^{-1} = \MATRIX{-1 &amp; 1 \\ 5 &amp; -4 }\)</span>. Hence, <span class="math display">\[
 e^{At} = \MATRIX{ 4 &amp; 1 \\ 5 &amp; 1 }
 \MATRIX{e^{-t} &amp; 0 \\ 0 &amp; e^{-2t} }
@@ -509,7 +508,9 @@ Y(s) &amp;= C X(s)
 \]</span> We can the use the above expression compute <span class="math inline">\(y(t)\)</span> by taking the inverse Laplace transform.</p>
 <p>It is sometimes useful to write the expression in time domain (but we will not use this expression for computations). To do so, recall that <span class="math inline">\(C(sI - A)^{-1}B\)</span> is the transfer function <span class="math inline">\(G(s)\)</span> of the system. Therefore, its inverse Laplace transform is the impulse response: <span class="math display">\[ g(t) = C e^{At} B. \]</span> Then, we can compute the inverse Laplace transform of <span class="math inline">\(G(s) U(s)\)</span> using the convolution formula and write <span class="math display">\[
 \bbox[5pt,border: 1px solid]
-{y(t) = C e^{At} x_0 + \int_{0}^t C e^{A (t-τ) } B u(τ) d τ}
+{y(t) =
+\underbrace{C e^{At} x_0}_{\text{zero-input response}}
++ \underbrace{\int_{0}^t C e^{A (t-τ) } B u(τ) d τ}}_{\text{zero-state response}}
 \]</span></p>
 
 
