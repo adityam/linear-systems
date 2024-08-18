@@ -186,24 +186,19 @@ Therefore, the characteristic equation is
 $$\det(sI - A) = s^2 + 3s + 2 = (s+1)(s+2) $$
 Hence, the eigenvalues of $A$ are $λ_1 = -1$ and $λ_2 = -2$. 
 
-We now compute the eigenvalues. For $λ_1 = -1$, we have
+We now compute the eigenvalues. Recall that for any eigenvalue $λ$, the eigen-vector satisfies $(λI - A) v = 0$. We start wtih $λ_1 = -1$. Then,
 $$
-\MATRIX{-6 & 4 \\ -5 & 3 } \MATRIX{ v_{11} \\ v_{12} }
-= -1 \MATRIX{ v_{11} \\ v_{12} }
+\MATRIX{5 & -4 \\ 5 & -4 } \MATRIX{ v_{11} \\ v_{12} } = 0
 $$
-Thus, the eigen-subspace corresponding to $λ_1 = -1$ is:
-$$ -5 v_{11} + 4 v_{12} = 0. $$
-We can pick any vector in this sub-space as $v_1$. For convenience, we pick
+We set $v_{11} = 4$. Then, $v_{12} = 5$. Thus, the eigenvector 
 $$ v_1 = \MATRIX{ 4 \\ 5}. $$
 
 Similarly, for $λ_2 = -2$, we have
 $$
-\MATRIX{-6 & 4 \\ -5 & 3 } \MATRIX{ v_{21} \\ v_{22} }
+\MATRIX{4 & -4 \\ 5 & -5 } \MATRIX{ v_{21} \\ v_{22} }
 = -2 \MATRIX{ v_{21} \\ v_{22} }
 $$
-Thus, the eigen-subspace corresponding to $λ_2 = -2$ is:
-$$ -4 v_{11} + 4 v_{12} = 0. $$
-We can pick any vector in this sub-space as $v_2$. For convenience, we pick
+We set $v_{21} = 1$. Then, $v_{22} = 1$. Thus, the eigenvector 
 $$ v_2 = \MATRIX{ 1 \\ 1}. $$
 
 Thus, $T = \MATRIX{ 4 & 1 \\ 5 & 1 }$ and therefore $T^{-1} = \MATRIX{-1 & 1 \\ 5 & -4 }$. Hence,
@@ -302,5 +297,7 @@ $$ g(t) = C e^{At} B. $$
 Then, we can compute the inverse Laplace transform of $G(s) U(s)$ using the convolution formula and write
 $$
 \bbox[5pt,border: 1px solid]
-{y(t) = C e^{At} x_0 + \int_{0}^t C e^{A (t-τ) } B u(τ) d τ}
+{y(t) = 
+\underbrace{C e^{At} x_0}_{\text{zero-input response}} 
++ \underbrace{\int_{0}^t C e^{A (t-τ) } B u(τ) d τ}}_{\text{zero-state response}}
 $$
