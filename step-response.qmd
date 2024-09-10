@@ -550,7 +550,7 @@ using ControlSystems, DataFrames
 # Use Float16 to reduce the size of data passed to OJS
 df=DataFrame(ζ=Float16[],time=Float16[],output=Float16[])
 
-for ζ in 0:0.1:5.5
+for ζ in 0:0.05:2
   ω_d = 1
   ω_n = sqrt(ω_d^2 + ζ^2)
   G = tf([ω_n^2],[1,2*ζ*ω_n, ω_n^2])
@@ -568,7 +568,7 @@ ojs_define(second_order_zeta = df)
 
 
 ```{ojs}
-  viewof zeta_damping = Object.assign(Inputs.range([0, 5.5], {label: "ζ", step: 0.1, value: 0.5 }), {style: '--label-width:20px'})
+  viewof zeta_damping = Object.assign(Inputs.range([0, 2], {label: "ζ", step: 0.05, value: 0.5 }), {style: '--label-width:20px'})
 
   ω_damping = 1
 
@@ -692,7 +692,9 @@ $$ σ^2 + ω_d^2 = ω_n.$$
 The parameter $ω_n$ is called the **natural frequency**. It is the frequency at which the system will oscillate when there is no damping. The parameter $ω_d$ is called the **damped frequency**. As we will show below, it is the frequency at which the damped system oscillates. 
 
 
-The system has two complex conjugate roots. In cartesian coordinates, these roots are at $-σ \pm j ω_d$, while in polar coordinates they are at $ω_n e^{\pm j(π/2 + φ)}$, where $\phi = \sin^{-1}ζ$. 
+The system has two complex conjugate roots. In cartesian coordinates, these roots are at $-σ \pm j ω_d$, while in polar coordinates they are at $ω_n e^{\pm j(π/2 + φ)}$, where $\phi = \sin^{-1}ζ$. The relationship between the different quantities is shown in @fig-poles-2nd-order.
+
+![Relationship between different quantities for a second order system](figures/svg/poles-2nd-order1.svg){#fig-poles-2nd-order}
 
 To find the step response, we again recall the following LT formula from the LT tables:
 $$
@@ -760,7 +762,59 @@ The response of an underdamped second order system has the following features:
   : $ω_n T_r$ as a function of $ζ$ {#tbl-rise-time}
 
 
-<!-- TODO: Add derivation --> 
+:::{.callout-note collapse="true"} 
+### Derivation of the formulas
+
+1. At $T_p$, we should have $dy(t)/dt = 0$. Recall that
+   $$
+   y(t) = K \biggl[ 1 - e^{-σt} \biggl(\cos ω_d t + \frac{σ}{ω_d} \sin ω_d t\biggr)\biggr] \IND(t) 
+   $$
+   Thus,
+   \begin{align*}
+   \frac{dy(t)}{dt} &= K σ e^{-σt} \left( \cancel{\cos ω_d t} + \frac{σ}{ω_d} \sin ω_d t\right) 
+   \\
+   &\quad
+   - K e^{-σt}( -ω_d \sin ω_d t + \cancel{σ \cos ω_d t} )
+   \\
+   &= K e^{-σt} \left[ \frac{σ^2}{ω_d} + ω_d \right] \sin ω_d t
+   \end{align*}
+   For $dy(t)/dt = 0$, we must have 
+   $$
+   ω_d t = n π, \quad n \in \mathbb{N}.
+   $$
+   From the step response, we can see that the first peak is the highest. So, we pick $n=1$ and thus,
+   $$
+   T_p = \frac{π}{ω_d}.
+   $$
+
+2. Now, for $K=1$, we have
+   \begin{align*}
+    \%{\rm OS}  &= y(T_p) - 1 \\
+    &= -e^{-σt}\biggl( 
+    \underbrace{\cos ω_d T_p}_{=-1} + \frac{σ}{ω_d} \underbrace{\sin ω_d t}_{=0} \biggr)
+    \\
+    &= e^{-σ T_p} = e^{-π σ / ω_d }
+    \end{align*}
+
+3. For the derivation of the setting time, we use the other form of $y(t)$:
+   $$
+   y(t) = K \biggl[ 1 - \frac{1}{\sqrt{1 - ζ^2}} e^{-σ t} \cos(ω_dt - \phi) \biggr] \IND(t)
+   $$
+   For simplicity, we simply consider the envelop
+   $$
+   \bar y(t) = K \biggl[ 1 - \frac{e^{-σ t}}{\sqrt{1 - ζ^2}} \biggr]
+   $$
+   and consider the value of $T_s$ such that $\bar y(T_s) = 0.98K$.
+   This is equivalent to
+   $$
+   \frac{e^{-σ T_s}{\sqrt{1 - ζ^2}} = 0.02.
+   $$
+   Thus,
+   $$T_s = \frac{- \ln(0.02 \sqrt{1 - ζ^2})}{σ}.$$
+   We observe that as $ζ$ varies from $0.1$ to $0.9$, $T_s$ varies from $3.91/σ$ to $4.72/σ$. For simplicity, we choose $T_s = 4/σ$. 
+
+
+:::
 
 :::{#exm-second-order-response}
 Consider the TF 
@@ -1353,9 +1407,9 @@ Plot.plot({
 
 For $ζ > 1$, the system has two poles at 
 $$
-p_1 = ω_n(ζ + \sqrt{ζ^2 - 1)
+p_1 = ω_n(ζ + \sqrt{ζ^2 - 1})
 \quad\text{and}\quad
-p_2 = ω_n(ζ - \sqrt{ζ^2 - 1).
+p_2 = ω_n(ζ - \sqrt{ζ^2 - 1}).
 $$
 
 The TF can be written as
@@ -1364,7 +1418,7 @@ $$ G(s) = \frac{ω_n^2}{(s+p_1)(s+p_2)}.$$
 Using partial fraction expansion, we can show that
 $$
 Y(s) = \frac{1}{s}\cdot G(s)
-= \frac{1}{s} - \frac{ω_n^2}{2 (p_1 - p_2) \biggl[ \frac{1/p_1}{s+p_1} + \frac{1/p_2}{s+p_2} \biggr].
+= \frac{1}{s} - \frac{ω_n^2}{2 (p_1 - p_2)} \biggl[ \frac{1/p_1}{s+p_1} + \frac{1/p_2}{s+p_2} \biggr].
 $$
 Therefore,
 $$

@@ -1,0 +1,114 @@
+\usepath[/home/adityam/Projects/presentations]
+
+\enablemode[euler]
+\environment env-fonts.tex
+\setupbodyfont[slidefont,10pt]
+
+\startMPdefinitions
+% Arrowhead Modifications for TAOCP. Copied from some webpage of Knuth. 
+% These arrows are better in appearance than the default mp arrows.
+ahangle := 65;
+ahlength := 10 ;
+vardef arrowhead expr p =
+  save q, e, f, g; path q; pair e; pair f; pair g;
+  e = point length p of p;
+  q = gobble(p shifted -e cutafter makepath(pencircle scaled 2ahlength))
+    cuttings;
+  f = point 0 of (q rotated 0.5ahangle) shifted e;
+  g = point length q of (reverse q rotated -0.5ahangle) shifted e;
+  f .. {dir (angle direction length q of (q rotated 0.5ahangle) - 0.3ahangle)}e
+    & e{dir (angle direction 0 of ((reverse q) rotated -0.5ahangle)+0.3ahangle)} .. g
+enddef;
+
+vardef arrowpath expr p =
+  p
+enddef;
+
+def mfun_draw_arrow_path text t =
+    if autoarrows :
+        set_ahlength(t) ;
+    fi
+    draw arrowpath mfun_arrow_path t ;
+    draw arrowhead mfun_arrow_path t ;
+    endgroup ;
+enddef ;
+
+def mfun_draw_arrow_path_double text t =
+    if autoarrows :
+        set_ahlength(t) ;
+    fi
+    draw arrowpath (reverse arrowpath mfun_arrow_path) t ;
+    draw arrowhead mfun_arrow_path t ;
+    draw arrowhead reverse mfun_arrow_path t ;
+    endgroup ;
+enddef ;
+
+
+  primarydef a -+ b =
+    a -- (xpart b, ypart a) -- b
+  enddef ;
+
+  primarydef a +- b =
+    a -- (xpart a, ypart b) -- b
+  enddef ;
+
+  input boxes;
+  input mp-sketch;
+  sketchypaths;
+  sketch_amount := 0.8bp;
+  pickup pencircle scaled 2bp;
+  defaultdx := 10bp;
+  defaultdy := 10bp;
+
+\stopMPdefinitions
+
+\starttext
+\startMPpage[offset=1dk] %{{{ Poles
+  u := 3cm;
+
+  drawoptions(withpen pencircle scaled 0.5bp withcolor 0.6white);
+  drawdblarrow (-1.5u, 0) -- (1.5u,0) ;
+  drawdblarrow (0, -1.5u) -- (0, 1.5u);
+
+  newpair p,q;
+  p := u * dir(135);
+  q := (xpart p, -ypart p);
+
+  draw p -- q dashed evenly;
+  draw p -- (0, ypart p) dashed evenly;
+  draw q -- (0, ypart q) dashed evenly;
+  draw p -- origin dashed evenly;
+
+  drawoptions();
+  label.rt("$j ω_d$", (0, ypart p));
+  label.rt("$-j ω_d$", (0, ypart q));
+  label.lrt("$σ$", (xpart p, 0));
+  label.lft("radius $ω_n$", (-u, 0.5(ypart p)));
+
+  draw (0,10bp) {left} .. (-10bp,0) .. {right} (0,-10bp) 
+       cutafter (p -- origin) withcolor "darkred";
+  label.ulft("$\phi$", (0,10bp)) withcolor "darkred";
+
+  label.top("$\sin^{-1}ζ = \phi$", (0.5u,0)) withcolor "darkred";
+
+  drawoptions(withpen pencircle scaled 0.5bp withcolor 0.6white);
+  drawarrow (-u, 0.5(ypart p)) {right} .. (0.5u, u) 
+            cutafter (p -- origin) ;
+
+  drawoptions(withpen pencircle scaled 1bp withcolor 0.6white);
+  draw (0,u) {left} .. (-u,0) .. {right} (0, -u) ;
+
+  picture cross; 
+  cross := image ( 
+    draw (-2bp,-2bp ) -- (2bp, 2bp); 
+    draw (-2bp, 2bp ) -- (2bp, -2bp); 
+  );
+
+  drawoptions(withpen pencircle scaled 1bp withcolor black);
+  draw cross shifted p;
+  draw cross shifted q;
+
+  currentpicture := currentpicture scaled 1.5;
+\stopMPpage
+\stoptext
+
