@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2024-09-05">
+<meta name="dcterms.date" content="2024-09-10">
 
 <title>State space models – Linear Systems and Control</title>
 <style>
@@ -254,7 +254,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 5, 2024</p>
+      <p class="date">September 10, 2024</p>
     </div>
   </div>
   
@@ -890,8 +890,8 @@ Which eigenvector to pick?
 <p>For any eigenvalue <span class="math inline">\(λ\)</span>, the matrix <span class="math inline">\(λ I - A\)</span> is singular. Therefore, the equation <span class="math inline">\((λI - A) x = 0\)</span> will have multiple solutions. Which solution to pick?</p>
 <p>The standard convention (especially when you are using a mathematical programming language to compute eigenvectors) is to pick the <strong>unit vector</strong>. For example, in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;5</a>, one would pick:</p>
 <ul>
-<li>For <span class="math inline">\(λ = 4\)</span>, the eigenvector is <span class="math inline">\(\MATRIX{ \sqrt{2} \\ \sqrt{2}}\)</span>.</li>
-<li>For <span class="math inline">\(λ = 2\)</span>, the eigenvector is <span class="math inline">\(\MATRIX{ -\sqrt{2} \\ \sqrt{2}}\)</span>.</li>
+<li>For <span class="math inline">\(λ = 4\)</span>, the eigenvector is <span class="math inline">\(\MATRIX{ \frac{1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}}}\)</span>.</li>
+<li>For <span class="math inline">\(λ = 2\)</span>, the eigenvector is <span class="math inline">\(\MATRIX{ \frac{-1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}}}\)</span>.</li>
 </ul>
 <p>However, when doing analysis by hand, it is often more convenient to pick eigenvectors which are easier to represent. For example, in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;5</a>, one would pick</p>
 <ul>
