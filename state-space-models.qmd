@@ -638,8 +638,8 @@ For any eigenvalue $λ$, the matrix $λ I - A$ is singular. Therefore, the equat
 
 The standard convention (especially when you are using a mathematical programming language to compute eigenvectors) is to pick the **unit vector**. For example, in @exm-eigenvalues, one would pick:
 
-- For $λ = 4$, the eigenvector is $\MATRIX{ \sqrt{2} \\ \sqrt{2}}$.
-- For $λ = 2$, the eigenvector is $\MATRIX{ -\sqrt{2} \\ \sqrt{2}}$.
+- For $λ = 4$, the eigenvector is $\MATRIX{ \frac{1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}}}$.
+- For $λ = 2$, the eigenvector is $\MATRIX{ \frac{-1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}}}$.
 
 However, when doing analysis by hand, it is often more convenient to pick eigenvectors which are easier to represent. For example, in @exm-eigenvalues, one would pick
 
