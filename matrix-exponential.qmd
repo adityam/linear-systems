@@ -252,10 +252,10 @@ $$
 We now do partial fraction expansion of each term:
 $$ (sI - A)^{-1} = 
 \MATRIX{ 
-\dfrac{-4}{s+1} + \dfrac{5}{s+2}} &
+\dfrac{-4}{s+1} + \dfrac{5}{s+2} &
 \dfrac{ 4}{s+1} - \dfrac{4}{s+2} \\
 \dfrac{-5}{s+1} + \dfrac{5}{s+2} & 
-\dfrac{5}{s+1} - \dfrac{4}{s+2} 
+\dfrac{5}{s+1} - \dfrac{4}{s+2} }
 $$
 Taking the inverse Laplace transform of each term, we get
 $$ e^{At} = \mathcal L^{-1}(sI - A)^{-1} = 
