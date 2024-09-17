@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2024-09-16">
+<meta name="dcterms.date" content="2024-09-17">
 
 <title>Time response of state space models – Linear Systems and Control</title>
 <style>
@@ -235,7 +235,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 16, 2024</p>
+      <p class="date">September 17, 2024</p>
     </div>
   </div>
   
@@ -468,10 +468,10 @@ Solution
 }
 \]</span> We now do partial fraction expansion of each term: <span class="math display">\[ (sI - A)^{-1} =
 \MATRIX{
-\dfrac{-4}{s+1} + \dfrac{5}{s+2}} &amp;
+\dfrac{-4}{s+1} + \dfrac{5}{s+2} &amp;
 \dfrac{ 4}{s+1} - \dfrac{4}{s+2} \\
 \dfrac{-5}{s+1} + \dfrac{5}{s+2} &amp;
-\dfrac{5}{s+1} - \dfrac{4}{s+2}
+\dfrac{5}{s+1} - \dfrac{4}{s+2} }
 \]</span> Taking the inverse Laplace transform of each term, we get <span class="math display">\[ e^{At} = \mathcal L^{-1}(sI - A)^{-1} =
 \MATRIX{
 -4 e^{-t} + 5 e^{-2t} &amp;
