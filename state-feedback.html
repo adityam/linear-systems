@@ -9,7 +9,7 @@
 <meta name="author" content="Aditya Mahajan">
 <meta name="dcterms.date" content="2024-09-19">
 
-<title>Linear Systems and Control</title>
+<title>Pole placement via statement feedback – Linear Systems and Control</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -124,6 +158,35 @@ window.MathJax = {
 </script>
 <script async="" data-id="101261731" src="//static.getclicky.com/js"></script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -165,26 +228,25 @@ window.MathJax = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#course-outline" id="toc-course-outline" class="nav-link active" data-scroll-target="#course-outline">Course Outline</a>
+  <li><a href="#state-feedback-for-systems-in-ccf" id="toc-state-feedback-for-systems-in-ccf" class="nav-link active" data-scroll-target="#state-feedback-for-systems-in-ccf"><span class="header-section-number">1</span> State feedback for systems in CCF</a></li>
+  <li><a href="#state-feedback-for-systems-not-in-ccf" id="toc-state-feedback-for-systems-not-in-ccf" class="nav-link" data-scroll-target="#state-feedback-for-systems-not-in-ccf"><span class="header-section-number">2</span> State feedback for systems not in CCF</a>
   <ul class="collapse">
-  <li><a href="#general-information" id="toc-general-information" class="nav-link" data-scroll-target="#general-information">General Information (Fall 2024)</a></li>
-  <li><a href="#graduate-attributes-and-learning-outcomes" id="toc-graduate-attributes-and-learning-outcomes" class="nav-link" data-scroll-target="#graduate-attributes-and-learning-outcomes">Graduate Attributes and Learning Outcomes</a></li>
-  <li><a href="#course-content" id="toc-course-content" class="nav-link" data-scroll-target="#course-content">Course Content</a></li>
-  <li><a href="#lab-schedule" id="toc-lab-schedule" class="nav-link" data-scroll-target="#lab-schedule">Lab Schedule</a></li>
-  <li><a href="#course-material" id="toc-course-material" class="nav-link" data-scroll-target="#course-material">Course Material</a></li>
-  <li><a href="#evaluation" id="toc-evaluation" class="nav-link" data-scroll-target="#evaluation">Evaluation</a></li>
-  <li><a href="#marking-policy" id="toc-marking-policy" class="nav-link" data-scroll-target="#marking-policy">Marking policy</a></li>
-  <li><a href="#course-delivery" id="toc-course-delivery" class="nav-link" data-scroll-target="#course-delivery">Course delivery</a></li>
-  <li><a href="#additional-notes" id="toc-additional-notes" class="nav-link" data-scroll-target="#additional-notes">Additional Notes</a></li>
+  <li><a href="#controllability-matrix" id="toc-controllability-matrix" class="nav-link" data-scroll-target="#controllability-matrix"><span class="header-section-number">2.1</span> Controllability matrix</a></li>
+  <li><a href="#pole-placement" id="toc-pole-placement" class="nav-link" data-scroll-target="#pole-placement"><span class="header-section-number">2.2</span> Pole Placement</a></li>
+  <li><a href="#method-1-using-controllability-matrix" id="toc-method-1-using-controllability-matrix" class="nav-link" data-scroll-target="#method-1-using-controllability-matrix"><span class="header-section-number">2.3</span> Method 1: Using controllability matrix</a></li>
+  <li><a href="#method-2-a-slightly-more-efficient-approach" id="toc-method-2-a-slightly-more-efficient-approach" class="nav-link" data-scroll-target="#method-2-a-slightly-more-efficient-approach"><span class="header-section-number">2.4</span> Method 2: A slightly more efficient approach</a></li>
   </ul></li>
+  <li><a href="#choosing-the-dc-gain" id="toc-choosing-the-dc-gain" class="nav-link" data-scroll-target="#choosing-the-dc-gain"><span class="header-section-number">3</span> Choosing the DC-gain</a></li>
+  <li><a href="#controllability-and-pole-zero-cancellation" id="toc-controllability-and-pole-zero-cancellation" class="nav-link" data-scroll-target="#controllability-and-pole-zero-cancellation"><span class="header-section-number">4</span> Controllability and pole-zero cancellation</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/state-feedback.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
+<h1 class="title">Pole placement via statement feedback</h1>
 </div>
 
 
@@ -222,336 +284,294 @@ window.MathJax = {
 </header>
 
 
-<section id="course-outline" class="level1 unnumbered">
-<h1 class="unnumbered">Course Outline</h1>
-<section id="general-information" class="level2">
-<h2 class="anchored" data-anchor-id="general-information">General Information (Fall 2024)</h2>
-<dl>
-<dt>Instructor</dt>
-<dd>
-<ul>
-<li>Aditya Mahajan</li>
-<li><em>Office Hours</em>: TBD</li>
-</ul>
-</dd>
-<dt>Teaching Assistants</dt>
-<dd>
-<ul>
-<li><p>TBD</p></li>
-</ul>
-</dd>
-<dt>Lectures</dt>
-<dd>
-<ul>
-<li><p>10:05am–11:25am Tuesday, Thursday (ENGMC 11)</p></li>
-</ul>
-</dd>
-<dt>Tutorials</dt>
-<dd>
-<ul>
-<li><p>8:35am–10:25am Friday, (ENGMC 11)</p></li>
-</ul>
-</dd>
-</dl>
-<p>Everyone <strong>must</strong> be registered for the tutorial. Tutorials start from the <strong>second</strong> week of classes.</p>
-<dl>
-<dt>Labs</dt>
-<dd>
-<ul>
-<li><p>1:35pm-3:25pm Monday (TR 4090)</p></li>
-</ul>
-</dd>
-<dd>
-<ul>
-<li><p>3:35pm–5:25pm Monday (TR 4090)</p></li>
-</ul>
-</dd>
-<dd>
-<ul>
-<li><p>1:35pm–3:25pm Tuesday (TR 4090)</p></li>
-</ul>
-</dd>
-<dd>
-<ul>
-<li><p>1:35pm–3:25pm Wednesday (TR 4090)</p></li>
-</ul>
-</dd>
-<dd>
-<ul>
-<li><p>1:35pm–3:25pm Friday (TR 4090)</p></li>
-</ul>
-</dd>
-</dl>
-<p>Everyone <strong>must</strong> be registered for one lab. Labs start from the <strong>second</strong> week of classes.</p>
-<p>The labs have to be done in groups of two. The groups will be formed in the first week of classs.</p>
-<dl>
-<dt>Prerequisites</dt>
-<dd>
-<ul>
-<li>ECSE 206 (Fundamentals of Signals and Systems)</li>
-<li>ECSE 210 (Electrical Circuits 2)</li>
-</ul>
-</dd>
-<dt>Communication</dt>
-<dd>
-<span class="text-info">Use the discussion board on myCourses</span> for all questions related to the course. Only personal emails related to medical exceptions for missing a deliverable will be answered.
-</dd>
-</dl>
+<p>Consider a SSM <span class="math display">\[\begin{align*}
+\dot x(t) &amp;= A x(t) + B u(t) \\
+y(t) &amp;= C x(t)
+\end{align*}\]</span></p>
+<p><span class="math inline">\(%Defition for iddots
+\newcommand\iddots{\mathinner{
+  \kern1mu\raise1pt{.}
+  \kern2mu\raise4pt{.}
+  \kern2mu\raise7pt{\Rule{0pt}{7pt}{0pt}.}
+  \kern1mu
+}}\)</span></p>
+<p>In this section, we will learning how to control such a system when the controller has access to the internal state <span class="math inline">\(x(t)\)</span>. This is called <strong>state feedback</strong>. In the <a href="output-feedback.qmd">next section</a>, we will learn how to design a system when the controller has access to only the output <span class="math inline">\(y(t)\)</span>. This is called <strong>output feedback</strong>.</p>
+<p>The basic idea of state feedback is to use a linear feedback controller: <span class="math display">\[
+u(t) = - K x(t)
+\quad \text{where }
+K = \MATRIX{k_0 &amp; \cdots &amp; k_{n-1}}.
+\]</span> This gives us <span class="math inline">\(n\)</span> tunable gains <span class="math inline">\(k_0, \dots, k_{n-1}\)</span> and the hope is that we can find these gain to arbitrarily choose the eigenvalues of the closed loop system. This is called <strong>pole placement</strong>.</p>
+<p>We will start by looking at system in CCF and show that for such systems pole placement can be achieved by simply comparing coefficients of the characteristic polynomial of the open loop systems and the designed characteristic polynomial of the closed loop system. We will then look at systems that are not in CCF and show that if the system satisfies a condition known as <strong>controllability</strong>, we can find a transformation that converts the to CCF and use the results from state transformation to find <span class="math inline">\(K\)</span>.</p>
+<section id="state-feedback-for-systems-in-ccf" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="state-feedback-for-systems-in-ccf"><span class="header-section-number">1</span> State feedback for systems in CCF</h2>
+<p>Consider a state space system in CCF with <span class="math display">\[
+A = \MATRIX{
+0 &amp; 1 &amp; 0 &amp; \cdots &amp; 0 \\
+0 &amp; 0 &amp; 1 &amp; \cdots &amp; 0 \\
+\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+0 &amp; 0 &amp; \cdots &amp; \cdots &amp; 1 \\
+-a_0 &amp; -a_1 &amp; \cdots &amp; \cdots &amp; - a_{n-1}
+},
+\quad
+B = \MATRIX{0 \\ 0 \\ \vdots \\ 0 \\ 1}.
+\]</span></p>
+<p>We want to find a state feedback controller <span class="math display">\[
+u(t) = -K x(t)
+\quad \text{where }
+K = \MATRIX{k_0 &amp; \cdots &amp; k_{n-1}}
+\]</span> such that the characteristic polynomial of the closed loop system is <span class="math display">\[
+\det(sI - (A - BK)) =
+s^n + α_{n-1} s^{n-1} + \cdots + α_1 s + α_0.
+\]</span></p>
+<p>Observe that <span class="math display">\[
+B K  = \MATRIX{0 \\ \vdots \\ 0 \\ 1}
+\MATRIX{k_0 &amp; \cdots &amp; k_{n-1}} =
+\MATRIX{
+0 &amp; 0 &amp; \cdots &amp; 0 \\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+0 &amp; 0 &amp; \cdots &amp; 0 \\
+k_0 &amp; k_1 &amp; \cdots &amp; k_{n-1}
+}.
+\]</span> Thus, <span class="math display">\[
+A - BK = \MATRIX{
+0 &amp; 1 &amp; 0 &amp; \cdots &amp; 0 \\
+0 &amp; 0 &amp; 1 &amp; \cdots &amp; 0 \\
+\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+0 &amp; 0 &amp; \cdots &amp; \cdots &amp; 1 \\
+-(a_0+k_0) &amp; -(a_1+k_1) &amp; \cdots &amp; \cdots &amp; -(a_{n-1} + k_{n-1})
+},
+\]</span> which is in CCF. Thus, <span class="math display">\[
+\det(sI - (A - BK)) =
+s^n + (a_{n-1} + k_{n-1}) s^{n-1} + \cdots + (a_1 + k_1) s + (a_0 + k_0).
+\]</span></p>
+<p>Observe that each component of the gain matrix <span class="math inline">\(K\)</span> affects only <em>one</em> coefficient of the characteristic polynomial. Thus, we can pick <span class="math display">\[
+\bbox[5pt,border: 1px solid]
+{K = \MATRIX{ α_0 - a_0 &amp; \cdots &amp; α_{n-1} - a_{n-1}}}
+\]</span> to place the poles of the closed loop system at any desired location.</p>
+<div id="exm-CCF" class="theorem example">
+<p><span class="theorem-title"><strong>Example 1</strong></span> Consider the system <span class="math display">\[
+A = \MATRIX{0 &amp; 1 \\ -1 &amp; -3},
+\quad
+B = \MATRIX{0 \\ 1}.
+\]</span> Determine a state feedback controller such that the eigenvalues of the closed loop system are at <span class="math inline">\(-3 \pm 2j\)</span>.</p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The desired characteristic polynomial is <span class="math display">\[(s + 3)^2 + 2^2 = s^2 + 6s + 13.\]</span></p>
+<p>The current characteristic polynomial is (since the system is in CCF, we can determine it by inspection) <span class="math display">\[\det(sI - A) = s^2 + 3s + 1.\]</span></p>
+<p>Thus, the required state feedback matrix is <span class="math display">\[K = \MATRIX{13 - 1 &amp; 6 - 3} = \MATRIX{12 &amp; 3}.\]</span></p>
+<p>We verify the solution below:</p>
+<div id="927715ce" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> [<span class="fl">0</span> <span class="fl">1</span>; <span class="op">-</span><span class="fl">1</span> <span class="op">-</span><span class="fl">3</span>]</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> [<span class="fl">0</span>; <span class="fl">1</span>]</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> [<span class="op">-</span><span class="fl">3</span><span class="op">+</span><span class="fl">2im</span> <span class="op">-</span><span class="fl">3</span><span class="op">-</span><span class="fl">2im</span>]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>K <span class="op">=</span> <span class="fu">place</span>(A,B,p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>1×2 Matrix{ComplexF64}:
+ 12.0+0.0im  3.0+0.0im</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 </section>
-<section id="graduate-attributes-and-learning-outcomes" class="level2">
-<h2 class="anchored" data-anchor-id="graduate-attributes-and-learning-outcomes">Graduate Attributes and Learning Outcomes</h2>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Attribute</th>
-<th>Description</th>
-<th>Status</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>KB</td>
-<td>Knowledge Base for Engineering</td>
-<td>Developed</td>
-</tr>
-<tr class="even">
-<td>PA</td>
-<td>Problem Analysis</td>
-<td>Developed</td>
-</tr>
-<tr class="odd">
-<td>IN</td>
-<td>Investigation</td>
-<td>Developed</td>
-</tr>
-<tr class="even">
-<td>DE</td>
-<td>Design</td>
-<td>Introduced</td>
-</tr>
-</tbody>
-</table>
-<p>Upon the successful completion of this course, the student students will have demonstrated the ability to:</p>
+<section id="state-feedback-for-systems-not-in-ccf" class="level2 page-columns page-full" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="state-feedback-for-systems-not-in-ccf"><span class="header-section-number">2</span> State feedback for systems not in CCF</h2>
+<p>When a system is not in CCF, we can still use the design idea for systems in CCF if there exists a transformation (or change of coordinates) <span class="math inline">\(x_c(t) = T^{-1} x(t)\)</span> such that the system matrices for the system <span class="math inline">\((A_c, B_c, C_c)\)</span> for <span class="math inline">\(x_c(t)\)</span> are in CCF. If such a transformation can be found, then we can find the gain matrix <span class="math inline">\(K_c\)</span> for the system in CCF using the method of the previous section and use<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> <span class="math display">\[ K = K_c T^{-1} \]</span> as the gain for the original system. So, the main question is: how do we find such a transformation?</p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;The state feedback in the new coordinate system is <span class="math display">\[u(t) = - K_c x_c(t).\]</span> Since <span class="math inline">\(x_c(t) = T^{-1} x(t)\)</span>, we have <span class="math display">\[ u(t) = - K_c T^{-1} x(t). \]</span> Therefore <span class="math inline">\(K = K_c T^{-1}\)</span>.</p></div></div><section id="controllability-matrix" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="controllability-matrix"><span class="header-section-number">2.1</span> Controllability matrix</h3>
+<p>The controllability matrix of a state space system <span class="math inline">\((A,B)\)</span> is defined as <span class="math display">\[\mathcal C_{(A,B)} = \MATRIX{B &amp; AB &amp; \cdots &amp; A^{n-1} B }.\]</span></p>
+<p>Now consider a change of coordinates <span class="math inline">\(x_c(t) = T^{-1} x(t)\)</span>. Recall that the state space representation in the new coordinate system is <span class="math display">\[
+A_c = T^{-1} A T \quad B_c = T^{-1} B.
+\]</span> Observe that</p>
 <ul>
-<li>Apply time- and frequency-domain tools to analyze linear time-invariant systems (KB, PA)</li>
-<li>Design controllers based on state-space methods and lead-lag compensators to meet time-response specifications (KB, PA, DE)</li>
-<li>Use Matlab to analyze and synthesize controllers for linear time-invariant systems (DE, IN)</li>
+<li><span class="math inline">\(A_c^2 = T^{-1} A T T^{-1} A T = T^{-1} A^2 T\)</span></li>
+<li><span class="math inline">\(A_c^3 = T^{-1} A^2 T T^{-1} A T = T^{-1} A^3 T\)</span></li>
+<li>etc.</li>
 </ul>
-</section>
-<section id="course-content" class="level2">
-<h2 class="anchored" data-anchor-id="course-content">Course Content</h2>
-<table class="table-striped caption-top table">
-<colgroup>
-<col style="width: 10%">
-<col style="width: 90%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Week</th>
-<th style="text-align: left;">Material Covered</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td style="text-align: left;"><a href="./freq-modeling.html">Review of LTI Systems and Laplace Transforms</a> <br> <em>Reading</em>: Nise Ch. 2</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td style="text-align: left;"><a href="./state-space-models.html">State-space modeling, canoncial forms, transfer function of state space models</a> <br> <em>Reading</em>: William and Lawrence Ch. 1 and Ch. 2</td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td style="text-align: left;"><a href="./step-response.html">Pole Zero Plot Step response of first and second order systems, dominant pole approximation</a> <br> <em>Reading</em>: Nise Ch. 4</td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td style="text-align: left;"><a href="./matrix-exponential.html">Matrix exponential and solution of matrix differential equations, time response of state space models</a></td>
-</tr>
-<tr class="odd">
-<td>5</td>
-<td style="text-align: left;"><a href="./state-feedback.html">Pole placement, controllability, and state feedback</a></td>
-</tr>
-<tr class="even">
-<td>6</td>
-<td style="text-align: left;">Luenberger observer, observability, output feedback, and separation principle</td>
-</tr>
-<tr class="odd">
-<td>7</td>
-<td style="text-align: left;">Review and Mid-Term</td>
-</tr>
-<tr class="even">
-<td>8</td>
-<td style="text-align: left;">Routh-Hurwitz stability criterion. Special cases: zero in first column, row of zeros.</td>
-</tr>
-<tr class="odd">
-<td>9</td>
-<td style="text-align: left;">Block diagrams, rules for simplifying block diagrams, block diagram implementations of canonical forms of state space models</td>
-</tr>
-<tr class="even">
-<td>10</td>
-<td style="text-align: left;"><a href="./steady-state-errors.html">System type, steady state error, and disturbance rejection</a> <br> <em>Reading</em>: Nise Ch. 7</td>
-</tr>
-<tr class="odd">
-<td>11</td>
-<td style="text-align: left;"><a href="./bode-and-nyquist.html">Bode and Nyquist Plots</a> <br> <em>Reading</em>: Nise Ch. 10</td>
-</tr>
-<tr class="even">
-<td>12</td>
-<td style="text-align: left;"><a href="./nyquist-stability.html">Nyquist stability criterion</a>, <a href="./safety-margins.html">gain and phase margins</a> <br> <em>Reading</em>: Nise Ch. 10</td>
-</tr>
-<tr class="odd">
-<td>13</td>
-<td style="text-align: left;">Lead-Lag compensators</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="lab-schedule" class="level2">
-<h2 class="anchored" data-anchor-id="lab-schedule">Lab Schedule</h2>
-<table class="table-striped caption-top table">
-<colgroup>
-<col style="width: 10%">
-<col style="width: 90%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Week</th>
-<th style="text-align: left;">Lab</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td style="text-align: left;">No Labs</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td style="text-align: left;">Lab 1 : Introduction to Matlab</td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td style="text-align: left;">Lab 2 : Transfer functions and step response</td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td style="text-align: left;">Lab 3 : Eigenvalues and eigenvectors</td>
-</tr>
-<tr class="odd">
-<td>5</td>
-<td style="text-align: left;">Lab 4 : System identification via Step Response</td>
-</tr>
-<tr class="even">
-<td>6</td>
-<td style="text-align: left;">Lab 5 : State-Feedback Control (in simulation)</td>
-</tr>
-<tr class="odd">
-<td>7</td>
-<td style="text-align: left;">Lab 6 : State-Feedback Control (in hardware)</td>
-</tr>
-<tr class="even">
-<td>8</td>
-<td style="text-align: left;">Lab 7 : Luenberger Observer for State Estimation</td>
-</tr>
-<tr class="odd">
-<td>9</td>
-<td style="text-align: left;">Lab 8 : Output-Feedback Control</td>
-</tr>
-<tr class="even">
-<td>10</td>
-<td style="text-align: left;">Lab 9 : Block Diagram Reduction using Matlab</td>
-</tr>
-<tr class="odd">
-<td>11</td>
-<td style="text-align: left;">Lab 10 : System identification via Bode Plots</td>
-</tr>
-<tr class="even">
-<td>12</td>
-<td style="text-align: left;">Lab 11 : Nyquist stability criterion</td>
-</tr>
-<tr class="odd">
-<td>13</td>
-<td style="text-align: left;">Lab 12 : Lead-Lag compensator design</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="course-material" class="level2">
-<h2 class="anchored" data-anchor-id="course-material">Course Material</h2>
-<dl>
-<dt>Textbook</dt>
-<dd>
+<p>Therefore,</p>
 <ul>
-<li><p>N. Nise, <em>Control Systems Engineering,</em> 7th Ed., Wiley</p>
-<p>Both paper and electronic versions of the textbook are available from the McGill bookstore. The electronic version of the book is also available from the publisher’s website and Google books.</p></li>
+<li><span class="math inline">\(A_c^2 B_c =  T^{-1} A^2 T T^{-1} B = T^{-1} A^2 B\)</span></li>
+<li><span class="math inline">\(A_c^3 B_c =  T^{-1} A^3 T T^{-1} B = T^{-1} A^3 B\)</span></li>
+<li>etc.</li>
 </ul>
-</dd>
-</dl>
-<ul>
-<li><p>R.L. Williams II and D.A. Lawrence, Linear State‐Space Control Systems, Wiley.</p>
-<p>The <a href="https://onlinelibrary.wiley.com/doi/book/10.1002/9780470117873">electronic version of the book</a> is available the library.</p></li>
-</ul>
-<dl>
-<dt>Reference Books</dt>
-<dd>
-<ul>
-<li>G.F. Franklin, J. Powell, A. Emani-Naeini, <em>Feedback Control of Dynamical Systems</em>, 7th Ed., Pearson.</li>
-<li>K. Oagata, <em>Modern Control Engineering</em>, 5th Ed., Pearson.</li>
-</ul>
-</dd>
-</dl>
+<p>Therefore, the controllability matrix of the system in the new coordinates is <span class="math display">\[\begin{align*}
+\mathcal C_{(A_c, B_c)} &amp;=
+\MATRIX{ T^{-1} B &amp; T^{-1} A B &amp; \cdots &amp; T^{-1} A^{n-1} B  }
+\\
+&amp;= T^{-1} \MATRIX{B &amp; AB &amp; \cdots A^{n-1} B }
+\\
+&amp;= T^{-1} \mathcal C_{(A,B)}.
+\end{align*}\]</span></p>
+<p>Thus, we can go from the SSM <span class="math inline">\((A,B)\)</span> to the SSM <span class="math inline">\((A_c, B_c)\)</span> using the transformation <span class="math display">\[
+T^{-1} = \mathcal C_{(A_c, B_c)} \mathcal C_{(A,B)}^{-1}
+\]</span> <em>provided <span class="math inline">\(\mathcal C_{(A,B)}\)</span> is invertible</em> (i.e., has full rank). When that is the case, we say that the system is <strong>controllable</strong>.</p>
+<p>There are different ways in which we can get uncontrollable models as is illustrated in the following example.</p>
+<div id="exm-controllability" class="theorem example">
+<p><span class="theorem-title"><strong>Example 2</strong></span> Check if the following systems are controllable.</p>
+<ol type="a">
+<li><p><span class="math inline">\(A = \MATRIX{2 &amp; 0 \\ 0 &amp; 3}\)</span> and <span class="math inline">\(B = \MATRIX{0 \\ 1}\)</span>.</p></li>
+<li><p><span class="math inline">\(A = \MATRIX{-4 &amp; 5 \\ 0 &amp; 9}\)</span> and <span class="math inline">\(B = \MATRIX{-2 \\ 0}\)</span>.</p></li>
+<li><p><span class="math inline">\(A = \MATRIX{1 &amp; 5 \\ 8 &amp; 4}\)</span> and <span class="math inline">\(B = \MATRIX{-2 \\ 2}\)</span>.</p></li>
+</ol>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="a">
+<li><p>We have <span class="math display">\[ A B = \MATRIX{2 &amp; 0 \\ 0 &amp; 3} \MATRIX{ 0 \\ 1} = \MATRIX{0 \\ 3}.\]</span> Thus, <span class="math display">\[ \mathcal C_{(A,B)} = \MATRIX{ 0 &amp; 0 \\ 1 &amp; 3}. \]</span> We have <span class="math inline">\(\det \mathcal C_{(A,B)} = 0\)</span>. So, <span class="math inline">\((A,B)\)</span> is not controllable.</p></li>
+<li><p>We have <span class="math display">\[ A B = \MATRIX{-4 &amp; 5 \\ 0 &amp; 9 } \MATRIX{ -2 \\ 0} = \MATRIX{8 \\ 0}.\]</span> Thus, <span class="math display">\[ \mathcal C_{(A,B)} = \MATRIX{ -2 &amp; -8 \\ 0 &amp; 0}. \]</span> We have <span class="math inline">\(\det \mathcal C_{(A,B)} = 0\)</span>. So, <span class="math inline">\((A,B)\)</span> is not controllable.</p></li>
+<li><p>We have <span class="math display">\[ A B = \MATRIX{ 1 &amp; 5 \\ 8 &amp; 4} \MATRIX{ -2 \\ 2} = \MATRIX{8 \\ -8}.\]</span> Thus, <span class="math display">\[ \mathcal C_{(A,B)} = \MATRIX{ -2 &amp; 8 \\ 2 &amp; -8}. \]</span> We have <span class="math inline">\(\det \mathcal C_{(A,B)} = 0\)</span>. So, <span class="math inline">\((A,B)\)</span> is not controllable.</p></li>
+</ol>
+</div>
+</div>
+</div>
 </section>
-<section id="evaluation" class="level2">
-<h2 class="anchored" data-anchor-id="evaluation">Evaluation</h2>
-<ul>
-<li><p><strong>Assignments (20%)</strong> Weekly homework assignments. Typically, each assignment will consist of four questions, out of which one or two randomly selected questions will be grader. The lowest two homework assignments will be dropped.</p></li>
-<li><p><strong>Laboratory (20%)</strong> In-person weekly labs, to be conducted in groups of two. At the end of each lab, each group has to submit a lab report by filling in a Matlab Livescript template provided as part of the lab assignment.</p></li>
-<li><p><strong>Mid Term (20%)</strong> Closed book in-class exam. <span class="text-danger"><strong>Oct 10</strong></span> (during class time)</p></li>
-<li><p><strong>Final Exam (40%)</strong> Closed book, in-person exam. Will be scheduled by the exam office and the dates will be announced later.</p>
-<p>The final exam will cover <strong>all</strong> the material seen in the class during the term.</p></li>
-</ul>
+<section id="pole-placement" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="pole-placement"><span class="header-section-number">2.2</span> Pole Placement</h3>
+<p>We can use the above idea to design state feedback controller for systems not in CCF. In particular, the pole placement problem is as follows.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Pole placement
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We are given a SSM <span class="math inline">\((A,B)\)</span> not in CCF and we want to find a state feedback controller <span class="math display">\[
+u(t) = - K x(t), \quad
+\text{where } K = \MATRIX{k_0 &amp; \cdots &amp; k_{n-1} }
+\]</span> such that the characteristic polynomial of the closed loop system is <span class="math display">\[
+\det(sI - A +  BK) = s^n + α_{n-1} s^{n-1} + \cdots + α_1 s + α_0.
+\]</span></p>
+</div>
+</div>
+<p>We present two methods for pole placement.</p>
 </section>
-<section id="marking-policy" class="level2">
-<h2 class="anchored" data-anchor-id="marking-policy">Marking policy</h2>
-<ul>
-<li><p>Assignments must be submitted electronically on myCourses as a PDF. You may write the assignments on paper and then scan them as a PDF (there are several such apps available for all phone platforms), or write on a tablet and convert to PDF, or type using a word processor.</p></li>
-<li><p><strong>There will no make-up examination</strong> for students who miss a mid-term.</p>
-<ul>
-<li><p>Student who miss the exam due to a valid reason (see <a href="https://www.mcgill.ca/engineering/students/undergraduate/courses-registration/exams-assessment/midterms-and-class-tests/adjustments-missed-midterms-and-class-tests">Faculty of Engineering policy</a>) should <strong>notify the instructor within a week</strong> of the exam and provide <strong>necessary documentation</strong>.</p></li>
-<li><p>If, and only if, proper documentation for a missed exam is presented, the marks for the missed exam will be shifted to the final exam.</p></li>
-<li><p>Students who miss the mid-term exam for any other reason (e.g., no medical note, going to the exam at the wrong time, or on the wrong day, etc.) will get zero marks on the exam.</p></li>
-</ul></li>
-<li><p>Any request for reevaluation of a mid-term or an assignment must be made <strong>in writing within a week of its return</strong>. Note that requesting a re-grade will mean that you <strong>WHOLE</strong> assignment or exam will be re-graded.</p></li>
-<li><p><span class="text-danger">Due to paucity of grading hours, only one or two randomly selected questions will be graded in each assignment.</span></p></li>
-<li><p>The lowest two assignments and labs will be dropped. There will be no make-up for missed assignments and labs, <em>even if it is for a valid reason.</em> The whole point of dropping the lowest two assignments/labs is to reduce the administrative overhead of keeping track of such missed assignments/labs.</p></li>
-</ul>
-<dl>
-<dt>Right to submit in English or French written work that is to be graded.</dt>
-<dd>
-In accord with McGill University’s <a href="https://www.mcgill.ca/secretariat/files/secretariat/charter_of_student_rights_last_approved_october_262017.pdf">Charter of Students’ Rights</a>, students in this course have the right to submit in English or in French any written work that is to be graded.
-</dd>
-<dt>Academic Integrity</dt>
-<dd>
-<p>McGill University values academic integrity. Therefore all students must understand the meaning and consequences of cheating, plagiarism and other academic offences under the <a href="https://www.mcgill.ca/secretariat/files/secretariat/code_of_student_conduct_and_disciplinary_procedures.pdf">Code of Student Conduct and Disciplinary Procedures</a> (see McGill’s <a href="http://www.mcgill.ca/students/srr/honest/">guide to academic honesty</a> for more information).</p>
-<p>L’université McGill attache une haute importance à l’honnêteté académique. Il incombe par conséquent à tous les étudiants de comprendre ce que l’on entend par tricherie, plagiat et autres infractions académiques, ainsi que les conséquences que peuvent avoir de telles actions, selon le <a href="https://www.mcgill.ca/secretariat/files/secretariat/code_of_student_conduct_and_disciplinary_procedures.pdf">Code de conduite de l’étudiant et des procédures disciplinaires</a> (pour de plus amples renseignements, veuillez consulter le <a href="http://www.mcgill.ca/students/srr/honest/">guide pour l’honnêteté académique</a> de McGill.)</p>
-</dd>
-</dl>
+<section id="method-1-using-controllability-matrix" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="method-1-using-controllability-matrix"><span class="header-section-number">2.3</span> Method 1: Using controllability matrix</h3>
+<ol type="1">
+<li><p>Find the controllability matrix <span class="math inline">\(\mathcal C_{(A,B)}\)</span> of the system.</p></li>
+<li><p>If the system is not controllable, i.e., the controllability matrix is not full rank (which can be tested by checking that the determinant of the controllability matrix is non-zero), pole placement is not possible and we quit the procedure.</p></li>
+<li><p>If the system is controllable, find the characteristic polynomial of <span class="math inline">\(A\)</span>: <span class="math display">\[\det(s I - A) = s^n + a_{n-1} s^{n-1} + \cdots + a_0 \]</span></p></li>
+<li><p>Using the above characteristic polynomial, write the SSM <span class="math inline">\((A_c, B_c)\)</span> in CCF.</p>
+<p><span class="text-smaller">Recall that the characteristic polynomial is the denominator of the transfer function</span></p></li>
+<li><p>Compute the controllability matrix <span class="math inline">\(\mathcal C(A_c, B_c)\)</span> of the system <span class="math inline">\((A_c, B_c)\)</span> in CCF.</p></li>
+<li><p>Compute the transformation <span class="math display">\[\bbox[5pt,border: 1px solid]{
+T^{-1} = \mathcal C_{(A_c, B_c)} \mathcal C_{(A,B)}^{-1}
+}\]</span></p></li>
+<li><p>Compute the controller gain <span class="math inline">\(K_c\)</span> for the system in CCF: <span class="math display">\[ K_c = \MATRIX{ α_0 - a_0 &amp; \cdots &amp; α_{n-1} - a_{n-1}}. \]</span></p></li>
+<li><p>The controller gain for the original system is <span class="math inline">\(K = K_c T^{-1}.\)</span>$</p></li>
+</ol>
 </section>
-<section id="course-delivery" class="level2">
-<h2 class="anchored" data-anchor-id="course-delivery">Course delivery</h2>
-<p>The course is taught in a “chalk and board” style; there will be no power point presentations. All students are expected to attend lectures and take notes. Partial notes on some of the material will be provided, but are not a substitute for the material covered in class.</p>
-<p>© Instructor-generated course materials (e.g., handouts, notes, summaries, exam questions) are protected by law and may not be copied or distributed in any form or in any medium without explicit permission of the instructor. Note that infringements of copyright can be subject to follow up by the University under the Code of Student Conduct and Disciplinary Procedures.</p>
+<section id="method-2-a-slightly-more-efficient-approach" class="level3" data-number="2.4">
+<h3 data-number="2.4" class="anchored" data-anchor-id="method-2-a-slightly-more-efficient-approach"><span class="header-section-number">2.4</span> Method 2: A slightly more efficient approach</h3>
+<p>It is possible to avoid the computation of the controllability matrix of the system in CCF by replacing steps 4–6 of Method 1 by the following:</p>
+<ol start="4" type="1">
+<li><p>Compute the matrix <span class="math display">\[ W = \MATRIX{ a_1 &amp; a_2 &amp; \cdots &amp; a_{n-1} &amp; 1 \\
+                a_2 &amp; \iddots &amp; \iddots &amp; 1 &amp; 0 \\
+                \iddots &amp; \iddots &amp; \iddots &amp; \iddots &amp; \vdots \\
+               a_{n-1} &amp; 1 &amp; 0 &amp; \cdots &amp; 0 \\
+               1 &amp; 0 &amp; 0 &amp; \cdots &amp; 0
+              }
+\]</span></p></li>
+<li><p>Compute the transformation: <span class="math display">\[\bbox[5pt,border: 1px solid]{
+T^{-1} = \bigl[ \mathcal C_{(A,B)} W \bigr]^{-1}
+}\]</span></p></li>
+</ol>
+<div id="exm-pole-placement" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3</strong></span> Consider the following SSM: <span class="math display">\[ A = \MATRIX{3 &amp; 1 \\ 1 &amp; 2}, B = \MATRIX{2 \\1} \text{ and } C = \MATRIX{ 3 &amp; 2}. \]</span> Design a state feedback controller (i.e., compute the feedback gain <span class="math inline">\(K\)</span>) such that the eigenvalues of the closed loop system are at <span class="math inline">\(-2 \pm 2j\)</span>.</p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We will show the solution via both method 1 and method 2. For method 1, we have the following.</p>
+<ol type="1">
+<li><p>We have <span class="math display">\[ A B = \MATRIX{3 &amp; 1\\ 1 &amp; 2} \MATRIX{2 \\ 1} = \MATRIX{7 \\ 4}. \]</span> Therefore, <span class="math display">\[ \mathcal C_{(A,B)} = \MATRIX{ 2 &amp; 7 \\ 1 &amp; 4}. \]</span></p></li>
+<li><p><span class="math inline">\(\det \mathcal C_{(A,B)} = 8 - 7 = 1 \neq 0\)</span>. Thus, <span class="math inline">\((A,B)\)</span> is controllable and we can design a state feedback controller.</p></li>
+<li><p>The characteristic polynomial is given by <span class="math display">\[s I - A = \MATRIX{s &amp; 0 \\ 0 &amp; s} - \MATRIX{3 &amp; 1 \\ 1 &amp; 2} = \MATRIX{ s-3 &amp; -1 \\ -1 &amp; s - 2}.\]</span> Therefore, <span class="math display">\[
+\det(sI-A) = \DET{ s-3 &amp; -1 \\ -1 &amp; s - 2} = (s-3)(s-1) - 1 = s^2 - 5s + 5.
+\]</span></p></li>
+<li><p>The SSM in CCF is <span class="math display">\[ A_c = \MATRIX{0 &amp; 1 \\ -5 &amp; 5}, \quad B_c = \MATRIX{0 \\ 1}.\]</span></p></li>
+<li><p>We have <span class="math display">\[ A_c B_c = \MATRIX{ 0 &amp; 1 \\ -5 &amp; 5} \MATRIX{0 \\ 1} = \MATRIX{1 \\ 5}. \]</span> Therefore, <span class="math display">\[ \mathcal C_{(A_c, B_c)} = \MATRIX{0 &amp; 1 \\ 1 &amp; 5}. \]</span></p></li>
+<li><p>Thus, we have <span class="math display">\[\begin{align*}
+T^{-1} &amp;= \mathcal C_{(A_c,B_c)} \mathcal C_{(A,B)}^{-1}
+\\
+&amp;= \MATRIX{0 &amp; 1 \\ 1 &amp; 5} \MATRIX{2 &amp; 7 \\ 1 &amp; 4}^{-1}
+\\
+&amp;= \MATRIX{0 &amp; 1 \\ 1 &amp; 5} \MATRIX{4 &amp; -7 \\ -1 &amp; 2}
+\\
+&amp;= \MATRIX{-1 &amp; 2 \\ -1 &amp; 3}.
+\end{align*}\]</span></p></li>
+<li><p>The desired characteristic polynomial is <span class="math display">\[ (s+2-2j)(s+2+2j) = (s+2)^2 + 2^2 = s^2 + 4s + 8. \]</span> Thus, <span class="math display">\[ K_c = \MATRIX{8 - 5 &amp; 4 - (-5)} = \MATRIX{3 &amp; 9}.\]</span></p></li>
+<li><p>Thus, <span class="math display">\[ K = K_c T^{-1} = \MATRIX{3 &amp; 9} \MATRIX{-1 &amp; 2 \\ -1 &amp; 3} = \MATRIX{-12 &amp; 33}. \]</span></p></li>
+</ol>
+<p>We can verify that the gain is correct.</p>
+<div id="3eed4918" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> [<span class="fl">3</span> <span class="fl">1</span>;<span class="fl">1</span> <span class="fl">2</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> [<span class="fl">2</span>; <span class="fl">1</span>]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> [<span class="op">-</span><span class="fl">2</span><span class="op">+</span><span class="fl">2im</span> <span class="op">-</span><span class="fl">2</span><span class="op">-</span><span class="fl">2im</span>]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>K <span class="op">=</span> <span class="fu">place</span>(A,B,p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>1×2 Matrix{ComplexF64}:
+ -12.0+0.0im  33.0+0.0im</code></pre>
+</div>
+</div>
+<p>Finally, we can redo the calculations using Method 2. In particular, instead of steps 4–6, we have</p>
+<ol start="4" type="1">
+<li><p>Define <span class="math display">\[ W = \MATRIX{ a_1 &amp; 1 \\ 1 &amp; 0 } = \MATRIX{ -5 &amp; 1 \\ 1 &amp; 0 }. \]</span></p></li>
+<li><p>Therefore, <span class="math display">\[\begin{align*}
+  T^{-1} &amp;= \bigl[ \mathcal C_{(A,B)} W \bigr]^{-1} \\
+  &amp;= \left( \MATRIX{2 &amp; 7 \\ 1 &amp; 4} \MATRIX{-5 &amp; 1 \\ 1 &amp; 0 } \right)^{-1} \\
+  &amp;= \MATRIX{-1 &amp; 2 \\ -1 &amp; 3},
+  \end{align*}\]</span></p></li>
+</ol>
+<p>Thus, we get the same <span class="math inline">\(T\)</span> as using Method 1. The remaining steps 7 and 8 are the same as before.</p>
+</div>
+</div>
+</div>
 </section>
-<section id="additional-notes" class="level2">
-<h2 class="anchored" data-anchor-id="additional-notes">Additional Notes</h2>
-<ul>
-<li><p>As the instructor of this course I endeavor to provide an inclusive learning environment. However, if you&nbsp;experience barriers to learning in this course, do not hesitate to discuss them with me or contact the office of <a href="https://www.mcgill.ca/access-achieve/">Student Accessibility and Achievement</a>.</p></li>
-<li><p><a href="http://www.mcgill.ca/mercury/">End-of-course evaluations</a> are one of the ways that McGill works towards maintaining and improving the quality of courses and the student’s learning experience. You will be notified by e-mail when the evaluations are available. Please note that a minimum number of responses must be received for results to be available to students.</p></li>
-</ul>
+</section>
+<section id="choosing-the-dc-gain" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="choosing-the-dc-gain"><span class="header-section-number">3</span> Choosing the DC-gain</h2>
+</section>
+<section id="controllability-and-pole-zero-cancellation" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="controllability-and-pole-zero-cancellation"><span class="header-section-number">4</span> Controllability and pole-zero cancellation</h2>
+<p>ABC</p>
 
 
 </section>
-</section>
+
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1123,5 +1143,5 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div></div></footer><script src="site_libs/quarto-html/zenscroll-min.js"></script>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/state-feedback.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div></div></footer><script src="site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>
