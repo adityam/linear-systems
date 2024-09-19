@@ -196,7 +196,7 @@ $$ v_1 = \MATRIX{ 4 \\ 5}. $$
 Similarly, for $λ_2 = -2$, we have
 $$
 \MATRIX{4 & -4 \\ 5 & -5 } \MATRIX{ v_{21} \\ v_{22} }
-= -2 \MATRIX{ v_{21} \\ v_{22} }
+= 0
 $$
 We set $v_{21} = 1$. Then, $v_{22} = 1$. Thus, the eigenvector 
 $$ v_2 = \MATRIX{ 1 \\ 1}. $$
