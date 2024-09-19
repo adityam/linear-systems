@@ -80,7 +80,7 @@ Upon the successful completion of this course, the student students will have de
 | 2    | [State-space modeling, canoncial forms, transfer function of state space models](state-space-models.qmd) <br /> _Reading_: William and Lawrence Ch. 1 and Ch. 2 |
 | 3    | [Pole Zero Plot Step response of first and second order systems, dominant pole approximation](step-response.qmd) <br /> _Reading_: Nise Ch. 4 |
 | 4    | [Matrix exponential and solution of matrix differential equations, time response of state space models](matrix-exponential.qmd) | 
-| 5    | Pole placement, controllability, and state feedback |
+| 5    | [Pole placement, controllability, and state feedback](state-feedback.qmd) |
 | 6    | Luenberger observer, observability, output feedback, and separation principle |
 | 7    | Review and Mid-Term | 
 | 8    | Routh-Hurwitz stability criterion. Special cases: zero in first column, row of zeros. |

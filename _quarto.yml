@@ -59,7 +59,7 @@ format:
     embed-resources: false
     smooth-scroll: true
 
-    jupyter: julia-1.9
+    jupyter: julia-1.10
     freeze: true
 
     toc: true
