@@ -59,9 +59,12 @@ format:
     embed-resources: false
     smooth-scroll: true
 
-    jupyter: julia-1.10
+    jupyter: julia-1.9
     freeze: true
 
     toc: true
     number-sections: true
 
+    # comments:
+    #   hypothesis: 
+    #     theme: clean
