@@ -1,0 +1,376 @@
+---
+title: Pole placement via statement feedback
+
+execute:
+  echo: false
+  freeze: true
+  cache: true
+---
+
+
+Consider a SSM 
+\begin{align*}
+\dot x(t) &= A x(t) + B u(t) \\
+y(t) &= C x(t)
+\end{align*}
+
+$%Defition for iddots
+\newcommand\iddots{\mathinner{
+  \kern1mu\raise1pt{.}
+  \kern2mu\raise4pt{.}
+  \kern2mu\raise7pt{\Rule{0pt}{7pt}{0pt}.}
+  \kern1mu
+}}$
+
+In this section, we will learning how to control such a system when the controller has access to the internal state $x(t)$. This is called **state feedback**. In the [next section](output-feedback.qmd), we will learn how to design a system when the controller has access to only the output $y(t)$. This is called **output feedback**.
+
+The basic idea of state feedback is to use a linear feedback controller:
+$$
+u(t) = - K x(t)
+\quad \text{where } 
+K = \MATRIX{k_0 & \cdots & k_{n-1}}.
+$$
+This gives us $n$ tunable gains $k_0, \dots, k_{n-1}$ and the hope is that we can find these gain to arbitrarily choose the eigenvalues of the closed loop system. This is called **pole placement**.
+
+We will start by looking at system in CCF and show that for such systems pole placement can be achieved by simply comparing coefficients of the characteristic polynomial of the open loop systems and the designed characteristic polynomial of the closed loop system. We will then look at systems that are not in CCF and show that if the system satisfies a condition known as **controllability**, we can find a transformation that converts the to CCF and use the results from state transformation to find $K$. 
+
+```{julia}
+#| output: false
+# Install packages
+# using Pkg; Pkg.activate(".")
+# for pkg in ["IJulia", "Revise", "ControlSystemsBase"]
+#    Pkg.add(pkg)
+# end
+#  
+# # Installing Jupyter Cache
+# Pkg.add("Conda")
+# using Conda
+# Conda.add("jupyter-cache")
+
+using Revise
+
+using ControlSystemsBase
+```
+
+
+## State feedback for systems in CCF
+
+Consider a state space system in CCF with 
+$$
+A = \MATRIX{
+0 & 1 & 0 & \cdots & 0 \\
+0 & 0 & 1 & \cdots & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & \cdots & 1 \\
+-a_0 & -a_1 & \cdots & \cdots & - a_{n-1}
+},
+\quad
+B = \MATRIX{0 \\ 0 \\ \vdots \\ 0 \\ 1}.
+$$
+
+We want to find a state feedback controller
+$$
+u(t) = -K x(t)
+\quad \text{where } 
+K = \MATRIX{k_0 & \cdots & k_{n-1}}
+$$
+such that the characteristic polynomial of the closed loop system is
+$$
+\det(sI - (A - BK)) =
+s^n + α_{n-1} s^{n-1} + \cdots + α_1 s + α_0.
+$$
+
+Observe that 
+$$
+B K  = \MATRIX{0 \\ \vdots \\ 0 \\ 1}
+\MATRIX{k_0 & \cdots & k_{n-1}} =
+\MATRIX{
+0 & 0 & \cdots & 0 \\
+\vdots & \vdots & \vdots & \vdots \\
+0 & 0 & \cdots & 0 \\
+k_0 & k_1 & \cdots & k_{n-1}
+}.
+$$
+Thus, 
+$$
+A - BK = \MATRIX{
+0 & 1 & 0 & \cdots & 0 \\
+0 & 0 & 1 & \cdots & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & \cdots & 1 \\
+-(a_0+k_0) & -(a_1+k_1) & \cdots & \cdots & -(a_{n-1} + k_{n-1})
+},
+$$
+which is in CCF. Thus,
+$$
+\det(sI - (A - BK)) =
+s^n + (a_{n-1} + k_{n-1}) s^{n-1} + \cdots + (a_1 + k_1) s + (a_0 + k_0).
+$$
+
+Observe that each component of the gain matrix $K$ affects only _one_ coefficient of the characteristic polynomial. Thus, we can pick
+$$
+\bbox[5pt,border: 1px solid]
+{K = \MATRIX{ α_0 - a_0 & \cdots & α_{n-1} - a_{n-1}}}
+$$
+to place the poles of the closed loop system at any desired location.
+
+:::{#exm-CCF}
+Consider the system
+$$
+A = \MATRIX{0 & 1 \\ -1 & -3},
+\quad
+B = \MATRIX{0 \\ 1}.
+$$
+Determine a state feedback controller such that the eigenvalues of the closed loop system are at $-3 \pm 2j$. 
+:::
+
+:::{.callout-note collapse="true"} 
+#### Solution
+
+The desired characteristic polynomial is
+$$(s + 3)^2 + 2^2 = s^2 + 6s + 13.$$
+
+The current characteristic polynomial is (since the system is in CCF, we can determine it by inspection)
+$$\det(sI - A) = s^2 + 3s + 1.$$
+
+Thus, the required state feedback matrix is
+$$K = \MATRIX{13 - 1 & 6 - 3} = \MATRIX{12 & 3}.$$
+
+We verify the solution below:
+```{julia}
+#| echo: true
+A = [0 1; -1 -3]
+B = [0; 1]
+p = [-3+2im -3-2im]
+K = place(A,B,p)
+```
+:::
+
+## State feedback for systems not in CCF
+
+When a system is not in CCF, we can still use the design idea for systems in CCF if there exists a transformation (or change of coordinates) $x_c(t) = T^{-1} x(t)$ such that the system matrices for the system $(A_c, B_c, C_c)$ for $x_c(t)$ are in CCF. If such a transformation can be found, then we can find the gain matrix $K_c$ for the system in CCF using the method of the previous section and use[^K]
+$$ K = K_c T^{-1} $$
+as the gain for the original system. So, the main question is: how do we find such a transformation?
+
+[^K]: The state feedback in the new coordinate system is
+$$u(t) = - K_c x_c(t).$$
+Since $x_c(t) = T^{-1} x(t)$, we have
+$$ u(t) = - K_c T^{-1} x(t). $$
+Therefore $K = K_c T^{-1}$. 
+
+### Controllability matrix
+
+The controllability matrix of a state space system $(A,B)$ is defined as 
+$$\mathcal C_{(A,B)} = \MATRIX{B & AB & \cdots & A^{n-1} B }.$$
+
+Now consider a change of coordinates $x_c(t) = T^{-1} x(t)$. Recall that the state space representation in the new coordinate system is
+$$
+A_c = T^{-1} A T \quad B_c = T^{-1} B.
+$$
+Observe that
+
+- $A_c^2 = T^{-1} A T T^{-1} A T = T^{-1} A^2 T$
+- $A_c^3 = T^{-1} A^2 T T^{-1} A T = T^{-1} A^3 T$
+- etc.
+
+Therefore,
+
+- $A_c^2 B_c =  T^{-1} A^2 T T^{-1} B = T^{-1} A^2 B$
+- $A_c^3 B_c =  T^{-1} A^3 T T^{-1} B = T^{-1} A^3 B$
+- etc.
+
+Therefore, the controllability matrix of the system in the new coordinates is
+\begin{align*}
+\mathcal C_{(A_c, B_c)} &=
+\MATRIX{ T^{-1} B & T^{-1} A B & \cdots & T^{-1} A^{n-1} B  }
+\\
+&= T^{-1} \MATRIX{B & AB & \cdots A^{n-1} B } 
+\\
+&= T^{-1} \mathcal C_{(A,B)}.
+\end{align*}
+
+Thus, we can go from the SSM $(A,B)$ to the SSM $(A_c, B_c)$ using the transformation
+$$
+T^{-1} = \mathcal C_{(A_c, B_c)} \mathcal C_{(A,B)}^{-1}
+$$
+_provided $\mathcal C_{(A,B)}$ is invertible_ (i.e., has full rank). When that is the case, we say that the system is **controllable**. 
+
+There are different ways in which we can get uncontrollable models as is illustrated in the following example. 
+
+:::{#exm-controllability}
+Check if the following systems are controllable.
+
+a. $A = \MATRIX{2 & 0 \\ 0 & 3}$ and $B = \MATRIX{0 \\ 1}$.
+
+b. $A = \MATRIX{-4 & 5 \\ 0 & 9}$ and $B = \MATRIX{-2 \\ 0}$. 
+
+c. $A = \MATRIX{1 & 5 \\ 8 & 4}$ and $B = \MATRIX{-2 \\ 2}$. 
+:::
+
+:::{.callout-note collapse="true"} 
+### Solution
+
+a. We have 
+   $$ A B = \MATRIX{2 & 0 \\ 0 & 3} \MATRIX{ 0 \\ 1} = \MATRIX{0 \\ 3}.$$
+   Thus,
+   $$ \mathcal C_{(A,B)} = \MATRIX{ 0 & 0 \\ 1 & 3}. $$
+   We have $\det \mathcal C_{(A,B)} = 0$. So, $(A,B)$ is not controllable.
+
+b. We have 
+   $$ A B = \MATRIX{-4 & 5 \\ 0 & 9 } \MATRIX{ -2 \\ 0} = \MATRIX{8 \\ 0}.$$
+   Thus,
+   $$ \mathcal C_{(A,B)} = \MATRIX{ -2 & -8 \\ 0 & 0}. $$
+   We have $\det \mathcal C_{(A,B)} = 0$. So, $(A,B)$ is not controllable.
+
+c. We have 
+   $$ A B = \MATRIX{ 1 & 5 \\ 8 & 4} \MATRIX{ -2 \\ 2} = \MATRIX{8 \\ -8}.$$
+   Thus,
+   $$ \mathcal C_{(A,B)} = \MATRIX{ -2 & 8 \\ 2 & -8}. $$
+   We have $\det \mathcal C_{(A,B)} = 0$. So, $(A,B)$ is not controllable.
+
+:::
+
+### Pole Placement
+
+We can use the above idea to design state feedback controller for systems not in CCF. In particular, the pole placement problem is as follows.
+
+:::{.callout-important}
+### Pole placement
+
+We are given a SSM $(A,B)$ not in CCF and we want to find a state feedback controller 
+$$
+u(t) = - K x(t), \quad
+\text{where } K = \MATRIX{k_0 & \cdots & k_{n-1} }
+$$
+such that the characteristic polynomial of the closed loop system is
+$$
+\det(sI - A +  BK) = s^n + α_{n-1} s^{n-1} + \cdots + α_1 s + α_0.
+$$
+:::
+
+We present two methods for pole placement.
+
+### Method 1: Using controllability matrix
+
+1. Find the controllability matrix $\mathcal C_{(A,B)}$ of the system. 
+
+2. If the system is not controllable, i.e., the controllability matrix is not full rank (which can be tested by checking that the determinant of the controllability matrix is non-zero), pole placement is not possible and we quit the procedure. 
+
+3. If the system is controllable, find the characteristic polynomial of $A$:
+   $$\det(s I - A) = s^n + a_{n-1} s^{n-1} + \cdots + a_0 $$
+
+4. Using the above characteristic polynomial, write the SSM $(A_c, B_c)$ in CCF.
+
+    [Recall that the characteristic polynomial is the denominator of the transfer function]{.text-smaller}
+
+5. Compute the controllability matrix $\mathcal C(A_c, B_c)$ of the system $(A_c, B_c)$ in CCF.
+
+6. Compute the transformation
+    $$\bbox[5pt,border: 1px solid]{
+    T^{-1} = \mathcal C_{(A_c, B_c)} \mathcal C_{(A,B)}^{-1}
+    }$$
+
+7. Compute the controller gain $K_c$ for the system in CCF:
+   $$ K_c = \MATRIX{ α_0 - a_0 & \cdots & α_{n-1} - a_{n-1}}. $$
+
+8. The controller gain for the original system is
+   $K = K_c T^{-1}.$$
+
+### Method 2: A slightly more efficient approach
+
+It is possible to avoid the computation of the controllability matrix of the system in CCF by
+replacing steps 4--6 of Method 1 by the following:
+
+4. Compute the matrix
+   $$ W = \MATRIX{ a_1 & a_2 & \cdots & a_{n-1} & 1 \\
+                   a_2 & \iddots & \iddots & 1 & 0 \\
+                   \iddots & \iddots & \iddots & \iddots & \vdots \\
+                  a_{n-1} & 1 & 0 & \cdots & 0 \\
+                  1 & 0 & 0 & \cdots & 0 
+                 }
+   $$
+
+5. Compute the transformation:
+   $$\bbox[5pt,border: 1px solid]{
+    T^{-1} = \bigl[ \mathcal C_{(A,B)} W \bigr]^{-1}
+   }$$
+
+
+:::{#exm-pole-placement}
+Consider the following SSM:
+$$ A = \MATRIX{3 & 1 \\ 1 & 2}, B = \MATRIX{2 \\1} \text{ and } C = \MATRIX{ 3 & 2}. $$
+Design a state feedback controller (i.e., compute the feedback gain $K$) such that the eigenvalues of the closed loop system are at $-2 \pm 2j$. 
+:::
+
+:::{.callout-note collapse="true"} 
+### Solution
+We will show the solution via both method 1 and method 2. For method 1, we have the following.
+
+1. We have
+   $$ A B = \MATRIX{3 & 1\\ 1 & 2} \MATRIX{2 \\ 1} = \MATRIX{7 \\ 4}. $$
+   Therefore,
+   $$ \mathcal C_{(A,B)} = \MATRIX{ 2 & 7 \\ 1 & 4}. $$
+
+2. $\det \mathcal C_{(A,B)} = 8 - 7 = 1 \neq 0$. Thus, $(A,B)$ is controllable and we can design a state feedback controller. 
+
+3. The characteristic polynomial is given by
+   $$s I - A = \MATRIX{s & 0 \\ 0 & s} - \MATRIX{3 & 1 \\ 1 & 2} = \MATRIX{ s-3 & -1 \\ -1 & s - 2}.$$
+   Therefore,
+   $$
+   \det(sI-A) = \DET{ s-3 & -1 \\ -1 & s - 2} = (s-3)(s-1) - 1 = s^2 - 5s + 5.
+   $$
+
+4. The SSM in CCF is
+    $$ A_c = \MATRIX{0 & 1 \\ -5 & 5}, \quad B_c = \MATRIX{0 \\ 1}.$$
+
+5. We have
+   $$ A_c B_c = \MATRIX{ 0 & 1 \\ -5 & 5} \MATRIX{0 \\ 1} = \MATRIX{1 \\ 5}. $$
+   Therefore,
+   $$ \mathcal C_{(A_c, B_c)} = \MATRIX{0 & 1 \\ 1 & 5}. $$
+
+6. Thus, we have
+   \begin{align*}
+    T^{-1} &= \mathcal C_{(A_c,B_c)} \mathcal C_{(A,B)}^{-1}
+    \\
+    &= \MATRIX{0 & 1 \\ 1 & 5} \MATRIX{2 & 7 \\ 1 & 4}^{-1} 
+    \\
+    &= \MATRIX{0 & 1 \\ 1 & 5} \MATRIX{4 & -7 \\ -1 & 2}
+    \\
+    &= \MATRIX{-1 & 2 \\ -1 & 3}.
+   \end{align*}
+
+7. The desired characteristic polynomial is
+   $$ (s+2-2j)(s+2+2j) = (s+2)^2 + 2^2 = s^2 + 4s + 8. $$
+   Thus,
+   $$ K_c = \MATRIX{8 - 5 & 4 - (-5)} = \MATRIX{3 & 9}.$$
+
+8. Thus, 
+   $$ K = K_c T^{-1} = \MATRIX{3 & 9} \MATRIX{-1 & 2 \\ -1 & 3} = \MATRIX{-12 & 33}. $$
+
+We can verify that the gain is correct.
+```{julia}
+#| echo: true
+A = [3 1;1 2]
+B = [2; 1]
+p = [-2+2im -2-2im]
+K = place(A,B,p)
+```
+Finally, we can redo the calculations using Method 2. In particular, instead of steps 4–6, we have
+
+4. Define
+   $$ W = \MATRIX{ a_1 & 1 \\ 1 & 0 } = \MATRIX{ -5 & 1 \\ 1 & 0 }. $$
+
+6. Therefore, 
+   \begin{align*}
+  T^{-1} &= \bigl[ \mathcal C_{(A,B)} W \bigr]^{-1} \\
+  &= \left( \MATRIX{2 & 7 \\ 1 & 4} \MATRIX{-5 & 1 \\ 1 & 0 } \right)^{-1} \\
+  &= \MATRIX{-1 & 2 \\ -1 & 3},
+  \end{align*}
+
+Thus, we get the same $T$ as using Method 1. The remaining steps 7 and 8 are the same as before. 
+
+:::
+
+## Choosing the DC-gain
+
+## Controllability and pole-zero cancellation
