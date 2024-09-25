@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2024-09-19">
+<meta name="dcterms.date" content="2024-09-25">
 
 <title>Pole placement via statement feedback – Linear Systems and Control</title>
 <style>
@@ -236,7 +236,7 @@ window.Quarto = {
   <li><a href="#method-1-using-controllability-matrix" id="toc-method-1-using-controllability-matrix" class="nav-link" data-scroll-target="#method-1-using-controllability-matrix"><span class="header-section-number">2.3</span> Method 1: Using controllability matrix</a></li>
   <li><a href="#method-2-a-slightly-more-efficient-approach" id="toc-method-2-a-slightly-more-efficient-approach" class="nav-link" data-scroll-target="#method-2-a-slightly-more-efficient-approach"><span class="header-section-number">2.4</span> Method 2: A slightly more efficient approach</a></li>
   </ul></li>
-  <li><a href="#choosing-the-dc-gain" id="toc-choosing-the-dc-gain" class="nav-link" data-scroll-target="#choosing-the-dc-gain"><span class="header-section-number">3</span> Choosing the DC-gain</a></li>
+  <li><a href="#state-feedback-for-reference-tracking" id="toc-state-feedback-for-reference-tracking" class="nav-link" data-scroll-target="#state-feedback-for-reference-tracking"><span class="header-section-number">3</span> State-feedback for reference tracking</a></li>
   <li><a href="#controllability-and-pole-zero-cancellation" id="toc-controllability-and-pole-zero-cancellation" class="nav-link" data-scroll-target="#controllability-and-pole-zero-cancellation"><span class="header-section-number">4</span> Controllability and pole-zero cancellation</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/state-feedback.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
@@ -272,7 +272,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 19, 2024</p>
+      <p class="date">September 25, 2024</p>
     </div>
   </div>
   
@@ -296,11 +296,26 @@ y(t) &amp;= C x(t)
   \kern1mu
 }}\)</span></p>
 <p>In this section, we will learning how to control such a system when the controller has access to the internal state <span class="math inline">\(x(t)\)</span>. This is called <strong>state feedback</strong>. In the <a href="output-feedback.qmd">next section</a>, we will learn how to design a system when the controller has access to only the output <span class="math inline">\(y(t)\)</span>. This is called <strong>output feedback</strong>.</p>
-<p>The basic idea of state feedback is to use a linear feedback controller: <span class="math display">\[
-u(t) = - K x(t)
-\quad \text{where }
+<div id="fig-block" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-block-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/SSM1.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-block-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Block diagram for state feedback
+</figcaption>
+</figure>
+</div>
+<p>The basic idea of state feedback is shown in <a href="#fig-block" class="quarto-xref">Figure&nbsp;1</a>. The system has two tunable blocks: the <strong>feedback gain</strong> <span class="math inline">\(K\)</span> which is a <span class="math inline">\(1 \times n\)</span> matrix and the <strong>pre-compensator</strong> <span class="math inline">\(N\)</span>, which is a scalar. The equation for the input-output system may be written as: <span class="math display">\[\begin{align*}
+  \dot x(t) &amp;= A x(t) + B \bigl( N r(t) - K x(t) \bigr),  \\
+  y(t) &amp;= C x(t),
+\end{align*}\]</span> or, equivalently, <span class="math display">\[\begin{align*}
+  \dot x(t) &amp;= (A - BK) x(t) + B N r(t),  \\
+  y(t) &amp;= C x(t),
+\end{align*}\]</span> where <span class="math inline">\(N \in \reals\)</span> and <span class="math display">\[
 K = \MATRIX{k_0 &amp; \cdots &amp; k_{n-1}}.
-\]</span> This gives us <span class="math inline">\(n\)</span> tunable gains <span class="math inline">\(k_0, \dots, k_{n-1}\)</span> and the hope is that we can find these gain to arbitrarily choose the eigenvalues of the closed loop system. This is called <strong>pole placement</strong>.</p>
+\]</span></p>
+<p>We will first consider the system without any input (i.e., <span class="math inline">\(r(t) = 0\)</span>) and consider the zero input response. In this case, we only need to design <span class="math inline">\(K\)</span>, which has <span class="math inline">\(n\)</span> tunable gains <span class="math inline">\(k_0, \dots, k_{n-1}\)</span>. The hope is that we can find these gain to arbitrarily choose the eigenvalues of the closed loop system. This is called <strong>pole placement</strong>.</p>
 <p>We will start by looking at system in CCF and show that for such systems pole placement can be achieved by simply comparing coefficients of the characteristic polynomial of the open loop systems and the designed characteristic polynomial of the closed loop system. We will then look at systems that are not in CCF and show that if the system satisfies a condition known as <strong>controllability</strong>, we can find a transformation that converts the to CCF and use the results from state transformation to find <span class="math inline">\(K\)</span>.</p>
 <section id="state-feedback-for-systems-in-ccf" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="state-feedback-for-systems-in-ccf"><span class="header-section-number">1</span> State feedback for systems in CCF</h2>
@@ -562,12 +577,16 @@ T^{-1} &amp;= \mathcal C_{(A_c,B_c)} \mathcal C_{(A,B)}^{-1}
 </div>
 </section>
 </section>
-<section id="choosing-the-dc-gain" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="choosing-the-dc-gain"><span class="header-section-number">3</span> Choosing the DC-gain</h2>
+<section id="state-feedback-for-reference-tracking" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="state-feedback-for-reference-tracking"><span class="header-section-number">3</span> State-feedback for reference tracking</h2>
+<p>We now return to the architecture shown in <a href="#fig-block" class="quarto-xref">Figure&nbsp;1</a> and consider the design of the pre-compensator <span class="math inline">\(N\)</span>. The idea is to choose the pre-compensator <span class="math inline">\(N\)</span> to ensure that steady state error is zero. In particular, we know that the DC-gain of the system is <span class="math display">\[
+\text{DC-gain} = N G(0) = N C (sI - (A - BK) )^{-1} B \bigg|_{s = 0} = - N C (A-BK)^{-1} B.
+\]</span> To ensure that steady-state error when tracking a step input is zero, we pick the pre-compensator gain <span class="math inline">\(N\)</span> as follows: <span class="math display">\[
+  N = - \frac{1}{ C(A-BK)^{-1} B }.
+\]</span></p>
 </section>
 <section id="controllability-and-pole-zero-cancellation" class="level2" data-number="4">
 <h2 data-number="4" class="anchored" data-anchor-id="controllability-and-pole-zero-cancellation"><span class="header-section-number">4</span> Controllability and pole-zero cancellation</h2>
-<p>ABC</p>
 
 
 </section>
