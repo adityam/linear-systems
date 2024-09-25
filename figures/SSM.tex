@@ -1,0 +1,71 @@
+\usepath[/home/adityam/Projects/presentations]
+
+\enablemode[euler]
+\environment env-fonts.tex
+\usemodule[tikz,pgfplots]
+
+\definecolor  [darkred]    [r=0.84, g=0.11, b=0.1] 
+\definecolor  [darkblue]   [r=0.1,  g=0.11, b=0.84]
+\definecolor  [darkgreen]  [g=0.7]
+
+\definecolor  [lightred]    [r=1, g=.71, b=.75]
+\definecolor  [lightblue]   [h=87cefa]
+\definecolor  [lightgreen]  [g=0.95,b=0.8,r=0.8] 
+
+\usetikzlibrary[shapes,arrows,arrows.meta,decorations.markings]
+\usetikzlibrary[positioning,intersections]
+
+\tikzstyle{block} = [draw, rectangle, 
+    minimum height=3em, minimum width=6em, inner sep=2ex]
+\tikzstyle{tightblock} = [draw, rectangle, 
+    minimum height=3em, minimum width=3em, inner sep=2ex]
+\tikzstyle{sum} = [draw, circle]
+\tikzstyle{input} = []
+\tikzstyle{output} = []
+
+
+\tikzstyle{vecArrow} = [thick, decoration={markings,mark=at position
+   1 with {\arrow[semithick]{open triangle 60}}},
+   double distance=1.4pt, shorten >= 5.5pt,
+   preaction = {decorate},
+   postaction = {draw,line width=1.4pt, white,shorten >= 4.5pt}]
+
+\tikzstyle{innerWhite} = [semithick, white,line width=1.4pt, shorten >= 4.5pt]
+
+\define\SMALL{\switchtobodyfont[10pt]}
+
+\starttext
+\startTEXpage % Reference tracking
+\scale[scale=1500]{\starttikzpicture[thick]
+      \node [input] (input) {$r(t)$};
+      \node [tightblock, right=of input, draw=darkred, fill=lightred] (compensator) {$N$};
+      \node [sum, right=of compensator] (sum0) {\tfc $+$};
+      \node [tightblock, right=of sum0] (B) {$B$};
+      \node [sum, right=of B] (sum1) {\tfc $+$};
+      \node [tightblock, right=of sum1] (integrator) {$\dfrac{1}{s}$};
+      \node [tightblock, below=8mm of integrator] (A) {$A$};
+      \node [tightblock, right=16mm of integrator] (C) {$C$};
+      \node [output, right=8mm of C] (output) {$y(t)$};
+
+      \node [tightblock, below=8mm of A, draw=darkred, fill=lightred] (K) {$K$};
+
+      \draw [->] (input) -- (compensator);
+      \draw [->] (compensator) -- (sum0.west) node[left=5pt, above] {$+$};
+      \draw [->] (sum0) -- (B);
+      \draw [vecArrow] (B) -- (sum1.west) node[left=5pt, above] {$+$};
+      \draw [vecArrow] (sum1) -- (integrator);
+      \draw [->] (C) -- (output);
+      \draw [vecArrow] (A) -| (sum1.south) node[below=5pt, left] {$+$};
+      \draw [vecArrow] (integrator) -- node[midway, coordinate, name=bend, label={[font=\SMALL]above:$x(t)$}] {} (C);
+      \draw [vecArrow] (bend) |- (A);
+
+      \draw [->] (K) -| (sum0.south) node[below=5pt, left] {$-$};
+      \draw [vecArrow] (bend) |- (K);
+
+      % 2nd pass
+      \draw [innerWhite] (integrator) -- (C);
+      \draw [innerWhite] (bend) |- (A);
+
+    \stoptikzpicture}
+\stopTEXpage
+\stoptext
