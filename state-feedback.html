@@ -147,7 +147,8 @@ window.MathJax = {
       NORM: ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1],
       ABS: ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1],
       GRAD: "\\nabla",
-      IP: ["\\left\\langle #1, #2 \\right\\rangle", 2]
+      IP: ["\\left\\langle #1, #2 \\right\\rangle", 2],
+      iddots: "\\mathinner{ \\kern1mu\\raise1pt{.} \\kern2mu\\raise4pt{.} \\kern2mu\\raise7pt{\\Rule{0pt}{7pt}{0pt}.} \\kern1mu}",
     },
   },
   options: {
@@ -293,13 +294,6 @@ window.Quarto = {
 \dot x(t) &amp;= A x(t) + B u(t) \\
 y(t) &amp;= C x(t)
 \end{align*}\]</span></p>
-<p><span class="math inline">\(%Defition for iddots
-\newcommand\iddots{\mathinner{
-  \kern1mu\raise1pt{.}
-  \kern2mu\raise4pt{.}
-  \kern2mu\raise7pt{\Rule{0pt}{7pt}{0pt}.}
-  \kern1mu
-}}\)</span></p>
 <p>In this section, we will learning how to control such a system when the controller has access to the internal state <span class="math inline">\(x(t)\)</span>. This is called <strong>state feedback</strong>. In the <a href="output-feedback.qmd">next section</a>, we will learn how to design a system when the controller has access to only the output <span class="math inline">\(y(t)\)</span>. This is called <strong>output feedback</strong>.</p>
 <div id="fig-block" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -682,6 +676,10 @@ Figure&nbsp;2: A RC-bridge
 \]</span> When the bridge is <strong>balanced</strong>, i.e., <span class="math inline">\(R_1 = R_2  = R\)</span> and <span class="math inline">\(C_1 = C_2 = C\)</span>, we have <span class="math display">\[
 \dot {\tilde v(t)} = -\left[ \frac{1}{RC} + \frac{2}{R_3 C} \right] \tilde v(t)
 \]</span> which is a homogeneous equation with no input. Thus, in this case, the control input <span class="math inline">\(u(t)\)</span> has no impact on the subspace <span class="math inline">\(v_1(t) - v_2(t)\)</span> of the state space. Thus, the system is not controllable.</p>
+<p>We can also verify this via the controllability matrix, whic is given by <span class="math display">\[
+\mathcal C = \MATRIX{ \dfrac{1}{RC} &amp; -\dfrac{1}{(RC)^2} \\
+\dfrac{1}{RC} &amp; -\dfrac{1}{(RC)^2}}
+\]</span> which is not full rank.</p>
 </section>
 <section id="uncontrollability-and-pole-zero-cancellation" class="level3" data-number="4.2">
 <h3 data-number="4.2" class="anchored" data-anchor-id="uncontrollability-and-pole-zero-cancellation"><span class="header-section-number">4.2</span> Uncontrollability and pole-zero cancellation</h3>
