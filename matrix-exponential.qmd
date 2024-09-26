@@ -267,7 +267,7 @@ $$ e^{At} = \mathcal L^{-1}(sI - A)^{-1} =
 $$
 :::
 
-## Time response of state space models
+## Time response of state space models {#time-response}
 
 Now consider a SSM given by
 \begin{align*}

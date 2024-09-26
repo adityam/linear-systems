@@ -160,5 +160,24 @@
     \stoptikzpicture}
 \stopTEXpage
 
+\startTEXpage[offset=1dk]
+\switchtobodyfont[10pt]
+\scale[scale=1500]{\startcircuitikz[american voltages,thick]
+  \draw (0,0) to[V=$u(t)$,invert] (0,4) 
+              to (2,4)
+              to[R=$R_1$, -*] (2,2)
+              node[label={left:$v_1(t)$}] {}
+              to[C=$C_1$] (2,0)
+              to (0,0);
+  \draw (2,4) to (6,4)
+              to[R=$R_2$, -*] (6,2)
+              node[label={right:$v_2(t)$}] {}
+              to[C=$C_2$] (6,0)
+              to (2,0);
+
+  \draw (2,2) to[R=$R_3$] (6,2);
+
+\stopcircuitikz}
+\stopTEXpage
 
 \stoptext

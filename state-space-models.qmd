@@ -225,7 +225,7 @@ $$
 In general, the poles will be complex and have multiplicity. In this setting, a generalization of DCF known as Jordan canconical form (JCF) is used. We will not consider JCF in this course.
 
 
-## SSMs for circuits
+## SSMs for circuits {#ssm-for-circuits}
 
 We will use the following notation in this section: $v(t)$ denotes voltage, $i(t)$ denotes current, and $q(t)$ denotes charge. 
 
