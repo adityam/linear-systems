@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2024-09-25">
+<meta name="dcterms.date" content="2024-09-26">
 
 <title>Pole placement via statement feedback – Linear Systems and Control</title>
 <style>
@@ -237,7 +237,12 @@ window.Quarto = {
   <li><a href="#method-2-a-slightly-more-efficient-approach" id="toc-method-2-a-slightly-more-efficient-approach" class="nav-link" data-scroll-target="#method-2-a-slightly-more-efficient-approach"><span class="header-section-number">2.4</span> Method 2: A slightly more efficient approach</a></li>
   </ul></li>
   <li><a href="#state-feedback-for-reference-tracking" id="toc-state-feedback-for-reference-tracking" class="nav-link" data-scroll-target="#state-feedback-for-reference-tracking"><span class="header-section-number">3</span> State-feedback for reference tracking</a></li>
-  <li><a href="#controllability-and-pole-zero-cancellation" id="toc-controllability-and-pole-zero-cancellation" class="nav-link" data-scroll-target="#controllability-and-pole-zero-cancellation"><span class="header-section-number">4</span> Controllability and pole-zero cancellation</a></li>
+  <li><a href="#understanding-lack-of-controllability" id="toc-understanding-lack-of-controllability" class="nav-link" data-scroll-target="#understanding-lack-of-controllability"><span class="header-section-number">4</span> Understanding lack of controllability</a>
+  <ul class="collapse">
+  <li><a href="#uncontrollable-modes-of-a-system" id="toc-uncontrollable-modes-of-a-system" class="nav-link" data-scroll-target="#uncontrollable-modes-of-a-system"><span class="header-section-number">4.1</span> Uncontrollable modes of a system</a></li>
+  <li><a href="#uncontrollability-and-pole-zero-cancellation" id="toc-uncontrollability-and-pole-zero-cancellation" class="nav-link" data-scroll-target="#uncontrollability-and-pole-zero-cancellation"><span class="header-section-number">4.2</span> Uncontrollability and pole-zero cancellation</a></li>
+  <li><a href="#properties-of-controllability" id="toc-properties-of-controllability" class="nav-link" data-scroll-target="#properties-of-controllability"><span class="header-section-number">4.3</span> Properties of controllability</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/state-feedback.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -272,7 +277,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 25, 2024</p>
+      <p class="date">September 26, 2024</p>
     </div>
   </div>
   
@@ -386,12 +391,12 @@ Solution
 <p>The current characteristic polynomial is (since the system is in CCF, we can determine it by inspection) <span class="math display">\[\det(sI - A) = s^2 + 3s + 1.\]</span></p>
 <p>Thus, the required state feedback matrix is <span class="math display">\[K = \MATRIX{13 - 1 &amp; 6 - 3} = \MATRIX{12 &amp; 3}.\]</span></p>
 <p>We verify the solution below:</p>
-<div id="927715ce" class="cell" data-execution_count="3">
+<div id="e4971d30" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> [<span class="fl">0</span> <span class="fl">1</span>; <span class="op">-</span><span class="fl">1</span> <span class="op">-</span><span class="fl">3</span>]</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> [<span class="fl">0</span>; <span class="fl">1</span>]</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> [<span class="op">-</span><span class="fl">3</span><span class="op">+</span><span class="fl">2im</span> <span class="op">-</span><span class="fl">3</span><span class="op">-</span><span class="fl">2im</span>]</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>K <span class="op">=</span> <span class="fu">place</span>(A,B,p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>1×2 Matrix{ComplexF64}:
  12.0+0.0im  3.0+0.0im</code></pre>
 </div>
@@ -552,12 +557,12 @@ T^{-1} &amp;= \mathcal C_{(A_c,B_c)} \mathcal C_{(A,B)}^{-1}
 <li><p>Thus, <span class="math display">\[ K = K_c T^{-1} = \MATRIX{3 &amp; 9} \MATRIX{-1 &amp; 2 \\ -1 &amp; 3} = \MATRIX{-12 &amp; 33}. \]</span></p></li>
 </ol>
 <p>We can verify that the gain is correct.</p>
-<div id="3eed4918" class="cell" data-execution_count="4">
+<div id="1380b04e" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> [<span class="fl">3</span> <span class="fl">1</span>;<span class="fl">1</span> <span class="fl">2</span>]</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> [<span class="fl">2</span>; <span class="fl">1</span>]</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> [<span class="op">-</span><span class="fl">2</span><span class="op">+</span><span class="fl">2im</span> <span class="op">-</span><span class="fl">2</span><span class="op">-</span><span class="fl">2im</span>]</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>K <span class="op">=</span> <span class="fu">place</span>(A,B,p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
+<div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>1×2 Matrix{ComplexF64}:
  -12.0+0.0im  33.0+0.0im</code></pre>
 </div>
@@ -585,10 +590,164 @@ T^{-1} &amp;= \mathcal C_{(A_c,B_c)} \mathcal C_{(A,B)}^{-1}
   N = - \frac{1}{ C(A-BK)^{-1} B }.
 \]</span></p>
 </section>
-<section id="controllability-and-pole-zero-cancellation" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="controllability-and-pole-zero-cancellation"><span class="header-section-number">4</span> Controllability and pole-zero cancellation</h2>
+<section id="understanding-lack-of-controllability" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="understanding-lack-of-controllability"><span class="header-section-number">4</span> Understanding lack of controllability</h2>
+<p>In this section, we provide some intuition to understand why controllability plays a critical role in state feedback. Consider the SSM</p>
+<p><span class="math display">\[\begin{align*}
+\dot x(t) &amp;= A x(t) + B u(t) \\
+y(t) &amp;= C x(t).
+\end{align*}\]</span></p>
+<p>As we saw in the <a href="./matrix-exponential.html#time-response">last section</a>, the zero-state response of the system is <span class="math display">\[
+x(t) = \int_{0}^t e^{A τ} B u(t-τ)\, d τ.
+\]</span></p>
+<p>We already say that <span class="math display">\[
+  e^{At} = I + At + \frac{A^2 t^2}{2!} + \frac{A^3 t^3}{3!} + \cdots
+\]</span> From <a href="https://en.wikipedia.org/wiki/Cayley%E2%80%93Hamilton_theorem">:Caley-Hamilton Theorem</a>, we know that any <span class="math inline">\(A^k\)</span> for <span class="math inline">\(k \ge n\)</span> can be expressed in terms of <span class="math inline">\(A^0, \dots, A^{n-1}\)</span>. Thus, we can write <span class="math display">\[
+  e^{At} = \sum_{k=0}^{n-1} w_k(t) A^k
+\]</span> for some weight functions <span class="math inline">\(\{w_k(t)\}_{k=0}^n\)</span>.</p>
+<p>Hence, we can write the state <span class="math inline">\(x(t)\)</span> as <span class="math display">\[\begin{align*}
+x(t) &amp;= \int_{0}^t \left( \sum_{k=0}^{n-1} w_k(t) A^k \right) B u(t - τ)\, d τ \\
+&amp;= \sum_{k=0}^{n-1} A^k B
+\underbrace{\left[\int_{0}^t w_k(t) u(t - τ)\, d τ\right]}
+_{\eqqcolon v_k(t)} \\
+&amp;= \sum_{k=0}^{n-1} A^{k-1} B v_k(t)
+\end{align*}\]</span> where <span class="math inline">\(v_k(t)\)</span> denote on the control input <span class="math inline">\(u(t)\)</span>.</p>
+<p>Let <span class="math inline">\(M_c\)</span> denote the range space of <span class="math inline">\(\mathcal C_{(A,B)}\)</span>. Then, by definition, for any input <span class="math inline">\(u(t)\)</span>, <span class="math display">\[
+x(t) = \sum_{k=0}^{n-1} A^{k-1} B v_k(t) = \mathcal C_{(A,B)} v(t) \in M_c.
+\]</span></p>
+<p>So, no matter what control inputs we use, we can only reach states belonging to <span class="math inline">\(M_c\)</span>. If <span class="math display">\[\text{rank}(\mathcal C_{(A,B)}) = \text{rank}(M_c) \neq n,\]</span> then there is a subspace that cannot be reached by any control input! This is actually the formal definition of controllability.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Controllability
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A SSM is said to be controllable if for every initial condition <span class="math inline">\(x_0\)</span>, time <span class="math inline">\(t\)</span>, and state <span class="math inline">\(x\)</span> at time <span class="math inline">\(t\)</span>, there exists a control input <span class="math inline">\(u\)</span> that moves the system starting at initial state <span class="math inline">\(x_0\)</span> to state <span class="math inline">\(x\)</span> at time <span class="math inline">\(t\)</span>.</p>
+<p>The argument presented above shows that a system is controllable if and only if <span class="math inline">\(\text{rank}(\mathcal C_{(A,B)} = n\)</span>.</p>
+</div>
+</div>
+<section id="uncontrollable-modes-of-a-system" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="uncontrollable-modes-of-a-system"><span class="header-section-number">4.1</span> Uncontrollable modes of a system</h3>
+<div id="exm-uncontrollable" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4</strong></span> Consider <span class="math display">\[
+A = \MATRIX{-2 &amp; 0 \\ 0 &amp; -1}
+\quad\text{and}\quad
+B = \MATRIX{2 \\ 0}.
+\]</span></p>
+<p>Then, <span class="math display">\[\mathcal C_{(A,B)} = \MATRIX{2 &amp; -4 \\ 0 &amp; 0 }.\]</span> Therefore, <span class="math display">\[
+\text{range}(\mathcal C_{(A,B)}) =
+\left\{ \MATRIX{ α \\ 0 } : α \in \reals \right\}.
+\]</span> Thus, no matter what input we choose, we cannot reach vectors belonging to the subspace <span class="math display">\[
+\left\{ \MATRIX{ 0 \\ β } : β \in \reals \right\}.
+\]</span></p>
+</div>
+<p>The above example shows that for systems where <span class="math inline">\(A\)</span> matrix is diagonal, it is easy to interpret controllability: a system <span class="math inline">\((A,B)\)</span> where <span class="math inline">\(A\)</span> is diagonal is uncontrollable if some element of <span class="math inline">\(B\)</span> is zero, which means that there is a <em>mode</em> (i.e., eigen-direction) such that the input cannot effect the evolution of the state in that eigen-direction.</p>
+<p>Let’s revisit the examples in <a href="#exm-controllability" class="quarto-xref">Example&nbsp;2</a>. Let <span class="math inline">\((λ_1, v_1)\)</span> and <span class="math inline">\((λ_2, v_2)\)</span> be the eigenvalue-eigenvector pairs for each model. Take <span class="math inline">\(T = [v_1, v_2]\)</span> and consider the change of variables <span class="math inline">\(\tilde x = T^{-1} x\)</span>. In this new coordinate system <span class="math display">\[ \tilde A = T^{-1} A T, \quad \tilde B = T^{-1} B. \]</span> We have that</p>
+<ol type="a">
+<li><p>We take <span class="math inline">\(T = \MATRIX{1 &amp; 0 \\ 0 &amp; 1}\)</span>. Thus, we have <span class="math display">\[\tilde A = \MATRIX{2 &amp; 0 \\ 0 &amp; 3}, \quad \tilde B = \MATRIX{0 \\ 1}.\]</span></p></li>
+<li><p>We take <span class="math inline">\(T = \MATRIX{1 &amp; 5 \\ 0 &amp; 13}\)</span>. Thus, we have <span class="math display">\[\tilde A = \MATRIX{-4 &amp; 0 \\ 0 &amp; 3}, \quad \tilde B = \MATRIX{-2 \\ 0}.\]</span></p></li>
+<li><p>We take <span class="math inline">\(T = \MATRIX{-1 &amp; 5 \\ 1 &amp; 8}\)</span>. Thus, we have <span class="math display">\[\tilde A = \MATRIX{-4 &amp; 0 \\ 0 &amp; 3}, \quad \tilde B = \MATRIX{2 \\ 0}.\]</span></p></li>
+</ol>
+<p>Thus, in all cases, there is an eigen-direction that cannot be controlled!</p>
+<p>Finally, we consider the following circuit to see why a physical system may be uncontrollable.</p>
+<div id="fig-rc-bridge" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rc-bridge-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/circuits9.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rc-bridge-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: A RC-bridge
+</figcaption>
+</figure>
+</div>
+<p>We will follow the approach presented in <a href="./state-space-models.html#ssm-for-circuits">previous section</a> to find a SSM for the circuit in <a href="#fig-rc-bridge" class="quarto-xref">Figure&nbsp;2</a>. We take the voltage across the two capcitors (denoted by <span class="math inline">\(v_1\)</span> and <span class="math inline">\(v_2\)</span>) as the two components of the SSM. From KCL, we have <span class="math display">\[\begin{align*}
+  C_1 \dot v_1(t) &amp;= \frac{u(t) - v_1(t)}{R_1} - \frac{v_1(t) - v_2(t)}{R_3} \\
+  C_2 \dot v_2(t) &amp;= \frac{u(t) - v_2(t)}{R_2} + \frac{v_1(t) - v_2(t)}{R_3}
+\end{align*}\]</span> which can be re-written in state-space form as: <span class="math display">\[\def\1{\vphantom{\dfrac{1}{C_1R_1}}}
+  \MATRIX{ \1\dot v_1(t) \\ \1\dot v_2(t) } =
+  \MATRIX{ -\left(\dfrac{1}{C_1R_1} + \dfrac{1}{C_1 R_3}\right) &amp; \dfrac{1}{C_1R_3} \\
+  \dfrac{1}{C_2R_3} &amp; -\left(\dfrac{1}{C_2R_2} + \dfrac{1}{C_2R_3}\right)}
+  \MATRIX{ \1v_1(t) \\ \1v_2(t) }
+  +
+  \MATRIX{\dfrac{1}{C_1R_1} \\ \dfrac{1}{C_2R_2}} u(t).
+\]</span> Consider the sum <span class="math inline">\(\tilde v(t) = v_1(t) + v_2(t) = \MATRIX{I &amp; I} \MATRIX{v_1(t) \\ v_2(t)}\)</span>, which satisfies <span class="math display">\[
+\dot {\tilde v(t)} =
+  -\frac{1}{C_1R_1} v_1(t)
+  - \frac{1}{C_2R_2} v_2(t)
++ \left[ \frac{1}{C_1R_1} - \frac {1}{C_2 R_2} \right] u(t).
+\]</span> When the bridge is <strong>balanced</strong>, i.e., <span class="math inline">\(R_1 C_1 = R_2 C_2 = RC\)</span>, we have <span class="math display">\[
+\dot {\tilde v(t)} = -\frac{1}{RC} (v_1(t) + v_2(t)) = -\frac{1}{RC} \tilde v(t)
+\]</span> which is a homogeneous equation with no input. Thus, in this case, the control input <span class="math inline">\(u(t)\)</span> has no impact on the subspace <span class="math inline">\(v_1(t) + v_2(t)\)</span> of the state space. Thus, the system is not controllable.</p>
+</section>
+<section id="uncontrollability-and-pole-zero-cancellation" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="uncontrollability-and-pole-zero-cancellation"><span class="header-section-number">4.2</span> Uncontrollability and pole-zero cancellation</h3>
+<p>Uncontrollability is often related to pole zero cancelling. Consider the following transfer function: <span class="math display">\[ G(s) = \frac{s - z}{s^2 + 3s + 2}. \]</span> Let’s compare the CCF and OCF representations of the system:</p>
+<ul>
+<li><p><strong>CCF representation</strong> <span class="math display">\[ A_c = \MATRIX{0 &amp; 1 \\ -2 &amp; -3 }, \quad
+   B_c = \MATRIX{0 \\ 1}, \quad
+   C_c = \MATRIX{-z &amp; 1}.
+\]</span></p></li>
+<li><p><strong>OCF representation</strong> <span class="math display">\[ A_o = \MATRIX{0 &amp; -2 \\ 1 &amp; -3 }, \quad
+   B_o = \MATRIX{-z \\ 1}, \quad
+   C_o = \MATRIX{0 &amp; 1}.
+\]</span></p></li>
+</ul>
+<p>Observe that in the CCF representation the matrices <span class="math inline">\((A_c, B_c)\)</span> do not depend on the location <span class="math inline">\(z\)</span> of the zero. Therefore, neither does the controllability matrix, which is given by <span class="math display">\[
+  \mathcal C_{(A_c, B_c)} = \MATRIX{ 0 &amp; 1 \\ 1 &amp; -3 }
+\]</span> On the other hand, in the OCF representation the matrix <span class="math inline">\(B_o\)</span> depends on the location <span class="math inline">\(z\)</span> of the zero. Therefore, so does the controllability matrix, which is given by <span class="math display">\[
+  \mathcal C_{(A_o, B_o)} = \MATRIX{ -z &amp; -2 \\ 1 &amp; -3 - z}.
+\]</span> Thus, <span class="math inline">\(\det \mathcal C_{(A_o, B_o)} = z^2 + 3z + 2 = (z+1)(z+2).\)</span>$ Thus, the OCF representation is not controllable when <span class="math inline">\(z = -1\)</span> or <span class="math inline">\(z = -2\)</span>!</p>
+<p>Consider z = -1$. For this value of <span class="math inline">\(z\)</span>, the TF is given by <span class="math display">\[
+  G(s) = \frac{s + 1}{(s+1)(s+2)} = \frac{1}{s+2}.
+\]</span> Thus, we have a pole-zero cancellation and the OCF representation is not controllable because of that!</p>
+<p>This also suggests that we need to refine the relationship between characteristic polynomial of <span class="math inline">\(A\)</span> and the poles of the TF. The two are equal <strong>when there is no pole-zero cancellation.</strong> This also leads to the following definition.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Internal stability
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A SSM model <span class="math inline">\((A,B,C)\)</span> is called <strong>internally stable</strong> if all the eigenvalues of <span class="math inline">\(A\)</span> lie in the OLHP.</p>
+<p>This is equivalent to having all open loop poles like in the OLHP and no pole-zero cancellations taking place.</p>
+</div>
+</div>
+</section>
+<section id="properties-of-controllability" class="level3" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="properties-of-controllability"><span class="header-section-number">4.3</span> Properties of controllability</h3>
+<p>We conclude the discussion with some properties of controllability.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Properties of controllability
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p><strong>Change of coordinates does not change controllability.</strong></p>
+<p>Let <span class="math inline">\(T\)</span> be an inverible matrix that changes the SSM <span class="math inline">\((A,B,C)\)</span> to <span class="math inline">\((\tilde A, \tilde B, \tilde C)\)</span>. Then, the system <span class="math inline">\((A,B)\)</span> is controllable if and only if <span class="math inline">\((\tilde A, \tilde B)\)</span> is controllable (we have seen this before when we derived a formula for <span class="math inline">\(T^{-1}\)</span>.)</p></li>
+<li><p><strong>Invariance under state feedback</strong></p>
+<p>The system <span class="math inline">\((A,B)\)</span> is controllable if and only if the system <span class="math inline">\((A - BK, B)\)</span> is controllable for all state feedback gains <span class="math inline">\(K\)</span>.</p></li>
+</ol>
+</div>
+</div>
+<p>Is there a contradiction between the first claim (change of variables doesn’t change controllability) and the pole-zero cancellation example above? No.&nbsp;Note that the claim is that <strong>for an invertible matrix <span class="math inline">\(T\)</span>.</strong> In the example considered in the pole-zero cancellation section, the change of coordinates that take us from CCF to OCF is given by: <span class="math display">\[
+  T^{-1} = \mathcal C_{(A_o, B_o)} \mathcal C_{(A_c, B_c)}^{-1}
+  = \MATRIX{ -2 - 3z &amp; - z \\ -z &amp; 1 }.
+\]</span> For <span class="math inline">\(z = -1\)</span> or <span class="math inline">\(z = -2\)</span>, the change of coordinates is not full rank!</p>
 
 
+</section>
 </section>
 
 
