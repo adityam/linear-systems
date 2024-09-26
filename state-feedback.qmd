@@ -14,7 +14,7 @@ Consider a SSM
 y(t) &= C x(t)
 \end{align*}
 
-In this section, we will learning how to control such a system when the controller has access to the internal state $x(t)$. This is called **state feedback**. In the [next section](output-feedback.qmd), we will learn how to design a system when the controller has access to only the output $y(t)$. This is called **output feedback**.
+In this section, we will learn how to control such a system when the controller has access to the internal state $x(t)$. This is called **state feedback**. In the [next section](output-feedback.qmd), we will learn how to design a system when the controller has access to only the output $y(t)$. This is called **output feedback**.
 
 ![Block diagram for state feedback](figures/svg/SSM1.svg){#fig-block}
 
@@ -71,7 +71,7 @@ A = \MATRIX{
 B = \MATRIX{0 \\ 0 \\ \vdots \\ 0 \\ 1}.
 $$
 
-We want to find a state feedback controller
+We want to desgin a state feedback controller
 $$
 u(t) = -K x(t)
 \quad \text{where } 
@@ -104,7 +104,7 @@ A - BK = \MATRIX{
 -(a_0+k_0) & -(a_1+k_1) & \cdots & \cdots & -(a_{n-1} + k_{n-1})
 },
 $$
-which is in CCF. Thus,
+which has the CCF structure. Thus,
 $$
 \det(sI - (A - BK)) =
 s^n + (a_{n-1} + k_{n-1}) s^{n-1} + \cdots + (a_1 + k_1) s + (a_0 + k_0).
@@ -253,7 +253,7 @@ $$
 
 We present two methods for pole placement.
 
-### Method 1: Using controllability matrix
+#### Method 1: Using controllability matrix {-}
 
 1. Find the controllability matrix $\mathcal C_{(A,B)}$ of the system. 
 
@@ -277,9 +277,9 @@ We present two methods for pole placement.
    $$ K_c = \MATRIX{ α_0 - a_0 & \cdots & α_{n-1} - a_{n-1}}. $$
 
 8. The controller gain for the original system is
-   $K = K_c T^{-1}.$$
+   $$K = K_c T^{-1}.$$
 
-### Method 2: A slightly more efficient approach
+#### Method 2: A slightly more efficient approach {-}
 
 It is possible to avoid the computation of the controllability matrix of the system in CCF by
 replacing steps 4--6 of Method 1 by the following:
@@ -298,6 +298,8 @@ replacing steps 4--6 of Method 1 by the following:
     T^{-1} = \bigl[ \mathcal C_{(A,B)} W \bigr]^{-1}
    }$$
 
+
+This method relies on the fact that for a system $(A_c,B_c)$ in CCF, $\mathcal C_{(A_c,B_c)} = W^{-1}$. For a proof, see Lemma 3.5 of William and Lawrence. 
 
 :::{#exm-pole-placement}
 Consider the following SSM:

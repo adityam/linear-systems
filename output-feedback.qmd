@@ -1,0 +1,308 @@
+---
+title: State observers and output feedback
+
+execute:
+  echo: false
+  freeze: true
+  cache: true
+---
+
+## State observer
+
+So far, we have assumed that the controller has access to the state of the system. In many systems, it is either too expensive or physically impossible to place enough sensors to observe all the components of the state. In such cases, one option is to estimate the state from the inputs and outputs of the system and use the estimated state to chose the control input. The system which generates a state estimate from inputs and outputs is called an **observer**.
+
+An estimate $\hat x(t)$ of the state $x(t)$ should have two properties:
+
+- It should be asymptotitcally consistent, i.e., $\lim_{t \to ∞} \NORM{x(t) - \hat x(t)} = 0$.
+- We should be able to control the rate of convergence.
+
+We state with a naive observer to show that it is possible to obtain asymptotically consistent estimators. We then consider how to modify the naive observer to be able to to control the rate of convergence. 
+
+### A naive observer
+
+The main idea of building an observer is to start with a (physical or digital) replica of the original system, provide it the same inputs as the original system, and measure the internal state of the replica. In particular, we start with an initial guess $\hat x(0)$ and then update the estimate according to
+$$ 
+\dot {\hat x}(t) = A \hat x(t) + B u(t).
+$$
+
+A feature of this observer is that if our initial guess $\hat x(0)$ is equal to the true initial conditions of the system then $\hat x(t) = x(t)$ for all $t$. If the initial guess is wrong, then there is an error $e(t) = x(t) - \hat x(t)$ in measuring the state of the system. The evolution of the error is given by: $e(0) = x(0) - \hat x(0)$ and 
+$$
+  \dot e(t) = \dot x(t) - \dot {\hat x}(t) = A e(t).
+$$
+This is a vector linear differential equation. Hence,
+$$
+  e(t) = \exp(At) e(0).
+$$
+Thus, if $A$ is internally stable (i.e., all the eigenvalues of $A$ lie in the OLHP), then the error $e(t)$ will converge to zero. However, we have no ability to influence the rate of convergence (which depends on the eigenvalues of $A$).
+
+### The Luenberger observer
+
+The Luenberger observer is given as follows. Start with an initial guess $\hat x(0)$ and update the estimate according to 
+$$
+\dot {\hat x}(t) = A \hat x(t) + B u(t) + L( y(t) - C \hat x(t))
+$$
+where $L = \MATRIX{ \ell_0 & \cdots & \ell_{n-1}}^\TRANS$ is called the **observer gain**.
+
+In this case, the error $e(t) = x(t) - \hat x(t)$ evolves as follows. The initial state $e(0) = x(0) - \hat x(0)$ and 
+$$
+\dot e(t) = \dot x(t) - \dot {\hat x}(t) = (A - LC) e(t).
+$$
+This is a vector linear differential equation.Hence,
+$$
+  e(t) = \exp( (A-LC)t) e(0).
+$$
+Thus, if $A - LC$ is stable, then the error will converge to zero with a rate that is determined by the eigenvalues of $A - LC$. 
+
+Thus, designing an observer gain is similar in spirit to designing a feedback gain for state feedback. In state feedback design, we are given $A$ and $B$ matrices and we want to choose a gain $K$ such that the eigenvalues of $A - BK$ take desired values; in observer desgin, we are given $A$ and $C$ matrices and we want to choose a gain $:$ such that the eigenvalues of $A - LC$ take desired values. 
+
+As was the case for state feedback, we will start with system in OCF and show that observer design for such systems can be done by simply comparing the coefficients of the characteristic polynomials of the open-loop system and the desired characteristic polynomial of $A - LC$. We then look at systems that are not in OCF and show that if the system satisfies a condition known as **observability**, we can find a transformation that converts the system to OCF, design the observer gain for the OCF representation, and translate it back to the original coordinate system. 
+
+## Observer design for systems in OCF
+
+Consider a state feedback system in OCF with 
+$$
+A = \MATRIX{ 0 & \cdots & \cdots & 0 & - a_0 \\
+             1 & 0 & \cdots & 0 & - a_1 \\
+             0 & 1 & \ddots & 0 & -a_2 \\
+             \vdots & \ddots & \ddots & \vdots & \vdots \\
+             0 & \cdots & \cdots & 1 & -a_{n-1} }
+,\quad
+C = \MATRIX{0 & \cdots & 0 & 1}.
+$$
+
+We want to design a Luenberger observer 
+$$
+\dot {\hat x}(t) = A \hat x(t) + B u(t) + L (y(t) - C \hat x(t)),
+\quad \text{where } 
+L = \MATRIX{\ell_0 \\ \vdots \\ \ell_{n-1}}
+$$
+such that the characteristic polynomial of $A - LC$ is 
+$$
+\det(sI _ A + LC) = s^n + α_{n-1} s^{n-1} + \cdots + α_0.
+$$
+
+Observe that
+$$
+LC = \MATRIX{\ell_0 \\ \vdots \ell_{n-1}} 
+\MATRIX{0 & \cdots & 0 & 1 }
+= \MATRIX{0  & \cdots & 0 & - \ell_0 \\
+          \vdots & \ddots & \vdots & \vdots \\
+          0  & \cdots & 0 & - \ell_{n-1}}
+$$
+Thus,
+$$
+A - LC = \MATRIX{ 0 & \cdots & \cdots & 0 & -(a_0 + \ell_0) \\
+             1 & 0 & \cdots & 0 & - (a_1 + \ell_1) \\
+             0 & 1 & \ddots & 0 & -(a_2 + \ell_2)\\
+             \vdots & \ddots & \ddots & \vdots & \vdots \\
+             0 & \cdots & \cdots & 1 & -(a_{n-1} + \ell_{n-1}) }
+$$
+which has the OCF structure. Thus,
+$$
+\det(sI - (A - LC)) =
+s^n + (a_{n-1} + \ell_{n-1}) s^{n-1} + \cdots + (a_1 + \ell_1) s + (a_0 + \ell_0).
+$$
+Observe that each component of the observer gain matrix $L$ affects only _one_ coefficient of the characteristic polynomial. Thus, we can pick
+$$
+\bbox[5pt,border: 1px solid]
+{L = \MATRIX{ α_0 - a_0 \\ \vdots \\ α_{n-1} - a_{n-1}} }
+$$
+to place the eigenvalues of $A - LC$ in the desired location.
+
+:::{#exm-OCF}
+Consider the system
+$$
+A = \MATRIX{0 & -2 \\ 1 & -3},
+\quad
+C = \MATRIX{0 & 1}.
+$$
+Determine a Luenberger observer gain $L$ such that the eigenvalues of $A - LC$ are at $-2 \pm j$. 
+:::
+
+
+## Observer design for systems not in OCF
+
+When a system is not in OCF, we can still use the design of systems in OCF if there is a transformation (or change of coordinates) $x_o(t) = T^{-1} x(t)$ such that the transformed matrices $(A_o, B_o, C_o)$ are in OCF. If such a transformation can be found, then we can find the observer gain $L_o$ for the system in OCF using the method of the previous section and use[^L]
+$$
+  L = T L_o
+$$
+as the observer gain for the original system. So, as was the case for state feedback, the main question is: how do we find such a transformation?
+
+[^L]: The Luenberger observer for the new coordinate system is
+$$
+\dot {\hat x_o}(t) = A_o \hat x_o(t) + B_o u(t) + L_o(y(t) - C_o \hat x_o(t)).
+$$
+Substituting the values of $(A_o, B_o, C_o)$, we get
+\begin{align*}
+\dot {\hat x_o}(t) 
+&= T^{-1} A T \hat x_o(t) + T^{-1} B u(t) + L_o( y(t) - C T \hat x_o(t)) \\
+&= T^{-1} A \hat x(t) + T^{-1} B u(t) + L_o(y(t) - C \hat x(t))
+\end{align*}
+where we have used the fact that $\hat x_o(t) = T \hat x(t)$. Multiplying both sides by $T$, we get
+$$
+\dot {\hat x}(t) = A \hat x(t) + B u(t) + T L_o(y(t) - C \hat x(t)).
+$$
+Hence, $L = T L_o$. 
+
+### Observability matrix
+
+The observability matrix of a state space system $(A,C)$ is defined as
+$$
+\mathcal O_{(A,C)} = \MATRIX{C \\ CA \\ \vdots \\ C A^{n-1}}
+$$
+Now consider a change of coordinates $x_o(t) = T^{-1} x(t)$. Recall that the state space representation in the new coordinate system is
+$$
+A_o = T^{-1} A T,
+\quad
+C_o = C T.
+$$
+
+Observe that
+
+- $A_o^2 = T^{-1} A T T^{-1} A T = T^{-1} A^2 T$
+- $A_o^3 = T^{-1} A^2 T T^{-1} A T = T^{-1} A^3 T$
+- etc.
+
+Therefore,
+
+- $C_o A_o = C T T^{-1} A T = C A T$
+- $C_o A_o^2 = C T T^{-1} A^2 T = C A^2 T$
+- etc.
+
+Therefore, the observability matrix of the system in the new coordinate system is
+\begin{align*}
+  \mathcal O_{(A_o, B_o)} 
+  % &= \MATRIX{ C_o \\ C_o A_o \\ \vdots \\ C_o A_o^{n-1} } \\
+  &= \MATRIX{ C T \\ C A T \\ \vdots \\ C A^{n-1} T } \\
+  &= \MATRIX{ C  \\ C A  \\ \vdots \\ C A^{n-1}  } T \\
+  &= \mathcal O_{(A,C)} T.
+\end{align*}
+
+Thus, we can go from SSM $(A,C)$ to SSM $(A_o,C_o)$ using the transformation
+$$
+  T = \mathcal O_{(A,C)}^{-1} \mathcal O_{(A_o, C_o)}
+$$
+_provided $\mathcal O_{(A,C)}$ is invertible_ (i.e., has full rank). When that is the case, we say that the system is **observable**.
+
+### Observer design
+
+The general observer design problem is as follows. We are given a system $(A,C)$ not in OCF and we want to design a Luenberger observer
+$$
+\dot {\hat x}(t) = A \hat x(t) + B u(t) + L (y(t) - C \hat x(t)),
+\quad \text{where } 
+L = \MATRIX{\ell_0 \\ \vdots \\ \ell_{n-1}}
+$$
+such that the characteristic polynomial of $A - LC$ is 
+$$
+\det(sI _ A + LC) = s^n + α_{n-1} s^{n-1} + \cdots + α_0.
+$$
+We present two methods for observer design.
+
+#### Method 1: Using observability matrix {-}
+
+1. Find the observability matrix $\mathcal O_{(A,C)}$ of the system. 
+
+2. If the system is not observable, i.e., the observability matrix is not full rank (which can be tested by checking that the determinant of the observability matrix is non-zero), observer design is not possible and we quit the procedure. 
+
+3. If the system is observable, find the characteristic polynomial of $A$:
+   $$\det(s I - A) = s^n + a_{n-1} s^{n-1} + \cdots + a_0 $$
+
+4. Using the above characteristic polynomial, write the SSM $(A_o, C_o)$ in OCF.
+
+    [Recall that the characteristic polynomial is the denominator of the transfer function]{.text-smaller}
+
+5. Compute the observability matrix $\mathcal O(A_o, C_o)$ of the system $(A_o, B_o)$ in OCF.
+
+6. Compute the transformation
+    $$\bbox[5pt,border: 1px solid]{
+    T = \mathcal O_{(A, C)}^{-1} \mathcal O_{(A_o,C_o)}
+    }$$
+
+7. Compute the observer gain $L_o$ for the system in OCF:
+   $$ L_o = \MATRIX{ α_0 - a_0 \\ \vdots \\ α_{n-1} - a_{n-1}}. $$
+
+8. The controller gain for the original system is
+   $$L = T L_o.$$
+
+
+#### Method 2: A slightly more efficient approach {-} 
+
+It is possible to avoid the computation of the observability matrix of the system in OCF by
+replacing steps 4--6 of Method 1 by the following:
+
+4. Compute the matrix
+   $$ W = \MATRIX{ a_1 & a_2 & \cdots & a_{n-1} & 1 \\
+                   a_2 & \iddots & \iddots & 1 & 0 \\
+                   \iddots & \iddots & \iddots & \iddots & \vdots \\
+                  a_{n-1} & 1 & 0 & \cdots & 0 \\
+                  1 & 0 & 0 & \cdots & 0 
+                 }
+   $$
+
+5. Compute the transformation:
+   $$\bbox[5pt,border: 1px solid]{
+    T = \bigl[ W \mathcal O_{(A,C)} \bigr]^{-1}
+   }$$
+
+This method relies on the fact that for a system $(A_o,C_o)$ in OCF, $\mathcal O_{(A_o,C_o)} = W^{-1}$. For a proof, see Lemma 4.5 of William and Lawrence. 
+
+:::{#exm-observer-design}
+Consider the following SSM:
+$$ A = \MATRIX{3 & 1 \\ 1 & 2}, B = \MATRIX{2 \\1} \text{ and } C = \MATRIX{ 3 & 2}. $$
+Design a Luenberger observer (i.e., compute the observer gain $L$) such that the eigenvalues of $A - LC$ are at $-10 \pm 5j$. 
+:::
+
+
+## Output feedback
+
+Consider a SSM 
+\begin{align*}
+\dot x(t) &= A x(t) + B u(t) \\
+y(t) &= C x(t)
+\end{align*}
+
+In this section, we will learn how to control such a system when the controller does not have access to the internal state $x(t)$, but can only observe the output $y(t)$. This is called **output feedback**.
+
+The basic idea of output feedback is to first estimate the state of the system via a Luenberger observer
+$$
+\dot {\hat x}(t) = A \hat x(t) + B u(t) + L (y(t) - C \hat x(t)),
+\quad\text{where }
+L = \MATRIX{\ell_0 \\ \vdots \\ \ell_{n-1}}
+$$
+and then use a linear feedback controller that uses the estimated state:
+$$
+  u(t) = - K \hat x(t), 
+\quad\text{where }
+K = \MATRIX{k_0 & \cdots & k_{n-1}}.
+$$
+
+This gives $2n$ tunable gains $k_0, \dots, k_{n-1}$ and $\ell_0, \dots, \ell_{n-1}$ and the hope is that we can find these gain to arbitrarily choose the eigenvalues of the closed loop system. 
+
+Writing the above equations in state space form, we get
+$$
+\MATRIX{ \dot x(t) \\ \dot {\hat x}(t) } =
+\MATRIX{ A & -BK \\ LC & A - BK - LC } 
+\MATRIX{ x(t) \\ \hat x(t) }.
+$$
+By using the transformation $T = \MATRIX{I & 0 \\ I & -I}$, we get
+$$
+\MATRIX{ \dot x(t) \\ \dot e(t) } =
+\MATRIX{ A - BK & -BK \\ 0 & A - LC } 
+\MATRIX{ x(t) \\ e(t) }.
+$$
+Thus, the characteristic polynomial of the closed loop system is
+$$
+\DET{ A - BK & -BK \\ 0 & A - LC }  = 
+\det(sI - (A - BK)) \det(sI - (A-LC))
+$$
+where we have used the fact that the determiniant of a block diagonal upper triangular matrix is the product of the determinants of the diagonal sub-matrices. 
+
+Thus, 
+$$
+\{\text{eigenvalues of closed loop system}\}
+= \{\text{eigenvalues of $(A - BK)$}\} \cup 
+  \{\text{eigenvalues of $(A - LC)$}\}.
+$$
+Thus, we can separately design the controller gain $K$ and the observer gain $L$ by using the methods described earlier. This is called **the separation principle.**
+
+If we choose observer poles several times faster than controller poles, the controller poles will dominate. Thus, output feedback gives essentially the same performance as (the non-implementable) state feedback. 
