@@ -234,8 +234,6 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#controllability-matrix" id="toc-controllability-matrix" class="nav-link" data-scroll-target="#controllability-matrix"><span class="header-section-number">2.1</span> Controllability matrix</a></li>
   <li><a href="#pole-placement" id="toc-pole-placement" class="nav-link" data-scroll-target="#pole-placement"><span class="header-section-number">2.2</span> Pole Placement</a></li>
-  <li><a href="#method-1-using-controllability-matrix" id="toc-method-1-using-controllability-matrix" class="nav-link" data-scroll-target="#method-1-using-controllability-matrix"><span class="header-section-number">2.3</span> Method 1: Using controllability matrix</a></li>
-  <li><a href="#method-2-a-slightly-more-efficient-approach" id="toc-method-2-a-slightly-more-efficient-approach" class="nav-link" data-scroll-target="#method-2-a-slightly-more-efficient-approach"><span class="header-section-number">2.4</span> Method 2: A slightly more efficient approach</a></li>
   </ul></li>
   <li><a href="#state-feedback-for-reference-tracking" id="toc-state-feedback-for-reference-tracking" class="nav-link" data-scroll-target="#state-feedback-for-reference-tracking"><span class="header-section-number">3</span> State-feedback for reference tracking</a></li>
   <li><a href="#understanding-lack-of-controllability" id="toc-understanding-lack-of-controllability" class="nav-link" data-scroll-target="#understanding-lack-of-controllability"><span class="header-section-number">4</span> Understanding lack of controllability</a>
@@ -294,7 +292,7 @@ window.Quarto = {
 \dot x(t) &amp;= A x(t) + B u(t) \\
 y(t) &amp;= C x(t)
 \end{align*}\]</span></p>
-<p>In this section, we will learning how to control such a system when the controller has access to the internal state <span class="math inline">\(x(t)\)</span>. This is called <strong>state feedback</strong>. In the <a href="output-feedback.qmd">next section</a>, we will learn how to design a system when the controller has access to only the output <span class="math inline">\(y(t)\)</span>. This is called <strong>output feedback</strong>.</p>
+<p>In this section, we will learn how to control such a system when the controller has access to the internal state <span class="math inline">\(x(t)\)</span>. This is called <strong>state feedback</strong>. In the <a href="./output-feedback.html">next section</a>, we will learn how to design a system when the controller has access to only the output <span class="math inline">\(y(t)\)</span>. This is called <strong>output feedback</strong>.</p>
 <div id="fig-block" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-block-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -329,7 +327,7 @@ A = \MATRIX{
 \quad
 B = \MATRIX{0 \\ 0 \\ \vdots \\ 0 \\ 1}.
 \]</span></p>
-<p>We want to find a state feedback controller <span class="math display">\[
+<p>We want to desgin a state feedback controller <span class="math display">\[
 u(t) = -K x(t)
 \quad \text{where }
 K = \MATRIX{k_0 &amp; \cdots &amp; k_{n-1}}
@@ -354,7 +352,7 @@ A - BK = \MATRIX{
 0 &amp; 0 &amp; \cdots &amp; \cdots &amp; 1 \\
 -(a_0+k_0) &amp; -(a_1+k_1) &amp; \cdots &amp; \cdots &amp; -(a_{n-1} + k_{n-1})
 },
-\]</span> which is in CCF. Thus, <span class="math display">\[
+\]</span> which has the CCF structure. Thus, <span class="math display">\[
 \det(sI - (A - BK)) =
 s^n + (a_{n-1} + k_{n-1}) s^{n-1} + \cdots + (a_1 + k_1) s + (a_0 + k_0).
 \]</span></p>
@@ -482,9 +480,8 @@ u(t) = - K x(t), \quad
 </div>
 </div>
 <p>We present two methods for pole placement.</p>
-</section>
-<section id="method-1-using-controllability-matrix" class="level3" data-number="2.3">
-<h3 data-number="2.3" class="anchored" data-anchor-id="method-1-using-controllability-matrix"><span class="header-section-number">2.3</span> Method 1: Using controllability matrix</h3>
+<section id="method-1-using-controllability-matrix" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="method-1-using-controllability-matrix">Method 1: Using controllability matrix</h4>
 <ol type="1">
 <li><p>Find the controllability matrix <span class="math inline">\(\mathcal C_{(A,B)}\)</span> of the system.</p></li>
 <li><p>If the system is not controllable, i.e., the controllability matrix is not full rank (which can be tested by checking that the determinant of the controllability matrix is non-zero), pole placement is not possible and we quit the procedure.</p></li>
@@ -496,11 +493,11 @@ u(t) = - K x(t), \quad
 T^{-1} = \mathcal C_{(A_c, B_c)} \mathcal C_{(A,B)}^{-1}
 }\]</span></p></li>
 <li><p>Compute the controller gain <span class="math inline">\(K_c\)</span> for the system in CCF: <span class="math display">\[ K_c = \MATRIX{ α_0 - a_0 &amp; \cdots &amp; α_{n-1} - a_{n-1}}. \]</span></p></li>
-<li><p>The controller gain for the original system is <span class="math inline">\(K = K_c T^{-1}.\)</span>$</p></li>
+<li><p>The controller gain for the original system is <span class="math display">\[K = K_c T^{-1}.\]</span></p></li>
 </ol>
 </section>
-<section id="method-2-a-slightly-more-efficient-approach" class="level3" data-number="2.4">
-<h3 data-number="2.4" class="anchored" data-anchor-id="method-2-a-slightly-more-efficient-approach"><span class="header-section-number">2.4</span> Method 2: A slightly more efficient approach</h3>
+<section id="method-2-a-slightly-more-efficient-approach" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="method-2-a-slightly-more-efficient-approach">Method 2: A slightly more efficient approach</h4>
 <p>It is possible to avoid the computation of the controllability matrix of the system in CCF by replacing steps 4–6 of Method 1 by the following:</p>
 <ol start="4" type="1">
 <li><p>Compute the matrix <span class="math display">\[ W = \MATRIX{ a_1 &amp; a_2 &amp; \cdots &amp; a_{n-1} &amp; 1 \\
@@ -514,6 +511,7 @@ T^{-1} = \mathcal C_{(A_c, B_c)} \mathcal C_{(A,B)}^{-1}
 T^{-1} = \bigl[ \mathcal C_{(A,B)} W \bigr]^{-1}
 }\]</span></p></li>
 </ol>
+<p>This method relies on the fact that for a system <span class="math inline">\((A_c,B_c)\)</span> in CCF, <span class="math inline">\(\mathcal C_{(A_c,B_c)} = W^{-1}\)</span>. For a proof, see Lemma 3.5 of William and Lawrence.</p>
 <div id="exm-pole-placement" class="theorem example">
 <p><span class="theorem-title"><strong>Example 3</strong></span> Consider the following SSM: <span class="math display">\[ A = \MATRIX{3 &amp; 1 \\ 1 &amp; 2}, B = \MATRIX{2 \\1} \text{ and } C = \MATRIX{ 3 &amp; 2}. \]</span> Design a state feedback controller (i.e., compute the feedback gain <span class="math inline">\(K\)</span>) such that the eigenvalues of the closed loop system are at <span class="math inline">\(-2 \pm 2j\)</span>.</p>
 </div>
@@ -574,6 +572,7 @@ T^{-1} &amp;= \mathcal C_{(A_c,B_c)} \mathcal C_{(A,B)}^{-1}
 </div>
 </div>
 </div>
+</section>
 </section>
 </section>
 <section id="state-feedback-for-reference-tracking" class="level2" data-number="3">

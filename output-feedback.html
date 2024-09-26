@@ -9,7 +9,7 @@
 <meta name="author" content="Aditya Mahajan">
 <meta name="dcterms.date" content="2024-09-26">
 
-<title>Linear Systems and Control</title>
+<title>State observers and output feedback – Linear Systems and Control</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -125,6 +125,35 @@ window.MathJax = {
 </script>
 <script async="" data-id="101261731" src="//static.getclicky.com/js"></script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -166,26 +195,27 @@ window.MathJax = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#course-outline" id="toc-course-outline" class="nav-link active" data-scroll-target="#course-outline">Course Outline</a>
+  <li><a href="#state-observer" id="toc-state-observer" class="nav-link active" data-scroll-target="#state-observer"><span class="header-section-number">1</span> State observer</a>
   <ul class="collapse">
-  <li><a href="#general-information" id="toc-general-information" class="nav-link" data-scroll-target="#general-information">General Information (Fall 2024)</a></li>
-  <li><a href="#graduate-attributes-and-learning-outcomes" id="toc-graduate-attributes-and-learning-outcomes" class="nav-link" data-scroll-target="#graduate-attributes-and-learning-outcomes">Graduate Attributes and Learning Outcomes</a></li>
-  <li><a href="#course-content" id="toc-course-content" class="nav-link" data-scroll-target="#course-content">Course Content</a></li>
-  <li><a href="#lab-schedule" id="toc-lab-schedule" class="nav-link" data-scroll-target="#lab-schedule">Lab Schedule</a></li>
-  <li><a href="#course-material" id="toc-course-material" class="nav-link" data-scroll-target="#course-material">Course Material</a></li>
-  <li><a href="#evaluation" id="toc-evaluation" class="nav-link" data-scroll-target="#evaluation">Evaluation</a></li>
-  <li><a href="#marking-policy" id="toc-marking-policy" class="nav-link" data-scroll-target="#marking-policy">Marking policy</a></li>
-  <li><a href="#course-delivery" id="toc-course-delivery" class="nav-link" data-scroll-target="#course-delivery">Course delivery</a></li>
-  <li><a href="#additional-notes" id="toc-additional-notes" class="nav-link" data-scroll-target="#additional-notes">Additional Notes</a></li>
+  <li><a href="#a-naive-observer" id="toc-a-naive-observer" class="nav-link" data-scroll-target="#a-naive-observer"><span class="header-section-number">1.1</span> A naive observer</a></li>
+  <li><a href="#the-luenberger-observer" id="toc-the-luenberger-observer" class="nav-link" data-scroll-target="#the-luenberger-observer"><span class="header-section-number">1.2</span> The Luenberger observer</a></li>
   </ul></li>
+  <li><a href="#observer-design-for-systems-in-ocf" id="toc-observer-design-for-systems-in-ocf" class="nav-link" data-scroll-target="#observer-design-for-systems-in-ocf"><span class="header-section-number">2</span> Observer design for systems in OCF</a></li>
+  <li><a href="#observer-design-for-systems-not-in-ocf" id="toc-observer-design-for-systems-not-in-ocf" class="nav-link" data-scroll-target="#observer-design-for-systems-not-in-ocf"><span class="header-section-number">3</span> Observer design for systems not in OCF</a>
+  <ul class="collapse">
+  <li><a href="#observability-matrix" id="toc-observability-matrix" class="nav-link" data-scroll-target="#observability-matrix"><span class="header-section-number">3.1</span> Observability matrix</a></li>
+  <li><a href="#observer-design" id="toc-observer-design" class="nav-link" data-scroll-target="#observer-design"><span class="header-section-number">3.2</span> Observer design</a></li>
+  </ul></li>
+  <li><a href="#output-feedback" id="toc-output-feedback" class="nav-link" data-scroll-target="#output-feedback"><span class="header-section-number">4</span> Output feedback</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/output-feedback.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
+<h1 class="title">State observers and output feedback</h1>
 </div>
 
 
@@ -223,336 +253,216 @@ window.MathJax = {
 </header>
 
 
-<section id="course-outline" class="level1 unnumbered">
-<h1 class="unnumbered">Course Outline</h1>
-<section id="general-information" class="level2">
-<h2 class="anchored" data-anchor-id="general-information">General Information (Fall 2024)</h2>
-<dl>
-<dt>Instructor</dt>
-<dd>
+<section id="state-observer" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="state-observer"><span class="header-section-number">1</span> State observer</h2>
+<p>So far, we have assumed that the controller has access to the state of the system. In many systems, it is either too expensive or physically impossible to place enough sensors to observe all the components of the state. In such cases, one option is to estimate the state from the inputs and outputs of the system and use the estimated state to chose the control input. The system which generates a state estimate from inputs and outputs is called an <strong>observer</strong>.</p>
+<p>An estimate <span class="math inline">\(\hat x(t)\)</span> of the state <span class="math inline">\(x(t)\)</span> should have two properties:</p>
 <ul>
-<li>Aditya Mahajan</li>
-<li><em>Office Hours</em>: TBD</li>
+<li>It should be asymptotitcally consistent, i.e., <span class="math inline">\(\lim_{t \to ∞} \NORM{x(t) - \hat x(t)} = 0\)</span>.</li>
+<li>We should be able to control the rate of convergence.</li>
 </ul>
-</dd>
-<dt>Teaching Assistants</dt>
-<dd>
-<ul>
-<li><p>TBD</p></li>
-</ul>
-</dd>
-<dt>Lectures</dt>
-<dd>
-<ul>
-<li><p>10:05am–11:25am Tuesday, Thursday (ENGMC 11)</p></li>
-</ul>
-</dd>
-<dt>Tutorials</dt>
-<dd>
-<ul>
-<li><p>8:35am–10:25am Friday, (ENGMC 11)</p></li>
-</ul>
-</dd>
-</dl>
-<p>Everyone <strong>must</strong> be registered for the tutorial. Tutorials start from the <strong>second</strong> week of classes.</p>
-<dl>
-<dt>Labs</dt>
-<dd>
-<ul>
-<li><p>1:35pm-3:25pm Monday (TR 4090)</p></li>
-</ul>
-</dd>
-<dd>
-<ul>
-<li><p>3:35pm–5:25pm Monday (TR 4090)</p></li>
-</ul>
-</dd>
-<dd>
-<ul>
-<li><p>1:35pm–3:25pm Tuesday (TR 4090)</p></li>
-</ul>
-</dd>
-<dd>
-<ul>
-<li><p>1:35pm–3:25pm Wednesday (TR 4090)</p></li>
-</ul>
-</dd>
-<dd>
-<ul>
-<li><p>1:35pm–3:25pm Friday (TR 4090)</p></li>
-</ul>
-</dd>
-</dl>
-<p>Everyone <strong>must</strong> be registered for one lab. Labs start from the <strong>second</strong> week of classes.</p>
-<p>The labs have to be done in groups of two. The groups will be formed in the first week of classs.</p>
-<dl>
-<dt>Prerequisites</dt>
-<dd>
-<ul>
-<li>ECSE 206 (Fundamentals of Signals and Systems)</li>
-<li>ECSE 210 (Electrical Circuits 2)</li>
-</ul>
-</dd>
-<dt>Communication</dt>
-<dd>
-<span class="text-info">Use the discussion board on myCourses</span> for all questions related to the course. Only personal emails related to medical exceptions for missing a deliverable will be answered.
-</dd>
-</dl>
+<p>We state with a naive observer to show that it is possible to obtain asymptotically consistent estimators. We then consider how to modify the naive observer to be able to to control the rate of convergence.</p>
+<section id="a-naive-observer" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="a-naive-observer"><span class="header-section-number">1.1</span> A naive observer</h3>
+<p>The main idea of building an observer is to start with a (physical or digital) replica of the original system, provide it the same inputs as the original system, and measure the internal state of the replica. In particular, we start with an initial guess <span class="math inline">\(\hat x(0)\)</span> and then update the estimate according to <span class="math display">\[
+\dot {\hat x}(t) = A \hat x(t) + B u(t).
+\]</span></p>
+<p>A feature of this observer is that if our initial guess <span class="math inline">\(\hat x(0)\)</span> is equal to the true initial conditions of the system then <span class="math inline">\(\hat x(t) = x(t)\)</span> for all <span class="math inline">\(t\)</span>. If the initial guess is wrong, then there is an error <span class="math inline">\(e(t) = x(t) - \hat x(t)\)</span> in measuring the state of the system. The evolution of the error is given by: <span class="math inline">\(e(0) = x(0) - \hat x(0)\)</span> and <span class="math display">\[
+  \dot e(t) = \dot x(t) - \dot {\hat x}(t) = A e(t).
+\]</span> This is a vector linear differential equation. Hence, <span class="math display">\[
+  e(t) = \exp(At) e(0).
+\]</span> Thus, if <span class="math inline">\(A\)</span> is internally stable (i.e., all the eigenvalues of <span class="math inline">\(A\)</span> lie in the OLHP), then the error <span class="math inline">\(e(t)\)</span> will converge to zero. However, we have no ability to influence the rate of convergence (which depends on the eigenvalues of <span class="math inline">\(A\)</span>).</p>
 </section>
-<section id="graduate-attributes-and-learning-outcomes" class="level2">
-<h2 class="anchored" data-anchor-id="graduate-attributes-and-learning-outcomes">Graduate Attributes and Learning Outcomes</h2>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Attribute</th>
-<th>Description</th>
-<th>Status</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>KB</td>
-<td>Knowledge Base for Engineering</td>
-<td>Developed</td>
-</tr>
-<tr class="even">
-<td>PA</td>
-<td>Problem Analysis</td>
-<td>Developed</td>
-</tr>
-<tr class="odd">
-<td>IN</td>
-<td>Investigation</td>
-<td>Developed</td>
-</tr>
-<tr class="even">
-<td>DE</td>
-<td>Design</td>
-<td>Introduced</td>
-</tr>
-</tbody>
-</table>
-<p>Upon the successful completion of this course, the student students will have demonstrated the ability to:</p>
-<ul>
-<li>Apply time- and frequency-domain tools to analyze linear time-invariant systems (KB, PA)</li>
-<li>Design controllers based on state-space methods and lead-lag compensators to meet time-response specifications (KB, PA, DE)</li>
-<li>Use Matlab to analyze and synthesize controllers for linear time-invariant systems (DE, IN)</li>
-</ul>
+<section id="the-luenberger-observer" class="level3" data-number="1.2">
+<h3 data-number="1.2" class="anchored" data-anchor-id="the-luenberger-observer"><span class="header-section-number">1.2</span> The Luenberger observer</h3>
+<p>The Luenberger observer is given as follows. Start with an initial guess <span class="math inline">\(\hat x(0)\)</span> and update the estimate according to <span class="math display">\[
+\dot {\hat x}(t) = A \hat x(t) + B u(t) + L( y(t) - C \hat x(t))
+\]</span> where <span class="math inline">\(L = \MATRIX{ \ell_0 &amp; \cdots &amp; \ell_{n-1}}^\TRANS\)</span> is called the <strong>observer gain</strong>.</p>
+<p>In this case, the error <span class="math inline">\(e(t) = x(t) - \hat x(t)\)</span> evolves as follows. The initial state <span class="math inline">\(e(0) = x(0) - \hat x(0)\)</span> and <span class="math display">\[
+\dot e(t) = \dot x(t) - \dot {\hat x}(t) = (A - LC) e(t).
+\]</span> This is a vector linear differential equation.Hence, <span class="math display">\[
+  e(t) = \exp( (A-LC)t) e(0).
+\]</span> Thus, if <span class="math inline">\(A - LC\)</span> is stable, then the error will converge to zero with a rate that is determined by the eigenvalues of <span class="math inline">\(A - LC\)</span>.</p>
+<p>Thus, designing an observer gain is similar in spirit to designing a feedback gain for state feedback. In state feedback design, we are given <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> matrices and we want to choose a gain <span class="math inline">\(K\)</span> such that the eigenvalues of <span class="math inline">\(A - BK\)</span> take desired values; in observer desgin, we are given <span class="math inline">\(A\)</span> and <span class="math inline">\(C\)</span> matrices and we want to choose a gain <span class="math inline">\(:\)</span> such that the eigenvalues of <span class="math inline">\(A - LC\)</span> take desired values.</p>
+<p>As was the case for state feedback, we will start with system in OCF and show that observer design for such systems can be done by simply comparing the coefficients of the characteristic polynomials of the open-loop system and the desired characteristic polynomial of <span class="math inline">\(A - LC\)</span>. We then look at systems that are not in OCF and show that if the system satisfies a condition known as <strong>observability</strong>, we can find a transformation that converts the system to OCF, design the observer gain for the OCF representation, and translate it back to the original coordinate system.</p>
 </section>
-<section id="course-content" class="level2">
-<h2 class="anchored" data-anchor-id="course-content">Course Content</h2>
-<table class="table-striped caption-top table">
-<colgroup>
-<col style="width: 10%">
-<col style="width: 90%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Week</th>
-<th style="text-align: left;">Material Covered</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td style="text-align: left;"><a href="./freq-modeling.html">Review of LTI Systems and Laplace Transforms</a> <br> <em>Reading</em>: Nise Ch. 2</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td style="text-align: left;"><a href="./state-space-models.html">State-space modeling, canoncial forms, transfer function of state space models</a> <br> <em>Reading</em>: William and Lawrence Ch. 1 and Ch. 2</td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td style="text-align: left;"><a href="./step-response.html">Pole Zero Plot Step response of first and second order systems, dominant pole approximation</a> <br> <em>Reading</em>: Nise Ch. 4</td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td style="text-align: left;"><a href="./matrix-exponential.html">Matrix exponential and solution of matrix differential equations, time response of state space models</a></td>
-</tr>
-<tr class="odd">
-<td>5</td>
-<td style="text-align: left;"><a href="./state-feedback.html">Pole placement, controllability, and state feedback</a> <br> <em>Reading</em>: William and Lawrence Ch. 3 and Ch. 7</td>
-</tr>
-<tr class="even">
-<td>6</td>
-<td style="text-align: left;"><a href="./output-feedback.html">Luenberger observer, observability, output feedback, and separation principle</a> <br> <em>Reading</em>: William and Lawrence Ch. 4 and Ch. 8</td>
-</tr>
-<tr class="odd">
-<td>7</td>
-<td style="text-align: left;">Review and Mid-Term</td>
-</tr>
-<tr class="even">
-<td>8</td>
-<td style="text-align: left;">Routh-Hurwitz stability criterion. Special cases: zero in first column, row of zeros.</td>
-</tr>
-<tr class="odd">
-<td>9</td>
-<td style="text-align: left;">Block diagrams, rules for simplifying block diagrams, block diagram implementations of canonical forms of state space models</td>
-</tr>
-<tr class="even">
-<td>10</td>
-<td style="text-align: left;"><a href="./steady-state-errors.html">System type, steady state error, and disturbance rejection</a> <br> <em>Reading</em>: Nise Ch. 7</td>
-</tr>
-<tr class="odd">
-<td>11</td>
-<td style="text-align: left;"><a href="./bode-and-nyquist.html">Bode and Nyquist Plots</a> <br> <em>Reading</em>: Nise Ch. 10</td>
-</tr>
-<tr class="even">
-<td>12</td>
-<td style="text-align: left;"><a href="./nyquist-stability.html">Nyquist stability criterion</a>, <a href="./safety-margins.html">gain and phase margins</a> <br> <em>Reading</em>: Nise Ch. 10</td>
-</tr>
-<tr class="odd">
-<td>13</td>
-<td style="text-align: left;">Lead-Lag compensators</td>
-</tr>
-</tbody>
-</table>
 </section>
-<section id="lab-schedule" class="level2">
-<h2 class="anchored" data-anchor-id="lab-schedule">Lab Schedule</h2>
-<table class="table-striped caption-top table">
-<colgroup>
-<col style="width: 10%">
-<col style="width: 90%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Week</th>
-<th style="text-align: left;">Lab</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td style="text-align: left;">No Labs</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td style="text-align: left;">Lab 1 : Introduction to Matlab</td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td style="text-align: left;">Lab 2 : Transfer functions and step response</td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td style="text-align: left;">Lab 3 : Eigenvalues and eigenvectors</td>
-</tr>
-<tr class="odd">
-<td>5</td>
-<td style="text-align: left;">Lab 4 : System identification via Step Response</td>
-</tr>
-<tr class="even">
-<td>6</td>
-<td style="text-align: left;">Lab 5 : State-Feedback Control (in simulation)</td>
-</tr>
-<tr class="odd">
-<td>7</td>
-<td style="text-align: left;">Lab 6 : State-Feedback Control (in hardware)</td>
-</tr>
-<tr class="even">
-<td>8</td>
-<td style="text-align: left;">Lab 7 : Luenberger Observer for State Estimation</td>
-</tr>
-<tr class="odd">
-<td>9</td>
-<td style="text-align: left;">Lab 8 : Output-Feedback Control</td>
-</tr>
-<tr class="even">
-<td>10</td>
-<td style="text-align: left;">Lab 9 : Block Diagram Reduction using Matlab</td>
-</tr>
-<tr class="odd">
-<td>11</td>
-<td style="text-align: left;">Lab 10 : System identification via Bode Plots</td>
-</tr>
-<tr class="even">
-<td>12</td>
-<td style="text-align: left;">Lab 11 : Nyquist stability criterion</td>
-</tr>
-<tr class="odd">
-<td>13</td>
-<td style="text-align: left;">Lab 12 : Lead-Lag compensator design</td>
-</tr>
-</tbody>
-</table>
+<section id="observer-design-for-systems-in-ocf" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="observer-design-for-systems-in-ocf"><span class="header-section-number">2</span> Observer design for systems in OCF</h2>
+<p>Consider a state feedback system in OCF with <span class="math display">\[
+A = \MATRIX{ 0 &amp; \cdots &amp; \cdots &amp; 0 &amp; - a_0 \\
+             1 &amp; 0 &amp; \cdots &amp; 0 &amp; - a_1 \\
+             0 &amp; 1 &amp; \ddots &amp; 0 &amp; -a_2 \\
+             \vdots &amp; \ddots &amp; \ddots &amp; \vdots &amp; \vdots \\
+             0 &amp; \cdots &amp; \cdots &amp; 1 &amp; -a_{n-1} }
+,\quad
+C = \MATRIX{0 &amp; \cdots &amp; 0 &amp; 1}.
+\]</span></p>
+<p>We want to design a Luenberger observer <span class="math display">\[
+\dot {\hat x}(t) = A \hat x(t) + B u(t) + L (y(t) - C \hat x(t)),
+\quad \text{where }
+L = \MATRIX{\ell_0 \\ \vdots \\ \ell_{n-1}}
+\]</span> such that the characteristic polynomial of <span class="math inline">\(A - LC\)</span> is <span class="math display">\[
+\det(sI _ A + LC) = s^n + α_{n-1} s^{n-1} + \cdots + α_0.
+\]</span></p>
+<p>Observe that <span class="math display">\[
+LC = \MATRIX{\ell_0 \\ \vdots \ell_{n-1}}
+\MATRIX{0 &amp; \cdots &amp; 0 &amp; 1 }
+= \MATRIX{0  &amp; \cdots &amp; 0 &amp; - \ell_0 \\
+          \vdots &amp; \ddots &amp; \vdots &amp; \vdots \\
+          0  &amp; \cdots &amp; 0 &amp; - \ell_{n-1}}
+\]</span> Thus, <span class="math display">\[
+A - LC = \MATRIX{ 0 &amp; \cdots &amp; \cdots &amp; 0 &amp; -(a_0 + \ell_0) \\
+             1 &amp; 0 &amp; \cdots &amp; 0 &amp; - (a_1 + \ell_1) \\
+             0 &amp; 1 &amp; \ddots &amp; 0 &amp; -(a_2 + \ell_2)\\
+             \vdots &amp; \ddots &amp; \ddots &amp; \vdots &amp; \vdots \\
+             0 &amp; \cdots &amp; \cdots &amp; 1 &amp; -(a_{n-1} + \ell_{n-1}) }
+\]</span> which has the OCF structure. Thus, <span class="math display">\[
+\det(sI - (A - LC)) =
+s^n + (a_{n-1} + \ell_{n-1}) s^{n-1} + \cdots + (a_1 + \ell_1) s + (a_0 + \ell_0).
+\]</span> Observe that each component of the observer gain matrix <span class="math inline">\(L\)</span> affects only <em>one</em> coefficient of the characteristic polynomial. Thus, we can pick <span class="math display">\[
+\bbox[5pt,border: 1px solid]
+{L = \MATRIX{ α_0 - a_0 \\ \vdots \\ α_{n-1} - a_{n-1}} }
+\]</span> to place the eigenvalues of <span class="math inline">\(A - LC\)</span> in the desired location.</p>
+<div id="exm-OCF" class="theorem example">
+<p><span class="theorem-title"><strong>Example 1</strong></span> Consider the system <span class="math display">\[
+A = \MATRIX{0 &amp; -2 \\ 1 &amp; -3},
+\quad
+C = \MATRIX{0 &amp; 1}.
+\]</span> Determine a Luenberger observer gain <span class="math inline">\(L\)</span> such that the eigenvalues of <span class="math inline">\(A - LC\)</span> are at <span class="math inline">\(-2 \pm j\)</span>.</p>
+</div>
 </section>
-<section id="course-material" class="level2">
-<h2 class="anchored" data-anchor-id="course-material">Course Material</h2>
-<dl>
-<dt>Textbook</dt>
-<dd>
+<section id="observer-design-for-systems-not-in-ocf" class="level2 page-columns page-full" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="observer-design-for-systems-not-in-ocf"><span class="header-section-number">3</span> Observer design for systems not in OCF</h2>
+<p>When a system is not in OCF, we can still use the design of systems in OCF if there is a transformation (or change of coordinates) <span class="math inline">\(x_o(t) = T^{-1} x(t)\)</span> such that the transformed matrices <span class="math inline">\((A_o, B_o, C_o)\)</span> are in OCF. If such a transformation can be found, then we can find the observer gain <span class="math inline">\(L_o\)</span> for the system in OCF using the method of the previous section and use<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> <span class="math display">\[
+  L = T L_o
+\]</span> as the observer gain for the original system. So, as was the case for state feedback, the main question is: how do we find such a transformation?</p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;The Luenberger observer for the new coordinate system is <span class="math display">\[
+\dot {\hat x_o}(t) = A_o \hat x_o(t) + B_o u(t) + L_o(y(t) - C_o \hat x_o(t)).
+\]</span> Substituting the values of <span class="math inline">\((A_o, B_o, C_o)\)</span>, we get <span class="math display">\[\begin{align*}
+\dot {\hat x_o}(t)
+&amp;= T^{-1} A T \hat x_o(t) + T^{-1} B u(t) + L_o( y(t) - C T \hat x_o(t)) \\
+&amp;= T^{-1} A \hat x(t) + T^{-1} B u(t) + L_o(y(t) - C \hat x(t))
+\end{align*}\]</span> where we have used the fact that <span class="math inline">\(\hat x_o(t) = T \hat x(t)\)</span>. Multiplying both sides by <span class="math inline">\(T\)</span>, we get <span class="math display">\[
+\dot {\hat x}(t) = A \hat x(t) + B u(t) + T L_o(y(t) - C \hat x(t)).
+\]</span> Hence, <span class="math inline">\(L = T L_o\)</span>.</p></div></div><section id="observability-matrix" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="observability-matrix"><span class="header-section-number">3.1</span> Observability matrix</h3>
+<p>The observability matrix of a state space system <span class="math inline">\((A,C)\)</span> is defined as <span class="math display">\[
+\mathcal O_{(A,C)} = \MATRIX{C \\ CA \\ \vdots \\ C A^{n-1}}
+\]</span> Now consider a change of coordinates <span class="math inline">\(x_o(t) = T^{-1} x(t)\)</span>. Recall that the state space representation in the new coordinate system is <span class="math display">\[
+A_o = T^{-1} A T,
+\quad
+C_o = C T.
+\]</span></p>
+<p>Observe that</p>
 <ul>
-<li><p>N. Nise, <em>Control Systems Engineering,</em> 7th Ed., Wiley</p>
-<p>Both paper and electronic versions of the textbook are available from the McGill bookstore. The electronic version of the book is also available from the publisher’s website and Google books.</p></li>
+<li><span class="math inline">\(A_o^2 = T^{-1} A T T^{-1} A T = T^{-1} A^2 T\)</span></li>
+<li><span class="math inline">\(A_o^3 = T^{-1} A^2 T T^{-1} A T = T^{-1} A^3 T\)</span></li>
+<li>etc.</li>
 </ul>
-</dd>
-</dl>
+<p>Therefore,</p>
 <ul>
-<li><p>R.L. Williams II and D.A. Lawrence, Linear State‐Space Control Systems, Wiley.</p>
-<p>The <a href="https://onlinelibrary.wiley.com/doi/book/10.1002/9780470117873">electronic version of the book</a> is available the library.</p></li>
+<li><span class="math inline">\(C_o A_o = C T T^{-1} A T = C A T\)</span></li>
+<li><span class="math inline">\(C_o A_o^2 = C T T^{-1} A^2 T = C A^2 T\)</span></li>
+<li>etc.</li>
 </ul>
-<dl>
-<dt>Reference Books</dt>
-<dd>
-<ul>
-<li>G.F. Franklin, J. Powell, A. Emani-Naeini, <em>Feedback Control of Dynamical Systems</em>, 7th Ed., Pearson.</li>
-<li>K. Oagata, <em>Modern Control Engineering</em>, 5th Ed., Pearson.</li>
-</ul>
-</dd>
-</dl>
+<p>Therefore, the observability matrix of the system in the new coordinate system is <span class="math display">\[\begin{align*}
+  \mathcal O_{(A_o, B_o)}
+  % &amp;= \MATRIX{ C_o \\ C_o A_o \\ \vdots \\ C_o A_o^{n-1} } \\
+  &amp;= \MATRIX{ C T \\ C A T \\ \vdots \\ C A^{n-1} T } \\
+  &amp;= \MATRIX{ C  \\ C A  \\ \vdots \\ C A^{n-1}  } T \\
+  &amp;= \mathcal O_{(A,C)} T.
+\end{align*}\]</span></p>
+<p>Thus, we can go from SSM <span class="math inline">\((A,C)\)</span> to SSM <span class="math inline">\((A_o,C_o)\)</span> using the transformation <span class="math display">\[
+  T = \mathcal O_{(A,C)}^{-1} \mathcal O_{(A_o, C_o)}
+\]</span> <em>provided <span class="math inline">\(\mathcal O_{(A,C)}\)</span> is invertible</em> (i.e., has full rank). When that is the case, we say that the system is <strong>observable</strong>.</p>
 </section>
-<section id="evaluation" class="level2">
-<h2 class="anchored" data-anchor-id="evaluation">Evaluation</h2>
-<ul>
-<li><p><strong>Assignments (20%)</strong> Weekly homework assignments. Typically, each assignment will consist of four questions, out of which one or two randomly selected questions will be grader. The lowest two homework assignments will be dropped.</p></li>
-<li><p><strong>Laboratory (20%)</strong> In-person weekly labs, to be conducted in groups of two. At the end of each lab, each group has to submit a lab report by filling in a Matlab Livescript template provided as part of the lab assignment.</p></li>
-<li><p><strong>Mid Term (20%)</strong> Closed book in-class exam. <span class="text-danger"><strong>Oct 10</strong></span> (during class time)</p></li>
-<li><p><strong>Final Exam (40%)</strong> Closed book, in-person exam. Will be scheduled by the exam office and the dates will be announced later.</p>
-<p>The final exam will cover <strong>all</strong> the material seen in the class during the term.</p></li>
-</ul>
+<section id="observer-design" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="observer-design"><span class="header-section-number">3.2</span> Observer design</h3>
+<p>The general observer design problem is as follows. We are given a system <span class="math inline">\((A,C)\)</span> not in OCF and we want to design a Luenberger observer <span class="math display">\[
+\dot {\hat x}(t) = A \hat x(t) + B u(t) + L (y(t) - C \hat x(t)),
+\quad \text{where }
+L = \MATRIX{\ell_0 \\ \vdots \\ \ell_{n-1}}
+\]</span> such that the characteristic polynomial of <span class="math inline">\(A - LC\)</span> is <span class="math display">\[
+\det(sI _ A + LC) = s^n + α_{n-1} s^{n-1} + \cdots + α_0.
+\]</span> We present two methods for observer design.</p>
+<section id="method-1-using-observability-matrix" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="method-1-using-observability-matrix">Method 1: Using observability matrix</h4>
+<ol type="1">
+<li><p>Find the observability matrix <span class="math inline">\(\mathcal O_{(A,C)}\)</span> of the system.</p></li>
+<li><p>If the system is not observable, i.e., the observability matrix is not full rank (which can be tested by checking that the determinant of the observability matrix is non-zero), observer design is not possible and we quit the procedure.</p></li>
+<li><p>If the system is observable, find the characteristic polynomial of <span class="math inline">\(A\)</span>: <span class="math display">\[\det(s I - A) = s^n + a_{n-1} s^{n-1} + \cdots + a_0 \]</span></p></li>
+<li><p>Using the above characteristic polynomial, write the SSM <span class="math inline">\((A_o, C_o)\)</span> in OCF.</p>
+<p><span class="text-smaller">Recall that the characteristic polynomial is the denominator of the transfer function</span></p></li>
+<li><p>Compute the observability matrix <span class="math inline">\(\mathcal O(A_o, C_o)\)</span> of the system <span class="math inline">\((A_o, B_o)\)</span> in OCF.</p></li>
+<li><p>Compute the transformation <span class="math display">\[\bbox[5pt,border: 1px solid]{
+T = \mathcal O_{(A, C)}^{-1} \mathcal O_{(A_o,C_o)}
+}\]</span></p></li>
+<li><p>Compute the observer gain <span class="math inline">\(L_o\)</span> for the system in OCF: <span class="math display">\[ L_o = \MATRIX{ α_0 - a_0 \\ \vdots \\ α_{n-1} - a_{n-1}}. \]</span></p></li>
+<li><p>The controller gain for the original system is <span class="math display">\[L = T L_o.\]</span></p></li>
+</ol>
 </section>
-<section id="marking-policy" class="level2">
-<h2 class="anchored" data-anchor-id="marking-policy">Marking policy</h2>
-<ul>
-<li><p>Assignments must be submitted electronically on myCourses as a PDF. You may write the assignments on paper and then scan them as a PDF (there are several such apps available for all phone platforms), or write on a tablet and convert to PDF, or type using a word processor.</p></li>
-<li><p><strong>There will no make-up examination</strong> for students who miss a mid-term.</p>
-<ul>
-<li><p>Student who miss the exam due to a valid reason (see <a href="https://www.mcgill.ca/engineering/students/undergraduate/courses-registration/exams-assessment/midterms-and-class-tests/adjustments-missed-midterms-and-class-tests">Faculty of Engineering policy</a>) should <strong>notify the instructor within a week</strong> of the exam and provide <strong>necessary documentation</strong>.</p></li>
-<li><p>If, and only if, proper documentation for a missed exam is presented, the marks for the missed exam will be shifted to the final exam.</p></li>
-<li><p>Students who miss the mid-term exam for any other reason (e.g., no medical note, going to the exam at the wrong time, or on the wrong day, etc.) will get zero marks on the exam.</p></li>
-</ul></li>
-<li><p>Any request for reevaluation of a mid-term or an assignment must be made <strong>in writing within a week of its return</strong>. Note that requesting a re-grade will mean that you <strong>WHOLE</strong> assignment or exam will be re-graded.</p></li>
-<li><p><span class="text-danger">Due to paucity of grading hours, only one or two randomly selected questions will be graded in each assignment.</span></p></li>
-<li><p>The lowest two assignments and labs will be dropped. There will be no make-up for missed assignments and labs, <em>even if it is for a valid reason.</em> The whole point of dropping the lowest two assignments/labs is to reduce the administrative overhead of keeping track of such missed assignments/labs.</p></li>
-</ul>
-<dl>
-<dt>Right to submit in English or French written work that is to be graded.</dt>
-<dd>
-In accord with McGill University’s <a href="https://www.mcgill.ca/secretariat/files/secretariat/charter_of_student_rights_last_approved_october_262017.pdf">Charter of Students’ Rights</a>, students in this course have the right to submit in English or in French any written work that is to be graded.
-</dd>
-<dt>Academic Integrity</dt>
-<dd>
-<p>McGill University values academic integrity. Therefore all students must understand the meaning and consequences of cheating, plagiarism and other academic offences under the <a href="https://www.mcgill.ca/secretariat/files/secretariat/code_of_student_conduct_and_disciplinary_procedures.pdf">Code of Student Conduct and Disciplinary Procedures</a> (see McGill’s <a href="http://www.mcgill.ca/students/srr/honest/">guide to academic honesty</a> for more information).</p>
-<p>L’université McGill attache une haute importance à l’honnêteté académique. Il incombe par conséquent à tous les étudiants de comprendre ce que l’on entend par tricherie, plagiat et autres infractions académiques, ainsi que les conséquences que peuvent avoir de telles actions, selon le <a href="https://www.mcgill.ca/secretariat/files/secretariat/code_of_student_conduct_and_disciplinary_procedures.pdf">Code de conduite de l’étudiant et des procédures disciplinaires</a> (pour de plus amples renseignements, veuillez consulter le <a href="http://www.mcgill.ca/students/srr/honest/">guide pour l’honnêteté académique</a> de McGill.)</p>
-</dd>
-</dl>
+<section id="method-2-a-slightly-more-efficient-approach" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="method-2-a-slightly-more-efficient-approach">Method 2: A slightly more efficient approach</h4>
+<p>It is possible to avoid the computation of the observability matrix of the system in OCF by replacing steps 4–6 of Method 1 by the following:</p>
+<ol start="4" type="1">
+<li><p>Compute the matrix <span class="math display">\[ W = \MATRIX{ a_1 &amp; a_2 &amp; \cdots &amp; a_{n-1} &amp; 1 \\
+                a_2 &amp; \iddots &amp; \iddots &amp; 1 &amp; 0 \\
+                \iddots &amp; \iddots &amp; \iddots &amp; \iddots &amp; \vdots \\
+               a_{n-1} &amp; 1 &amp; 0 &amp; \cdots &amp; 0 \\
+               1 &amp; 0 &amp; 0 &amp; \cdots &amp; 0
+              }
+\]</span></p></li>
+<li><p>Compute the transformation: <span class="math display">\[\bbox[5pt,border: 1px solid]{
+T = \bigl[ W \mathcal O_{(A,C)} \bigr]^{-1}
+}\]</span></p></li>
+</ol>
+<p>This method relies on the fact that for a system <span class="math inline">\((A_o,C_o)\)</span> in OCF, <span class="math inline">\(\mathcal O_{(A_o,C_o)} = W^{-1}\)</span>. For a proof, see Lemma 4.5 of William and Lawrence.</p>
+<div id="exm-observer-design" class="theorem example">
+<p><span class="theorem-title"><strong>Example 2</strong></span> Consider the following SSM: <span class="math display">\[ A = \MATRIX{3 &amp; 1 \\ 1 &amp; 2}, B = \MATRIX{2 \\1} \text{ and } C = \MATRIX{ 3 &amp; 2}. \]</span> Design a Luenberger observer (i.e., compute the observer gain <span class="math inline">\(L\)</span>) such that the eigenvalues of <span class="math inline">\(A - LC\)</span> are at <span class="math inline">\(-10 \pm 5j\)</span>.</p>
+</div>
 </section>
-<section id="course-delivery" class="level2">
-<h2 class="anchored" data-anchor-id="course-delivery">Course delivery</h2>
-<p>The course is taught in a “chalk and board” style; there will be no power point presentations. All students are expected to attend lectures and take notes. Partial notes on some of the material will be provided, but are not a substitute for the material covered in class.</p>
-<p>© Instructor-generated course materials (e.g., handouts, notes, summaries, exam questions) are protected by law and may not be copied or distributed in any form or in any medium without explicit permission of the instructor. Note that infringements of copyright can be subject to follow up by the University under the Code of Student Conduct and Disciplinary Procedures.</p>
 </section>
-<section id="additional-notes" class="level2">
-<h2 class="anchored" data-anchor-id="additional-notes">Additional Notes</h2>
-<ul>
-<li><p>As the instructor of this course I endeavor to provide an inclusive learning environment. However, if you&nbsp;experience barriers to learning in this course, do not hesitate to discuss them with me or contact the office of <a href="https://www.mcgill.ca/access-achieve/">Student Accessibility and Achievement</a>.</p></li>
-<li><p><a href="http://www.mcgill.ca/mercury/">End-of-course evaluations</a> are one of the ways that McGill works towards maintaining and improving the quality of courses and the student’s learning experience. You will be notified by e-mail when the evaluations are available. Please note that a minimum number of responses must be received for results to be available to students.</p></li>
-</ul>
+</section>
+<section id="output-feedback" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="output-feedback"><span class="header-section-number">4</span> Output feedback</h2>
+<p>Consider a SSM <span class="math display">\[\begin{align*}
+\dot x(t) &amp;= A x(t) + B u(t) \\
+y(t) &amp;= C x(t)
+\end{align*}\]</span></p>
+<p>In this section, we will learn how to control such a system when the controller does not have access to the internal state <span class="math inline">\(x(t)\)</span>, but can only observe the output <span class="math inline">\(y(t)\)</span>. This is called <strong>output feedback</strong>.</p>
+<p>The basic idea of output feedback is to first estimate the state of the system via a Luenberger observer <span class="math display">\[
+\dot {\hat x}(t) = A \hat x(t) + B u(t) + L (y(t) - C \hat x(t)),
+\quad\text{where }
+L = \MATRIX{\ell_0 \\ \vdots \\ \ell_{n-1}}
+\]</span> and then use a linear feedback controller that uses the estimated state: <span class="math display">\[
+  u(t) = - K \hat x(t),
+\quad\text{where }
+K = \MATRIX{k_0 &amp; \cdots &amp; k_{n-1}}.
+\]</span></p>
+<p>This gives <span class="math inline">\(2n\)</span> tunable gains <span class="math inline">\(k_0, \dots, k_{n-1}\)</span> and <span class="math inline">\(\ell_0, \dots, \ell_{n-1}\)</span> and the hope is that we can find these gain to arbitrarily choose the eigenvalues of the closed loop system.</p>
+<p>Writing the above equations in state space form, we get <span class="math display">\[
+\MATRIX{ \dot x(t) \\ \dot {\hat x}(t) } =
+\MATRIX{ A &amp; -BK \\ LC &amp; A - BK - LC }
+\MATRIX{ x(t) \\ \hat x(t) }.
+\]</span> By using the transformation <span class="math inline">\(T = \MATRIX{I &amp; 0 \\ I &amp; -I}\)</span>, we get <span class="math display">\[
+\MATRIX{ \dot x(t) \\ \dot e(t) } =
+\MATRIX{ A - BK &amp; -BK \\ 0 &amp; A - LC }
+\MATRIX{ x(t) \\ e(t) }.
+\]</span> Thus, the characteristic polynomial of the closed loop system is <span class="math display">\[
+\DET{ A - BK &amp; -BK \\ 0 &amp; A - LC }  =
+\det(sI - (A - BK)) \det(sI - (A-LC))
+\]</span> where we have used the fact that the determiniant of a block diagonal upper triangular matrix is the product of the determinants of the diagonal sub-matrices.</p>
+<p>Thus, <span class="math display">\[
+\{\text{eigenvalues of closed loop system}\}
+= \{\text{eigenvalues of $(A - BK)$}\} \cup
+  \{\text{eigenvalues of $(A - LC)$}\}.
+\]</span> Thus, we can separately design the controller gain <span class="math inline">\(K\)</span> and the observer gain <span class="math inline">\(L\)</span> by using the methods described earlier. This is called <strong>the separation principle.</strong></p>
+<p>If we choose observer poles several times faster than controller poles, the controller poles will dominate. Thus, output feedback gives essentially the same performance as (the non-implementable) state feedback.</p>
 
 
 </section>
-</section>
+
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1124,5 +1034,5 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div></div></footer><script src="site_libs/quarto-html/zenscroll-min.js"></script>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/output-feedback.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div></div></footer><script src="site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>
