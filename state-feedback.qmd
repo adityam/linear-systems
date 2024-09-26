@@ -493,26 +493,26 @@ We will follow the approach presented in [previous section](state-space-models.q
   C_2 \dot v_2(t) &= \frac{u(t) - v_2(t)}{R_2} + \frac{v_1(t) - v_2(t)}{R_3}
 \end{align*}
 which can be re-written in state-space form as:
-$$\def\1{\vphantom{\dfrac{1}{C_1R_1}}}
+$$\def\1{\vphantom{\dfrac{1}{R_1C_1}}}
   \MATRIX{ \1\dot v_1(t) \\ \1\dot v_2(t) } =
-  \MATRIX{ -\left(\dfrac{1}{C_1R_1} + \dfrac{1}{C_1 R_3}\right) & \dfrac{1}{C_1R_3} \\
-  \dfrac{1}{C_2R_3} & -\left(\dfrac{1}{C_2R_2} + \dfrac{1}{C_2R_3}\right)}
+  \MATRIX{ -\left(\dfrac{1}{R_1C_1} + \dfrac{1}{R_3C_1}\right) & \dfrac{1}{R_3C_1} \\
+  \dfrac{1}{R_3C_2} & -\left(\dfrac{1}{R_2C_2} + \dfrac{1}{R_3C_2}\right)}
   \MATRIX{ \1v_1(t) \\ \1v_2(t) }
   + 
-  \MATRIX{\dfrac{1}{C_1R_1} \\ \dfrac{1}{C_2R_2}} u(t).
+  \MATRIX{\dfrac{1}{R_1C_1} \\ \dfrac{1}{R_2C_2}} u(t).
 $$
-Consider the sum $\tilde v(t) = v_1(t) + v_2(t) = \MATRIX{I & I} \MATRIX{v_1(t) \\ v_2(t)}$, which satisfies
+Consider the difference $\tilde v(t) = v_1(t) - v_2(t) = \MATRIX{I & -I} \MATRIX{v_1(t) \\ v_2(t)}$, which satisfies
 $$
 \dot {\tilde v(t)} = 
-  -\frac{1}{C_1R_1} v_1(t)
-  - \frac{1}{C_2R_2} v_2(t)
- + \left[ \frac{1}{C_1R_1} - \frac {1}{C_2 R_2} \right] u(t).
+  -\left[\frac{1}{R_1C_1} + \frac{2}{R_3C_1} \right] v_1(t) 
+  +\left[\frac{1}{R_2C_2} + \frac{2}{R_3C_2} \right] v_2(t) 
+ + \left[ \frac{1}{R_1C_1} - \frac {1}{R_2C_2} \right] u(t).
 $$
-When the bridge is **balanced**, i.e., $R_1 C_1 = R_2 C_2 = RC$, we have
+When the bridge is **balanced**, i.e., $R_1 = R_2  = R$ and $C_1 = C_2 = C$, we have
 $$
-\dot {\tilde v(t)} = -\frac{1}{RC} (v_1(t) + v_2(t)) = -\frac{1}{RC} \tilde v(t)
+\dot {\tilde v(t)} = -\left[ \frac{1}{RC} + \frac{2}{R_3 C} \right] \tilde v(t) 
 $$
-which is a homogeneous equation with no input. Thus, in this case, the control input $u(t)$ has no impact on the subspace $v_1(t) + v_2(t)$ of the state space. Thus, the system is not controllable.
+which is a homogeneous equation with no input. Thus, in this case, the control input $u(t)$ has no impact on the subspace $v_1(t) - v_2(t)$ of the state space. Thus, the system is not controllable.
 
 
 
