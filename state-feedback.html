@@ -667,21 +667,21 @@ Figure&nbsp;2: A RC-bridge
 <p>We will follow the approach presented in <a href="./state-space-models.html#ssm-for-circuits">previous section</a> to find a SSM for the circuit in <a href="#fig-rc-bridge" class="quarto-xref">Figure&nbsp;2</a>. We take the voltage across the two capcitors (denoted by <span class="math inline">\(v_1\)</span> and <span class="math inline">\(v_2\)</span>) as the two components of the SSM. From KCL, we have <span class="math display">\[\begin{align*}
   C_1 \dot v_1(t) &amp;= \frac{u(t) - v_1(t)}{R_1} - \frac{v_1(t) - v_2(t)}{R_3} \\
   C_2 \dot v_2(t) &amp;= \frac{u(t) - v_2(t)}{R_2} + \frac{v_1(t) - v_2(t)}{R_3}
-\end{align*}\]</span> which can be re-written in state-space form as: <span class="math display">\[\def\1{\vphantom{\dfrac{1}{C_1R_1}}}
+\end{align*}\]</span> which can be re-written in state-space form as: <span class="math display">\[\def\1{\vphantom{\dfrac{1}{R_1C_1}}}
   \MATRIX{ \1\dot v_1(t) \\ \1\dot v_2(t) } =
-  \MATRIX{ -\left(\dfrac{1}{C_1R_1} + \dfrac{1}{C_1 R_3}\right) &amp; \dfrac{1}{C_1R_3} \\
-  \dfrac{1}{C_2R_3} &amp; -\left(\dfrac{1}{C_2R_2} + \dfrac{1}{C_2R_3}\right)}
+  \MATRIX{ -\left(\dfrac{1}{R_1C_1} + \dfrac{1}{R_3C_1}\right) &amp; \dfrac{1}{R_3C_1} \\
+  \dfrac{1}{R_3C_2} &amp; -\left(\dfrac{1}{R_2C_2} + \dfrac{1}{R_3C_2}\right)}
   \MATRIX{ \1v_1(t) \\ \1v_2(t) }
   +
-  \MATRIX{\dfrac{1}{C_1R_1} \\ \dfrac{1}{C_2R_2}} u(t).
-\]</span> Consider the sum <span class="math inline">\(\tilde v(t) = v_1(t) + v_2(t) = \MATRIX{I &amp; I} \MATRIX{v_1(t) \\ v_2(t)}\)</span>, which satisfies <span class="math display">\[
+  \MATRIX{\dfrac{1}{R_1C_1} \\ \dfrac{1}{R_2C_2}} u(t).
+\]</span> Consider the difference <span class="math inline">\(\tilde v(t) = v_1(t) - v_2(t) = \MATRIX{I &amp; -I} \MATRIX{v_1(t) \\ v_2(t)}\)</span>, which satisfies <span class="math display">\[
 \dot {\tilde v(t)} =
-  -\frac{1}{C_1R_1} v_1(t)
-  - \frac{1}{C_2R_2} v_2(t)
-+ \left[ \frac{1}{C_1R_1} - \frac {1}{C_2 R_2} \right] u(t).
-\]</span> When the bridge is <strong>balanced</strong>, i.e., <span class="math inline">\(R_1 C_1 = R_2 C_2 = RC\)</span>, we have <span class="math display">\[
-\dot {\tilde v(t)} = -\frac{1}{RC} (v_1(t) + v_2(t)) = -\frac{1}{RC} \tilde v(t)
-\]</span> which is a homogeneous equation with no input. Thus, in this case, the control input <span class="math inline">\(u(t)\)</span> has no impact on the subspace <span class="math inline">\(v_1(t) + v_2(t)\)</span> of the state space. Thus, the system is not controllable.</p>
+  -\left[\frac{1}{R_1C_1} + \frac{2}{R_3C_1} \right] v_1(t)
+  +\left[\frac{1}{R_2C_2} + \frac{2}{R_3C_2} \right] v_2(t)
++ \left[ \frac{1}{R_1C_1} - \frac {1}{R_2C_2} \right] u(t).
+\]</span> When the bridge is <strong>balanced</strong>, i.e., <span class="math inline">\(R_1 = R_2  = R\)</span> and <span class="math inline">\(C_1 = C_2 = C\)</span>, we have <span class="math display">\[
+\dot {\tilde v(t)} = -\left[ \frac{1}{RC} + \frac{2}{R_3 C} \right] \tilde v(t)
+\]</span> which is a homogeneous equation with no input. Thus, in this case, the control input <span class="math inline">\(u(t)\)</span> has no impact on the subspace <span class="math inline">\(v_1(t) - v_2(t)\)</span> of the state space. Thus, the system is not controllable.</p>
 </section>
 <section id="uncontrollability-and-pole-zero-cancellation" class="level3" data-number="4.2">
 <h3 data-number="4.2" class="anchored" data-anchor-id="uncontrollability-and-pole-zero-cancellation"><span class="header-section-number">4.2</span> Uncontrollability and pole-zero cancellation</h3>
