@@ -14,14 +14,6 @@ Consider a SSM
 y(t) &= C x(t)
 \end{align*}
 
-$%Defition for iddots
-\newcommand\iddots{\mathinner{
-  \kern1mu\raise1pt{.}
-  \kern2mu\raise4pt{.}
-  \kern2mu\raise7pt{\Rule{0pt}{7pt}{0pt}.}
-  \kern1mu
-}}$
-
 In this section, we will learning how to control such a system when the controller has access to the internal state $x(t)$. This is called **state feedback**. In the [next section](output-feedback.qmd), we will learn how to design a system when the controller has access to only the output $y(t)$. This is called **output feedback**.
 
 ![Block diagram for state feedback](figures/svg/SSM1.svg){#fig-block}
@@ -513,6 +505,13 @@ $$
 \dot {\tilde v(t)} = -\left[ \frac{1}{RC} + \frac{2}{R_3 C} \right] \tilde v(t) 
 $$
 which is a homogeneous equation with no input. Thus, in this case, the control input $u(t)$ has no impact on the subspace $v_1(t) - v_2(t)$ of the state space. Thus, the system is not controllable.
+
+We can also verify this via the controllability matrix, whic is given by
+$$
+\mathcal C = \MATRIX{ \dfrac{1}{RC} & -\dfrac{1}{(RC)^2} \\
+\dfrac{1}{RC} & -\dfrac{1}{(RC)^2}}
+$$
+which is not full rank. 
 
 
 
