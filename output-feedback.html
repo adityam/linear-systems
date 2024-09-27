@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2024-09-26">
+<meta name="dcterms.date" content="2024-09-27">
 
 <title>State observers and output feedback – Linear Systems and Control</title>
 <style>
@@ -241,7 +241,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 26, 2024</p>
+      <p class="date">September 27, 2024</p>
     </div>
   </div>
   
@@ -431,6 +431,16 @@ T = \bigl[ W \mathcal O_{(A,C)} \bigr]^{-1}
 y(t) &amp;= C x(t)
 \end{align*}\]</span></p>
 <p>In this section, we will learn how to control such a system when the controller does not have access to the internal state <span class="math inline">\(x(t)\)</span>, but can only observe the output <span class="math inline">\(y(t)\)</span>. This is called <strong>output feedback</strong>.</p>
+<div id="fig-block" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-block-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/SSM2.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-block-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Block diagram for output feedback
+</figcaption>
+</figure>
+</div>
 <p>The basic idea of output feedback is to first estimate the state of the system via a Luenberger observer <span class="math display">\[
 \dot {\hat x}(t) = A \hat x(t) + B u(t) + L (y(t) - C \hat x(t)),
 \quad\text{where }
@@ -440,7 +450,7 @@ L = \MATRIX{\ell_0 \\ \vdots \\ \ell_{n-1}}
 \quad\text{where }
 K = \MATRIX{k_0 &amp; \cdots &amp; k_{n-1}}.
 \]</span></p>
-<p>This gives <span class="math inline">\(2n\)</span> tunable gains <span class="math inline">\(k_0, \dots, k_{n-1}\)</span> and <span class="math inline">\(\ell_0, \dots, \ell_{n-1}\)</span> and the hope is that we can find these gain to arbitrarily choose the eigenvalues of the closed loop system.</p>
+<p>As before, we will first consider the system without any reference signal, i.e., <span class="math inline">\(r(t) = 0\)</span>. In tihs case, there are <span class="math inline">\(2n\)</span> tunable gains <span class="math inline">\(k_0, \dots, k_{n-1}\)</span> and <span class="math inline">\(\ell_0, \dots, \ell_{n-1}\)</span> and the hope is that we can find these gain to arbitrarily choose the eigenvalues of the closed loop system.</p>
 <p>Writing the above equations in state space form, we get <span class="math display">\[
 \MATRIX{ \dot x(t) \\ \dot {\hat x}(t) } =
 \MATRIX{ A &amp; -BK \\ LC &amp; A - BK - LC }
