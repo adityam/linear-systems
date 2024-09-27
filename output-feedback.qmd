@@ -263,6 +263,8 @@ y(t) &= C x(t)
 
 In this section, we will learn how to control such a system when the controller does not have access to the internal state $x(t)$, but can only observe the output $y(t)$. This is called **output feedback**.
 
+![Block diagram for output feedback](figures/svg/SSM2.svg){#fig-block}
+
 The basic idea of output feedback is to first estimate the state of the system via a Luenberger observer
 $$
 \dot {\hat x}(t) = A \hat x(t) + B u(t) + L (y(t) - C \hat x(t)),
@@ -276,7 +278,8 @@ $$
 K = \MATRIX{k_0 & \cdots & k_{n-1}}.
 $$
 
-This gives $2n$ tunable gains $k_0, \dots, k_{n-1}$ and $\ell_0, \dots, \ell_{n-1}$ and the hope is that we can find these gain to arbitrarily choose the eigenvalues of the closed loop system. 
+As before, we will first consider the system without any reference signal, i.e., $r(t) = 0$. In tihs case, there are
+$2n$ tunable gains $k_0, \dots, k_{n-1}$ and $\ell_0, \dots, \ell_{n-1}$ and the hope is that we can find these gain to arbitrarily choose the eigenvalues of the closed loop system. 
 
 Writing the above equations in state space form, we get
 $$

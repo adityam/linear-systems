@@ -35,7 +35,7 @@
 \define\SMALL{\switchtobodyfont[10pt]}
 
 \starttext
-\startTEXpage % Reference tracking
+\startTEXpage % state feedback
 \scale[scale=1500]{\starttikzpicture[thick]
       \node [input] (input) {$r(t)$};
       \node [tightblock, right=of input, draw=darkred, fill=lightred] (compensator) {$N$};
@@ -65,6 +65,83 @@
       % 2nd pass
       \draw [innerWhite] (integrator) -- (C);
       \draw [innerWhite] (bend) |- (A);
+
+    \stoptikzpicture}
+\stopTEXpage
+
+\startTEXpage % output feedback
+\scale[scale=1500]{\starttikzpicture[thick]
+      \node [input] (input) {$r(t)$};
+      \node [tightblock, right=of input, draw=darkred, fill=lightred] (compensator) {$N$};
+      \node [sum, right=12mm of compensator] (sum0) {\tfc $+$};
+      \node [tightblock, right=of sum0] (B) {$B$};
+      \node [sum, right=of B] (sum1) {\tfc $+$};
+      \node [tightblock, right=of sum1] (integrator) {$\dfrac{1}{s}$};
+      \node [tightblock, below=8mm of integrator] (A) {$A$};
+      \node [tightblock, right=16mm of integrator] (C) {$C$};
+      \node [output, right=8mm of C] (output) {$y(t)$};
+
+      \node [tightblock, below=8mm of A, draw=darkred, fill=lightred] (K) {$K$};
+
+      \draw [->] (input) -- (compensator);
+      \draw [->] (compensator) -- node[midway, coordinate, name=bend0] {} (sum0.west) node[left=5pt, above] {$+$};
+      \draw [->] (sum0) -- (B);
+      \draw [vecArrow] (B) -- (sum1.west) node[left=5pt, above] {$+$};
+      \draw [vecArrow] (sum1) -- (integrator);
+      \draw [->] (C) -- (output);
+      \draw [vecArrow] (A) -| (sum1.south) node[below=5pt, left] {$+$};
+      \draw [vecArrow] (integrator) -- node[midway, coordinate, name=bend, label={[font=\SMALL]above:$x(t)$}] {} (C);
+      \draw [vecArrow] (bend) |- (A);
+
+      \draw [->] (K) -| (sum0.south) node[below=5pt, left] {$-$};
+
+      % 2nd pass
+      \draw [innerWhite] (integrator) -- (C);
+      \draw [innerWhite] (bend) |- (A);
+
+      \node[tightblock, below=8mm of K] (integrator-c) {$\dfrac{1}{s}$};
+      \node [tightblock, below=8mm of integrator-c] (A-c) {$A$};
+      \node [tightblock, right=16mm of integrator-c] (C-c) {$C$};
+      \node [output, right=8mm of C-c] (output-c) {$\hat y(t)$};
+      \node [tightblock, below=8mm of integrator] (A) {$A$};
+      \node [tightblock, right=16mm of integrator] (C) {$C$};
+      \node [output, right=8mm of C] (output) {$y(t)$};
+
+      \node [sum, left=of integrator-c] (sum1-c) {\tfc $+$};
+      \node [tightblock, left=of sum1-c] (B-c) {$B$};
+      \node [sum, left=of B-c] (sum0-c) {\tfc $+$};
+
+      \node [tightblock, below=8mm of A-c, draw=darkblue, fill=lightblue] (L) {$L$};
+      \node [sum, left=of A-c] (sum2-c) {\tfc $+$};
+
+      \draw[->] (bend0) |- (sum0-c.west) node[left=5pt, above] {$+$};
+      \draw [->] (sum0-c) -- (B-c);
+      \draw [vecArrow] (B-c) -- (sum1-c.west) node[left=5pt, above] {$+$};
+      \draw [vecArrow] (sum1-c) -- (integrator-c);
+      \draw [->] (C-c) -- (output-c);
+      \draw [vecArrow] (sum2-c) -- (sum1-c.south) node[below=5pt, left] {$+$};
+      \draw [vecArrow] (A-c) -- (sum2-c.east) node[right=5pt, above] {$+$};
+
+      \draw [vecArrow] (integrator-c) -- node[midway, coordinate, name=bend-c, label={[font=\SMALL]above:$\hat x(t)$}] {} (C-c);
+      \draw [vecArrow] (bend-c) |- (A-c);
+
+      \draw [->] (K) -| (sum0-c.north) node[above=5pt, left] {$-$};
+      \draw [vecArrow, draw=darkblue] (bend-c) |- (K);
+
+      \draw [vecArrow] (L) -| (sum2-c.south) node[below=5pt, right] {$+$}; 
+
+      % 2nd pass
+      \draw [innerWhite] (integrator-c) -- (C-c);
+      \draw [innerWhite] (bend-c) |- (A-c);
+      \draw [innerWhite] (bend-c) |- (K);
+
+      \node [sum, right=of output-c] (sum3) {\tfc $+$};
+      \draw [->] (output) -| (sum3.north) node[above=5pt, right] {$+$};
+      \draw [->] (output-c) -- (sum3.west) node[left=5pt, above] {$-$};
+
+      \draw [->] (sum3) |- (L);
+
+
 
     \stoptikzpicture}
 \stopTEXpage
