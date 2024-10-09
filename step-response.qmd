@@ -827,7 +827,7 @@ From inspection, we get that $ω_n^2 = 100$ and $2 ζ ω_n = 15$. Thus,
 $ω_n = 10$ and $ζ  = 0.75$. Then we have
 
 - $T_p = \dfrac{π}{ω_d} = 0.475$.
-- $\%{\rm OS} = \exp\biggl(\dfrac{π σ}{ω_d}\biggr) × 100 = 2.28\%$.
+- $\%{\rm OS} = \exp\biggl(-\dfrac{π σ}{ω_d}\biggr) × 100 = 2.28\%$.
 - $T_s(2\%) = \dfrac{4}{σ} = 0.533$ sec.
 - From @tbl-rise-time, we get that for $ζ = 0.75$, $ω_n T_r \approx (2.216 + 2.467)/2 = 2.3415$. Thus, $T_r = 2.3415/ω_n = 0.23415$ sec.
 
