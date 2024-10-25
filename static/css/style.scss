@@ -8,71 +8,27 @@
     background-color: $secondary;
 }
 
-/* Game tables */
-.game td, .game1 td {
+/* Routh Array */
+.routharray td {
   padding-top: 0.25em;
   padding-bottom: 0.25em;
-}
-
-.game td {
-  text-align: right;
-}
-
-.game1 td {
-  text-align: center;
-}
-
-.game  tr:not(:nth-of-type(1)) > td:not(:nth-of-type(1)),
-.game1 tr:not(:nth-of-type(1)) > td:not(:nth-of-type(1)) {
-  border-bottom: 1px solid;
-}
-
-.game tr:not(:nth-of-type(1)) > td:nth-of-type(1),
-.game1 tr:not(:nth-of-type(1)) > td:nth-of-type(1) {
-  border-right : 1px solid ;
-}
-
-.game tr:not(:nth-of-type(1)) > td:nth-of-type(2n) {
-  padding-left: 1em;
-  border-left: 1px solid;
-}
-
-.game1 tr:not(:nth-of-type(1)) > td:not(:nth-of-type(1)) {
   padding-left: 0.5em;
   padding-right: 0.5em;
-  border-left: 1px solid;
-}
-
-.game tr:not(:nth-of-type(1)) > td:nth-of-type(2n+1) {
-  padding-right: 1em;
-}
-
-.game tr:not(:nth-of-type(1)) > td:nth-of-type(2n):after {
-  content: ', ';
-}
-
-.game tr:not(:nth-of-type(1)) > td:nth-last-of-type(1),
-.game1 tr:not(:nth-of-type(1)) > td:nth-last-of-type(1) {
-  border-right : 1px solid ;
-}
-
-.game tr:nth-of-type(1) > td:not(:nth-of-type(1)),
-.game1 tr:nth-of-type(1) > td:not(:nth-of-type(1)) {
-  text-align: center;
-  padding-left: 1em;
-  border-bottom : 1px solid ;
-}
-
-.game tr:nth-last-of-type(1) > td:not(:nth-of-type(1)),
-.game1 tr:nth-last-of-type(1) > td:not(:nth-of-type(1)) {
-  border-bottom : 1px solid ;
-}
-
-
-.game, .game1 {
-  border-collapse: collapse;
   border: none;
 }
+
+.routharray tr:first-child {
+  border-top: 1px solid;
+}
+
+.routharray tr > td:nth-child(2) {
+  background-color: $gray-400;
+}
+
+.routharray td {
+  text-align: center;
+}
+
 
 // Copied from https://github.com/quarto-dev/quarto-web/blob/386ce1f654644a9db8134770c5312fe2b3c3b6b4/styles.css#L143
 @media (max-width: 575px) {

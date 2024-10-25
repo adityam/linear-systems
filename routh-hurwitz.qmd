@@ -1,0 +1,287 @@
+---
+title: Routh-Hurwitz Stability Criterion
+
+execute:
+  echo: false
+  freeze: true
+  cache: true
+
+---
+
+Consider a unity feedback system as shown in @fig-feedback. In such a setting, we are often interested in finding the values of $K$ for which the system is stable. 
+
+![Block diagram of a proportional controller](figures/svg/routh-hurwitz1.svg){#fig-feedback}
+
+```{julia}
+#| output: false
+# Install packages
+
+# using Pkg; Pkg.activate(".")
+# for pkg in ["IJulia", "Revise", "Polynomials"]
+#    Pkg.add(pkg)
+# end
+# 
+# # Installing Jupyter Cache
+# Pkg.add("Conda")
+# using Conda
+# Conda.add("jupyter-cache")
+
+using Revise
+
+using Polynomials 
+
+using Hyperscript, Symbolics, Printf, LinearAlgebra 
+
+function RouthArray(polynomial; details=true)
+  coeffs = length(polynomial) 
+  n_rows = coeffs
+  n_cols = [ ceil(Int, idx/2) for idx=n_rows:-1:1 ]
+
+  math(x) = @sprintf("\$%s\$", x)
+
+  RA = zeros(Num, n_rows, n_cols[1])
+
+  ## Fill the first two rows
+  for idx in 1:coeffs
+    RA[2 - rem(idx,2), ceil(Int, idx/2)] = polynomial[idx]
+  end
+
+  for row in 3:n_rows
+   ## Handle row of zero
+   ## Handle first column zero
+   ## Normal case
+   for col = 1:n_cols[row]
+      D = [ RA[row-2, 1] RA[row-2, col+1]; RA[row-1, 1] RA[row-1, col+1] ]
+      RA[row, col] = -det(D)//RA[row - 1, 1] |> expand |> simplify
+   end
+  end
+  
+  ## Print the table
+  table = m("table")
+  tr = m("tr")
+  td = m("td")
+
+  function value(row, col)
+    if details && row > 2
+      # Fix zero in first col
+      @sprintf("\$-\\dfrac{\\DET{ %s & %s \\\\ %s & %s}}{%s} = %s\$", 
+               showr(RA[row - 2, 1]), showr(RA[row - 2, col+1]),
+               showr(RA[row - 1, 1]), showr(RA[row - 1, col+1]),
+               showr(RA[row - 1, 1]), showr(RA[row, col]) )
+    else
+      math(showr(RA[row,col]))
+    end
+  end
+
+  function showr(x::Num)
+    showr(Symbolics.value(x))
+  end
+
+  function showr(x::Rational)
+    (denominator(x) == 1) ? string(numerator(x)) : string(x)
+  end
+
+  showr(x) = string(x)
+
+  table.routharray(
+    [ tr( td(@sprintf("\$s^{%s}\$", coeffs - row )),
+          [td(value(row, col)) for col = 1:n_cols[row]]) for row = 1:n_rows ])
+
+end
+
+```
+
+
+:::{#exm-PI}
+Consider the system shown in @fig-feedback with
+$$ G(s) = \frac{1}{s-1}. $$
+Find the values of $K$ for which the system is stable. 
+:::
+
+:::{.callout-note collapse="false"} 
+#### Solution
+
+The closed-loop transfer function is given by
+$$ T(s) = \frac{K G(s)}{1 + K G(s) } = \frac{K}{s - 1 + K}. $$
+Thus, the closed-loop transfer function has a pole at $1 - K$. The system is stable when all poles are in the OLHP, i.e., $1 - K < 0$. Thus, the system is stable for 
+$$ K > 1. $$
+:::
+
+In the above example, we could identify the roots of the closed loop transfer function and thereby determine the values of gain $K$ for which the system is stable. However, we can only factorize lower order polynomials; for polynomials with degree greater than $t$, we need to resort to numerical methods. Doing so, makes it difficult to find the range of values of $K$ for which a polynomial is stable. 
+
+However, for determine the stability of a system, we don't need to find the roots of the denominator polynomial; we simply need to verify that all the roots are in the OLHP. The following result shows that we can determine if roots lie in the ORHP without factorizing a polynomial. 
+
+:::{#thm-factorize}
+A necessary condition for a polynomial to be stable is that all the coefficients have the same sign (positive or negative)
+:::
+
+But this is a necessary condition but not a sufficient condition. So, we know that the polynomial
+$$ D(s) = s^5 + 4 s^4 + 10s^3 - s^2 + 2 s + 1$$
+is unstable because one of the coefficients are negative. Moreover, we know that the polynomail
+$$ D(s) = s^4 + 4s^3 + s + 1$$
+is unstable because the coefficient of the $s^2$ term is $0$. But this necessary condition doesn't tell us if 
+$$ D(s) = s^5 + 4 s^4 + 10s^3 + s^2 + 2 s + 1$$ 
+is stable or not.
+
+The Routh-Hurwitz criterion is a simple algebraic procedure which determines whether a polynomial is stable. The first step is generating what is called a Routh Array. 
+
+
+## Generating the Routh Array
+
+Consider a polynomial 
+$$ D(s) = a_n s^n + \cdots + a_0. $$
+
+The Routh array is a (non-rectangular) array with $n+1$ rows, indexed by $s^n$, $s^{n-1}$, $\dots$, $s^0$. 
+
+- **Step 1.** Fill the first two rows of the Routh array with the coefficients of $D(s)$ going in the zigzag pattern as shown below. We stop when we have used all the coefficients. Any unfilled entries in the Routh array are assumed to be zero. 
+
+    <!-- TODO: Add figure -->
+
+- **Step 2.** This is a recursive step, where we take two filled rows, say row $s^{m+2}$ and $s^m$ and use that to fill row $s^m$, for all $m \in \{n-2, \dots, 0\}$. Each entry is the negative determinant of a $2 \times 2$ matrix constructed from the entries in the previous two rows (i.e., row $s^{m+2}$ and $s^{m+1}$ when we are filling in row $s^m$) divided by the first entry in row $s^{m+1}$ (**provided that entry is not zero!**). The first column of $2 \times 2$ matrix is the first column of the previous two rows; the second column of the $2 \times 2$ matrix is the columns above and to the right. 
+
+    <!-- TODO: Add figure -->
+
+    Note that in each row, we eventually end up with zeros at which time we stop filling the row. We repeat this procedure until we have filled all rows until row $s^0$. 
+
+We always follow the above method to fill in the Routh array, irrespective of the size of the polynomial. We illustrate this via some examples. 
+
+:::{#exm-Routh-Hurwitz-1}
+Find the Routh Array of 
+$$ D(s) = s^4 + 2 s^3 + 3 s^2 + 4s + 5. $$
+:::
+
+:::{.callout-note collapse="false"} 
+### Solution
+
+We follow the procedure described above. The first column of the table is highlight.
+
+```{julia}
+#| html-table-processing: none
+RouthArray([1,2,3,4,5])
+```
+
+:::
+
+## Interpreting the Routh Array
+
+We start with the basic case when **there is no zero in the first column** (as is the case in @exm-Routh-Hurwitz-1). In this case, we look at the first column and count the number of sign changes (which are highlighted by arrows above). For example, for @exm-Routh-Hurwitz-1, we have two sign changes in the first column, as shown below.
+
+<!-- TODO: Add figure -->
+
+When there are no zeros in the first column, the polynomial has no roots on the $j ω$-axis. Moreover, 
+
+- No. of roots in the ORHP = no. of sign changes
+- No. of roots in the OLHP = degree of polynomial $-$ no. of sign changes.
+
+So, for @exm-Routh-Hurwitz-1, we have 
+
+- No. of roots in the ORHP = 2 (no. of sign changes)
+- No. of roots in the OLPH = 4 (degree of polynomial) $-$ 2 (no. of sign changes) = 2. 
+
+We can verify this by factorizing $D(s)$, which gives
+
+```{julia}
+#| echo: true
+
+D = Polynomial([5,4,3,2,1], :s)
+println("D(s) = ", D)
+roots(D)
+```
+
+:::{#exm-Routh-Hurwitz-2}
+Find the location of the poles of a TF with with denominator given by
+$$ D(s) = s^4 + 5 s^3 + s^2 + 10s + 1. $$
+:::
+
+:::{.callout-note collapse="true"} 
+### Solution
+
+We first compute the Routh Array
+
+```{julia}
+#| html-table-processing: none
+RouthArray([1,5,1,10,1])
+```
+
+Note that there are two sign changes in the first column. Thus, we have
+
+- No. of roots in ORHP = 2 (no. of sign changes)
+- No. of roots in OLHP = 4 (degree of poly) $-$ 2 (no. of sign changes) = 2. 
+
+We can verify this by factorizing $D(s)$, which gives
+
+```{julia}
+#| echo: true
+
+D = Polynomial([1,10,1,5,1], :s)
+println("D(s) = ", D)
+roots(D)
+```
+
+:::
+
+:::{#exm-Routh-Hurwitz-3}
+Find the location of the poles of a TF with with denominator given by
+$$ D(s) = s^6 + 4s^5 + 3s^4 + 2s^3 + s^2 + 4s + 4. $$
+:::
+
+:::{.callout-note collapse="true"} 
+### Solution
+
+We first compute the Routh Array
+
+```{julia}
+#| html-table-processing: none
+c = [1,4,3,2,1,4,4]
+RouthArray(c)
+```
+
+Note that there are two sign changes in the first column. Thus, we have
+
+- No. of roots in ORHP = 2 (no. of sign changes)
+- No. of roots in OLHP = 6 (degree of poly) $-$ 2 (no. of sign changes) = 4. 
+
+We can verify this by factorizing $D(s)$, which gives
+
+```{julia}
+#| echo: true
+
+D = Polynomial(reverse(c), :s)
+println("D(s) = ", D)
+roots(D)
+```
+
+:::
+
+### An optimization
+
+Since we only care about the signs of the coefficient, we can multiply or divide all elements in a row by a positive number without changing the result. This can sometimes lead to simpler calculations. 
+
+
+
+## Special cases: Zero in the first column
+
+We cannot follow the usual method to construct the Routh array if there is zero in the first column. For example, consider
+$$ D(s) = s^5 + 2s^4 + 3s^3 + 6s^2 + 5s + 3. $$
+
+<!-- TODO: Show the RA until zero --> 
+
+If the entire row is not zero, then we proceed as follows
+
+- Replace the zero in the first column by an $ε$ and continue to construct the Routh array as a function of $ε$. 
+- Count the number of sign changes as $ε \to 0^{+}$ ($ε$ goes to zero from above). Let this number be $k_{+}$. 
+- Count the number of sign changes as $ε \to 0^{-}$ ($ε$ goes to zero from below). Let this number be $k_{-}$. 
+
+Then, we have
+
+- No. of roots in the ORHP = $\min\{k_{+}, k_{-}\}$
+- No. of roots on the $j ω$-axis = $|k_{+} - k_{-}|$. 
+- No. of roots in the OLHP = $\text{degree of polynomial} - \max\{k_{+}, k_{-}\}$. 
+
+### Reciprocal polynomial
+
+If we get a zero in the first column, we can follow another method but this method is not guaranteed to work. To understand this, we need the notion of a **reciprocal polynomial**: for a polynomial $D(s)$ of degree $n$, the reciprocal polynomial is $s^n D(\frac 1s)$. 
+
+## Special cases: Entire row of zeros
+
+## Stability in state space
