@@ -211,24 +211,43 @@ The Routh array is a (non-rectangular) array with $n+1$ rows, indexed by $s^n$, 
 
 - **Step 1.** Fill the first two rows of the Routh array with the coefficients of $D(s)$ going in the zigzag pattern as shown below. We stop when we have used all the coefficients. Any unfilled entries in the Routh array are assumed to be zero. 
 
-<table class="routharray-simple" align="center">
-<tr>
-  <td>$s^n$</td>
-  <td>$a_{n}$</td>
-  <td>$a_{n-2}$</td>
-  <td>$\cdots$</td>
-</tr>
-<tr>
-  <td>$s^{n-1}$</td>
-  <td>$a_{n-1}$</td>
-  <td>$a_{n-3}$</td>
-  <td>$\cdots$</td>
-</tr>
-</table>
+    <table class="routharray-simple" align="center">
+    <tr>
+      <td>$s^n$</td>
+      <td>$a_{n}$</td>
+      <td>$a_{n-2}$</td>
+      <td>$\cdots$</td>
+    </tr>
+    <tr>
+      <td>$s^{n-1}$</td>
+      <td>$a_{n-1}$</td>
+      <td>$a_{n-3}$</td>
+      <td>$\cdots$</td>
+    </tr>
+    </table>
 
 - **Step 2.** This is a recursive step, where we take two filled rows, say row $s^{m+2}$ and $s^m$ and use that to fill row $s^m$, for all $m \in \{n-2, \dots, 0\}$. Each entry is the negative determinant of a $2 \times 2$ matrix constructed from the entries in the previous two rows (i.e., row $s^{m+2}$ and $s^{m+1}$ when we are filling in row $s^m$) divided by the first entry in row $s^{m+1}$ (**provided that entry is not zero!**). The first column of $2 \times 2$ matrix is the first column of the previous two rows; the second column of the $2 \times 2$ matrix is the columns above and to the right. 
 
-    <!-- TODO: Add figure -->
+    <table class="routharray-simple" align="center">
+    <tr>
+      <td>$s^{m+2}$</td>
+      <td>$b_{1}$</td>
+      <td>$b_{2}$</td>
+      <td>$\cdots$</td>
+    </tr>
+    <tr>
+      <td>$s^{m+1}$</td>
+      <td>$c_1$</td>
+      <td>$c_2$</td>
+      <td>$\cdots$</td>
+    </tr>
+    <tr>
+      <td>$s^{m}$</td>
+      <td>$-\dfrac{\DET{b_1 & b_2 \\ c_1 & c_2}}{c_1}$</td>
+      <td>$-\dfrac{\DET{b_1 & b_3 \\ c_1 & c_3}}{c_1}$</td>
+      <td>$\cdots$</td>
+    </tr>
+    </table>
 
     Note that in each row, we eventually end up with zeros at which time we stop filling the row. We repeat this procedure until we have filled all rows until row $s^0$. 
 
