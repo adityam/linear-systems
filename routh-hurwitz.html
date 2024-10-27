@@ -243,6 +243,7 @@ window.Quarto = {
   </ul></li>
   <li><a href="#special-cases-entire-row-of-zeros" id="toc-special-cases-entire-row-of-zeros" class="nav-link" data-scroll-target="#special-cases-entire-row-of-zeros"><span class="header-section-number">4</span> Special cases: Entire row of zeros</a></li>
   <li><a href="#stability-in-state-space" id="toc-stability-in-state-space" class="nav-link" data-scroll-target="#stability-in-state-space"><span class="header-section-number">5</span> Stability in state space</a></li>
+  <li><a href="#stable-design-via-routh-hurwitz" id="toc-stable-design-via-routh-hurwitz" class="nav-link" data-scroll-target="#stable-design-via-routh-hurwitz"><span class="header-section-number">6</span> Stable design via Routh-Hurwitz</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/routh-hurwitz.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -385,8 +386,8 @@ Solution
 <div id="callout-2" class="callout-2-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <p>We follow the procedure described above. The first column of the table is highlight.</p>
-<div id="d28a6b0d" class="cell" data-execution_count="3">
-<div class="cell-output cell-output-display" data-execution_count="29">
+<div id="edd569d0" class="cell" data-execution_count="3">
+<div class="cell-output cell-output-display" data-execution_count="52">
 <table class="routharray"><tbody><tr><td>$s^{4}$</td><td>$1$</td><td>$3$</td><td>$5$</td></tr><tr><td>$s^{3}$</td><td>$2$</td><td>$4$</td></tr><tr><td>$s^{2}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 3 \\ 2 &amp; 4}}{2} = 1$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 5 \\ 2 &amp; 0}}{2} = 5$</td></tr><tr><td>$s^{1}$</td><td>$\displaystyle -\frac{\DET{ 2 &amp; 4 \\ 1 &amp; 5}}{1} = -6$</td></tr><tr><td>$s^{0}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 5 \\ -6 &amp; 0}}{-6} = 5$</td></tr></tbody></table>
 </div>
 </div>
@@ -409,14 +410,14 @@ Solution
 <li>No.&nbsp;of roots in the OLPH = 4 (degree of polynomial) <span class="math inline">\(-\)</span> 2 (no. of sign changes) = 2.</li>
 </ul>
 <p>We can verify this by factorizing <span class="math inline">\(D(s)\)</span>, which gives</p>
-<div id="ba60ce0a" class="cell" data-execution_count="4">
+<div id="3a874f06" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>D <span class="op">=</span> <span class="fu">Polynomial</span>([<span class="fl">5</span>,<span class="fl">4</span>,<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">1</span>], <span class="op">:</span>s)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"D(s) = "</span>, D)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">roots</span>(D)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>D(s) = 5 + 4*s + 3*s^2 + 2*s^3 + s^4</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="30">
+<div class="cell-output cell-output-display" data-execution_count="53">
 <pre><code>4-element Vector{ComplexF64}:
  -1.2878154795576484 - 0.8578967583284913im
  -1.2878154795576484 + 0.8578967583284913im
@@ -440,14 +441,14 @@ Solution
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>We first compute the Routh Array</p>
-<div id="ded2ed7a" class="cell" data-execution_count="5">
-<div class="cell-output cell-output-display" data-execution_count="31">
+<div id="b21c39a1" class="cell" data-execution_count="5">
+<div class="cell-output cell-output-display" data-execution_count="54">
 <table class="routharray"><tbody><tr><td>$s^{4}$</td><td>$1$</td><td>$1$</td><td>$1$</td></tr><tr><td>$s^{3}$</td><td>$5$</td><td>$10$</td></tr><tr><td>$s^{2}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 1 \\ 5 &amp; 10}}{5} = -1$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 1 \\ 5 &amp; 0}}{5} = 1$</td></tr><tr><td>$s^{1}$</td><td>$\displaystyle -\frac{\DET{ 5 &amp; 10 \\ -1 &amp; 1}}{-1} = 15$</td></tr><tr><td>$s^{0}$</td><td>$\displaystyle -\frac{\DET{ -1 &amp; 1 \\ 15 &amp; 0}}{15} = 1$</td></tr></tbody></table>
 </div>
 </div>
 <p>We now look at the signs of the terms in the first column:</p>
-<div id="48b91c81" class="cell" data-execution_count="6">
-<div class="cell-output cell-output-display" data-execution_count="32">
+<div id="b2a239a4" class="cell" data-execution_count="6">
+<div class="cell-output cell-output-display" data-execution_count="55">
 <table class="routhsigns"><thead><tr><td>Term</td><td>Sign</td></tr></thead><tbody><tr><td>$s^{4}$</td><td>$+$</td></tr><tr><td>$s^{3}$</td><td>$+$</td></tr><tr><td>$s^{2}$</td><td>$-$</td></tr><tr><td>$s^{1}$</td><td>$+$</td></tr><tr><td>$s^{0}$</td><td>$+$</td></tr></tbody></table>
 </div>
 </div>
@@ -457,11 +458,11 @@ Solution
 <li>No.&nbsp;of roots in OLHP = 4 (degree of poly) <span class="math inline">\(-\)</span> 2 (no. of sign changes) = 2.</li>
 </ul>
 <p>We can verify this by factorizing <span class="math inline">\(D(s)\)</span>, which gives</p>
-<div id="38b0f4fe" class="cell" data-execution_count="7">
+<div id="ed3c38c5" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-stdout">
 <pre><code>D(s) = 1 + 10*s + s^2 + 5*s^3 + s^4</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="33">
+<div class="cell-output cell-output-display" data-execution_count="56">
 <pre><code>4-element Vector{ComplexF64}:
    -5.173143012444715 + 0.0im
  -0.10051275725870919 + 0.0im
@@ -491,14 +492,14 @@ Solution
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>We first compute the Routh Array</p>
-<div id="f373e9bb" class="cell" data-execution_count="8">
-<div class="cell-output cell-output-display" data-execution_count="34">
+<div id="b0ea9bb5" class="cell" data-execution_count="8">
+<div class="cell-output cell-output-display" data-execution_count="57">
 <table class="routharray"><tbody><tr><td>$s^{6}$</td><td>$1$</td><td>$3$</td><td>$1$</td><td>$4$</td></tr><tr><td>$s^{5}$</td><td>$\cancel{4} 2$</td><td>$\cancel{2} 1$</td><td>$\cancel{4} 2$</td></tr><tr><td>$s^{4}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 3 \\ 2 &amp; 1}}{2} = \frac{5}{2}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 1 \\ 2 &amp; 2}}{2} = 0$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 4 \\ 2 &amp; 0}}{2} = 4$</td></tr><tr><td>$s^{3}$</td><td>$\displaystyle -\frac{\DET{ 2 &amp; 1 \\ \frac{5}{2} &amp; 0}}{\frac{5}{2}} = 1$</td><td>$\displaystyle -\frac{\DET{ 2 &amp; 2 \\ \frac{5}{2} &amp; 4}}{\frac{5}{2}} = \frac{-6}{5}$</td></tr><tr><td>$s^{2}$</td><td>$\displaystyle -\frac{\DET{ \frac{5}{2} &amp; 0 \\ 1 &amp; \frac{-6}{5}}}{1} = 3$</td><td>$\displaystyle -\frac{\DET{ \frac{5}{2} &amp; 4 \\ 1 &amp; 0}}{1} = 4$</td></tr><tr><td>$s^{1}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; \frac{-6}{5} \\ 3 &amp; 4}}{3} = \frac{-38}{15}$</td></tr><tr><td>$s^{0}$</td><td>$\displaystyle -\frac{\DET{ 3 &amp; 4 \\ \frac{-38}{15} &amp; 0}}{\frac{-38}{15}} = 4$</td></tr></tbody></table>
 </div>
 </div>
 <p>We now look at the signs of the terms in the first column:</p>
-<div id="a2835509" class="cell" data-execution_count="9">
-<div class="cell-output cell-output-display" data-execution_count="35">
+<div id="a067a21e" class="cell" data-execution_count="9">
+<div class="cell-output cell-output-display" data-execution_count="58">
 <table class="routhsigns"><thead><tr><td>Term</td><td>Sign</td></tr></thead><tbody><tr><td>$s^{6}$</td><td>$+$</td></tr><tr><td>$s^{5}$</td><td>$+$</td></tr><tr><td>$s^{4}$</td><td>$+$</td></tr><tr><td>$s^{3}$</td><td>$+$</td></tr><tr><td>$s^{2}$</td><td>$+$</td></tr><tr><td>$s^{1}$</td><td>$-$</td></tr><tr><td>$s^{0}$</td><td>$+$</td></tr></tbody></table>
 </div>
 </div>
@@ -508,11 +509,11 @@ Solution
 <li>No.&nbsp;of roots in OLHP = 6 (degree of poly) <span class="math inline">\(-\)</span> 2 (no. of sign changes) = 4.</li>
 </ul>
 <p>We can verify this by factorizing <span class="math inline">\(D(s)\)</span>, which gives</p>
-<div id="ad8d6826" class="cell" data-execution_count="10">
+<div id="843ba520" class="cell" data-execution_count="10">
 <div class="cell-output cell-output-stdout">
 <pre><code>D(s) = 4 + 4*s + s^2 + 2*s^3 + 3*s^4 + 4*s^5 + s^6</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="36">
+<div class="cell-output cell-output-display" data-execution_count="59">
 <pre><code>6-element Vector{ComplexF64}:
  -3.2643574436966434 + 0.0im
  -0.8858022358397655 + 0.0im
@@ -602,15 +603,15 @@ Solution
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>We first compute the Routh Array</p>
-<div id="28da736d" class="cell" data-execution_count="11">
-<div class="cell-output cell-output-display" data-execution_count="37">
+<div id="fe2e7041" class="cell" data-execution_count="11">
+<div class="cell-output cell-output-display" data-execution_count="60">
 <table class="routharray"><tbody><tr><td>$s^{5}$</td><td>$1$</td><td>$3$</td><td>$5$</td></tr><tr><td>$s^{4}$</td><td>$2$</td><td>$6$</td><td>$3$</td></tr><tr><td>$s^{3}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 3 \\ 2 &amp; 6}}{2} = \cancel{0} \epsilon$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 5 \\ 2 &amp; 3}}{2} = \frac{7}{2}$</td></tr><tr><td>$s^{2}$</td><td>$\displaystyle -\frac{\DET{ 2 &amp; 6 \\ \epsilon &amp; \frac{7}{2}}}{\epsilon} = \frac{-7 + 6 \epsilon}{\epsilon}$</td><td>$\displaystyle -\frac{\DET{ 2 &amp; 3 \\ \epsilon &amp; 0}}{\epsilon} = 3$</td></tr><tr><td>$s^{1}$</td><td>$\displaystyle -\frac{\DET{ \epsilon &amp; \frac{7}{2} \\ \frac{-7 + 6 \epsilon}{\epsilon} &amp; 3}}{\frac{-7 + 6 \epsilon}{\epsilon}} = \frac{\frac{-49}{2} + 21 \epsilon - 3 \epsilon^{2}}{-7 + 6 \epsilon}$</td></tr><tr><td>$s^{0}$</td><td>$\displaystyle -\frac{\DET{ \frac{-7 + 6 \epsilon}{\epsilon} &amp; 3 \\ \frac{\frac{-49}{2} + 21 \epsilon - 3 \epsilon^{2}}{-7 + 6 \epsilon} &amp; 0}}{\frac{\frac{-49}{2} + 21 \epsilon - 3 \epsilon^{2}}{-7 + 6 \epsilon}} = 3$</td></tr></tbody></table>
 </div>
 </div>
 <p>We now look at the signs of the terms in the first column:</p>
-<div id="b6fdcaee" class="cell" data-execution_count="12">
+<div id="7fd13d68" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sign_changes</span>(RA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="38">
+<div class="cell-output cell-output-display" data-execution_count="61">
 <table class="routhsigns"><thead><tr><td>Term</td><td>$ ε \to 0^{+}$</td><td>$ ε \to 0^{-}$</td></tr></thead><tbody><tr><td>$s^{5}$</td><td>$+$</td><td>$+$</td></tr><tr><td>$s^{4}$</td><td>$+$</td><td>$+$</td></tr><tr><td>$s^{3}$</td><td>$+$</td><td>$-$</td></tr><tr><td>$s^{2}$</td><td>$-$</td><td>$+$</td></tr><tr><td>$s^{1}$</td><td>$+$</td><td>$+$</td></tr><tr><td>$s^{0}$</td><td>$+$</td><td>$+$</td></tr></tbody></table>
 </div>
 </div>
@@ -621,11 +622,11 @@ Solution
 <li>No.&nbsp;of roots in the OLHP = <span class="math inline">\(5 - 2 = 3\)</span></li>
 </ul>
 <p>We can verify this by factorizing <span class="math inline">\(D(s)\)</span>, which gives</p>
-<div id="750c1a89" class="cell" data-execution_count="13">
+<div id="6593f175" class="cell" data-execution_count="13">
 <div class="cell-output cell-output-stdout">
 <pre><code>D(s) = 3 + 5*s + 6*s^2 + 3*s^3 + 2*s^4 + s^5</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="39">
+<div class="cell-output cell-output-display" data-execution_count="62">
 <pre><code>5-element Vector{ComplexF64}:
  -1.6680888389741944 + 0.0im
  -0.5088331416337463 - 0.7019951317695377im
@@ -643,7 +644,7 @@ Solution
 <p><span class="math display">\[\begin{align*}
 s^5 D\left(\frac 1s\right) &amp;=
 s^5 \left[ \frac{1}{s^5} + \frac{2}{s^4} + \frac{3}{s^3} + \frac{6}{s^2} + \frac{5}{s} + 3 \right] \\
-3 s^5 + 5 s^4 + 6 s^3 + 3 s^2 + 2s + 1
+&amp;= 3 s^5 + 5 s^4 + 6 s^3 + 3 s^2 + 2s + 1
 \end{align*}\]</span></p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -682,14 +683,14 @@ Solution
 <div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>We have already computed the reciprocal polynomial above. We now construct the Routh array</p>
-<div id="b7fd5388" class="cell" data-execution_count="14">
-<div class="cell-output cell-output-display" data-execution_count="40">
+<div id="e4f275c8" class="cell" data-execution_count="14">
+<div class="cell-output cell-output-display" data-execution_count="63">
 <table class="routharray"><tbody><tr><td>$s^{5}$</td><td>$3$</td><td>$6$</td><td>$2$</td></tr><tr><td>$s^{4}$</td><td>$5$</td><td>$3$</td><td>$1$</td></tr><tr><td>$s^{3}$</td><td>$\displaystyle -\frac{\DET{ 3 &amp; 6 \\ 5 &amp; 3}}{5} = \frac{21}{5}$</td><td>$\displaystyle -\frac{\DET{ 3 &amp; 2 \\ 5 &amp; 1}}{5} = \frac{7}{5}$</td></tr><tr><td>$s^{2}$</td><td>$\displaystyle -\frac{\DET{ 5 &amp; 3 \\ \frac{21}{5} &amp; \frac{7}{5}}}{\frac{21}{5}} = \frac{4}{3}$</td><td>$\displaystyle -\frac{\DET{ 5 &amp; 1 \\ \frac{21}{5} &amp; 0}}{\frac{21}{5}} = 1$</td></tr><tr><td>$s^{1}$</td><td>$\displaystyle -\frac{\DET{ \frac{21}{5} &amp; \frac{7}{5} \\ \frac{4}{3} &amp; 1}}{\frac{4}{3}} = \frac{-7}{4}$</td></tr><tr><td>$s^{0}$</td><td>$\displaystyle -\frac{\DET{ \frac{4}{3} &amp; 1 \\ \frac{-7}{4} &amp; 0}}{\frac{-7}{4}} = 1$</td></tr></tbody></table>
 </div>
 </div>
 <p>We now look at the signs of the terms in the first column:</p>
-<div id="0290d155" class="cell" data-execution_count="15">
-<div class="cell-output cell-output-display" data-execution_count="41">
+<div id="5c6bc988" class="cell" data-execution_count="15">
+<div class="cell-output cell-output-display" data-execution_count="64">
 <table class="routhsigns"><thead><tr><td>Term</td><td>Sign</td></tr></thead><tbody><tr><td>$s^{5}$</td><td>$+$</td></tr><tr><td>$s^{4}$</td><td>$+$</td></tr><tr><td>$s^{3}$</td><td>$+$</td></tr><tr><td>$s^{2}$</td><td>$+$</td></tr><tr><td>$s^{1}$</td><td>$-$</td></tr><tr><td>$s^{0}$</td><td>$+$</td></tr></tbody></table>
 </div>
 </div>
@@ -709,7 +710,7 @@ Solution
 D(s) = s^5 + 7s^4 + 6 s^3 + 42 s^2 + 8 s + 56.
 \]</span></p>
 <p>In this case, the Routh array ends with a row of zero.</p>
-<table class="routharray" align="center">
+<table class="routharray-simple" align="center">
 <tbody><tr>
 <td>
 <span class="math inline">\(s^5\)</span>
@@ -772,7 +773,7 @@ D(s) = \underbrace{(s+7)}_{\text{remainder poly.}}
 \]</span></p>
 </div>
 </div>
-<p>As argumed The rows that we have encountered until the row of all zeros corresponds to the remainder polynomial. We interpret is the same way we did the normal case.</p>
+<p>The rows that we have encountered until the row of all zeros corresponds to the remainder polynomial. We interpret is the same way we did the normal case.</p>
 <p>Observe that the divisor polynomial is an <strong>even</strong> polynomial. A key feature of an even polynomial is that it has an equal number of roots in the OLHP and the ORHP. The number of sign changes is equal to the number of roots in the ORHP. So, the number of roots in OLHP are the same. The remaining roots must be on the <span class="math inline">\(j ω\)</span>-axis.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -791,25 +792,23 @@ Roots of even polynomial
 <p><span class="math display">\[ a_{2m} z^m + a_{2m -2} z^{m-1} + \cdots + a_0. \]</span></p>
 <p>Let <span class="math inline">\(p_1, p_2, \dots, p_m\)</span> be the roots of this polynomial. Then, the roots of <span class="math inline">\(P^{2m}\)</span> are <span class="math inline">\(\pm \sqrt{p_1}, \pm \sqrt{p_2}, \dots, \pm \sqrt{p_m}\)</span>.</p>
 <p>Now observe the following:</p>
-<ul>
-<li><p>If <span class="math inline">\(p_i\)</span> is real and positive, then <span class="math inline">\(+ \sqrt{p_i}\)</span> is positive and <span class="math inline">\(- \sqrt{p_i}\)</span> is negative. Thus, one root is in the ORHP and one is in the OLHP.</p></li>
-<li><p>If <span class="math inline">\(p_i\)</span> is real and negative, then <span class="math inline">\(\pm \sqrt{p_i} = \pm j \sqrt{|p_i|}\)</span>, which lie on the <span class="math inline">\(j ω\)</span>-axis. Thus, there are no roots in the ORHP or OLHP.</p></li>
-<li><p>If <span class="math inline">\(p_i\)</span> is complex and say equal to <span class="math inline">\(a_i + j b_i\)</span>, then there must be another root <span class="math inline">\(a_i - j b_i\)</span>. Now let <span class="math inline">\(\pm (c_i + j d_i)\)</span> denote the square root of <span class="math inline">\(a_i + j b_i\)</span>. Then, the square roots of <span class="math inline">\(a_i - j b_i\)</span> are <span class="math inline">\(\pm (c_i - j d_i)\)</span>. Thus, out of the four roots, two are in the the ORHP and two are in the OLHP.</p></li>
-</ul>
+<p>A. If <span class="math inline">\(p_i\)</span> is real and positive, then <span class="math inline">\(+ \sqrt{p_i}\)</span> is positive and <span class="math inline">\(- \sqrt{p_i}\)</span> is negative. Thus, one root is in the ORHP and one is in the OLHP.</p>
+<p>B. If <span class="math inline">\(p_i\)</span> is real and negative, then <span class="math inline">\(\pm \sqrt{p_i} = \pm j \sqrt{|p_i|}\)</span>, which lie on the <span class="math inline">\(j ω\)</span>-axis. Thus, there are no roots in the ORHP or OLHP.</p>
+<p>C. If <span class="math inline">\(p_i\)</span> is complex and say equal to <span class="math inline">\(a_i + j b_i\)</span>, then there must be another root <span class="math inline">\(a_i - j b_i\)</span>. Now let <span class="math inline">\(\pm (c_i + j d_i)\)</span> denote the square root of <span class="math inline">\(a_i + j b_i\)</span>. Then, the square roots of <span class="math inline">\(a_i - j b_i\)</span> are <span class="math inline">\(\pm (c_i - j d_i)\)</span>. Thus, out of the four roots, two are in the the ORHP and two are in the OLHP.</p>
 <p>Thus, in all cases, no. of roots in the ORHP = no. of roots in the OLHP.</p>
 <!-- TODO: Add a figure -->
 </div>
 </div>
 <p>The rows that we have encountered until the row of all zeros corresponds to the remainder polynomial. We interpret is the same way we did the normal case.</p>
 <p>We first compute the Routh Array</p>
-<div id="73fbce85" class="cell" data-execution_count="16">
-<div class="cell-output cell-output-display" data-execution_count="42">
+<div id="3338042e" class="cell" data-execution_count="16">
+<div class="cell-output cell-output-display" data-execution_count="65">
 <table class="routharray"><tbody><tr><td>$s^{5}$</td><td>$1$</td><td>$6$</td><td>$8$</td></tr><tr><td>$s^{4}$</td><td>$\cancel{7} 1$</td><td>$\cancel{42} 6$</td><td>$\cancel{56} 8$</td></tr><tr><td>$s^{3}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 6 \\ 1 &amp; 6}}{1} = \cancel{0} \cancel{4} 1$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 8 \\ 1 &amp; 8}}{1} = \cancel{0} \cancel{12} 3$</td></tr><tr><td>$s^{2}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 6 \\ 1 &amp; 3}}{1} = 3$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 8 \\ 1 &amp; 0}}{1} = 8$</td></tr><tr><td>$s^{1}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 3 \\ 3 &amp; 8}}{3} = \frac{1}{3}$</td></tr><tr><td>$s^{0}$</td><td>$\displaystyle -\frac{\DET{ 3 &amp; 8 \\ \frac{1}{3} &amp; 0}}{\frac{1}{3}} = 8$</td></tr></tbody></table>
 </div>
 </div>
 <p>We now look at the signs of the terms in the first column:</p>
-<div id="b39ac265" class="cell" data-execution_count="17">
-<div class="cell-output cell-output-display" data-execution_count="43">
+<div id="fdac094a" class="cell" data-execution_count="17">
+<div class="cell-output cell-output-display" data-execution_count="66">
 <table class="routhsigns"><thead><tr><td>Term</td><td>Sign</td></tr></thead><tbody><tr><td>$s^{5}$</td><td>$+$</td></tr><tr><td>$s^{4}$</td><td>$+$</td></tr><tr><td>$s^{3}$</td><td>$+$</td></tr><tr><td>$s^{2}$</td><td>$+$</td></tr><tr><td>$s^{1}$</td><td>$+$</td></tr><tr><td>$s^{0}$</td><td>$+$</td></tr></tbody></table>
 </div>
 </div>
@@ -853,11 +852,11 @@ Roots of even polynomial
 </tbody>
 </table>
 <p>We can verify this by factorizing <span class="math inline">\(D(s)\)</span>, which gives (there are four roots on the <span class="math inline">\(j ω\)</span> axis but we get small error in the location of the roots due to numerical accuracy)</p>
-<div id="3d1fe3ca" class="cell" data-execution_count="18">
+<div id="9068cc09" class="cell" data-execution_count="18">
 <div class="cell-output cell-output-stdout">
 <pre><code>D(s) = 56 + 8*s + 42*s^2 + 6*s^3 + 7*s^4 + s^5</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="44">
+<div class="cell-output cell-output-display" data-execution_count="67">
 <pre><code>5-element Vector{ComplexF64}:
      -7.000000000000012 + 0.0im
   6.938893903907228e-17 - 1.414213562373094im
@@ -884,14 +883,14 @@ Solution
 <div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>We write the Routh Array</p>
-<div id="5a6485da" class="cell" data-execution_count="19">
-<div class="cell-output cell-output-display" data-execution_count="45">
+<div id="ec8605f5" class="cell" data-execution_count="19">
+<div class="cell-output cell-output-display" data-execution_count="68">
 <table class="routharray"><tbody><tr><td>$s^{3}$</td><td>$1$</td><td>$2$</td></tr><tr><td>$s^{2}$</td><td>$1$</td><td>$2$</td></tr><tr><td>$s^{1}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 2 \\ 1 &amp; 2}}{1} = \cancel{0} 2$</td></tr><tr><td>$s^{0}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 2 \\ 2 &amp; 0}}{2} = 2$</td></tr></tbody></table>
 </div>
 </div>
 <p>We now look at the signs of the terms in the first column:</p>
-<div id="89d86cd7" class="cell" data-execution_count="20">
-<div class="cell-output cell-output-display" data-execution_count="46">
+<div id="d2ba2ee3" class="cell" data-execution_count="20">
+<div class="cell-output cell-output-display" data-execution_count="69">
 <table class="routhsigns"><thead><tr><td>Term</td><td>Sign</td></tr></thead><tbody><tr><td>$s^{3}$</td><td>$+$</td></tr><tr><td>$s^{2}$</td><td>$+$</td></tr><tr><td>$s^{1}$</td><td>$+$</td></tr><tr><td>$s^{0}$</td><td>$+$</td></tr></tbody></table>
 </div>
 </div>
@@ -940,6 +939,185 @@ Solution
 </section>
 <section id="stability-in-state-space" class="level2" data-number="5">
 <h2 data-number="5" class="anchored" data-anchor-id="stability-in-state-space"><span class="header-section-number">5</span> Stability in state space</h2>
+<p>So far, we have examined stability of the TF. But we can use Routh-Hurwitz method to determine stability of state-space models as well. For example, consider a SSM <span class="math display">\[
+  A = \MATRIX{0 &amp; 0 &amp; 1 \\ 1 &amp; 0 &amp; 1 \\ -10 &amp; -5 &amp; -2},
+  \quad
+  B = \MATRIX{10 \\ 0 \\ 0},
+  \quad
+  C = \MATRIX{1 &amp; 0 &amp; 0}.
+\]</span> The denominator of the TF <span class="math inline">\(C(sI - A)^{-1}B\)</span> is the characteristic polynomial of <span class="math inline">\(A\)</span> given by <span class="math display">\[\begin{align*}
+\det(sI - A) &amp;= \DET{s &amp; 0 &amp; -1 \\ -1 &amp; s &amp; -1 \\ 10 &amp; 5 &amp; s + 2}
+\\
+&amp;= s \DET{s &amp; -1 \\ 5 &amp; s + 2} -1 \DET{-1 &amp; -1 \\ s &amp; 5}
+\\
+&amp;= s^3 + 2 s^2 + 15s + 5
+\end{align*}\]</span></p>
+<p>We can determine if the SSM is stable by checking the stability of the characteristic polynomial of <span class="math inline">\(A\)</span>. In this instance, we have</p>
+<div id="d23688e4" class="cell" data-execution_count="21">
+<div class="cell-output cell-output-display" data-execution_count="70">
+<table class="routharray caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td>$s^{3}$</td>
+<td>$1$</td>
+<td>$15$</td>
+</tr>
+<tr class="even">
+<td>$s^{2}$</td>
+<td>$2$</td>
+<td>$5$</td>
+</tr>
+<tr class="odd">
+<td>$s^{1}$</td>
+<td>$\displaystyle -\frac{\DET{ 1 &amp; 15 \\ 2 &amp; 5}}{2} = \frac{25}{2}$</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>$s^{0}$</td>
+<td>$\displaystyle -\frac{\DET{ 2 &amp; 5 \\ \frac{25}{2} &amp; 0}}{\frac{25}{2}} = 5$</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>We now look at the sign of the terms in the first column:</p>
+<div id="8a2bcd01" class="cell" data-execution_count="22">
+<div class="cell-output cell-output-display" data-execution_count="71">
+<table class="routhsigns"><thead><tr><td>Term</td><td>Sign</td></tr></thead><tbody><tr><td>$s^{3}$</td><td>$+$</td></tr><tr><td>$s^{2}$</td><td>$+$</td></tr><tr><td>$s^{1}$</td><td>$+$</td></tr><tr><td>$s^{0}$</td><td>$+$</td></tr></tbody></table>
+</div>
+</div>
+<p>Since there are no sign changes, the system is stable!</p>
+</section>
+<section id="stable-design-via-routh-hurwitz" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="stable-design-via-routh-hurwitz"><span class="header-section-number">6</span> Stable design via Routh-Hurwitz</h2>
+<p>The Routh-Hurwitz criterion can be used to identify values of controller parameters for which a closed loop system is stable. We illustrate this via some examples.</p>
+<div id="exm-stability-1" class="theorem example">
+<p><span class="theorem-title"><strong>Example 8</strong></span> Consider the system shown below:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/svg/routh-hurwitz2.svg" class="img-fluid figure-img"></p>
+<figcaption>A proportional controller</figcaption>
+</figure>
+</div>
+<p>Find the value of <span class="math inline">\(K\)</span> for which the system is stable.</p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The closed loop transfer function is given by <span class="math display">\[
+T(s) = \frac{K G(s)}{1 + K G(s)}
+= \frac{K(s+1)}{s^3 + 5s^2 + (K-6)s + K
+\]</span></p>
+<p>Therefore, the Routh array is given by</p>
+<div id="35b81cc9" class="cell" data-execution_count="23">
+<div class="cell-output cell-output-display" data-execution_count="72">
+<table class="routharray caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td>$s^{3}$</td>
+<td>$1$</td>
+<td>$-6 + K$</td>
+</tr>
+<tr class="even">
+<td>$s^{2}$</td>
+<td>$5$</td>
+<td>$K$</td>
+</tr>
+<tr class="odd">
+<td>$s^{1}$</td>
+<td>$\displaystyle -\frac{\DET{ 1 &amp; -6 + K \\ 5 &amp; K}}{5} = -6 + \frac{4}{5} K$</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>$s^{0}$</td>
+<td>$\displaystyle -\frac{\DET{ 5 &amp; K \\ -6 + \frac{4}{5} K &amp; 0}}{-6 + \frac{4}{5} K} = K$</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>For stability, all terms in the first column must be positive. Thus, we have <span class="math display">\[
+\dfrac{4K}{5} - 6 &gt; 0
+\quad\text{and}\quad
+K &gt; 0
+\]</span> which is equivalent to <span class="math display">\[ K &gt; 7.5 \]</span></p>
+</div>
+</div>
+</div>
+<div id="exm-stability-2" class="theorem example">
+<p><span class="theorem-title"><strong>Example 9</strong></span> Consider the system shown below:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/svg/routh-hurwitz3.svg" class="img-fluid figure-img"></p>
+<figcaption>A proportional-integral (PI) controller</figcaption>
+</figure>
+</div>
+<p>Find the values of <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> for which the system is stable.</p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The closed loop transfer function is given by <span class="math display">\[
+T(s) = \frac{\left(A + \dfrac{B}{s}\right) G(s)}{1 + \left(A + \dfrac{B}{s}\right)G(s)}
+= \frac{As + B}{s^3 + 3s^2 + (A + 2)s + B}.
+\]</span></p>
+<p>Therefore, the Routh array is given by</p>
+<div id="435cb0c2" class="cell" data-execution_count="24">
+<div class="cell-output cell-output-display" data-execution_count="73">
+<table class="routharray caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td>$s^{3}$</td>
+<td>$1$</td>
+<td>$2 + A$</td>
+</tr>
+<tr class="even">
+<td>$s^{2}$</td>
+<td>$3$</td>
+<td>$B$</td>
+</tr>
+<tr class="odd">
+<td>$s^{1}$</td>
+<td>$\displaystyle -\frac{\DET{ 1 &amp; 2 + A \\ 3 &amp; B}}{3} = 2 + A - \frac{1}{3} B$</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>$s^{0}$</td>
+<td>$\displaystyle -\frac{\DET{ 3 &amp; B \\ 2 + A - \frac{1}{3} B &amp; 0}}{2 + A - \frac{1}{3} B} = B$</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>For stability, all terms in the first column must be positive. Thus, we have <span class="math display">\[
+2 + A - \frac{1}{3}B &gt; 0
+\quad\text{and}\quad
+B &gt; 0.
+\]</span></p>
+</div>
+</div>
+</div>
 
 
 </section>
