@@ -451,7 +451,7 @@ If we get a zero in the first column, we can follow another method but this meth
 \begin{align*}
 s^5 D\left(\frac 1s\right) &=
 s^5 \left[ \frac{1}{s^5} + \frac{2}{s^4} + \frac{3}{s^3} + \frac{6}{s^2} + \frac{5}{s} + 3 \right] \\
-3 s^5 + 5 s^4 + 6 s^3 + 3 s^2 + 2s + 1
+&= 3 s^5 + 5 s^4 + 6 s^3 + 3 s^2 + 2s + 1
 \end{align*}
 
 :::{.callout-important}
@@ -512,7 +512,7 @@ $$
 
 In this case, the Routh array ends with a row of zero.
 
-<table class="routharray" align="center">
+<table class="routharray-simple" align="center">
 <tr>
   <td>$s^5$</td>
   <td>$1$</td>
@@ -550,7 +550,6 @@ $$
 
 :::
 
-As argumed
 The rows that we have encountered until the row of all zeros corresponds to the remainder polynomial. We interpret is the same way we did the normal case. 
 
 Observe that the divisor polynomial is an **even** polynomial.  A key feature of an even polynomial is that it has an equal number of roots in the OLHP and the ORHP. The number of sign changes is equal to the number of roots in the ORHP. So, the number of roots in OLHP are the same. The remaining roots must be on the $j ω$-axis. 
@@ -572,11 +571,11 @@ Let $p_1, p_2, \dots, p_m$ be the roots of this polynomial. Then, the roots of $
 
 Now observe the following:
 
-- If $p_i$ is real and positive, then $+ \sqrt{p_i}$ is positive and $- \sqrt{p_i}$ is negative. Thus, one root is in the ORHP and one is in the OLHP.
+A. If $p_i$ is real and positive, then $+ \sqrt{p_i}$ is positive and $- \sqrt{p_i}$ is negative. Thus, one root is in the ORHP and one is in the OLHP.
 
-- If $p_i$ is real and negative, then $\pm \sqrt{p_i} = \pm j \sqrt{|p_i|}$, which lie on the $j ω$-axis. Thus, there are no roots in the ORHP or OLHP.
+B. If $p_i$ is real and negative, then $\pm \sqrt{p_i} = \pm j \sqrt{|p_i|}$, which lie on the $j ω$-axis. Thus, there are no roots in the ORHP or OLHP.
 
-- If $p_i$ is complex and say equal to $a_i + j b_i$, then there must be another root $a_i - j b_i$. Now let $\pm (c_i + j d_i)$ denote the square root of $a_i + j b_i$. Then, the square roots of $a_i - j b_i$ are $\pm (c_i - j d_i)$. Thus, out of the four roots, two are in the the ORHP and two are in the OLHP.  
+C. If $p_i$ is complex and say equal to $a_i + j b_i$, then there must be another root $a_i - j b_i$. Now let $\pm (c_i + j d_i)$ denote the square root of $a_i + j b_i$. Then, the square roots of $a_i - j b_i$ are $\pm (c_i - j d_i)$. Thus, out of the four roots, two are in the the ORHP and two are in the OLHP.  
 
 Thus, in all cases, no. of roots in the ORHP = no. of roots in the OLHP.
 
@@ -659,6 +658,109 @@ Since we have a row of zeros, we split our analysis into two cases. The remainde
 
 :::
 
-
-
 ## Stability in state space
+
+So far, we have examined stability of the TF. But we can use Routh-Hurwitz method to determine stability of state-space models as well. For example, consider a SSM
+$$
+  A = \MATRIX{0 & 0 & 1 \\ 1 & 0 & 1 \\ -10 & -5 & -2}, 
+  \quad
+  B = \MATRIX{10 \\ 0 \\ 0},
+  \quad
+  C = \MATRIX{1 & 0 & 0}.
+$$
+The denominator of the TF $C(sI - A)^{-1}B$ is the characteristic polynomial of $A$ given by
+\begin{align*}
+\det(sI - A) &= \DET{s & 0 & -1 \\ -1 & s & -1 \\ 10 & 5 & s + 2}
+\\
+&= s \DET{s & -1 \\ 5 & s + 2} -1 \DET{-1 & -1 \\ s & 5} 
+\\
+&= s^3 + 2 s^2 + 15s + 5
+\end{align*}
+
+We can determine if the SSM is stable by checking the stability of the characteristic polynomial of $A$. In this instance, we have
+
+```{julia}
+c = [1,2,15,5]
+(html, RA) = RouthArray(c)
+html
+```
+
+We now look at the sign of the terms in the first column:
+```{julia}
+sign_changes(RA)
+```
+Since there are no sign changes, the system is stable!
+
+## Stable design via Routh-Hurwitz
+
+The Routh-Hurwitz criterion can be used to identify values of controller parameters for which a closed loop system is stable. We illustrate this via some examples.
+
+:::{#exm-stability-1}
+Consider the system shown below:
+
+![A proportional controller](figures/svg/routh-hurwitz2.svg)
+
+Find the value of $K$ for which the system is stable.
+:::
+
+:::{.callout-note collapse="true"} 
+### Solution
+
+The closed loop transfer function is given by
+$$
+T(s) = \frac{K G(s)}{1 + K G(s)}
+= \frac{K(s+1)}{s^3 + 5s^2 + (K-6)s + K
+$$
+
+Therefore, the Routh array is given by
+
+```{julia}
+@variables K
+(html, RA) = RouthArray([1,5, K-6, K])
+html
+```
+
+For stability, all terms in the first column must be positive. Thus, we have
+$$
+\dfrac{4K}{5} - 6 > 0
+\quad\text{and}\quad
+K > 0
+$$
+which is equivalent to
+$$ K > 7.5 $$
+
+:::
+
+:::{#exm-stability-2}
+Consider the system shown below:
+
+![A proportional-integral (PI) controller](figures/svg/routh-hurwitz3.svg)
+
+Find the values of $A$ and $B$ for which the system is stable.
+:::
+
+:::{.callout-note collapse="true"} 
+### Solution
+
+The closed loop transfer function is given by
+$$
+T(s) = \frac{\left(A + \dfrac{B}{s}\right) G(s)}{1 + \left(A + \dfrac{B}{s}\right)G(s)}
+= \frac{As + B}{s^3 + 3s^2 + (A + 2)s + B}.
+$$
+
+Therefore, the Routh array is given by
+
+```{julia}
+@variables A, B
+(html, RA) = RouthArray([1, 3, A+2, B])
+html
+```
+
+For stability, all terms in the first column must be positive. Thus, we have
+$$
+2 + A - \frac{1}{3}B > 0
+\quad\text{and}\quad
+B > 0.
+$$
+
+:::
