@@ -332,41 +332,82 @@ Solution
 <p>Consider a polynomial <span class="math display">\[ D(s) = a_n s^n + \cdots + a_0. \]</span></p>
 <p>The Routh array is a (non-rectangular) array with <span class="math inline">\(n+1\)</span> rows, indexed by <span class="math inline">\(s^n\)</span>, <span class="math inline">\(s^{n-1}\)</span>, <span class="math inline">\(\dots\)</span>, <span class="math inline">\(s^0\)</span>.</p>
 <ul>
-<li><strong>Step 1.</strong> Fill the first two rows of the Routh array with the coefficients of <span class="math inline">\(D(s)\)</span> going in the zigzag pattern as shown below. We stop when we have used all the coefficients. Any unfilled entries in the Routh array are assumed to be zero.</li>
-</ul>
+<li><p><strong>Step 1.</strong> Fill the first two rows of the Routh array with the coefficients of <span class="math inline">\(D(s)\)</span> going in the zigzag pattern as shown below. We stop when we have used all the coefficients. Any unfilled entries in the Routh array are assumed to be zero.</p>
 <table class="routharray-simple" align="center">
 <tbody><tr>
 <td>
-<span class="math inline">\(s^n\)</span>
+<p><span class="math inline">\(s^n\)</span></p>
 </td>
 <td>
-<span class="math inline">\(a_{n}\)</span>
+<p><span class="math inline">\(a_{n}\)</span></p>
 </td>
 <td>
-<span class="math inline">\(a_{n-2}\)</span>
+<p><span class="math inline">\(a_{n-2}\)</span></p>
 </td>
 <td>
-<span class="math inline">\(\cdots\)</span>
+<p><span class="math inline">\(\cdots\)</span></p>
 </td>
 </tr>
 <tr>
 <td>
-<span class="math inline">\(s^{n-1}\)</span>
+<p><span class="math inline">\(s^{n-1}\)</span></p>
 </td>
 <td>
-<span class="math inline">\(a_{n-1}\)</span>
+<p><span class="math inline">\(a_{n-1}\)</span></p>
 </td>
 <td>
-<span class="math inline">\(a_{n-3}\)</span>
+<p><span class="math inline">\(a_{n-3}\)</span></p>
 </td>
 <td>
-<span class="math inline">\(\cdots\)</span>
+<p><span class="math inline">\(\cdots\)</span></p>
+</td>
+</tr>
+</tbody></table></li>
+<li><p><strong>Step 2.</strong> This is a recursive step, where we take two filled rows, say row <span class="math inline">\(s^{m+2}\)</span> and <span class="math inline">\(s^m\)</span> and use that to fill row <span class="math inline">\(s^m\)</span>, for all <span class="math inline">\(m \in \{n-2, \dots, 0\}\)</span>. Each entry is the negative determinant of a <span class="math inline">\(2 \times 2\)</span> matrix constructed from the entries in the previous two rows (i.e., row <span class="math inline">\(s^{m+2}\)</span> and <span class="math inline">\(s^{m+1}\)</span> when we are filling in row <span class="math inline">\(s^m\)</span>) divided by the first entry in row <span class="math inline">\(s^{m+1}\)</span> (<strong>provided that entry is not zero!</strong>). The first column of <span class="math inline">\(2 \times 2\)</span> matrix is the first column of the previous two rows; the second column of the <span class="math inline">\(2 \times 2\)</span> matrix is the columns above and to the right.</p>
+<table class="routharray-simple" align="center">
+<tbody><tr>
+<td>
+<p><span class="math inline">\(s^{m+2}\)</span></p>
+</td>
+<td>
+<p><span class="math inline">\(b_{1}\)</span></p>
+</td>
+<td>
+<p><span class="math inline">\(b_{2}\)</span></p>
+</td>
+<td>
+<p><span class="math inline">\(\cdots\)</span></p>
+</td>
+</tr>
+<tr>
+<td>
+<p><span class="math inline">\(s^{m+1}\)</span></p>
+</td>
+<td>
+<p><span class="math inline">\(c_1\)</span></p>
+</td>
+<td>
+<p><span class="math inline">\(c_2\)</span></p>
+</td>
+<td>
+<p><span class="math inline">\(\cdots\)</span></p>
+</td>
+</tr>
+<tr>
+<td>
+<p><span class="math inline">\(s^{m}\)</span></p>
+</td>
+<td>
+<p><span class="math inline">\(-\dfrac{\DET{b_1 &amp; b_2 \\ c_1 &amp; c_2}}{c_1}\)</span></p>
+</td>
+<td>
+<p><span class="math inline">\(-\dfrac{\DET{b_1 &amp; b_3 \\ c_1 &amp; c_3}}{c_1}\)</span></p>
+</td>
+<td>
+<p><span class="math inline">\(\cdots\)</span></p>
 </td>
 </tr>
 </tbody></table>
-<ul>
-<li><p><strong>Step 2.</strong> This is a recursive step, where we take two filled rows, say row <span class="math inline">\(s^{m+2}\)</span> and <span class="math inline">\(s^m\)</span> and use that to fill row <span class="math inline">\(s^m\)</span>, for all <span class="math inline">\(m \in \{n-2, \dots, 0\}\)</span>. Each entry is the negative determinant of a <span class="math inline">\(2 \times 2\)</span> matrix constructed from the entries in the previous two rows (i.e., row <span class="math inline">\(s^{m+2}\)</span> and <span class="math inline">\(s^{m+1}\)</span> when we are filling in row <span class="math inline">\(s^m\)</span>) divided by the first entry in row <span class="math inline">\(s^{m+1}\)</span> (<strong>provided that entry is not zero!</strong>). The first column of <span class="math inline">\(2 \times 2\)</span> matrix is the first column of the previous two rows; the second column of the <span class="math inline">\(2 \times 2\)</span> matrix is the columns above and to the right.</p>
-<p><!-- TODO: Add figure --></p>
 <p>Note that in each row, we eventually end up with zeros at which time we stop filling the row. We repeat this procedure until we have filled all rows until row <span class="math inline">\(s^0\)</span>.</p></li>
 </ul>
 <p>We always follow the above method to fill in the Routh array, irrespective of the size of the polynomial. We illustrate this via some examples.</p>
