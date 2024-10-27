@@ -9,7 +9,7 @@
 }
 
 /* Routh Array */
-.routharray td {
+.routharray td, .routharray-simple td, .routhsigns td {
   padding-top: 0.25em;
   padding-bottom: 0.25em;
   padding-left: 0.5em;
@@ -17,17 +17,28 @@
   border: none;
 }
 
-.routharray tr:first-child {
+.routharray tr:first-child,
+.routharray-simple tr:first-child,
+.routhsigns tr:first-child {
   border-top: 1px solid;
+}
+
+.routharray-simple tr > td:nth-child(2),
+.routhsigns tr > td:nth-child(2) {
+  border-left: 1px solid;
 }
 
 .routharray tr > td:nth-child(2) {
   background-color: $gray-400;
 }
 
-.routharray td {
+.routharray td,
+.routharray-simple td,
+.routhsigns td {
   text-align: center;
 }
+
+  
 
 
 // Copied from https://github.com/quarto-dev/quarto-web/blob/386ce1f654644a9db8134770c5312fe2b3c3b6b4/styles.css#L143

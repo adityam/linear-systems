@@ -17,7 +17,7 @@ Consider a unity feedback system as shown in @fig-feedback. In such a setting, w
 # Install packages
 
 # using Pkg; Pkg.activate(".")
-# for pkg in ["IJulia", "Revise", "Polynomials"]
+# for pkg in ["IJulia", "Revise", "Polynomials", "Symbolics", "Latexify", "Hyperscript"]
 #    Pkg.add(pkg)
 # end
 # 
@@ -30,9 +30,10 @@ using Revise
 
 using Polynomials 
 
-using Hyperscript, Symbolics, Printf, LinearAlgebra 
+using Hyperscript, Symbolics, Printf, LinearAlgebra, Latexify
 
-function RouthArray(polynomial; details=true)
+function RouthArray(polynomial; details=true, normalize=true)
+  @variables ϵ 
   coeffs = length(polynomial) 
   n_rows = coeffs
   n_cols = [ ceil(Int, idx/2) for idx=n_rows:-1:1 ]
@@ -40,20 +41,50 @@ function RouthArray(polynomial; details=true)
   math(x) = @sprintf("\$%s\$", x)
 
   RA = zeros(Num, n_rows, n_cols[1])
+  factors = zeros(Int, n_rows)
+  # flag = 1 means row of zero
+  # flag = 2 means previous row zero
+  flags = zeros(Int, n_rows)
+
+  function normalize_row(row)
+    row_values = Symbolics.value.(RA[row, :])
+    if normalize && n_cols[row] != 1 && all(typeof.(row_values) .== Int)
+       factor = gcd(row_values)
+       if factor != 1
+          factors[row] = factor
+          RA[row, :] = div.(row_values, factor)
+       end
+    end
+  end
+  
 
   ## Fill the first two rows
   for idx in 1:coeffs
     RA[2 - rem(idx,2), ceil(Int, idx/2)] = polynomial[idx]
   end
+  normalize_row.([1,2])
 
   for row in 3:n_rows
    ## Handle row of zero
-   ## Handle first column zero
+   check_row = RA[row-1,:] .== 0
+   check_first = RA[row-1,1] == 0
+   if (all(typeof.(check_row) .== Bool) && all(check_row))
+     flags[row-1] = 2
+     row_order  = coeffs - (row - 2)
+     row_powers = row_order:-2:0
+     RA[row-1, :] = RA[row-2, :] .* row_powers
+     normalize_row(row-1)
+   elseif (typeof(check_first) == Bool) && check_first
+     flags[row-1] = 1
+     RA[row - 1, 1] = ϵ
+   end
+
    ## Normal case
    for col = 1:n_cols[row]
       D = [ RA[row-2, 1] RA[row-2, col+1]; RA[row-1, 1] RA[row-1, col+1] ]
       RA[row, col] = -det(D)//RA[row - 1, 1] |> expand |> simplify
    end
+
   end
   
   ## Print the table
@@ -61,34 +92,79 @@ function RouthArray(polynomial; details=true)
   tr = m("tr")
   td = m("td")
 
-  function value(row, col)
-    if details && row > 2
-      # Fix zero in first col
-      @sprintf("\$-\\dfrac{\\DET{ %s & %s \\\\ %s & %s}}{%s} = %s\$", 
-               showr(RA[row - 2, 1]), showr(RA[row - 2, col+1]),
-               showr(RA[row - 1, 1]), showr(RA[row - 1, col+1]),
-               showr(RA[row - 1, 1]), showr(RA[row, col]) )
+  function normalized_value(row, col)
+    result = "" 
+    if factors[row] != 0
+       result= @sprintf("\\cancel{%s} %s",
+                        ltx(RA[row, col]*factors[row]),
+                        ltx(RA[row, col]))
+        
     else
-      math(showr(RA[row,col]))
+       result = ltx(RA[row, col])
     end
   end
 
-  function showr(x::Num)
-    showr(Symbolics.value(x))
+  function value(row, col)
+    result = ""
+    if flags[row] == 1 && col == 1
+       result = @sprintf("\\cancel{0} %s", normalized_value(row,col))
+    elseif flags[row] == 2
+       result = @sprintf("\\cancel{0} %s", normalized_value(row,col))
+    else
+       result = normalized_value(row,col)
+    end
+
+    if details && row > 2
+      @sprintf("\$\\displaystyle -\\frac{\\DET{ %s & %s \\\\ %s & %s}}{%s} = %s\$", 
+               ltx(RA[row - 2, 1]), ltx(RA[row - 2, col+1]),
+               ltx(RA[row - 1, 1]), ltx(RA[row - 1, col+1]),
+               ltx(RA[row - 1, 1]), result )
+    else
+      math(result)
+    end
   end
 
-  function showr(x::Rational)
-    (denominator(x) == 1) ? string(numerator(x)) : string(x)
+  function ltx(x)
+    latexify(x, env=:raw)
   end
 
-  showr(x) = string(x)
 
-  table.routharray(
+  html = table.routharray(
     [ tr( td(@sprintf("\$s^{%s}\$", coeffs - row )),
           [td(value(row, col)) for col = 1:n_cols[row]]) for row = 1:n_rows ])
-
+  
+  return (html, RA)
 end
 
+function sign_changes(RA)
+  sign(x) = (x > 0) ? "\$+\$" : "\$-\$"
+
+  first_col = Symbolics.value.(RA[:, 1])
+  n_rows = size(RA,1)
+
+  ## Print the table
+  table = m("table")
+  tr = m("tr")
+  td = m("td")
+  thead = m("thead")
+  @variables ϵ 
+
+  if any(SymbolicUtils.symtype.(first_col) .== Real) # zero in first column
+    table.routhsigns(
+      thead( td("Term"), td("\$ ε \\to 0^{+}\$"), td("\$ ε \\to 0^{-}\$" )),
+    [ tr( td(@sprintf("\$s^{%s}\$", n_rows - row )),
+          td(sign(substitute(RA[row, 1], Dict([ ϵ =>  1e-10])))),
+          td(sign(substitute(RA[row, 1], Dict([ ϵ => -1e-10]))))
+        ) for row = 1:n_rows ])
+  else
+    table.routhsigns(
+      thead( td("Term"), td("Sign") ),
+    [ tr( td(@sprintf("\$s^{%s}\$", n_rows - row )),
+          td(sign(RA[row, 1]))
+        ) for row = 1:n_rows ])
+  end
+    
+end
 ```
 
 
@@ -117,7 +193,7 @@ A necessary condition for a polynomial to be stable is that all the coefficients
 
 But this is a necessary condition but not a sufficient condition. So, we know that the polynomial
 $$ D(s) = s^5 + 4 s^4 + 10s^3 - s^2 + 2 s + 1$$
-is unstable because one of the coefficients are negative. Moreover, we know that the polynomail
+is unstable because one of the coefficients are negative. Moreover, we know that the polynomial
 $$ D(s) = s^4 + 4s^3 + s + 1$$
 is unstable because the coefficient of the $s^2$ term is $0$. But this necessary condition doesn't tell us if 
 $$ D(s) = s^5 + 4 s^4 + 10s^3 + s^2 + 2 s + 1$$ 
@@ -135,7 +211,20 @@ The Routh array is a (non-rectangular) array with $n+1$ rows, indexed by $s^n$, 
 
 - **Step 1.** Fill the first two rows of the Routh array with the coefficients of $D(s)$ going in the zigzag pattern as shown below. We stop when we have used all the coefficients. Any unfilled entries in the Routh array are assumed to be zero. 
 
-    <!-- TODO: Add figure -->
+<table class="routharray-simple" align="center">
+<tr>
+  <td>$s^n$</td>
+  <td>$a_{n}$</td>
+  <td>$a_{n-2}$</td>
+  <td>$\cdots$</td>
+</tr>
+<tr>
+  <td>$s^{n-1}$</td>
+  <td>$a_{n-1}$</td>
+  <td>$a_{n-3}$</td>
+  <td>$\cdots$</td>
+</tr>
+</table>
 
 - **Step 2.** This is a recursive step, where we take two filled rows, say row $s^{m+2}$ and $s^m$ and use that to fill row $s^m$, for all $m \in \{n-2, \dots, 0\}$. Each entry is the negative determinant of a $2 \times 2$ matrix constructed from the entries in the previous two rows (i.e., row $s^{m+2}$ and $s^{m+1}$ when we are filling in row $s^m$) divided by the first entry in row $s^{m+1}$ (**provided that entry is not zero!**). The first column of $2 \times 2$ matrix is the first column of the previous two rows; the second column of the $2 \times 2$ matrix is the columns above and to the right. 
 
@@ -157,7 +246,7 @@ We follow the procedure described above. The first column of the table is highli
 
 ```{julia}
 #| html-table-processing: none
-RouthArray([1,2,3,4,5])
+RouthArray([1,2,3,4,5], normalize=false) |> first
 ```
 
 :::
@@ -200,8 +289,18 @@ We first compute the Routh Array
 
 ```{julia}
 #| html-table-processing: none
-RouthArray([1,5,1,10,1])
+(html, RA) = RouthArray([1,5,1,10,1], normalize=false)
+html
+
 ```
+
+We now look at the signs of the terms in the first column:
+
+```{julia}
+#| html-table-processing: none
+sign_changes(RA)
+```
+
 
 Note that there are two sign changes in the first column. Thus, we have
 
@@ -211,14 +310,16 @@ Note that there are two sign changes in the first column. Thus, we have
 We can verify this by factorizing $D(s)$, which gives
 
 ```{julia}
-#| echo: true
-
 D = Polynomial([1,10,1,5,1], :s)
 println("D(s) = ", D)
 roots(D)
 ```
 
 :::
+
+### An optimization
+
+Since we only care about the signs of the coefficient, we can multiply or divide all elements in a row by a positive number without changing the result. This can sometimes lead to simpler calculations. 
 
 :::{#exm-Routh-Hurwitz-3}
 Find the location of the poles of a TF with with denominator given by
@@ -233,7 +334,14 @@ We first compute the Routh Array
 ```{julia}
 #| html-table-processing: none
 c = [1,4,3,2,1,4,4]
-RouthArray(c)
+(html, RA) = RouthArray(c)
+html
+```
+
+We now look at the signs of the terms in the first column:
+```{julia}
+#| html-table-processing: none
+sign_changes(RA)
 ```
 
 Note that there are two sign changes in the first column. Thus, we have
@@ -244,18 +352,12 @@ Note that there are two sign changes in the first column. Thus, we have
 We can verify this by factorizing $D(s)$, which gives
 
 ```{julia}
-#| echo: true
-
 D = Polynomial(reverse(c), :s)
 println("D(s) = ", D)
 roots(D)
 ```
 
 :::
-
-### An optimization
-
-Since we only care about the signs of the coefficient, we can multiply or divide all elements in a row by a positive number without changing the result. This can sometimes lead to simpler calculations. 
 
 
 
@@ -264,9 +366,30 @@ Since we only care about the signs of the coefficient, we can multiply or divide
 We cannot follow the usual method to construct the Routh array if there is zero in the first column. For example, consider
 $$ D(s) = s^5 + 2s^4 + 3s^3 + 6s^2 + 5s + 3. $$
 
-<!-- TODO: Show the RA until zero --> 
+<table class="routharray" align="center">
+<tr>
+  <td>$s^5$</td>
+  <td>$1$</td>
+  <td>$3$</td>
+  <td>$5$</td>
+</tr>
+<tr>
+  <td>$s^4$</td>
+  <td>$2$</td>
+  <td>$6$</td>
+  <td>$3$</td>
+</tr>
+<tr>
+  <td>$s^3$</td>
+  <td>$0$</td>
+  <td>$7/2$</td>
+  <td>$3$</td>
+</tr>
+</table>
 
-If the entire row is not zero, then we proceed as follows
+
+If there is zero in the first column but the entire row is not zero,
+we proceed as follows
 
 - Replace the zero in the first column by an $ε$ and continue to construct the Routh array as a function of $ε$. 
 - Count the number of sign changes as $ε \to 0^{+}$ ($ε$ goes to zero from above). Let this number be $k_{+}$. 
@@ -278,10 +401,264 @@ Then, we have
 - No. of roots on the $j ω$-axis = $|k_{+} - k_{-}|$. 
 - No. of roots in the OLHP = $\text{degree of polynomial} - \max\{k_{+}, k_{-}\}$. 
 
+:::{#exm-Routh-Hurwitz-zero-1}
+Find the location of the poles of a TF with with denominator given by
+$$ D(s) = s^5 + 2s^4 + 3s^3 + 6s^2 + 5s + 3. $$
+:::
+
+:::{.callout-note collapse="true"} 
+### Solution
+
+We first compute the Routh Array
+
+```{julia}
+#| html-table-processing: none
+c = [1,2,3,6,5,3]
+(html, RA) = RouthArray(c)
+html
+```
+
+We now look at the signs of the terms in the first column:
+
+```{julia}
+#| html-table-processing: none
+#| echo: true
+sign_changes(RA)
+```
+
+In both cases, we have two sign changes in the first column. Therefore, $k_{+} = k_{-} = 2$. Hence, we have
+
+- No. of roots in the ORHP = 2
+- No. of roots on the $j ω$-axis = 0
+- No. of roots in the OLHP = $5 - 2 = 3$
+
+
+We can verify this by factorizing $D(s)$, which gives
+
+```{julia}
+D = Polynomial(reverse(c), :s)
+println("D(s) = ", D)
+roots(D)
+```
+
+:::
+
+
 ### Reciprocal polynomial
 
-If we get a zero in the first column, we can follow another method but this method is not guaranteed to work. To understand this, we need the notion of a **reciprocal polynomial**: for a polynomial $D(s)$ of degree $n$, the reciprocal polynomial is $s^n D(\frac 1s)$. 
+If we get a zero in the first column, we can follow another method but this method is not guaranteed to work. To understand this, we need the notion of a **reciprocal polynomial**: for a polynomial $D(s)$ of degree $n$, the reciprocal polynomial is $s^n D(\frac 1s)$. For instance, for @exm-Routh-Hurwitz-zero-1, we have
+
+\begin{align*}
+s^5 D\left(\frac 1s\right) &=
+s^5 \left[ \frac{1}{s^5} + \frac{2}{s^4} + \frac{3}{s^3} + \frac{6}{s^2} + \frac{5}{s} + 3 \right] \\
+3 s^5 + 5 s^4 + 6 s^3 + 3 s^2 + 2s + 1
+\end{align*}
+
+:::{.callout-important}
+### Why look at the reciprocal polynomial.
+Observe that if $D(s)$ factorizes as
+$$
+D(s) = (s+p_1)(s+p_2) \cdots (s+p_n)
+$$
+then the factorization of $s^nD(\frac 1s)$ is given by
+\begin{align*}
+s^n D(s) &= s^n \left( \frac 1s + p_1 \right) \left( \frac 1s + p_2 \right) \cdots \left( \frac 1s + p_n \right) \\
+&= (p_1 p_2 \cdots p_n) \left(s + \frac 1{p_1} \right) \left( s + \frac{1}{p_2}\right) \cdots \left(s + \frac{1}{p_n} \right).
+\end{align*}
+Thus, if $p_i$ is a root of $D(s)$, then $\dfrac{1}{p_i}$ is a root of $s^n D(\frac 1s)$. 
+
+The key point is that **$p_i$ and $1/p_i$ have the same sign**. In particular if 
+$$
+p_i = a_i + j b_i \implies \frac {1}{p_i} = \frac{a}{|p_i|} - j\frac{ b_i}{|p_i|}
+$$
+So, the polynomial and its reciprocal have same number of roots in the OLHP, ORHP, and $j ω$-axis.
+:::
+
+:::{#exm-Routh-Hurwitz-zero-2}
+Solve @exm-Routh-Hurwitz-zero-1 using the reciprocal polynomial.
+:::
+
+:::{.callout-note collapse="true"} 
+### Solution
+
+We have already computed the reciprocal polynomial above. We now construct the Routh array
+
+```{julia}
+#| html-table-processing: none
+
+(html, RA) = RouthArray(reverse(c))
+html
+```
+
+We now look at the signs of the terms in the first column:
+```{julia}
+#| html-table-processing: none
+sign_changes(RA)
+```
+
+Thus, we see that there are two sign changes in the first column. Therefore, 
+
+- No. of roots in the ORHP = 2 (no. of sign changes)
+- No. of roots in the OLHP = 5 (degree of polynomial) $-$ 2 (no. of sign changes) = 3.
+which matches with what we had observed in the solution of @exm-Routh-Hurwitz-zero-1.
+:::
 
 ## Special cases: Entire row of zeros
+
+Sometimes, we get an entire row of zero. For instance, consider
+$$
+D(s) = s^5 + 7s^4 + 6 s^3 + 42 s^2 + 8 s + 56. 
+$$
+
+In this case, the Routh array ends with a row of zero.
+
+<table class="routharray" align="center">
+<tr>
+  <td>$s^5$</td>
+  <td>$1$</td>
+  <td>$6$</td>
+  <td>$8$</td>
+</tr>
+<tr>
+  <td>$s^4$</td>
+  <td>$\cancel{7} 1$</td>
+  <td>$\cancel{42} 6$</td>
+  <td>$\cancel{56} 8$</td>
+</tr>
+<tr>
+  <td>$s^3$</td>
+  <td>$0$</td>
+  <td>$0$</td>
+  <td>$0$</td>
+</tr>
+</table>
+
+:::{.callout-important}
+### When do we get a row of zeros
+
+Suppose the row $s^{m-1}$ is zero in the Routh array. This means that the polynomial $P^m$ (which is the polynomial above the row of zeros) divides $D(s)$. 
+
+For instance, in the above example, row $s^3$ is zero. The above claim means that 
+$$
+P_4(s) = s^4 + 6 s^2 + 8
+$$
+divides $D(s)$. This is indeed the case and we can verify that
+$$
+D(s) = \underbrace{(s+7)}_{\text{remainder poly.}}
+       \underbrace{(s^4 + 6s^2 + 8)}_{\text{divisor poly.}}.
+$$
+
+:::
+
+As argumed
+The rows that we have encountered until the row of all zeros corresponds to the remainder polynomial. We interpret is the same way we did the normal case. 
+
+Observe that the divisor polynomial is an **even** polynomial.  A key feature of an even polynomial is that it has an equal number of roots in the OLHP and the ORHP. The number of sign changes is equal to the number of roots in the ORHP. So, the number of roots in OLHP are the same. The remaining roots must be on the $j ω$-axis. 
+
+:::{.callout-tip}
+### Roots of even polynomial
+
+An even polynomial has the same number of roots in the ORHP and OLHP. 
+
+Consider an even polynomial
+
+$$P^{2m}(s) = a_{2m} s^{2m} + a_{2m -2 } s^{2m -2} + \cdots + a^0.$$
+
+We can write this as a polynomial in $z = s^2$ as
+
+$$ a_{2m} z^m + a_{2m -2} z^{m-1} + \cdots + a_0. $$
+
+Let $p_1, p_2, \dots, p_m$ be the roots of this polynomial. Then, the roots of $P^{2m}$ are $\pm \sqrt{p_1}, \pm \sqrt{p_2}, \dots, \pm \sqrt{p_m}$. 
+
+Now observe the following:
+
+- If $p_i$ is real and positive, then $+ \sqrt{p_i}$ is positive and $- \sqrt{p_i}$ is negative. Thus, one root is in the ORHP and one is in the OLHP.
+
+- If $p_i$ is real and negative, then $\pm \sqrt{p_i} = \pm j \sqrt{|p_i|}$, which lie on the $j ω$-axis. Thus, there are no roots in the ORHP or OLHP.
+
+- If $p_i$ is complex and say equal to $a_i + j b_i$, then there must be another root $a_i - j b_i$. Now let $\pm (c_i + j d_i)$ denote the square root of $a_i + j b_i$. Then, the square roots of $a_i - j b_i$ are $\pm (c_i - j d_i)$. Thus, out of the four roots, two are in the the ORHP and two are in the OLHP.  
+
+Thus, in all cases, no. of roots in the ORHP = no. of roots in the OLHP.
+
+<!-- TODO: Add a figure -->
+:::
+
+The rows that we have encountered until the row of all zeros corresponds to the remainder polynomial. We interpret is the same way we did the normal case. 
+
+We first compute the Routh Array
+
+```{julia}
+#| html-table-processing: none
+c = [1,7,6,42,8,56]
+(html, RA) = RouthArray(c)
+html
+```
+
+We now look at the signs of the terms in the first column:
+
+```{julia}
+#| html-table-processing: none
+sign_changes(RA)
+```
+
+Since we have a row of zeros, we split our analysis into two cases. The remainder polynomial, which is rows $s^5$ to $s^4$ and has no sign change, and the divisor polynomial, which is rows $s^4$ to $s^0$ and has no sign changes either. So, we have
+
+| Polynomial | degree | no. of sign changes | ORHP | OLHP | $j ω$-axis |
+|:----------:|:------:|:-------------------:|:----:|:----:|:-----------|
+| Remainder  | 1 | 0 | 0 | 1 | 0 | 
+| Divisor    | 4 | 0 | 0 | 0 | 4 |
+| $D(s)$     | 5 |   | 0 | 1 | 4 |
+
+: {.striped}
+
+We can verify this by factorizing $D(s)$, which gives (there are four roots on the $j ω$ axis but we get small error in the location of the roots due to numerical accuracy)
+
+```{julia}
+D = Polynomial(reverse(c), :s)
+println("D(s) = ", D)
+roots(D)
+```
+
+:::{#exm-Routh-Hurwitz-row-zero-1}
+Consider 
+$$
+D(s) = (s^2 + 2)(s+2) = s^3 + s^2 + 2s + 2.
+$$
+Use Routh Hurwitz to find the location of the roots.
+:::
+
+:::{.callout-note collapse="true"} 
+### Solution
+
+We write the Routh Array
+
+```{julia}
+#| html-table-processing: none
+c = [1,1,2,2]
+(html, RA) = RouthArray(c)
+html
+```
+
+We now look at the signs of the terms in the first column:
+
+```{julia}
+#| html-table-processing: none
+sign_changes(RA)
+```
+
+
+Since we have a row of zeros, we split our analysis into two cases. The remainder polynomial, which is rows $s^3$ to $s^2$ and has no sign change, and the divisor polynomial, which is rows $s^2$ to $s^0$ and has no sign changes either. So, we have
+
+| Polynomial | degree | no. of sign changes | ORHP | OLHP | $j ω$-axis |
+|:----------:|:------:|:-------------------:|:----:|:----:|:-----------|
+| Remainder  | 1 | 0 | 0 | 1 | 0 | 
+| Divisor    | 2 | 0 | 0 | 0 | 2 |
+| $D(s)$     | 3 |   | 0 | 1 | 2 |
+
+: {.striped}
+
+:::
+
+
 
 ## Stability in state space
