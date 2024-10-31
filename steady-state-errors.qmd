@@ -129,22 +129,24 @@ to a step input.
 #### Solution
 We first check if the open loop system is stable. From Routh Hurwitz criteria we have
 
-```{=html}
-<table class="bordered">
+<table class="routharray" align="center">
 <tr>
-  <td class="table-active"> 1 </td>
+  <td> $s^2$ </td>
+  <td> 1 </td>
   <td> 15 </td>
 </tr>
 <tr>
-  <td class="table-active"> 3 </td>
+  <td> $s^1$ </td>
+  <td> 3 </td>
   <td>   </td>
 </tr>
 <tr>
-  <td class="table-active"> 44/3 </td>
+  <td> $s^0$ </td>
+  <td> 44/3 </td>
   <td>   </td>
 </tr>
 </table>
-```
+
 Since all entries in the first column are positive, the system is stable. Therefore, we have
 $$
   e(∞) = \lim_{s \to 0} s R(s) (1 - T(s)) 
@@ -172,7 +174,7 @@ Before looking at more general systems, we discuss the notion of a system type. 
 $$
 \def\1#1{\Bigl(1 + \dfrac{s}{#1}\Bigr)}
 G(s) = K \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
-      {\textcolor{red}{s^k}\1{p_1}\1{p_2}\cdots\1{p_n}}
+      {\textcolor{red}{s^k}\1{p_1}\1{p_2}\cdots\1{p_{n-k}}}
 $$
 Here $k$ denotes the number of poles at origin and is called **the type** of the system. Thus, we have
 
@@ -186,13 +188,13 @@ G(s) = K_p \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
 $\def\1#1{\Bigl(1 + \dfrac{s}{#1}\Bigr)}
 \quad
 G(s) = \dfrac{K_v}{s} \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
-      {\1{p_1}\1{p_2}\cdots\1{p_n}}$
+      {\1{p_1}\1{p_2}\cdots\1{p_{n-1}}}$
 
 - Type 2: 
 $\def\1#1{\Bigl(1 + \dfrac{s}{#1}\Bigr)}
 \quad
 G(s) = \dfrac{K_a}{s^2} \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
-      {\1{p_1}\1{p_2}\cdots\1{p_n}}$
+      {\1{p_1}\1{p_2}\cdots\1{p_{n-2}}}$
 
 For historical reasons, the gain corresponding to the different system types are called:
 
@@ -277,15 +279,6 @@ Therefore, we have the following:
 | 1 | 0 | $∞$ |
 | 2 | finite | $\dfrac{1}{K_a}$ |
 
-
-:::{#exr-unity-feedback-1}
-Consider a unity feedback system with open-loop transfer function
-$$
-G(s) = \dfrac{100(s+3)}{(s+1)(s+6)}
-$$
-Find the steady state errors to step, ramp, and parabola inputs.
-:::
-
 ### Summary
 
 In summary, the steady-state error of different types of system for different types of inputs is shown in @tbl-summary
@@ -298,6 +291,15 @@ In summary, the steady-state error of different types of system for different ty
 
 : Steady-state error of different types of systems for different inputs {#tbl-summary}
 
+
+
+:::{#exr-unity-feedback-1}
+Consider a unity feedback system with open-loop transfer function
+$$
+G(s) = \dfrac{100(s+3)}{(s+1)(s+6)}
+$$
+Find the steady state errors to step, ramp, and parabola inputs.
+:::
 
 
 :::{.callout-note collapse="true"} 
@@ -376,6 +378,8 @@ $$
 
 Thus,
 $$ K_v \ge 10 \implies K \ge 40. $$
+
+We will also need to find the values of $K$ for which the closed loop system is stable. That is left as an exercise. 
 
 We now test if the specified value of the gain works.
 
