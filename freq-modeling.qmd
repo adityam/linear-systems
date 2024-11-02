@@ -282,7 +282,7 @@ $$
 
 There are three common ways to inter connect LTI systems shown below.
 
-![Series Connection equivalent to $G_1(s)G_2(s)$.](figures/svg/interconnect3.svg){#fig-series}
+![Cascade Connection equivalent to $G_1(s)G_2(s)$.](figures/svg/interconnect3.svg){#fig-cascade}
 
 ![Parallel Connection equivalent to $G_1(s) + G_2(s)$.](figures/svg/interconnect4.svg){#fig-parallel}
 

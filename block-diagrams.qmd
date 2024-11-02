@@ -1,0 +1,140 @@
+---
+title: Block diagrams
+---
+
+## Simple inteconnection of blocks
+
+We have already seen three basic forms of block diagrams:
+
+![Cascade Connection equivalent to $G_1(s)G_2(s)$.](figures/svg/interconnect3.svg){#fig-cascade}
+
+![Parallel Connection equivalent to $G_1(s) + G_2(s)$.](figures/svg/interconnect4.svg){#fig-parallel}
+
+![Feedback Connection equivalent to $\displaystyle \frac{G(s)}{1 + G(s)H(s)}$.](figures/svg/interconnect5.svg){#fig-feedback}
+
+We can use the basic rules above to simplify block diagrams. We provide a few examples below.
+
+:::{#exm-blocks-1}
+Simplify the block diagram shown below.
+
+::: {.panel-tabset}
+
+## Original diagram
+
+![Block diagram for @exm-blocks-1](figures/svg/blocks1.svg)
+
+## Step 1
+
+![The highlighted blocks are in cascade](figures/svg/blocks2.svg)
+
+## Step 2
+
+![The highlighted blocks are in feedback](figures/svg/blocks3.svg)
+
+Thus, the simplified TF is
+
+$$
+T(s) = \frac{G_1(s) G_2(s) G_3(s) } { 1 + G_1(s) G_2(s) G_3(s) H_1(s) H_2(s) }.
+$$
+
+:::
+:::
+
+:::{#exm-blocks-2}
+Simplify the block diagram shown below.
+
+![Block diagram for @exm-blocks-2](figures/svg/blocks4.svg)
+:::
+
+::: {.callout-note}
+
+## Approach 1: Nested feedback loops
+
+::: {.panel-tabset}
+
+## Original diagram
+
+![Block diagram for @exm-blocks-2](figures/svg/blocks4.svg)
+
+## First feedback loop
+
+![The first feedback loop](figures/svg/blocks5.svg)
+
+In the first approach, we can view the system as three nested feedback loops. The first loop is highlighted above, which simplifies to
+
+$$
+  \dfrac{G_2(s) G_3(s)}{1 + G_2(s) G_3(s) H_1(s)}
+$$
+
+## Simplified diagram
+
+![Simplified block diagram](figures/svg/blocks6.svg)
+
+## Second feedback loop
+
+![The second feedback loop](figures/svg/blocks7.svg)
+
+The second loop simplified to
+
+$$
+\dfrac{
+  \dfrac{G_2(s) G_3(s)}{1 + G_2(s) G_3(s) H_1(s)}
+}
+{ 1 + 
+  \dfrac{G_2(s) G_3(s) H_2(s)}{1 + G_2(s) G_3(s) H_1(s)}
+}
+= \dfrac{ G_2(s) G_3(s) } { 1 + G_2(s)G_3(s) H_1(s) + G_2(s)G_3(s)H_2(s) }
+$$
+
+## Simplified diagram
+
+![Simplified block diagram](figures/svg/blocks8.svg)
+
+This is a simple feedback loop. Thus, we can simplify it to
+$$
+\dfrac{ 
+ \dfrac{ G_1(s) G_2(s) G_3(s) } { 1 + G_2(s)G_3(s) H_1(s) + G_2(s)G_3(s)H_2(s) }}
+{ 1 + 
+ \dfrac{ G_1(s) G_2(s) G_3(s) H_3(s) } { 1 + G_2(s)G_3(s) H_1(s) + G_2(s)G_3(s)H_2(s) }
+}
+= \dfrac{G_1(s) G_2(s) G_3(s) } {1 + G_2(s) G_3(s) \bigl[ H_1(s) + H_2(s) + H_3(s) \bigr] }.
+$$
+:::
+:::
+
+::: {.callout-note}
+
+## Approach 2: Parallel feedback loops
+
+::: {.panel-tabset}
+
+## Original diagram
+
+![Block diagram for @exm-blocks-2](figures/svg/blocks4.svg)
+
+## Parallel feedback loops
+
+![Parallel feedback loop](figures/svg/blocks9.svg)
+
+## Simplified diagram
+
+![Simplified diagram](figures/svg/blocks10.svg)
+
+This is a simple feedback circuit. Thus, the simplified transfer function is
+$$
+\dfrac{G_1(s) G_2(s) G_3(s) } {1 + G_2(s) G_3(s) \bigl[ H_1(s) + H_2(s) + H_3(s) \bigr] }.
+$$
+:::
+:::
+
+The above two examples show that we can simplify block diagrams using the simple rules for interconnected blocks. However, these simple ideas are unable to simplify more complicated block diagrams shown below. 
+
+:::{#exm-blocks-3}
+Simplify the block diagram shown below.
+
+![Block diagram for @exm-blocks-3](figures/svg/blocks11.svg)
+:::
+
+In order to simplify such diagrams, we need to develop rules for moving pick up points and adders around blocks.
+
+## Rules for moving pickup points and adders around blocks
