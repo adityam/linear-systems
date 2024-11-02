@@ -133,6 +133,13 @@
     "text": "2 Moving pickup points and adders around blocks\nThere are four basic rules for simplifying block diagrams.\n\nMoving a pickup point after a block to before a block.\n\nIn both cases, \\(Y(s) = X(s) G(s)\\) and \\(Z(s) = X(s)G(s)\\).\nMoving a pickup point before a block to after a block.\n\nIn both cases, \\(Y(s) = X(s) G(s)\\) and \\(Z(s) = X(s)\\).\nMoving an adder after a block to before a block.\n\nIn both cases, \\(Z(s) = X(s)G(s) + Y(s)\\).\nMoving an adder before a block to after a block.\n\nIn both cases, \\(Z(s) = X(s)G(s) + Y(s)G(s)\\)."
   },
   {
+    "objectID": "block-diagrams.html#back-to-the-example",
+    "href": "block-diagrams.html#back-to-the-example",
+    "title": "Block diagrams",
+    "section": "3 Back to the example",
+    "text": "3 Back to the example\nWe now see how we can use the rule above to simplify the block diagram of Example 3.\n\nOriginal diagramMoving a pickup pointSimplified diagram\n\n\n\n\n\nBlock diagram for Example 3\n\n\n\n\n\n\n\nMoving a pickup point\n\n\nWe look at the highlighted sub-block and move the pickup point from behind \\(G_4(s)\\) to after \\(G_4(s)\\).\n\n\n\n\n\nSimplified diagram\n\n\n\n\n\nThe simplified diagram is of the form that we can identify the three basic blocks and iteratively simplify it. However, the method is tedious. We can make it much simpler by moving the adders around so that all of them are in the middle.\n\nSimplified diagramMoving addersSimplified diagram\n\n\n\n\n\nSimplified diagram\n\n\n\n\n\n\n\nMoving adders\n\n\n\n\n\n\n\nSimplified diagram\n\n\n\n\n\nThe final diagram now has three adders in feedback, similar to Example 2. Therefore, we can simplify the TF as\n\\[\n\\dfrac{G_1(s) G_2(s) G_3(s) G_4(s)}\n{1 + G_2(s)G_3(s)G_4(s) \\Bigl[ \\dfrac{H_1(s)}{G_2(s)} + \\dfrac{H_2(s)}{G_4(s)} + H_3(s)G_1(s) \\Bigr]}.\n\\]"
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Course Outline",

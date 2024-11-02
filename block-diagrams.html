@@ -197,6 +197,7 @@ window.Quarto = {
   <ul>
   <li><a href="#simple-inteconnection-of-blocks" id="toc-simple-inteconnection-of-blocks" class="nav-link active" data-scroll-target="#simple-inteconnection-of-blocks"><span class="header-section-number">1</span> Simple inteconnection of blocks</a></li>
   <li><a href="#moving-pickup-points-and-adders-around-blocks" id="toc-moving-pickup-points-and-adders-around-blocks" class="nav-link" data-scroll-target="#moving-pickup-points-and-adders-around-blocks"><span class="header-section-number">2</span> Moving pickup points and adders around blocks</a></li>
+  <li><a href="#back-to-the-example" id="toc-back-to-the-example" class="nav-link" data-scroll-target="#back-to-the-example"><span class="header-section-number">3</span> Back to the example</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/block-diagrams.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -474,6 +475,75 @@ Approach 2: Parallel feedback loops
 <p><img src="figures/svg/moving-blocks4.svg" class="img-fluid"></p>
 <p>In both cases, <span class="math inline">\(Z(s) = X(s)G(s) + Y(s)G(s)\)</span>.</p></li>
 </ol>
+</section>
+<section id="back-to-the-example" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="back-to-the-example"><span class="header-section-number">3</span> Back to the example</h2>
+<p>We now see how we can use the rule above to simplify the block diagram of <a href="#exm-blocks-3" class="quarto-xref">Example&nbsp;3</a>.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Original diagram</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">Moving a pickup point</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-3" role="tab" aria-controls="tabset-4-3" aria-selected="false">Simplified diagram</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/svg/blocks11.svg" class="img-fluid figure-img"></p>
+<figcaption>Block diagram for <a href="#exm-blocks-3" class="quarto-xref">Example&nbsp;3</a></figcaption>
+</figure>
+</div>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/svg/blocks12.svg" class="img-fluid figure-img"></p>
+<figcaption>Moving a pickup point</figcaption>
+</figure>
+</div>
+<p>We look at the highlighted sub-block and move the pickup point from behind <span class="math inline">\(G_4(s)\)</span> to after <span class="math inline">\(G_4(s)\)</span>.</p>
+</div>
+<div id="tabset-4-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-3-tab">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/svg/blocks13.svg" class="img-fluid figure-img"></p>
+<figcaption>Simplified diagram</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>The simplified diagram is of the form that we can identify the three basic blocks and iteratively simplify it. However, the method is tedious. We can make it much simpler by moving the adders around so that all of them are in the middle.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">Simplified diagram</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">Moving adders</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-3" role="tab" aria-controls="tabset-5-3" aria-selected="false">Simplified diagram</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/svg/blocks13.svg" class="img-fluid figure-img"></p>
+<figcaption>Simplified diagram</figcaption>
+</figure>
+</div>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/svg/blocks14.svg" class="img-fluid figure-img"></p>
+<figcaption>Moving adders</figcaption>
+</figure>
+</div>
+</div>
+<div id="tabset-5-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-3-tab">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/svg/blocks15.svg" class="img-fluid figure-img"></p>
+<figcaption>Simplified diagram</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>The final diagram now has three adders in feedback, similar to <a href="#exm-blocks-2" class="quarto-xref">Example&nbsp;2</a>. Therefore, we can simplify the TF as</p>
+<p><span class="math display">\[
+\dfrac{G_1(s) G_2(s) G_3(s) G_4(s)}
+{1 + G_2(s)G_3(s)G_4(s) \Bigl[ \dfrac{H_1(s)}{G_2(s)} + \dfrac{H_2(s)}{G_4(s)} + H_3(s)G_1(s) \Bigr]}.
+\]</span></p>
 
 
 </section>
