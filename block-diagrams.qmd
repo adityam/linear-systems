@@ -166,3 +166,50 @@ There are four basic rules for simplifying block diagrams.
 
    In both cases, $Z(s) = X(s)G(s) + Y(s)G(s)$. 
 
+## Back to the example
+
+We now see how we can use the rule above to simplify the block diagram of @exm-blocks-3.
+
+::: {.panel-tabset}
+
+## Original diagram
+
+![Block diagram for @exm-blocks-3](figures/svg/blocks11.svg)
+
+## Moving a pickup point
+
+![Moving a pickup point](figures/svg/blocks12.svg)
+
+We look at the highlighted sub-block and move the pickup point from behind $G_4(s)$ to after $G_4(s)$. 
+
+## Simplified diagram
+
+![Simplified diagram](figures/svg/blocks13.svg)
+
+:::
+
+The simplified diagram is of the form that we can identify the three basic blocks and iteratively simplify it. However, the method is tedious. We can make it much simpler by moving the adders around so that all of them are in the middle.
+
+::: {.panel-tabset}
+
+## Simplified diagram
+
+![Simplified diagram](figures/svg/blocks13.svg)
+
+## Moving adders
+
+![Moving adders](figures/svg/blocks14.svg)
+
+## Simplified diagram
+
+![Simplified diagram](figures/svg/blocks15.svg)
+
+:::
+
+The final diagram now has three adders in feedback, similar to @exm-blocks-2. Therefore, we can simplify the TF as
+
+$$
+\dfrac{G_1(s) G_2(s) G_3(s) G_4(s)}
+{1 + G_2(s)G_3(s)G_4(s) \Bigl[ \dfrac{H_1(s)}{G_2(s)} + \dfrac{H_2(s)}{G_4(s)} + H_3(s)G_1(s) \Bigr]}.
+$$
+

@@ -458,7 +458,7 @@ enddef ;
 \stopMPpage % }}}
 \stopstackingsteps
 
-\startstackingsteps[{0,1}]
+\startstackingsteps[{0,1,12,14},{-2,0,12,14,2}, {-3,0,14,3,30}, {-4,0,30,4,14,40},{0,30,5}]
 \startMPpage[offset=1dk, stacking={\namedstackingparameter\empty{criterium}}] % {{{ Example 3 begingroup;
   sketchypaths;
 
@@ -478,7 +478,6 @@ enddef ;
   circleit.sum_three("\tfc $+$");
 
   split_one = origin;
-
 
   G_one.w - sum_one.e = (1.5ux,0);
   sum_two.w - G_one.e = (1.5ux,0);
@@ -501,13 +500,50 @@ enddef ;
   boxes_fixsize(sum_one, sum_two, sum_three, G_one, G_two, G_three, G_four, H_one, H_two, H_three);
   boxes_fixpos(sum_one, sum_two, sum_three, G_one, G_two, G_three, G_four, H_one, H_two, H_three);
 
-  draw boxes_pic sum_one shifted sum_one.c;
+  circleit.nsum_one("\tfc $+$");
+  boxit.nG_one("$G_1(s)$");
+
+  circleit.nsum_two("\tfc $+$");
+  boxit.nG_two("$G_2(s)$");
+
+  nsum_one.c = G_one.c;
+  nG_one.c = sum_one.c;
+
+  nsum_two.c = G_two.c;
+  nG_two.c = sum_three.c;
+
+  boxit.new_one("$\dfrac{1}{G_4(s)}$");
+  xpart new_one.c = xpart G_four.c;
+  ypart new_one.c = ypart H_two.c;
+
+  boxit.new_two("$G_1(s)$");
+  xpart new_two.c = xpart(0.5[nsum_one.c, sum_two.c]);
+  ypart new_two.c = ypart H_three.c;
+
+  boxit.new_three("$\dfrac{1}{G_2(s)}$");
+  xpart new_three.c = xpart sum_three.c;
+  ypart new_three.c = ypart H_one.c;
+
+
+  boxes_fixsize(new_one, new_two, new_three, nsum_one, nsum_two, nG_one, nG_two);
+  boxes_fixpos (new_one, new_two, new_three, nsum_one, nsum_two, nG_one, nG_two);
+
+  draw boxes_pic sum_one shifted sum_one.c withstacking 14;
   draw boxes_pic sum_two shifted sum_two.c;
-  draw boxes_pic sum_three shifted sum_three.c;
-  draw boxes_pic G_one shifted G_one.c;
-  draw boxes_pic G_two shifted G_two.c;
+  draw boxes_pic sum_three shifted sum_three.c withstacking 14;
+  draw boxes_pic G_one shifted G_one.c withstacking 14;
+  draw boxes_pic G_two shifted G_two.c withstacking 14;
   draw boxes_pic G_three shifted G_three.c;
   draw boxes_pic G_four shifted G_four.c;
+
+  draw boxes_pic new_one shifted new_one.c withstacking 30;
+  draw boxes_pic new_two shifted new_two.c withstacking 5;
+  draw boxes_pic new_three shifted new_three.c withstacking 5;
+
+  draw boxes_pic nsum_one shifted nsum_one.c withstacking 5;
+  draw boxes_pic nG_one shifted nG_one.c withstacking 5;
+  draw boxes_pic nsum_two shifted nsum_two.c withstacking 5;
+  draw boxes_pic nG_two shifted nG_two.c withstacking 5;
 
   draw boxes_pic H_one shifted H_one.c;
   draw boxes_pic H_two shifted H_two.c;
@@ -518,48 +554,111 @@ enddef ;
   Input  := sum_one.w - (1.5ux,0);
   Output := split_two + (ux,0);
 
+  newpath back_one, back_two, back_three;
+
+  back_one = bbox image( 
+      drawboxed(G_four);
+      draw fullcircle shifted (xpart split_one, ypart H_two.c);
+      draw fullcircle shifted split_two;
+    ) enlarged 5pt;
+
+  fill back_one withcolor 0.85white withstacking -2;
+  draw back_one dashed evenly withstacking -2;
+
+  back_two = bbox image( 
+      drawboxed(sum_one, G_one);
+      draw fullcircle shifted (xpart sum_one.c, ypart H_one.c);
+    ) enlarged 5pt;
+
+  fill back_two withcolor 0.85white withstacking -4;
+  draw back_two dashed evenly withstacking -4;
+
+  back_three = bbox image( 
+      drawboxed(sum_three, G_two);
+      draw fullcircle shifted (xpart sum_three.c, ypart H_one.c);
+    ) enlarged 5pt;
+
+  fill back_three withcolor 0.85white withstacking -4;
+  draw back_three dashed evenly withstacking -4;
+
+
   for i = 1 upto 5 :
     sketch_amount := 1.3bp;
-    draw bpath G_one cornered 10bp;
-    draw bpath G_two cornered 10bp;
+    draw bpath G_one cornered 10bp withstacking 14;
+    draw bpath G_two cornered 10bp withstacking 14;
     draw bpath G_three cornered 10bp;
     draw bpath G_four cornered 10bp;
     draw bpath H_one cornered 10bp;
     draw bpath H_two cornered 10bp;
     draw bpath H_three cornered 10bp;
-    draw bpath sum_one;
+    draw bpath sum_one withstacking 14;
     draw bpath sum_two;
-    draw bpath sum_three;
+    draw bpath sum_three withstacking 14;
+
+    draw bpath new_one cornered 10bp withstacking 30;
+    draw bpath new_two cornered 10bp withstacking 5;
+    draw bpath new_three cornered 10bp withstacking 5;
+    draw bpath nG_one cornered 10bp withstacking 5;
+    draw bpath nG_two cornered 10bp withstacking 5;
+    draw bpath nsum_one withstacking 5;
+    draw bpath nsum_two withstacking 5;
 
     sketch_amount := 0.6bp;
-    drawarrow Input -- lft sum_one.w;
-    drawarrow sum_one.e -- lft G_one.w;
-    drawarrow G_one.e -- lft sum_two.w;
-    drawarrow sum_two.e -- lft G_two.w;
-    drawarrow G_two.e -- lft sum_three.w;
-    drawarrow sum_three.e -- lft G_three.w;
+    drawarrow Input -- lft sum_one.w withstacking 14;
+    drawarrow Input -- lft nG_one.w withstacking 5;
+
+    drawarrow sum_one.e -- lft G_one.w withstacking 14;
+    drawarrow nG_one.e -- lft nsum_one.w withstacking 5;
+
+    drawarrow G_one.e -- lft sum_two.w withstacking 14;
+    drawarrow nsum_one.e -- lft sum_two.w withstacking 5;
+
+    drawarrow sum_two.e -- lft G_two.w withstacking 14;
+    drawarrow G_two.e -- lft sum_three.w withstacking 14;
+    drawarrow sum_three.e -- lft G_three.w withstacking 14;
+
+    drawarrow sum_two.e -- lft nsum_two.w withstacking 5;
+    drawarrow nsum_two.e -- lft nG_two.w withstacking 5;
+    drawarrow nG_two.e -- lft G_three.w withstacking 5;
+
     drawarrow G_three.e -- lft G_four.w;
     drawarrow G_four.e -- Output;
 
-    drawarrow split_one +- lft H_two.e;
+    drawarrow split_one +- rt H_two.e withstacking 12;
     drawarrow H_two.w -+ top sum_two.n;
 
     drawarrow split_two +- lft H_one.e;
-    drawarrow H_one.w -+ bot sum_three.s;
+    drawarrow H_one.w -+ bot sum_three.s withstacking 14;
+    drawarrow H_one.w -- rt new_three.e withstacking 5;
+    drawarrow new_three.w -+ bot nsum_two.s withstacking 5;
 
     drawarrow split_two +- lft H_three.e;
-    drawarrow H_three.w -+ bot sum_one.s;
+    drawarrow H_three.w -+ bot sum_one.s withstacking 14;
+    drawarrow H_three.w -- lft new_two.e withstacking 5;
+    drawarrow new_two.w -+ bot nsum_one.s withstacking 5;
+
+    drawarrow split_two +- rt new_one.e withstacking 30;
+    drawarrow new_one.w -- rt H_two.e withstacking 30;
 
   endfor;
 
-  label.ulft("\tfx $+$", sum_one.w + (2bp,2bp)); 
-  label.lrt("\tfx $-$",  sum_one.s + (2bp,0) ); 
+  fill fullcircle scaled 3bp shifted split_one withcolor 0.85red 
+       withstacking 2;
+
+  label.ulft("\tfx $+$", sum_one.w + (2bp,2bp)) withstacking 14; 
+  label.lrt("\tfx $-$",  sum_one.s + (2bp,0) ) withstacking 14; 
+
+  label.ulft("\tfx $+$", nsum_one.w + (2bp,2bp)) withstacking 5; 
+  label.lrt("\tfx $-$",  nsum_one.s + (2bp,0) ) withstacking 5; 
 
   label.ulft("\tfx $+$", sum_two.w + (2bp,2bp)); 
   label.urt("\tfx $-$",  sum_two.n + (2bp,0) ) ; 
 
-  label.ulft("\tfx $+$", sum_three.w + (2bp,2bp)); 
-  label.lrt("\tfx $-$",  sum_three.s + (2bp,0) ); 
+  label.ulft("\tfx $+$", nsum_two.w + (2bp,2bp)) withstacking 5; 
+  label.lrt("\tfx $-$",  nsum_two.s + (2bp,0) )  withstacking 5; 
+
+  label.ulft("\tfx $+$", sum_three.w + (2bp,2bp)) withstacking 14; 
+  label.lrt("\tfx $-$",  sum_three.s + (2bp,0) ) withstacking 14; 
 
   label.lft("$U(s)$", Input);
   label.rt("$Y(s)$", Output);
