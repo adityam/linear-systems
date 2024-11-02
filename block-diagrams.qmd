@@ -155,4 +155,14 @@ There are four basic rules for simplifying block diagrams.
 
 3. **Moving an adder after a block to before a block.**
 
+   ![](figures/svg/moving-blocks3.svg)
+
+   In both cases, $Z(s) = X(s)G(s) + Y(s)$. 
+
+
 4. **Moving an adder before a block to after a block.**
+
+   ![](figures/svg/moving-blocks4.svg)
+
+   In both cases, $Z(s) = X(s)G(s) + Y(s)G(s)$. 
+

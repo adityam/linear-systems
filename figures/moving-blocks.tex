@@ -247,4 +247,196 @@ enddef ;
   currentpicture := currentpicture scaled 1.5;
 \stopMPpage
 
+\startMPpage[offset=1dk]
+  ux := 1cm;
+  uy := 1cm;
+
+  sketchypaths;
+
+  picture one, two;
+
+  one = image(
+      boxit.block_one("$G(s)$");
+      circleit.sum_one("\tfc $+$");
+
+      pair Input_one, Input_two, Output;
+
+      block_one.c = origin;
+      sum_one.w - block_one.e = (1.5ux,0);
+      drawunboxed(block_one,sum_one);
+
+      Input_one = block_one.w - (1.5ux,0);
+      Output = sum_one.e + (1.5ux,0);
+      Input_two = (xpart Output, ypart sum_one.s - 1.5uy);
+
+      for i = 1 upto 5 :
+        sketch_amount := 1.3bp;
+        draw bpath block_one cornered 10bp;
+        draw bpath sum_one withcolor 0.85red;
+
+        sketch_amount := 0.6bp;
+        drawarrow Input_one -- lft block_one.w;
+        drawarrow block_one.e -- sum_one.w;
+        drawarrow sum_one.e -- Output;
+        drawarrow Input_two -+ bot sum_one.s;
+
+      endfor
+
+      label.ulft("\tfx $+$", sum_one.w + (2bp,2bp)); 
+      label.lrt("\tfx $+$",  sum_one.s + (2bp,0) ); 
+
+      label.lft("$X(s)$", Input_one);
+      label.rt ("$Y(s)$", Input_two);
+      label.rt ("$Z(s)$", Output);
+  );
+
+  two = image(
+      boxit.block_two("$G(s)$");
+      boxit.block_three("$\dfrac{1}{G(s)}$");
+      circleit.sum_two("\tfc $+$");
+
+      newpair Input_one, Input_two, Output;
+
+      block_two.c = origin;
+      block_two.w - sum_two.e = (1.5ux,0);
+      block_two.s - block_three.n = (0, uy);
+      drawunboxed(block_two,sum_two,block_three);
+
+      Input_one = sum_two.w - (1.5ux,0);
+      Output = block_two.e + (1.5ux,0);
+      Input_two = block_three.e + (1.5ux,0);
+
+      for i = 1 upto 5 :
+        sketch_amount := 1.3bp;
+        draw bpath block_two cornered 10bp;
+        draw bpath block_three cornered 10bp withcolor 0.85red;
+        draw bpath sum_two withcolor 0.85red;
+
+        sketch_amount := 0.6bp;
+        drawarrow Input_one -- lft sum_two.w;
+        drawarrow sum_two.e -- lft block_two.w;
+        drawarrow block_two.e -- Output;
+        drawarrow Input_two -- rt block_three.e;
+        drawarrow block_three.w -+ sum_two.s;
+
+      endfor
+
+      label.ulft("\tfx $+$", sum_two.w + (2bp,2bp)); 
+      label.lrt("\tfx $+$",  sum_two.s + (2bp,0) ); 
+
+      label.lft("$X(s)$", Input_one);
+      label.rt ("$Y(s)$", Input_two);
+      label.rt ("$Z(s)$", Output);
+  );
+
+
+  boxit.part_one(one);
+  boxit.part_two(two);
+  boxit.equiv("\tfc $≡$");
+
+  equiv.c = origin;
+  equiv.w - part_one.e = (ux,0);
+  part_two.w - equiv.e = (ux,0);
+  
+  drawunboxed(part_one, equiv, part_two);
+
+  currentpicture := currentpicture scaled 1.5;
+\stopMPpage
+
+\startMPpage[offset=1dk]
+  ux := 1cm;
+  uy := 1cm;
+
+  sketchypaths;
+
+  picture one, two;
+
+  one = image(
+      boxit.block_one("$G(s)$");
+      circleit.sum_one("\tfc $+$");
+
+      pair Input_one, Input_two, Output;
+
+      block_one.c = origin;
+      block_one.w - sum_one.e = (1.5ux,0);
+      drawunboxed(block_one,sum_one);
+
+      Input_one = sum_one.w - (1.5ux,0);
+      Output = block_one.e + (1.5ux,0);
+      Input_two = (xpart Input_one, ypart sum_one.s - 1.5uy);
+
+      for i = 1 upto 5 :
+        sketch_amount := 1.3bp;
+        draw bpath block_one cornered 10bp;
+        draw bpath sum_one withcolor 0.85red;
+
+        sketch_amount := 0.6bp;
+        drawarrow Input_one -- lft sum_one.w;
+        drawarrow sum_one.e -- lft block_one.w;
+        drawarrow block_one.e -- Output;
+        drawarrow Input_two -+ bot sum_one.s;
+
+      endfor
+
+      label.ulft("\tfx $+$", sum_one.w + (2bp,2bp)); 
+      label.lrt("\tfx $+$",  sum_one.s + (2bp,0) ); 
+
+      label.lft("$X(s)$", Input_one);
+      label.lft("$Y(s)$", Input_two);
+      label.rt ("$Z(s)$", Output);
+  );
+
+  two = image(
+      boxit.block_two("$G(s)$");
+      boxit.block_three("$G(s)$");
+      circleit.sum_two("\tfc $+$");
+
+      newpair Input_one, Input_two, Output;
+
+      block_two.c = origin;
+      sum_two.w - block_two.e = (1.5ux,0);
+      block_two.s - block_three.n = (0, uy);
+      drawunboxed(block_two,sum_two,block_three);
+
+      Input_one = block_two.w - (1.5ux,0);
+      Output = sum_two.e + (1.5ux,0);
+      Input_two = block_three.w - (1.5ux,0);
+
+      for i = 1 upto 5 :
+        sketch_amount := 1.3bp;
+        draw bpath block_two cornered 10bp;
+        draw bpath block_three cornered 10bp withcolor 0.85red;
+        draw bpath sum_two withcolor 0.85red;
+
+        sketch_amount := 0.6bp;
+        drawarrow Input_one -- lft block_two.w;
+        drawarrow block_two.e -- lft sum_two.w;
+        drawarrow sum_two.e -- Output;
+        drawarrow Input_two -- rt block_three.w;
+        drawarrow block_three.e -+ sum_two.s;
+
+      endfor
+
+      label.ulft("\tfx $+$", sum_two.w + (2bp,2bp)); 
+      label.lrt("\tfx $+$",  sum_two.s + (2bp,0) ); 
+
+      label.lft("$X(s)$", Input_one);
+      label.lft("$Y(s)$", Input_two);
+      label.rt ("$Z(s)$", Output);
+  );
+
+
+  boxit.part_one(one);
+  boxit.part_two(two);
+  boxit.equiv("\tfc $≡$");
+
+  equiv.c = origin;
+  equiv.w - part_one.e = (ux,0);
+  part_two.w - equiv.e = (ux,0);
+  
+  drawunboxed(part_one, equiv, part_two);
+
+  currentpicture := currentpicture scaled 1.5;
+\stopMPpage
+
 \stoptext
