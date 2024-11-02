@@ -137,4 +137,22 @@ Simplify the block diagram shown below.
 
 In order to simplify such diagrams, we need to develop rules for moving pick up points and adders around blocks.
 
-## Rules for moving pickup points and adders around blocks
+## Moving pickup points and adders around blocks
+
+There are four basic rules for simplifying block diagrams.
+
+1. **Moving a pickup point after a block to before a block.**
+  
+   ![](figures/svg/moving-blocks1.svg)
+
+   In both cases, $Y(s) = X(s) G(s)$ and $Z(s) = X(s)G(s)$. 
+
+2. **Moving a pickup point before a block to after a block.**
+
+   ![](figures/svg/moving-blocks2.svg)
+
+   In both cases, $Y(s) = X(s) G(s)$ and $Z(s) = X(s)$. 
+
+3. **Moving an adder after a block to before a block.**
+
+4. **Moving an adder before a block to after a block.**
