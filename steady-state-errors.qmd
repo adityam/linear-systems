@@ -472,10 +472,131 @@ e_{\rm para}(∞) = \frac{1}{K_a} = ∞.
 $$
 :::
 
+## Steady-state error for systems in SSM
+
+As discussed before, we can use the final value theorem to find the steady state error for SSM. In particular, when we use a state feedback controller with feedback gain $K$, the transfer function is given by
+$$
+  T(s) = C(sI - (A-BK))^{-1} B.
+$$
+Therefore, we have
+$$
+  e_{\rm step}(∞) = \lim_{s \to 0} s R(s) \bigl[ 1 - T(s) \bigr]
+  = 1 + C(A - BK)^{-1} B.
+$$
+
+One way to make the steady state error of a SSM to be zero is use integral control. **To be written**
+
 ## Steady-state errors for disturbances
 
-To be written
+In a real system, there are often errors in actuation, which can be modeled as a disturbance between the controller and the plant as shown in @fig-disturbance. 
 
-## Disturbance rejection for non-unity feedback system
+![System with disturbance](figures/svg/steady-state-error-block-diagrams9.svg){#fig-disturbance}
 
-To be written
+We first start with an overview of how to analyze such **multi-input single-output** systems. Since the system is an LTI system, we may assume that it is a superposition of two systems as shown in @fig-superposition.
+
+::: {#fig-superposition layout-ncol=2}
+
+![System where $D(s) = 0$](figures/svg/steady-state-error-block-diagrams11.svg)
+
+![System where $R(s) = 0$](figures/svg/steady-state-error-block-diagrams10.svg)
+
+System viewed as superposition of two systems
+:::
+
+In particular, 
+
+- The first system is a regular feedback system, thus
+  $$Y_R(s) = R(s) \dfrac{G_1(s) G_2(s)}{1 + G_1(s) G_2(s) }.$$
+
+- The second subsystem is a regular feedback system, thus
+  $$Y_D(s) = D(s) \dfrac{G_2(s)}{1 + G_1(s) G_2(s) }.$$
+
+
+By linearity, we have
+$$ 
+Y(s) = Y_R(s) + Y_D(s).
+$$
+
+Now, we know that
+\begin{align*}
+  E(s) &= R(s) - Y(s) = R(s) - Y_R(s) - Y_D(s) \\
+&= \underbrace{\frac{1}{1 + G_1(s) G_2(s)} R(s)}_{E_R(s)}
+- \underbrace{\frac{G_2(s)}{1 + G_1(s) G_2(s)} D(s)}_{E_D(s)}.
+\end{align*}
+Thus, the steady state error is
+\begin{align*}
+e(∞) &= \lim_{s \to 0} s E(s) 
+\\
+&= \underbrace{ \lim_{s \to 0} \dfrac{s R(s)}{1 + G_1(s) G_2(s) } }_{e_R(∞)}
+-
+\underbrace{ \lim_{s \to 0} \dfrac{s G_2(s) D(s)}{1 + G_1(s) G_2(s) } }_{e_D(∞)}
+\end{align*}
+
+The first term $e_R(∞)$ is the steady-state error due to $R(s)$, which we have already studied.
+
+The second term $e_D(∞)$ is the steady-state error due to disturbance. Often the disturbance is $d(t) = \text{constant}$, i.e., $D(s) = \dfrac 1s$, which correspondings to calibration error. For $D(s) = 1/s$, we have
+$$
+  e_D(∞) = \dfrac{1}
+  {\lim_{s \to 0} \dfrac 1{G_2(s)} 
+  + 
+  \lim_{s \to 0} G_1(s)}
+ = \dfrac{1}{\dfrac{1}{K_{2,p}} + K_{1,p}},
+$$
+where $K_{1,p}$ and $K_{2,p}$ are the position constants of $G_1(s)$ and $G_2(s)$, respectively. 
+Thus, the steady state error can reduced by increasing the position constant of the controller and decreasing the position constant of the plant. 
+
+:::{#exm-disturbance}
+Find the steady-state error for the system shown in @fig-disturbance-example when $R(s) = 1/s$ and $D(s) = 1/s$. 
+
+![System for @exm-disturbance](figures/svg/steady-state-error-block-diagrams12.svg){#fig-disturbance-example}
+:::
+
+:::{.callout-note collapse="true"} 
+#### Solution
+
+We first use Routh-Hurwitz to check that the TF from $R(s)$ to $Y(s)$ (and therefore the TF from $D(s)$ to $Y(s)$) is stable. The redetails are left as an exercise.
+
+To find the error due to reference tracking, observe that (when $D(s) = 0$), the open loop system has the TF
+$$
+\dfrac{100}{s(s+50)}
+$$
+which is a type 1 system. Since the reference input is a step function, we have
+$$
+e_R(∞) = 0.
+$$
+
+Now, to find $e_D(∞)$, we compute the position constants of the controller and the plant. 
+$$
+K_{1,p} = 100
+\quad\text{and}\quad
+K_{2,p} = ∞.
+$$
+Hence,
+$$
+e_{D}(∞) = \dfrac{1}{\dfrac{1}{K_{2,p}} + K_{1,p}} = \dfrac{1}{100}.
+$$
+
+:::
+
+## Disturbance rejection for non-unity feedback systems
+
+Now consider a system with disturbance and non-unity feedback, as shown in @fig-disturbance-non-unity.
+
+![System with disturbance and non-unity feedback](figures/svg/steady-state-error-block-diagrams13.svg){#fig-disturbance-non-unity}
+
+As before, we can show that
+$$
+E(s) = E_R(s) - E_D(s)
+$$
+where 
+
+- $E_R(s)$ is the same as in the case when no disturbance is present, so we can compute $e_R(∞)$ by evaluating the error constants of 
+  $$
+    G_e(s) = \dfrac{G_1(s)G_2(s)}{1 + G_1(s)G_2(s) \bigl( H(s) - 1\bigr)}
+  $$
+- $E_D(s)$ is given by
+  $$
+    E_D(s) = \dfrac{G_2(s) D(s)}{1 + G_1(s) G_2(s) H(s)}.
+  $$
+  So, we can find $e_D(∞)$ by using the final value theorem on the above expression.
+

@@ -487,6 +487,230 @@ enddef ;
   endgroup;
 \stopMPpage % }}}
 
+\startstackingsteps[{0,1,12,13},{0,12,2},{0,13,3}]
+\startMPpage[offset=1dk,
+stacking={\namedstackingparameter\empty{criterium}}] % {{{ disturbance rejection
+  begingroup;
+  sketchypaths;
+
+  ux := 1cm;
+  uy := 1cm;
+
+  newpair Input, Output, Disturbance;
+
+  boxit.controller("$G_1(s)$");
+  boxit.plant("$G_2(s)$");
+  boxit.negative("$-$");
+
+  circleit.sum_one("\tfc $+$");
+  circleit.sum_two("\tfc $+$");
+
+
+  newpair split_one, feedback_one;
+
+  Input = sum_one.w - (ux,0);
+  sum_one.e = controller.w - (1.5ux,0);
+  controller.e = sum_two.w - (1.5ux,0);
+  sum_two.e = plant.w - (1.5ux,0);
+  plant.e = split_one - (ux,0);
+  split_one = Output - (ux,0); 
+  feedback_one = controller.s - (0, uy);
+
+  negative.c = sum_one.c;
+
+  Disturbance = sum_two.n + (0, 1.5uy);
+  
+  boxes_fixsize(negative,controller, plant, sum_one, sum_two);
+  boxes_fixpos (negative,controller, plant, sum_one, sum_two);
+
+  draw boxes_pic controller shifted controller.c;
+  draw boxes_pic negative shifted negative.c withstacking 2;
+  draw boxes_pic plant shifted plant.c;
+  draw boxes_pic sum_one shifted sum_one.c withstacking 13;
+  draw boxes_pic sum_two shifted sum_two.c withstacking 12;
+
+  for i = 1 upto 5 :
+    sketch_amount := 1.3bp;
+    draw bpath controller cornered 10bp;
+    draw bpath plant cornered 10bp;
+    draw bpath negative cornered 10bp withstacking 2;
+    draw bpath sum_one withstacking 13;
+    draw bpath sum_two withstacking 12;
+
+    sketch_amount := 0.6bp;
+    drawarrow Input -- lft sum_one.w withstacking 13;
+    drawarrow sum_one.e -- lft controller.w withstacking 13;
+    drawarrow controller.e -- lft sum_two.w withstacking 12;
+    drawarrow sum_two.e -- lft plant.w withstacking 12;
+    drawarrow controller.e -- lft plant.w withstacking 3;
+
+    drawarrow plant.e -- Output;
+    drawarrow split_one +- feedback_one -+ bot sum_one.s withstacking 13;
+    drawarrow split_one +- feedback_one -+ bot negative.s withstacking 2;
+    drawarrow negative.e -- lft controller.w withstacking 2;
+    drawarrow Disturbance -- top sum_two.n withstacking 12; 
+  endfor;
+
+  label.ulft("\tfx $+$", sum_one.w + (2bp,2bp)) withstacking 13; 
+  label.lrt("\tfx $-$", sum_one.s + (2bp,0) ) withstacking 13; 
+
+  label.ulft("\tfx $+$", sum_two.w + (2bp,2bp)) withstacking 12; 
+  label.urt("\tfx $+$", sum_two.n + (2bp,0) ) withstacking 12; 
+
+  label.lft("$R(s)$", Input) withstacking 13;
+  label.rt("$Y(s)$", Output) withstacking -1;
+  label.rt("$Y_D(s)$", Output) withstacking 2;
+  label.rt("$Y_R(s)$", Output) withstacking 3;
+  label.top("$D(s)$", Disturbance) withstacking 12;
+
+  currentpicture := currentpicture scaled 1.5;
+
+  endgroup;
+\stopMPpage % }}}
+\stopstackingsteps
+
+\startMPpage[offset=1dk] % {{{ disturbance rejection
+  begingroup;
+  sketchypaths;
+
+  ux := 1cm;
+  uy := 1cm;
+
+  newpair Input, Output, Disturbance;
+
+  boxit.controller("$100$");
+  boxit.plant("$\dfrac{1}{s(s+50)}$");
+
+  circleit.sum_one("\tfc $+$");
+  circleit.sum_two("\tfc $+$");
+
+
+  newpair split_one, feedback_one;
+
+  Input = sum_one.w - (ux,0);
+  sum_one.e = controller.w - (1.5ux,0);
+  controller.e = sum_two.w - (1.5ux,0);
+  sum_two.e = plant.w - (1.5ux,0);
+  plant.e = split_one - (ux,0);
+  split_one = Output - (ux,0); 
+  feedback_one = controller.s - (0, uy);
+
+  Disturbance = sum_two.n + (0, 1.5uy);
+  
+  boxes_fixsize(controller, plant, sum_one, sum_two);
+  boxes_fixpos (controller, plant, sum_one, sum_two);
+
+  draw boxes_pic controller shifted controller.c;
+  draw boxes_pic plant shifted plant.c;
+  draw boxes_pic sum_one shifted sum_one.c;
+  draw boxes_pic sum_two shifted sum_two.c;
+
+  for i = 1 upto 5 :
+    sketch_amount := 1.3bp;
+    draw bpath controller cornered 10bp;
+    draw bpath plant cornered 10bp;
+    draw bpath sum_one;
+    draw bpath sum_two;
+
+    sketch_amount := 0.6bp;
+    drawarrow Input -- lft sum_one.w;
+    drawarrow sum_one.e -- lft controller.w;
+    drawarrow controller.e -- lft sum_two.w;
+    drawarrow sum_two.e -- lft plant.w;
+
+    drawarrow plant.e -- Output;
+    drawarrow split_one +- feedback_one -+ bot sum_one.s;
+    drawarrow Disturbance -- top sum_two.n; 
+  endfor;
+
+  label.ulft("\tfx $+$", sum_one.w + (2bp,2bp)); 
+  label.lrt("\tfx $-$", sum_one.s + (2bp,0) ); 
+
+  label.ulft("\tfx $+$", sum_two.w + (2bp,2bp)); 
+  label.urt("\tfx $+$", sum_two.n + (2bp,0) ); 
+
+  label.lft("$R(s)$", Input);
+  label.rt("$Y(s)$", Output);
+  label.top("$D(s)$", Disturbance);
+
+  currentpicture := currentpicture scaled 1.5;
+
+  endgroup;
+\stopMPpage % }}}
+
+\startMPpage[offset=1dk] % {{{ non-unity feedback disturbance rejection
+  begingroup;
+  sketchypaths;
+
+  ux := 1cm;
+  uy := 1cm;
+
+  newpair Input, Output, Disturbance;
+
+  boxit.controller("$G_1(s)$");
+  boxit.plant("$G_2(s)$");
+  boxit.feedback("$H(s)$");
+
+  circleit.sum_one("\tfc $+$");
+  circleit.sum_two("\tfc $+$");
+
+
+  newpair split_one;
+
+  Input = sum_one.w - (ux,0);
+  sum_one.e = controller.w - (1.5ux,0);
+  controller.e = sum_two.w - (1.5ux,0);
+  sum_two.e = plant.w - (1.5ux,0);
+  plant.e = split_one - (ux,0);
+  split_one = Output - (ux,0); 
+  feedback.n = sum_two.s - (0, 1.5uy);
+
+  Disturbance = sum_two.n + (0, 1.5uy);
+  
+  boxes_fixsize(controller, plant, sum_one, sum_two, feedback);
+  boxes_fixpos (controller, plant, sum_one, sum_two, feedback);
+
+  draw boxes_pic controller shifted controller.c;
+  draw boxes_pic plant shifted plant.c;
+  draw boxes_pic feedback shifted feedback.c;
+  draw boxes_pic sum_one shifted sum_one.c;
+  draw boxes_pic sum_two shifted sum_two.c;
+
+  for i = 1 upto 5 :
+    sketch_amount := 1.3bp;
+    draw bpath controller cornered 10bp;
+    draw bpath plant cornered 10bp;
+    draw bpath feedback cornered 10bp;
+    draw bpath sum_one;
+    draw bpath sum_two;
+
+    sketch_amount := 0.6bp;
+    drawarrow Input -- lft sum_one.w;
+    drawarrow sum_one.e -- lft controller.w;
+    drawarrow controller.e -- lft sum_two.w;
+    drawarrow sum_two.e -- lft plant.w;
+
+    drawarrow plant.e -- Output;
+    drawarrow split_one +- rt feedback.e;
+    drawarrow feedback.w -+ bot sum_one.s;
+    drawarrow Disturbance -- top sum_two.n; 
+  endfor;
+
+  label.ulft("\tfx $+$", sum_one.w + (2bp,2bp)); 
+  label.lrt("\tfx $-$", sum_one.s + (2bp,0) ); 
+
+  label.ulft("\tfx $+$", sum_two.w + (2bp,2bp)); 
+  label.urt("\tfx $+$", sum_two.n + (2bp,0) ); 
+
+  label.lft("$R(s)$", Input);
+  label.rt("$Y(s)$", Output);
+  label.top("$D(s)$", Disturbance);
+
+  currentpicture := currentpicture scaled 1.5;
+
+  endgroup;
+\stopMPpage % }}}
+
 \stoptext
 
 % vim: foldmethod=marker
