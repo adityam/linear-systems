@@ -329,7 +329,7 @@ G(s) = \frac{ω_n^2}{s(s+2 ζ ω_n)}.
 $$
 The closed-loop transfer function of this system is
 $$
-T(s) = \frac{G(s)}{(1 + G(s)} = \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2}.
+T(s) = \frac{G(s)}{(1 + G(s))} = \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2}.
 $$
 In order to find the PM, we first find the gain crossover frequency $ω_{\rm gc}$. We know that $|G(j ω_{\rm gc})| = 1$. Thus,
 $$
