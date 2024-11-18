@@ -493,8 +493,18 @@ $$
 G_e(s) = \frac{ \dfrac{2}{s(s+2)} }{1 + \dfrac{4}{s(s+2)} - \dfrac{2}{s(s+2)}}
 = \frac{2}{s^2 + 2s + 2}.
 $$
+We now check for the location of poles of the error signal.
+$$
+  E(s) = \frac{R(s)}{1 + G_e(s)} = R(s) \frac{2}{s^2 + 2s + 4}.
+$$
+We use the Routh Hurwitz criterion to check the location of poles of the denominator
+```{julia}
+#| html-table-processing: none
+RouthArray([1,2,4], details=false) |> first
+```
+Since there are no sign changes, $E(s)$ has no poles in the ORHP. So we can determine the steady state error using error constants.
 
-Thus, the equivalent system is a type 0 system with 
+The equivalent system is a type 0 system with 
 $$
 K_p = \lim_{s \to 0} G(s) = 1,
 \quad
@@ -595,7 +605,16 @@ Find the steady-state error for the system shown in @fig-disturbance-example whe
 :::{.callout-note collapse="true"} 
 #### Solution
 
-We first use Routh-Hurwitz to check that the TF from $R(s)$ to $Y(s)$ (and therefore the TF from $D(s)$ to $Y(s)$) is stable. The redetails are left as an exercise.
+We first use Routh-Hurwitz to check that the TF from $R(s)$ to $Y(s)$ (and therefore the TF from $D(s)$ to $Y(s)$) is stable. The denominator of both the systems are the same, so we verify only one of them. The error signal is
+$$
+  E(s) = \frac{R(s)}{1 + G_1(s)G_2(s)} = R(s) \frac{100}{s^2 + 50s + 100}.
+$$
+We use the Routh Hurwitz criterion to check the location of poles of the denominator
+```{julia}
+#| html-table-processing: none
+RouthArray([1,50,100], details=false) |> first
+```
+Since there are no sign changes, $E(s)$ has no poles in the ORHP. So we can determine the steady state error using error constants.
 
 To find the error due to reference tracking, observe that (when $D(s) = 0$), the open loop system has the TF
 $$
