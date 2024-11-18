@@ -32,6 +32,7 @@ current_colors = theme_palette(current_theme)
 theme(current_theme)
 default(linewidth=2)
 
+include("scripts/routh-hurwitz.jl")
 ```
 
 **Steady-state error** is the difference between the input (or reference) and the output for a prescribed test input as $t \to ∞$. We are typically interested in the following test signals shown below:
@@ -91,7 +92,7 @@ SignalPlot(parabola_points,
 |:-----:|:--------------:|:------:|:------:|
 | Step input | Constant position | $\IND(t)$ | $\dfrac 1{s}$ | 
 | Ramp input | Constant velocity | $t\IND(t)$ | $\dfrac 1{s^2}$ | 
-| Parabola input | Constant acceleration | $\frac 12 t^2 \IND(t)$ | $\dfrac 1{s^2}$ | 
+| Parabola input | Constant acceleration | $\frac 12 t^2 \IND(t)$ | $\dfrac 1{s^3}$ | 
 
 Since we are interested in steady state errors, we restrict attention to stable systems. The formulas that we derive **will not be applicable to unstable systems**.
 
@@ -103,7 +104,7 @@ Consider a system with input $r(t)$, TF $T(s)$ and output $y(t)$. The steady sta
 $$
   e(t) = r(t) - y(t).
 $$
-We assume that $T(s)$ is stable. Therefore, from the final value theorem, we have
+We assume that $T(s)$ is stable. Therefore, from the final value theorem (see below), we have
 $$ 
 e(∞) = \lim_{t \to ∞} e(t) = \lim_{s \to 0} s E(s)
 $$
@@ -117,6 +118,21 @@ $$
 {e(∞) = \lim_{s \to 0} s R(s) (1 - T(s))}
 $$
 
+:::{.callout-important}
+### The Final Value Theorem
+
+Consider a signal $x(t)$ with Laplace transform $X(s)$. Suppose every pole of $F(s)$ is either in the open left hand plane or at origin, then
+$$
+  \lim_{t \to ∞} x(t) = \lim_{s \to 0} s X(s).
+$$
+
+1. If $X(s)$ has more than one pole at origin, then the above formula is still correct but $x(∞)$ will converge to $\pm \infty$. See [Chen et al (2007)](https://doi.org/10.1109/MCS.2007.365008) for details.
+2. If $X(s)$ has poles in the ORHP, then $x(∞)$ does not exist.
+
+Thus, for our purposes, in order to apply the final value theorem, we need to make sure that $1 - T(s)$ has no poles in the ORHP. Typically, $1 - T(s)$ will have the same denominator as $T(s)$, so we simply check if the system $T(s)$ has no poles in the ORHP.
+
+:::
+
 :::{#exr-steady-state-error-open-loop}
 Find the steady-state error of the open loop system with TF
 $$
@@ -127,26 +143,12 @@ to a step input.
 
 :::{.callout-note collapse="true"} 
 #### Solution
-We first check if the open loop system is stable. From Routh Hurwitz criteria we have
+We first check if the system has no poles in the ORHP. From Routh Hurwitz criteria we have
 
-<table class="routharray" align="center">
-<tr>
-  <td> $s^2$ </td>
-  <td> 1 </td>
-  <td> 15 </td>
-</tr>
-<tr>
-  <td> $s^1$ </td>
-  <td> 3 </td>
-  <td>   </td>
-</tr>
-<tr>
-  <td> $s^0$ </td>
-  <td> 44/3 </td>
-  <td>   </td>
-</tr>
-</table>
-
+```{julia}
+#| html-table-processing: none
+RouthArray([1,3,15], normalize=false) |> first
+```
 Since all entries in the first column are positive, the system is stable. Therefore, we have
 $$
   e(∞) = \lim_{s \to 0} s R(s) (1 - T(s)) 
@@ -279,6 +281,17 @@ Therefore, we have the following:
 | 1 | 0 | $∞$ |
 | 2 | finite | $\dfrac{1}{K_a}$ |
 
+### Note about stability
+
+Recall that in order to apply the final value theorem, the error signal must satisfy the conditions of the theorem: $E(s)$ should have no poles in the ORHP.
+
+The error signal is
+$$
+  E(s) = s R(s)[ 1 - T(s)] = \frac{s R(s)}{1 + G(s)}
+$$
+Thus, to ensure that the steady state error is finite, we must have that the denominator of $E(s)$ (or equivalently, the denominator of the closed loop transfer function $T(s)$) should have no poles in the ORHP.
+
+
 ### Summary
 
 In summary, the steady-state error of different types of system for different types of inputs is shown in @tbl-summary
@@ -305,7 +318,16 @@ Find the steady state errors to step, ramp, and parabola inputs.
 :::{.callout-note collapse="true"} 
 #### Solution
 
-We first use Routh-Hurwitz to verify that the closed loop system is stable (left as an exercise). 
+We first use Routh-Hurwitz to verify that the closed loop system has no poles in the ORHP. Observe that
+$$
+  E(s) = \frac{R(s)}{1 + G(s)} = R(s) \frac{100(s+3)}{s^2 + 107 s + 306}.
+$$
+We use the Routh Hurwitz criterion to check the location of poles of the denominator
+```{julia}
+#| html-table-processing: none
+RouthArray([1,107,306], details=false) |> first
+```
+Since there are no sign changes, $E(s)$ has no poles in the ORHP. So we can determine the steady state error using error constants.
 
 Note that $G(s)$ is a type 0 system. Therefore,
 $$
@@ -336,9 +358,18 @@ Find the steady state errors to step, ramp, and parabola inputs.
 :::{.callout-note collapse="true"} 
 #### Solution
 
-We first use Routh-Hurwitz to verify that the closed loop system is stable (left as an exercise). 
+We first use Routh-Hurwitz to verify that the closed loop system has no poles in the ORHP. Observe that
+$$
+  E(s) = \frac{R(s)}{1 + G(s)} = R(s) \frac{100(s+3)}{s^3 + 7s^2 + 106 s + 300}.
+$$
+We use the Routh Hurwitz criterion to check the location of poles of the denominator
+```{julia}
+#| html-table-processing: none
+RouthArray([1,7,106,300], details=false) |> first
+```
+Since there are no sign changes, $E(s)$ has no poles in the ORHP. So we can determine the steady state error using error constants.
 
-Note that $G(s)$ is a type 0 system. Therefore,
+Note that $G(s)$ is a type 1 system. Therefore,
 $$
 K_p =  ∞,
 \quad
@@ -379,7 +410,17 @@ $$
 Thus,
 $$ K_v \ge 10 \implies K \ge 40. $$
 
-We will also need to find the values of $K$ for which the closed loop system is stable. That is left as an exercise. 
+We will also need to find the values of $K$ for which the error signal has no poles in the ORHP. Recall that the error signal is
+$$
+ E(s) = \frac{R(s)}{1 + G(s)} = R(s) \frac{K(s+5)}{s^3 + 12 s^2 + (20 + K)s + 5K}.
+$$
+We use the Routh Hurwitz criterion to check the location of poles of the denominator
+```{julia}
+#| html-table-processing: none
+@variables K
+RouthArray([1,12,20+K,5K], details=true) |> first
+```
+For the system to be stable, there should be no sign changes in the first column, which is the case for $K \ge 40$.
 
 We now test if the specified value of the gain works.
 
