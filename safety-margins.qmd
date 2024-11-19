@@ -34,7 +34,7 @@ The reason that GM and PM are used as a proxy is that a minimal phase system is 
 using Revise
 using DataFrames
 
-using ControlSystems, StatsPlots, LaTeXStrings
+using ControlSystems, StatsPlots, LaTeXStrings, Hyperscript, Printf
 
 include("julia/bode.jl")
 
@@ -350,7 +350,7 @@ $$
 {\begin{align*}
 \text{PM} &= 180 + \angle G(j ω_{\rm gc}) 
 = 90 - \tan^{-1} \frac{ω_{\rm gc}}{2 ζ ω_n }
-= \tan^{-1} \frac{2 ζ ω_n}{ω_{\rm rc}}
+= \tan^{-1} \frac{2 ζ ω_n}{ω_{\rm gc}}
 \\
 &= \tan^{-1} \frac{2 ζ}{ \sqrt{ -2 ζ^2 + \sqrt{1 + 4 ζ^4} } }.
 \end{align*}}
@@ -391,4 +391,17 @@ Plot.plot({
 
 ::: {#exm-PM-from-daming}
 Find the PM needed to ensure that the percentage overshoot is less than 10%.
+:::
+
+:::{.callout-note collapse="true"} 
+### Solution
+
+For percentage overshoot to be less than 10%, the damping coefficient must be larger than
+```{julia}
+OS = 0.1
+ζ  = -log(0.1)/sqrt(pi^2 + log(0.1)^2)
+div = m("div")
+div(["\$\$ζ = \\frac{- \\ln(\\%{\\rm OS}/100)}{\\sqrt{π^2 + \\ln^2(\\%{\\rm OS}/100)}} = ", @sprintf("%0.4f", ζ), "\$\$"])
+```
+Looking at @fig-pm-from-damping, we see that $ζ \ge 0.59$ corresponds to $\text{PM} \ge 60^∘$. Thus, we need a PM of at least $60^∘$.
 :::
