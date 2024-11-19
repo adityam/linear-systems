@@ -181,8 +181,8 @@ function get_yticks(df, col, step, suffix)
 
     return (yticks, ylabels)
 end
-    
-function get_xticks(df)
+
+function get_xticks(df; step=1, format=xtick->L"10^{%$xtick}")
     col = :log10ω
     step = 1
     data_max = maximum(df[!, col])
@@ -190,7 +190,7 @@ function get_xticks(df)
     xticks = range(floor(Int, data_min/step)*step,
                    ceil(Int, data_max/step)*step,
                    step=step) |> collect
-    xlabels = [L"10^{%$xtick}" for xtick in xticks]
+    xlabels = [format(xtick) for xtick in xticks]
 
     return (xticks, xlabels)
 end
