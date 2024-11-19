@@ -88,7 +88,7 @@ Upon the successful completion of this course, the student students will have de
 | 10   | [System type, steady state error, and disturbance rejection](steady-state-errors.qmd) <br /> _Reading_: Nise Ch. 7|
 | 11   | [Bode and Nyquist Plots](bode-and-nyquist.qmd) <br /> _Reading_: Nise Ch. 10 |
 | 12   | [Nyquist stability criterion](nyquist-stability.qmd), [gain and phase margins](safety-margins.qmd) <br /> _Reading_: Nise Ch. 10 |
-| 13   | Lead-Lag compensators
+| 13   | [Lead-Lag compensators](lead-lag-compensators.qmd) <br /> _Reading_: Nise Ch. 11 |
 
 : {tbl-colwidths="[10,90]" .striped}
 
