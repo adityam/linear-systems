@@ -270,7 +270,7 @@ Now let's go back to our feedback control system:
 
 ![A feedback control system](figures/svg/steady-state-error-block-diagrams4.svg){#fig-feedback-2}
 
-Consider the TF $1 + GH$. For example, for $G(s) 1/(s+2)$ and $H(s) = 1$, the map of $1 + GH = 1 + 1/(s+2)$ is shown in @fig-nyquist
+Consider the TF $1 + GH$. For example, for $G(s) = 1/(s+2)$ and $H(s) = 1$, the map of $1 + GH = 1 + 1/(s+2)$ is shown in @fig-nyquist
 
 ```{julia}
 #| label: fig-nyquist
@@ -389,7 +389,7 @@ for different values of $K$.
 :::{.callout-note collapse="true"} 
 #### Condition for stability
 
-From observation we not that system $GH$ is stable and $P = 0$. Thus, for stability (i.e., $Z = 0$), we want $N = 0$, i.e., the Nyquist plot should have **zero** encirclements of $-1$.
+From observation we know that system $GH$ is not stable and $P = 1$. Thus, for stability (i.e., $Z = 0$), we want $N = -1$, i.e., the Nyquist plot should have **one counter-clockwise** encirclement of $-1$.
 
 :::
 
