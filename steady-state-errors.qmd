@@ -32,7 +32,7 @@ current_colors = theme_palette(current_theme)
 theme(current_theme)
 default(linewidth=2)
 
-include("scripts/routh-hurwitz.jl")
+include("julia/routh-hurwitz.jl")
 ```
 
 **Steady-state error** is the difference between the input (or reference) and the output for a prescribed test input as $t \to ∞$. We are typically interested in the following test signals shown below:

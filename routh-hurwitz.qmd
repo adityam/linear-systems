@@ -28,10 +28,9 @@ Consider a unity feedback system as shown in @fig-feedback. In such a setting, w
 
 using Revise
 
-include("scripts/routh-hurwitz.jl")
+include("julia/routh-hurwitz.jl")
 
 ```
-
 
 :::{#exm-PI}
 Consider the system shown in @fig-feedback with
