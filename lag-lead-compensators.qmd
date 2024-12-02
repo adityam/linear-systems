@@ -1,0 +1,235 @@
+---
+title: Lag-lead compensators
+
+execute:
+  echo: false
+  freeze: true
+  cache: true
+aliases:
+  - lead-lag-compensators.html
+---
+
+In this section, we study a class of frequency domain controllers known as the lead-lag compensators. To get intution, we start with the simplest form of controllers: the proportional controller. 
+
+```{julia}
+#| output: false
+# Install packages
+
+# using Pkg; Pkg.activate(".")
+# for pkg in ["IJulia", "Revise", "ControlSystems", "Plots", "StatsPlots", "LaTeXStrings", "DataFrames", "JSON"]
+#    Pkg.add(pkg)
+# end
+# 
+# # Installing Jupyter Cache
+# Pkg.add("Conda")
+# using Conda
+# Conda.add("jupyter-cache")
+
+using Revise
+using DataFrames
+
+using ControlSystems, StatsPlots, LaTeXStrings
+
+include("julia/bode.jl")
+
+current_theme = :bright
+current_colors = theme_palette(current_theme)
+theme(current_theme)
+default(linewidth=2)
+
+```
+
+## Improving transient response via gain adjustment
+
+:::{#exm-gain-adjustment}
+Consider the open-loop transfer function 
+$$
+G(s) = \frac{1000}{s(s+10)}.
+$$
+Find the value of gain $K$ such that the gain adjusted system $KG(s)$ has a PM of $45 ^∘$. 
+:::
+
+:::{.callout-note collapse="false"} 
+### Solution
+
+::: {.panel-tabset}
+### Original PM
+
+We first calculate the PM of the system
+
+```{julia}
+G = zpk([], [0,-10], 1000.0)
+bp = bodeplot_SL(G)
+
+plt1 = @df bp plot(:log10ω, :gain,  title="Gain plot")
+plot!(plt1, xticks=get_xticks(bp), yticks=get_yticks(bp, :gain, 20, " dB"), legend=false)
+hline!(plt1, [0], linestyle=:dash, linewidth=1)
+
+plt2 = @df bp plot(:log10ω, :phase, title="Phase plot")
+plot!(plt2, xticks=get_xticks(bp), yticks=get_yticks(bp, :phase, 45, "°"), legend=false)
+hline!(plt2, [-180], linestyle=:dash, linewidth=1)
+
+# GM-calculations
+ω_pc = phase_crossover(bp)
+
+if (!isnothing(ω_pc))
+  scatter!(plt2, [ω_pc], [-180], color=current_colors[4])
+  vline!(plt1, [ω_pc], linestyle=:dashdotdot, linewidth=1, color=current_colors[4]) 
+  vline!(plt2, [ω_pc], linestyle=:dashdotdot, linewidth=1, color=current_colors[4]) 
+
+  G, _ = get_value(bp, ω_pc)
+  plot!(plt1, [ω_pc, ω_pc], [0, G], color=current_colors[4])
+  annotate!(plt1, ω_pc + 0.05, G/2, text("GM", :left, 8, current_colors[4]))
+end
+
+# PM-calculations
+ω_gc = gain_crossover(bp)
+
+if (!isnothing(ω_gc))
+  scatter!(plt1, [ω_gc], [0], color=current_colors[3])
+  vline!(plt1, [ω_gc], linestyle=:dashdotdot, linewidth=1, color=current_colors[3]) 
+  vline!(plt2, [ω_gc], linestyle=:dashdotdot, linewidth=1, color=current_colors[3]) 
+
+  _, Φ = get_value(bp, ω_gc)
+  plot!(plt2, [ω_gc, ω_gc], [-180, Φ], color=current_colors[3])
+  annotate!(plt2, ω_gc - 0.05, (Φ - 180)/2, text("PM", :right, 8, current_colors[3]))
+end
+
+plot(plt1, plt2, layout=(2,1))
+```
+
+From the plot, we can see that the gain plot intersects the 0dB line at $ω = 10\sqrt{10}$ (the green circle). Thus, $ω_{\rm gc} = 10\sqrt{10}$ rad/s. At $ω_{\rm gc} = 10\sqrt{10}$, we have $\angle G(j ω_{\rm gc}) = -157.5 ^∘$. Thus, $\text{PM} = 180 ^∘ - 157.5 ^∘ = 22.5 ^∘$.
+
+### Desired PM
+
+```{julia}
+plt1 = @df bp plot(:log10ω, :gain,  title="Gain plot")
+plot!(plt1, xticks=get_xticks(bp), yticks=get_yticks(bp, :gain, 20, " dB"), legend=false)
+hline!(plt1, [0], linestyle=:dash, linewidth=1)
+
+plt2 = @df bp plot(:log10ω, :phase, title="Phase plot")
+plot!(plt2, xticks=get_xticks(bp), yticks=get_yticks(bp, :phase, 45, "°"), legend=false)
+hline!(plt2, [-180], linestyle=:dash, linewidth=1)
+
+# Desired PM
+ωd_gc = 1.0 # gain_crossover(bp)
+
+if (!isnothing(ωd_gc))
+  G, Φ = get_value(bp, ωd_gc)
+
+  vline!(plt1, [ωd_gc], linestyle=:dashdotdot, linewidth=1, color=current_colors[5]) 
+  vline!(plt2, [ωd_gc], linestyle=:dashdotdot, linewidth=1, color=current_colors[5]) 
+
+  hline!(plt2, [-135], linestyle=:dashdotdot, linewidth=1, color=current_colors[5]) 
+
+  plot!(plt2, [ωd_gc, ωd_gc], [-180, Φ], color=current_colors[5])
+  annotate!(plt2, ωd_gc - 0.05, (Φ - 180)/2, text("desired PM", :right, 8, current_colors[5]))
+
+  plot!(plt1, [ωd_gc, ωd_gc], [0, G], color=current_colors[5])
+  annotate!(plt1, ωd_gc - 0.05, G/2, text("required gain compensation", :right, 8, current_colors[5]))
+
+  scatter!(plt1, [ωd_gc], [G], color=current_colors[5])
+end
+
+plot(plt1, plt2, layout=(2,1))
+```
+
+The desired PM is $45 ^∘$. For that, we want the phase at the gain crossover frequency to be $-180 ^∘ + 45 ^∘ = -135 ^∘$ (the cyan horizontal line). So the desired gain crossover frequency is $ω^d_{\rm gc} = 10$ rad/s. 
+
+For that to happen, we need a **gain compensation** equal to 20dB, so that the cyan point in the gain plot becomes the new gain crossover frequency.
+
+Thus, we need a gain compensation of $K = -20 \text{dB} = \dfrac{1}{10}$. 
+
+:::
+:::
+
+The gain adjustment procedure can be summarized as follows:
+
+1. Draw the Bode plot (both gain and phase plots).
+2. Find the frequence $ω^d_{\rm gc}$ on the phase plot that gives the desired PM.
+3. Add a **gain compensation** $K$ of $-20\log| G(ω^d_{\rm gc})|$
+
+Then, the system $KG(s)$ has a PM equal to the desired PM. The drawback is that the above procedure changes the error constant of the system. For instance, in @exm-gain-adjustment, gain adjustment changes the velocity constant from $K_v = 100$ to $K_v = 10$. 
+
+In the rest of the section, we design two forms of **compensators** that allow us to change the PM without an impact on the error constants.
+
+## Lag Compensator
+
+The primary function of a lag compensator is to provide attentuation in the high-frequency range to give a system sufficient phase margin. The general form of the lag compensator is
+$$
+KG_c(s) = K \cdot \frac {1}{α} \cdot \frac{s + \dfrac{1}{T}}{s + \dfrac{1}{αT}},
+\quad α > 1.
+$$
+The lag compesnator is parameterized controller with three tunable parameters: $K$, $T$, and $α$. The Bode plot of $G_c(s)$ for $α = 10$ is shown in @fig-lag. Typically, we use this to design a compensator for type-1 system to meet requirements that can be translated in terms of phase margin and velocity constant. 
+
+```{julia}
+#| fig-cap: Bode plot of $G_c(s)$ for $α = 10$
+#| label: fig-lag
+
+α = 10.0
+G = zpk([-1], [-1/α], 1/α)
+bp = bodeplot_SL(G)
+format(xtick) = L"\dfrac{%$(exp10(xtick))}{T}"
+
+plt1 = @df bp plot(:log10ω, :gain,  title="Gain plot")
+plot!(plt1, xticks=get_xticks(bp, format=format), yticks=get_yticks(bp, :gain, 20, " dB"), legend=false)
+
+plt2 = @df bp plot(:log10ω, :phase, title="Phase plot")
+plot!(plt2, xticks=get_xticks(bp, format=format), yticks=get_yticks(bp, :phase, 45, "°"), legend=false)
+
+plot(plt1, plt2, layout=(2,1))
+```
+
+Given a desired velocity constant and phase margin, we choose the parameters $K$, $T$, and $α$ of the lag-compensator as follows:
+
+1. **Determine gain $K$ to achieve the desired error constant.**
+
+   Note that $G_c(s)$ can be written as 
+   $$
+    G_c(s) = \frac{1}{α} \cdot \frac{s + \dfrac{1}{T}}{s + \dfrac{1}{αT}}
+    = \frac{1 + sT}{1 + s α T}
+   $$
+   which is a normalized transfer function with unity gain. Thus, $G_c(s)$ does not provide any gain compensation at low frequency. Therefore, it has no impact on the error constants. 
+
+   Thus,
+   $$
+   \bbox[5pt,border: 1px solid]
+   {\text{Error constant of $KG_c(s)G(s)$}}
+   = \bbox[5pt,border: 1px solid]
+   {K \cdot \text{Error constant of $G(s)$}}
+   $$
+
+2. **Determine the target phase margin and the desired gain crossover frequency.**
+
+   Consider the **gain compensated system** $H(s) = KG(s)$ and check if $H(s)$ has the desired PM. If so, we are done and don't really need the compensator $G_c(s)$. But typically the gain compensated system $H(s)$ will not have the desired PM. In that case, we choose
+   $$
+   \text{target PM} = \text{desired PM} + \text{($5 ^∘$ to $12 ^∘$)}.
+   $$
+   
+   The reason that we add $5 ^∘$ to $12 ^∘$ to the PM is because we will follow a crude method to design a lag compensator. The $5 ^∘$ to $12 ^∘$ is a safety margin. We target something higher so that even if we don't achieve the target PM, we hope that we may at least achieve the desired PM. In this course, we will always take the safety margin to be $12 ^∘$. 
+
+   Now, we look at the phase plot of $H(s)$, which is the same as the phase plot of $G(s)$, and find the **desired gain crossover frequency** $ω^d_{\rm gc}$ such that
+   $$
+     \angle H(j ω^d_{\rm gc}) = - 180 + \text{target PM}.
+   $$
+   We want that at this frequency the gain plot of $H(s)$ should pass through the 0dB line.
+
+3. **Determine the zero (and thus the value of $T$).**
+
+   Look at the Bode plot of @fig-lag. Observe that at frequencies above $10/T$, the lag compensator $G_c(s)$ has negligible phase, but provides a gain attentuation of $-20 \log α$ dB. So, we choose
+   $$
+    \dfrac{10}{T} = ω^d_{\rm gc}.
+   $$
+   With this choice, we have
+   $$
+    \angle G_c(j ω^d_{\rm gc})H(j ω^d_{\rm gc})
+    \approx
+    \angle H(j ω^d_{\rm gc}).
+   $$
+   The above relationship is an approximation rather than an equality because we are using the straight line approximations for the phase plot. In reality, the phase of $G_c(j ω^d_{\rm gc})$ at $10/T$ is not exactly zero. This was one of the reasons that we added a safety margin of $5 ^∘$ to $12 ^∘$. 
+
+4. **Determine the attentuation needed to be $ω^d_{\rm gc}$ the gain crossover frequency**
+
+    Since $H(s)$ did not have the desired PM (in step 2), it must be the case that $| H(j ω^d_{\rm gc}) |_{\rm dB} \ge 0\, {\rm dB}$. We choose $α$ such that
+    $$| H(j ω^d_{\rm gc}) |_{dB} - 20 \log α = 0. $$
+    This ensures that $|G_c(j ω^d_{\rm gc}) H(j ω^d_{\rm gc}|_{\rm dB} \approx 0\,{\rm dB}$. Therefore, the PM of $K G_c(s) G(s)$ is approximately the target PM. In practise, we are slightly off because both the gain and the phase plots were approximations. 
