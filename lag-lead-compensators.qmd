@@ -16,7 +16,7 @@ In this section, we study a class of frequency domain controllers known as the l
 # Install packages
 
 # using Pkg; Pkg.activate(".")
-# for pkg in ["IJulia", "Revise", "ControlSystems", "Plots", "StatsPlots", "LaTeXStrings", "DataFrames", "JSON"]
+# for pkg in ["IJulia", "Revise", "ControlSystems", "Plots", "StatsPlots", "LaTeXStrings", "DataFrames", "JSON", "Markdown"]
 #    Pkg.add(pkg)
 # end
 # 
@@ -28,7 +28,7 @@ In this section, we study a class of frequency domain controllers known as the l
 using Revise
 using DataFrames
 
-using ControlSystems, StatsPlots, LaTeXStrings
+using ControlSystems, StatsPlots, LaTeXStrings, Printf, Markdown
 
 include("julia/bode.jl")
 
@@ -90,9 +90,9 @@ if (!isnothing(ω_gc))
   vline!(plt1, [ω_gc], linestyle=:dashdotdot, linewidth=1, color=current_colors[3]) 
   vline!(plt2, [ω_gc], linestyle=:dashdotdot, linewidth=1, color=current_colors[3]) 
 
-  _, Φ = get_value(bp, ω_gc)
-  plot!(plt2, [ω_gc, ω_gc], [-180, Φ], color=current_colors[3])
-  annotate!(plt2, ω_gc - 0.05, (Φ - 180)/2, text("PM", :right, 8, current_colors[3]))
+  _, φ = get_value(bp, ω_gc)
+  plot!(plt2, [ω_gc, ω_gc], [-180, φ], color=current_colors[3])
+  annotate!(plt2, ω_gc - 0.05, (φ - 180)/2, text("PM", :right, 8, current_colors[3]))
 end
 
 plot(plt1, plt2, layout=(2,1))
@@ -115,15 +115,15 @@ hline!(plt2, [-180], linestyle=:dash, linewidth=1)
 ωd_gc = 1.0 # gain_crossover(bp)
 
 if (!isnothing(ωd_gc))
-  G, Φ = get_value(bp, ωd_gc)
+  G, φ = get_value(bp, ωd_gc)
 
   vline!(plt1, [ωd_gc], linestyle=:dashdotdot, linewidth=1, color=current_colors[5]) 
   vline!(plt2, [ωd_gc], linestyle=:dashdotdot, linewidth=1, color=current_colors[5]) 
 
   hline!(plt2, [-135], linestyle=:dashdotdot, linewidth=1, color=current_colors[5]) 
 
-  plot!(plt2, [ωd_gc, ωd_gc], [-180, Φ], color=current_colors[5])
-  annotate!(plt2, ωd_gc - 0.05, (Φ - 180)/2, text("desired PM", :right, 8, current_colors[5]))
+  plot!(plt2, [ωd_gc, ωd_gc], [-180, φ], color=current_colors[5])
+  annotate!(plt2, ωd_gc - 0.05, (φ - 180)/2, text("desired PM", :right, 8, current_colors[5]))
 
   plot!(plt1, [ωd_gc, ωd_gc], [0, G], color=current_colors[5])
   annotate!(plt1, ωd_gc - 0.05, G/2, text("required gain compensation", :right, 8, current_colors[5]))
@@ -163,11 +163,12 @@ $$
 The lag compesnator is parameterized controller with three tunable parameters: $K$, $T$, and $α$. The Bode plot of $G_c(s)$ for $α = 10$ is shown in @fig-lag. Typically, we use this to design a compensator for type-1 system to meet requirements that can be translated in terms of phase margin and velocity constant. 
 
 ```{julia}
-#| fig-cap: Bode plot of $G_c(s)$ for $α = 10$
+#| fig-cap: Bode plot of $G_c(s)$ for $α = 10$. Now that at $ω = 10/T$ (the green dot), the phase has returned back to zero.
 #| label: fig-lag
 
 α = 10.0
-G = zpk([-1], [-1/α], 1/α)
+T = 1.0
+G = zpk([-1/T], [-1/(α*T)], 1/α)
 bp = bodeplot_SL(G)
 format(xtick) = L"\dfrac{%$(exp10(xtick))}{T}"
 
@@ -176,6 +177,11 @@ plot!(plt1, xticks=get_xticks(bp, format=format), yticks=get_yticks(bp, :gain, 2
 
 plt2 = @df bp plot(:log10ω, :phase, title="Phase plot")
 plot!(plt2, xticks=get_xticks(bp, format=format), yticks=get_yticks(bp, :phase, 45, "°"), legend=false)
+
+ωd_gc = log10(10.0/T)
+G, φ = get_value(bp, ωd_gc)
+scatter!(plt1, [ωd_gc], [G], color=current_colors[3])
+scatter!(plt2, [ωd_gc], [φ], color=current_colors[3])
 
 plot(plt1, plt2, layout=(2,1))
 ```
@@ -216,7 +222,7 @@ Given a desired velocity constant and phase margin, we choose the parameters $K$
 
 3. **Determine the zero (and thus the value of $T$).**
 
-   Look at the Bode plot of @fig-lag. Observe that at frequencies above $10/T$, the lag compensator $G_c(s)$ has negligible phase, but provides a gain attentuation of $-20 \log α$ dB. So, we choose
+   Look at the Bode plot of @fig-lag. Observe that at frequencies above $10/T$ (the green dot in the plot), the lag compensator $G_c(s)$ has negligible phase, but provides a gain attentuation of $-20 \log α$ dB. So, we choose
    $$
     \dfrac{10}{T} = ω^d_{\rm gc}.
    $$
@@ -233,3 +239,169 @@ Given a desired velocity constant and phase margin, we choose the parameters $K$
     Since $H(s)$ did not have the desired PM (in step 2), it must be the case that $| H(j ω^d_{\rm gc}) |_{\rm dB} \ge 0\, {\rm dB}$. We choose $α$ such that
     $$| H(j ω^d_{\rm gc}) |_{dB} - 20 \log α = 0. $$
     This ensures that $|G_c(j ω^d_{\rm gc}) H(j ω^d_{\rm gc}|_{\rm dB} \approx 0\,{\rm dB}$. Therefore, the PM of $K G_c(s) G(s)$ is approximately the target PM. In practise, we are slightly off because both the gain and the phase plots were approximations. 
+
+:::{#exm-lag-lead}
+Consider the open loop system
+$$
+G(s) = \dfrac{100}{s(s+10)(s+100)}.
+$$
+Suppose we want a PM of $60 ^∘$ and a velocity constant of $K_v = 100$. Design a lag compensator that meets this specificiation.
+:::
+
+:::{.callout-note collapse="false"} 
+### Solution
+
+As a first step, we draw the Bode plot of $G(s)$. First we normalize the numerator and the denominator:
+$$ G(s) = \frac{1}{10} \cdot \frac{1}{s \Bigl( 1 + \dfrac{s}{10} \Bigr)
+  \Bigl( 1 + \dfrac{s}{100} \Bigr)}.
+$$
+The correponding Bode plot is shown in @fig-example.
+
+```{julia}
+#| fig-cap: Bode plot for $G(s)$ of @exm-lag-lead.
+#| label: fig-example
+
+G = zpk([], [0,10,100.], 100.)
+bp = bodeplot_SL(G)
+
+plt1 = @df bp plot(:log10ω, :gain,  title="Gain plot")
+plot!(plt1, xticks=get_xticks(bp), yticks=get_yticks(bp, :gain, 20, " dB"), legend=false)
+
+plt2 = @df bp plot(:log10ω, :phase, title="Phase plot")
+plot!(plt2, xticks=get_xticks(bp), yticks=get_yticks(bp, :phase, 45, "°"), legend=false)
+
+plot(plt1, plt2, layout=(2,1))
+```
+
+We now follow the steps to find $K$, $T$, and $α$ parameters of the lag compensator. 
+
+1. **Determine $K$**
+
+    Observe that the initial $-20$ dB line crosses the $0$ dB line at $ω = 0.1$. Thus, the velocity constant of $G(s)$ is $0.1$. [We could have obtained this from the expression of the normalized TF as well]. The desrived velocity constant is $K_v = 100$. Thus, we want
+    $$
+    K = \dfrac{\text{desired $K_v$}}{\text{current $K_v$}} = \frac{100}{0.1} = 1000 = 60\,{\rm dB}.
+    $$
+
+    For the next parts, we will consider the gain-compensated transfer function $H(s) = KG(s)$. The magnitude plot of $H(s)$ is the similar to the magnitude plot of $G(s)$ but is shifted up by $20 \log K = 60$ dB. The phase plot is $H(s)$ is the same as the phase plot of $G(s)$. 
+
+2. **Determine $1/T$.**
+
+    The desired phase margin is $60 ^∘$. So, we set
+    $$\text{target PM} = 60 ^∘ + 12 ^∘ = 72 ^∘. $$
+    So, we need to find the frequency $ω^d_{\rm gc}$ on the phase plot of $H(s)$ such that
+    $$
+    \angle H(j ω^d_{\rm gc}) = - 180 ^∘ + 72 ^∘ = -108 ^∘.
+    $$
+
+    From @fig-example, we can see that $ω^d_{\rm gc} \in (1, 10)$. From the straight line approximation plot, we have that
+    $$
+    \frac{P_1 - P_{ω}}{\log 1 - \log ω^d_{\rm gc}} = -45 ^∘
+    $$
+
+    ```{julia}
+    #| output: asis
+    plt2 = @df bp plot(:log10ω, :phase, title="Phase plot")
+    plot!(plt2, xticks=get_xticks(bp), yticks=get_yticks(bp, :phase, 45, "°"), legend=false)
+
+    ωd_gc = 0.4
+    G, φ = get_value(bp, ωd_gc)
+    hline!(plt2, [φ], linestyle=:dashdotdot, linewidth=1, color=current_colors[5]) 
+    vline!(plt2, [ωd_gc], linestyle=:dashdotdot, linewidth=1, color=current_colors[5]) 
+    scatter!(plt2, [ωd_gc], [φ], color=current_colors[5])
+    ```
+
+    Thus,
+    $$
+    \log ω^d_{\rm gc} = \log 1 + \frac{P_1 - P_{ω}}{45 ^∘} 
+    = \frac{-90 + 108}{45} = \frac{18}{45} = \frac{2}{5} 
+    = 0.4.
+    $$
+    Thus, 
+    $$ω^d_{\rm gc} = 2.5119.$$
+
+
+    Finally, we choose 
+    $$
+    \frac{10}{T} = ω^d_{\rm gc} 
+    \implies
+    \frac{1}{T} = 0.25119.
+    $$
+
+3. **Determining $α$**
+
+    Now we look at the magnitude plot of $H(s)$ and compute $| H(j ω^{d}_{\rm gc})|$. Recall that the magnitude plot of $H(s)$ is equal to the magnitude plot of $G(s)$ shifted up by $60$ dB (which is $20\log K$). Thus, we have
+    $$
+      | H(j ω) |_{\rm dB} = | G(j ω)|_{\rm dB} + 60.
+    $$
+
+    From the gain plot of $G(s)$, we have
+    $$
+    \frac{G_1 - G_{ω}}{\log 1 - \log ω^d_{\rm gc}} = -20
+    $$
+
+    ```{julia}
+    #| output: asis
+    plt1 = @df bp plot(:log10ω, :gain,  title="Gain plot")
+    plot!(plt1, xticks=get_xticks(bp), yticks=get_yticks(bp, :gain, 20, " dB"), legend=false)
+
+    ωd_gc = 0.4
+    G, φ = get_value(bp, ωd_gc)
+    hline!(plt1, [G], linestyle=:dashdotdot, linewidth=1, color=current_colors[4]) 
+    vline!(plt1, [ωd_gc], linestyle=:dashdotdot, linewidth=1, color=current_colors[4]) 
+    scatter!(plt1, [ωd_gc], [G], color=current_colors[4])
+    ```
+
+    Thus,
+    $$ G_{ω} = G_1 + 20(\log 1 - \log ω^d_{\rm gc})
+    = -20 + 20(- 0.4)
+    = -28\,{\rm dB}. $$
+    Consequently,
+    $$ H(j ω^d_{\rm gc}) = -28\,{\rm dB} + 60\,{\rm dB} = 32\,{\rm dB}. $$
+
+    So, we need the lag compensator to provide an attenuation of $32$ dB. So, we want
+    $$
+    20 \log α = 32 \implies α = 39.81. 
+    $$
+
+Combining everything together, we get that the lag-compensator is given by
+```{julia}
+#| output: asis
+
+K = 1_000.0
+Tinv = 0.25119
+α = 39.81
+
+output = @sprintf("\$\$KG_c(s) = %0.4f \\cdot \\frac{s + %0.4f}{s + %0.4f}\$\$",
+        K/α, Tinv, Tinv/α)
+Markdown.parse(output)
+```
+:::
+
+:::{.callout-warning collapse="false"}
+### Verification
+
+Now we compare the Bode plot of the uncompensated system $G(s)$ and the compensated system $KG_c(s)G(s)$.
+
+```{julia}
+#| echo: true
+using ControlSystems, Plots
+
+s = tf('s')
+
+K = 1_000.0
+Tinv = 0.25119
+α = 39.81
+
+G = 100/(s * (s+10) * (s+100))
+KGc = K/α * (s + Tinv)/(s + Tinv/α)
+
+ω = exp10.(range(-4,4,length=100))
+
+marginplot(G, ω, label=L"$G(s)$")
+marginplot!(KGc*G, ω, label=L"$KG_c(s)G(s)$")
+```
+
+Note that the phase margin of the compensated system is $69.11 ^∘$ instead of the target of $72 ^∘$. The difference explains why we were using an additional phase margin of $12 ^∘$. 
+
+
+:::
