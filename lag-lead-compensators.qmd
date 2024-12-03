@@ -403,5 +403,59 @@ marginplot!(KGc*G, ω, label=L"$KG_c(s)G(s)$")
 
 Note that the phase margin of the compensated system is $69.11 ^∘$ instead of the target of $72 ^∘$. The difference explains why we were using an additional phase margin of $12 ^∘$. 
 
+Also note that at $ω_{\rm gc} = 2.47$ (shown by the red vertical line on the phase plot), the phase of the uncompensated system $G(s)$ is almost the same as the phase of the compensated system $KG_c(s)G(s)$. At the same time, the compensated system has a larger velocity constant than the uncompensated system, so provides a better error constant (which can also be read from the Bode plot). 
+
+If we had only tried the gain compensated system $K G(s)$, the phase margin would be bad.
+
+```{julia}
+#| echo: true
+using ControlSystems, Plots
+
+s = tf('s')
+
+K = 1_000.0
+
+G = 100/(s * (s+10) * (s+100))
+
+ω = exp10.(range(-4,4,length=100))
+
+marginplot(G, ω, label=L"$G(s)$")
+marginplot!(K*G, ω, label=L"$KG(s)$")
+```
+Thus, the lag compensated system enables us to get the same error constant as the gain compensated system and, at the same time, have a good phase margin.
+
+```{julia}
+#| echo: true
+using ControlSystems, Plots
+
+s = tf('s')
+
+K = 1_000.0
+Tinv = 0.25119
+α = 39.81
+
+G = 100/(s * (s+10) * (s+100))
+KGc = K/α * (s + Tinv)/(s + Tinv/α)
+
+CL_1 = feedback(G)
+CL_2 = feedback(K*G)
+CL_3 = feedback(KGc*G)
+
+ramp(x,t) = [t] # Input needs to be a vector
+
+res_1 = lsim(CL_1, ramp, 5)
+res_2 = lsim(CL_2, ramp, 5)
+res_3 = lsim(CL_3, ramp, 5)
+
+plt = plot(size=(600,300))
+plot!(plt, res_1.t, [res_1.u' res_1.y'], label=[L"u(t)" L"y_1(t)"])
+plot!(plt, res_2.t, res_2.y', label=L"y_2(t)")
+plot!(plt, res_3.t, res_3.y', label=L"y_3(t)")
+
+```
+
+In the above plot $y_1(t)$ is the ramp response of the uncompensated system, $y_2(t)$ is the ramp response of the gain compensated system, and $y_3(t)$ is the ramp response of the lag compensated system.
+
+Note that the uncompensated system has a large error (because it has a small error constant); the gain compensated system has a small steady-state error, but has overshoot and oscillations (because it has small phase margin); while the lag compensatoed system has small steady-state error (the error becomes much smaller if we let the system run for longer time) but has no overshoot or oscillations. 
 
 :::
