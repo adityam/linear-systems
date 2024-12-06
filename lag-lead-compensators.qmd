@@ -29,6 +29,7 @@ using Revise
 using DataFrames
 
 using ControlSystems, StatsPlots, LaTeXStrings, Printf, Markdown
+setPlotScale("dB")
 
 include("julia/bode.jl")
 
@@ -163,7 +164,7 @@ $$
 The lag compesnator is parameterized controller with three tunable parameters: $K$, $T$, and $α$. The Bode plot of $G_c(s)$ for $α = 10$ is shown in @fig-lag. Typically, we use this to design a compensator for type-1 system to meet requirements that can be translated in terms of phase margin and velocity constant. 
 
 ```{julia}
-#| fig-cap: Bode plot of $G_c(s)$ for $α = 10$. Now that at $ω = 10/T$ (the green dot), the phase has returned back to zero.
+#| fig-cap: Bode plot of $G_c(s)$ for $α = 10$. Note that at $ω = 10/T$ (the green dot), the phase has returned back to zero.
 #| label: fig-lag
 
 α = 10.0
@@ -451,11 +452,316 @@ plt = plot(size=(600,300))
 plot!(plt, res_1.t, [res_1.u' res_1.y'], label=[L"u(t)" L"y_1(t)"])
 plot!(plt, res_2.t, res_2.y', label=L"y_2(t)")
 plot!(plt, res_3.t, res_3.y', label=L"y_3(t)")
-
 ```
 
 In the above plot $y_1(t)$ is the ramp response of the uncompensated system, $y_2(t)$ is the ramp response of the gain compensated system, and $y_3(t)$ is the ramp response of the lag compensated system.
 
 Note that the uncompensated system has a large error (because it has a small error constant); the gain compensated system has a small steady-state error, but has overshoot and oscillations (because it has small phase margin); while the lag compensatoed system has small steady-state error (the error becomes much smaller if we let the system run for longer time) but has no overshoot or oscillations. 
-
 :::
+
+## Lead Compensator
+
+The general form of the lead compensaotor is
+$$
+KG_c(s) = K \cdot \frac{1}{β} \cdot 
+  \frac{s + \dfrac{1}{T}}{s + \dfrac{1}{βT}},
+  \quad β < 1.
+$$
+As was the case for the lag compensator, the lead compensator is parameterized by three tunable parameters: $K$, $T$, and $β$. The Bode plot of $G_c(s)$ for $β = 0.1$ is shown in @fig-lead. Typically, we use the lead compensator to design a compensator for a type-1 system to meet requirements that can be translated in terms of phase margin and velocity constant. 
+
+```{julia}
+#| fig-cap: Bode plot of $G_c(s)$ for $β = 0.1$. Note that the phase is the maximum at $ω = 1/\sqrt{β}T$.
+#| label: fig-lead
+
+β = 0.1
+T = 1.0
+G = zpk([-1/T], [-1/(β*T)], 1/β)
+
+plt = bodeplot(G,legend=false)
+
+ωd_gc = 1/(sqrt(β)*T)
+Phi = asind( (1 - β)/(1 + β) )
+Gain = 1/β * abs( (im*ωd_gc + 1/T)/(im*ωd_gc + 1/(β*T)) )
+
+scatter!(plt[1], [ωd_gc], [20*log10(Gain)], color=current_colors[3])
+scatter!(plt[2], [ωd_gc], [Phi], color=current_colors[3])
+
+xticks=exp10.( [-2,-1,0,1,2] )
+xlabels=[L"\frac{0.01}{T}", L"\frac{0.1}{T}", L"\frac{1}{T}", L"\frac{10}{T}", L"\frac{100}{T}"]
+
+plot!(plt[1], xticks=(xticks, xlabels) )
+plot!(plt[2], xticks=(xticks, xlabels) )
+
+# bp = bodeplot_SL(G)
+# format(xtick) = L"\dfrac{%$(exp10(xtick))}{T}"
+# 
+# plt1 = @df bp plot(:log10ω, :gain,  title="Gain plot")
+# plot!(plt1, xticks=get_xticks(bp, format=format), yticks=get_yticks(bp, :gain, 20, " dB"), legend=false)
+# 
+# plt2 = @df bp plot(:log10ω, :phase, title="Phase plot")
+# plot!(plt2, xticks=get_xticks(bp, format=format), yticks=get_yticks(bp, :phase, 45, "°"), legend=false)
+# 
+# G, φ = get_value(bp, ωd_gc)
+# scatter!(plt1, [ωd_gc], [G], color=current_colors[3])
+# scatter!(plt2, [ωd_gc], [φ], color=current_colors[3])
+# 
+# plot(plt1, plt2, layout=(2,1))
+```
+
+Given a desired velocity constant and phase margin, we choose the parameters $K$, $T$, and $β$ of the lead-compensator as follows:
+
+1. **Determine gain $K$ to achieve the desired error constant.**
+
+   This step is exactly the same as in the case of the lag-compensator.
+
+2. **Determine the required phase compensation**
+
+   - As in the case of the lag compensator, choose the target phase margin as
+     $$\text{target phase margin}
+     = \text{desired phase margin} + 12 ^∘.
+     $$
+   - Consider the gain compensated system $H(s) = KG(s)$ and find its phase margin.
+   - Required phase compensation is given as follows:
+     $$ Φ_M = \text{target phase margin} - \text{phase margin of $KG(s)$}. $$
+
+3. **Determine $β$**
+
+   With a bit of algebra, we can show that the maximum phase of $G_c(s)$ satisfies:
+   $$
+    \sin(Φ_M) = \frac{1 - β}{1 + β}.
+   $$
+   Thus, the value of $β$ needed to achieve the required $Φ_M$ is
+   $$
+    β = \frac{1 - \sin Φ_M}{1 + \sin Φ_M}.
+   $$
+
+4. **Determine $1/T$**
+   
+   As can be seen from @fig-lead, the peak of the phase curve is at 
+   $$ ω_{\max} = \frac{1}{\sqrt{β} T}. $$
+   Moreover, at that frequency
+   $$ |G_c(j ω_{\max})| = 10 \log \frac{1}{β}\, {\rm dB}.$$
+
+   We want $ω_{\max}$ to be the new gain crossover frequency. In order to do so, we set $ω_{\max}$ to be the frequency at which the magnitude of the gain compensated system is the $-10 \log \frac 1{β}$. This ensures that
+   $$
+      |K G_c(j ω_{\max}) G(j ω_{\max})|_{\rm dB}
+      = |K G(j ω_{\max})|_{\rm dB} + |G_c(j ω_{\max})|_{\rm dB} 
+      = 0\,{\rm dB}
+   $$
+   so that $ω_{\max}$ is the new gain crossover frequency. This gives us the value of $ω_{\max}$.
+
+   Finally, we set
+   $$
+   \frac{1}{\sqrt{β}T} = ω_{\max}
+   \implies
+   \frac{1}{T} = ω_{\max} \sqrt{β}.
+   $$
+
+
+:::{#exm-lag-lead-2}
+Reconsider @exm-lag-lead and design a lead compensator to meet the specifications.
+:::
+
+:::{.callout-note collapse="false"} 
+### Solution
+
+As a first step, we draw the Bode plot of $G(s)$, which is shown in @fig-example. We now follow the steps to find $K$, $T$, and $β$ parameters of the lead compensator.
+
+1. **Determine $K$**
+
+   This step is the same as before, and we find that 
+   $$ K = 1000 = 60\,{\rm dB}. $$
+
+2. **Determine required phase comensation**
+    
+   The desired PM is $60 ^∘$. So we set
+   $$
+   \text{target phase margin} = 60 ^∘ + 12 ^∘ = 72 ^∘.
+   $$
+
+   Next we determine the PM of the gain compensated system $H(s) = KG(s)$. To do so, we first find the gain cutoff frequency $ω_{\rm gc}$, which is the frequency where $|KG(j ω)| = 0\,{\rm dB}$, or equivalently, $|G(j ω)| = -60\,{\rm dB}$. 
+
+   From @fig-example, we can see that $ω_{\rm gc} \in (10, 100)$. So we have
+   $$
+   \frac{G_{10} - G_{ω}}{\log 10 - \log ω_{\rm gc}}
+   = -40,
+   $$
+   Thus,
+   $$
+   \log ω_{\rm gc} = \log 10 + \frac{-40 + 60}{40} = 1.5.
+   $$
+   Hence, $ω_{\rm gc} = 10^{1.5} = 31.6227$.
+
+    ```{julia}
+    #| output: asis
+
+    G = zpk([], [0,10,100.], 100.)
+    bp = bodeplot_SL(G)
+
+    plt1 = @df bp plot(:log10ω, :gain,  title="Gain plot")
+    plot!(plt1, xticks=get_xticks(bp), yticks=get_yticks(bp, :gain, 20, " dB"), legend=false)
+
+    ωd_gc = 1.5
+    G, φ = get_value(bp, ωd_gc)
+    hline!(plt1, [G], linestyle=:dashdotdot, linewidth=1, color=current_colors[4]) 
+    vline!(plt1, [ωd_gc], linestyle=:dashdotdot, linewidth=1, color=current_colors[4]) 
+    scatter!(plt1, [ωd_gc], [G], color=current_colors[4])
+    ```
+
+    Now we compute the phase at $ω_{\rm gc}$. We have
+    $$
+    \frac{P_{10} - P_{ω}}{\log 10 - \log ω_{\rm gc}} = -90.
+    $$
+    Hence,
+    $$
+    P_{ω} = P_{10} + 90(1.5 - 1) = 180 ^∘.
+    $$
+    Thus, the $\text{PM} = 0 ^∘$. 
+
+    ```{julia}
+    #| output: asis
+
+    plt2 = @df bp plot(:log10ω, :phase, title="Phase plot")
+    plot!(plt2, xticks=get_xticks(bp), yticks=get_yticks(bp, :phase, 45, "°"), legend=false)
+
+    ωd_gc = 1.5
+    G, φ = get_value(bp, ωd_gc)
+    hline!(plt2, [φ], linestyle=:dashdotdot, linewidth=1, color=current_colors[5]) 
+    vline!(plt2, [ωd_gc], linestyle=:dashdotdot, linewidth=1, color=current_colors[5]) 
+    scatter!(plt2, [ωd_gc], [φ], color=current_colors[5])
+    ```
+
+3. **Determine $β$**
+
+   The required phase compensation is given by
+   $$
+   Φ_M = \text{target PM} - \text{current PM} = 72 ^∘.
+   $$
+   Hence,
+   $$
+    β = \frac{1 - \sin Φ_M}{1 + \sin Φ_M} = 0.025.
+   $$
+
+4. **Determine $1/T$**
+
+   We now find the new gain crossover frequency. For that matter, we first find the gain at the peak of the lead compensator:
+   $$
+   |G_c(j ω_{\max})| = 10 \log \frac 1{β} = 16\,{\rm dB}.
+   $$
+   Now, to find the new gain crossover frequency, we find the frequency at which the magnitude of the gain compensated system is the negative of $|G_c(j ω_{\max})|$, i.e., find $ω^d_{\rm gc}$ such that 
+   $$
+   |KG(j ω^d_{\rm gc})| = - |G_c(j ω_{\max})| = -16\,{\rm dB}.
+   $$
+   Thus,
+   $$
+   |G(j ω^d_{\rm gc})| = -16\,{\rm dB} - 60\,{\rm dB} = -72\,{\rm dB}.
+   $$
+
+   From the Bode plot, we know that $ω^d_{\rm gc} \in (10, 100)$. THus, 
+   $$
+   \frac{G_{10} - G_{ω}}{\log 10 - \log ω^d_{\rm gc}} = -40.
+   $$
+   Thus,
+   $$
+   \log ω^d_{\rm gc} = \log 10 + \frac{-40 + 76}{40} = 1.9. 
+   $$
+   Thus, $ω^d_{\rm gc} = 10^{1.9} = 79.4328$. 
+
+    ```{julia}
+    #| output: asis
+
+    G = zpk([], [0,10,100.], 100.)
+    bp = bodeplot_SL(G)
+
+    plt1 = @df bp plot(:log10ω, :gain,  title="Gain plot")
+    plot!(plt1, xticks=get_xticks(bp), yticks=get_yticks(bp, :gain, 20, " dB"), legend=false)
+
+    ωd_gc = 1.5
+    G, φ = get_value(bp, ωd_gc)
+    hline!(plt1, [G], linestyle=:dashdotdot, linewidth=1, color=current_colors[4]) 
+    vline!(plt1, [ωd_gc], linestyle=:dashdotdot, linewidth=1, color=current_colors[4]) 
+    scatter!(plt1, [ωd_gc], [G], color=current_colors[4])
+    ```
+
+    Hence, we have
+    $$
+    \frac 1T = ω^d_{\rm gc} \sqrt{β} = 12.58.
+    $$
+
+Combining everything together, we get that the lead-compensator is given by
+```{julia}
+#| output: asis
+
+K = 1_000.0
+Tinv = 12.5594
+β = 0.025
+
+output = @sprintf("\$\$KG_c(s) = %0.0f \\cdot \\frac{s + %0.4f}{s + %0.4f}\$\$",
+        K/β, Tinv, Tinv/β)
+Markdown.parse(output)
+```
+:::
+
+:::{.callout-warning collapse="false"}
+### Verification
+
+Now we compare the Bode plot of the uncompensated system $G(s)$ and the compensated system $KG_c(s)G(s)$.
+
+```{julia}
+#| echo: true
+using ControlSystems, Plots
+
+s = tf('s')
+
+K = 1_000.0
+Tinv = 12.5594
+β = 0.025
+
+
+G = 100/(s * (s+10) * (s+100))
+KGc = K/β * (s + Tinv)/(s + Tinv/β)
+
+ω = exp10.(range(-4,4,length=100))
+
+marginplot(G, ω, label=L"$G(s)$")
+marginplot!(KGc*G, ω, label=L"$KG_c(s)G(s)$")
+```
+
+Note that the phase margin of the compensated system is $46.78 ^∘$ instead of the target of $72 ^∘$. Thus the choice of $12 ^∘$ safety margin did not work here and we would need to retry this with a larger safety margin.
+
+Now we compare the performance of the lead compensator with the gain compensated and uncompensated systems.
+
+```{julia}
+#| echo: true
+using ControlSystems, Plots
+
+s = tf('s')
+
+K = 1_000.0
+Tinv = 12.5594
+β = 0.025
+
+G = 100/(s * (s+10) * (s+100))
+KGc = K/β * (s + Tinv)/(s + Tinv/β)
+
+CL_1 = feedback(G)
+CL_2 = feedback(K*G)
+CL_3 = feedback(KGc*G)
+
+ramp(x,t) = [t] # Input needs to be a vector
+
+res_1 = lsim(CL_1, ramp, 5)
+res_2 = lsim(CL_2, ramp, 5)
+res_3 = lsim(CL_3, ramp, 5)
+
+plt = plot(size=(600,300))
+plot!(plt, res_1.t, [res_1.u' res_1.y'], label=[L"u(t)" L"y_1(t)"])
+plot!(plt, res_2.t, res_2.y', label=L"y_2(t)")
+plot!(plt, res_3.t, res_3.y', label=L"y_3(t)")
+```
+
+In the above plot $y_1(t)$ is the ramp response of the uncompensated system, $y_2(t)$ is the ramp response of the gain compensated system, and $y_3(t)$ is the ramp response of the lag compensated system.
+
+Note that the uncompensated system has a large error (because it has a small error constant); the gain compensated system has a small steady-state error, but has overshoot and oscillations (because it has small phase margin); while the lead compensatoed system has small steady-state error  but has little overshoot or oscillations. (Even though we did not achieve the target PM of $60 ^∘$, the achieved PM of $46.78 ^∘$ is still good, so the ramp response is good.  
+:::
+
