@@ -265,7 +265,7 @@ $$
 G(s) = \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2}.
 $$
 
-In this course, we will ignore the impact of damping coefficient on the Bode plot approximate **any** second order system as
+In this course, we will ignore the impact of damping coefficient on the Bode plot approximate **any** _underdamped_ second order system as
 $$
 G(s) = \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2} \approx 
 \frac{ω_n^2}{(s+ω_n)^2}.
