@@ -2,14 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.39">
+<meta name="generator" content="quarto-1.6.43">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2024-12-06">
+<meta name="dcterms.date" content="2025-04-11">
+<meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
-<title>Routh-Hurwitz Stability Criterion – Linear Systems and Control</title>
+<title>7&nbsp; Routh-Hurwitz Stability Criterion – Linear Systems and Control</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -66,17 +67,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./block-diagrams.html" rel="next">
+<link href="./output-feedback.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-d166b450ba5a8e9f7a0ab969bf6592c1.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-4379b0ccadffce622b03caf4c46266b3.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-9ea16c1cb545fbfebfbd03958c344a8d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-7d03948db9a048ac6b7c3dc6585b4b60.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-7b9821c38c566442c0416ac34ba65a7f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-6b837f0e7ac12effd785ceb15e1f9c2d.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script src="site_libs/quarto-contrib/nutshell-1.0.6/nutshell.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -194,7 +197,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -206,12 +209,13 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./../linear-systems/index.html"> 
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
 <span class="menu-text">Linear Control Systems</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-            <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools tools-wide">
+    <a href="https://github.com/adityam/linear-systems" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
@@ -221,28 +225,129 @@ window.Quarto = {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./routh-hurwitz.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Routh-Hurwitz Stability Criterion</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Course Outline</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./freq-modeling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./state-space-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">State space models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./step-response.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Step Response</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./matrix-exponential.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Time response of state space models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./state-feedback.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pole placement via statement feedback</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./output-feedback.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">State observers and output feedback</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./routh-hurwitz.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Routh-Hurwitz Stability Criterion</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./block-diagrams.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Block diagrams</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./steady-state-errors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Steady-state errors</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bode-and-nyquist.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Bode and Nyquist plots</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nyquist-stability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Nyquist Stability Criterion</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./safety-margins.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Gain and Phase margins</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lag-lead-compensators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lag-lead compensators</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+    <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#generating-the-routh-array" id="toc-generating-the-routh-array" class="nav-link active" data-scroll-target="#generating-the-routh-array"><span class="header-section-number">1</span> Generating the Routh Array</a></li>
-  <li><a href="#interpreting-the-routh-array" id="toc-interpreting-the-routh-array" class="nav-link" data-scroll-target="#interpreting-the-routh-array"><span class="header-section-number">2</span> Interpreting the Routh Array</a>
+  <li><a href="#generating-the-routh-array" id="toc-generating-the-routh-array" class="nav-link active" data-scroll-target="#generating-the-routh-array"><span class="header-section-number">7.1</span> Generating the Routh Array</a></li>
+  <li><a href="#interpreting-the-routh-array" id="toc-interpreting-the-routh-array" class="nav-link" data-scroll-target="#interpreting-the-routh-array"><span class="header-section-number">7.2</span> Interpreting the Routh Array</a>
   <ul class="collapse">
-  <li><a href="#an-optimization" id="toc-an-optimization" class="nav-link" data-scroll-target="#an-optimization"><span class="header-section-number">2.1</span> An optimization</a></li>
+  <li><a href="#an-optimization" id="toc-an-optimization" class="nav-link" data-scroll-target="#an-optimization"><span class="header-section-number">7.2.1</span> An optimization</a></li>
   </ul></li>
-  <li><a href="#special-cases-zero-in-the-first-column" id="toc-special-cases-zero-in-the-first-column" class="nav-link" data-scroll-target="#special-cases-zero-in-the-first-column"><span class="header-section-number">3</span> Special cases: Zero in the first column</a>
+  <li><a href="#special-cases-zero-in-the-first-column" id="toc-special-cases-zero-in-the-first-column" class="nav-link" data-scroll-target="#special-cases-zero-in-the-first-column"><span class="header-section-number">7.3</span> Special cases: Zero in the first column</a>
   <ul class="collapse">
-  <li><a href="#reciprocal-polynomial" id="toc-reciprocal-polynomial" class="nav-link" data-scroll-target="#reciprocal-polynomial"><span class="header-section-number">3.1</span> Reciprocal polynomial</a></li>
+  <li><a href="#reciprocal-polynomial" id="toc-reciprocal-polynomial" class="nav-link" data-scroll-target="#reciprocal-polynomial"><span class="header-section-number">7.3.1</span> Reciprocal polynomial</a></li>
   </ul></li>
-  <li><a href="#special-cases-entire-row-of-zeros" id="toc-special-cases-entire-row-of-zeros" class="nav-link" data-scroll-target="#special-cases-entire-row-of-zeros"><span class="header-section-number">4</span> Special cases: Entire row of zeros</a></li>
-  <li><a href="#stability-in-state-space" id="toc-stability-in-state-space" class="nav-link" data-scroll-target="#stability-in-state-space"><span class="header-section-number">5</span> Stability in state space</a></li>
-  <li><a href="#stable-design-via-routh-hurwitz" id="toc-stable-design-via-routh-hurwitz" class="nav-link" data-scroll-target="#stable-design-via-routh-hurwitz"><span class="header-section-number">6</span> Stable design via Routh-Hurwitz</a></li>
+  <li><a href="#special-cases-entire-row-of-zeros" id="toc-special-cases-entire-row-of-zeros" class="nav-link" data-scroll-target="#special-cases-entire-row-of-zeros"><span class="header-section-number">7.4</span> Special cases: Entire row of zeros</a></li>
+  <li><a href="#stability-in-state-space" id="toc-stability-in-state-space" class="nav-link" data-scroll-target="#stability-in-state-space"><span class="header-section-number">7.5</span> Stability in state space</a></li>
+  <li><a href="#stable-design-via-routh-hurwitz" id="toc-stable-design-via-routh-hurwitz" class="nav-link" data-scroll-target="#stable-design-via-routh-hurwitz"><span class="header-section-number">7.6</span> Stable design via Routh-Hurwitz</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/routh-hurwitz.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -251,7 +356,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Routh-Hurwitz Stability Criterion</h1>
+<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Routh-Hurwitz Stability Criterion</span></h1>
 </div>
 
 
@@ -277,7 +382,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 6, 2024</p>
+      <p class="date">April 11, 2025</p>
     </div>
   </div>
   
@@ -289,19 +394,19 @@ window.Quarto = {
 </header>
 
 
-<p>Consider a unity feedback system as shown in <a href="#fig-feedback" class="quarto-xref">Figure&nbsp;1</a>. In such a setting, we are often interested in finding the values of <span class="math inline">\(K\)</span> for which the system is stable.</p>
+<p>Consider a unity feedback system as shown in <a href="nyquist-stability.html#fig-feedback" class="quarto-xref">Figure&nbsp;<span>11.1</span></a>. In such a setting, we are often interested in finding the values of <span class="math inline">\(K\)</span> for which the system is stable.</p>
 <div id="fig-feedback" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-feedback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/svg/routh-hurwitz1.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-feedback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Block diagram of a proportional controller
+Figure&nbsp;7.1: Block diagram of a proportional controller
 </figcaption>
 </figure>
 </div>
 <div id="exm-PI" class="theorem example">
-<p><span class="theorem-title"><strong>Example 1</strong></span> Consider the system shown in <a href="#fig-feedback" class="quarto-xref">Figure&nbsp;1</a> with <span class="math display">\[ G(s) = \frac{1}{s-1}. \]</span> Find the values of <span class="math inline">\(K\)</span> for which the system is stable.</p>
+<p><span class="theorem-title"><strong>Example 7.1</strong></span> Consider the system shown in <a href="nyquist-stability.html#fig-feedback" class="quarto-xref">Figure&nbsp;<span>11.1</span></a> with <span class="math display">\[ G(s) = \frac{1}{s-1}. \]</span> Find the values of <span class="math inline">\(K\)</span> for which the system is stable.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
@@ -322,12 +427,12 @@ Solution
 <p>In the above example, we could identify the roots of the closed loop transfer function and thereby determine the values of gain <span class="math inline">\(K\)</span> for which the system is stable. However, we can only factorize lower order polynomials; for polynomials with degree greater than <span class="math inline">\(t\)</span>, we need to resort to numerical methods. Doing so, makes it difficult to find the range of values of <span class="math inline">\(K\)</span> for which a polynomial is stable.</p>
 <p>However, for determine the stability of a system, we don’t need to find the roots of the denominator polynomial; we simply need to verify that all the roots are in the OLHP. The following result shows that we can determine if roots lie in the ORHP without factorizing a polynomial.</p>
 <div id="thm-factorize" class="theorem">
-<p><span class="theorem-title"><strong>Theorem 1</strong></span> A necessary condition for a polynomial to be stable is that all the coefficients have the same sign (positive or negative)</p>
+<p><span class="theorem-title"><strong>Theorem 7.1</strong></span> A necessary condition for a polynomial to be stable is that all the coefficients have the same sign (positive or negative)</p>
 </div>
 <p>But this is a necessary condition but not a sufficient condition. So, we know that the polynomial <span class="math display">\[ D(s) = s^5 + 4 s^4 + 10s^3 - s^2 + 2 s + 1\]</span> is unstable because one of the coefficients are negative. Moreover, we know that the polynomial <span class="math display">\[ D(s) = s^4 + 4s^3 + s + 1\]</span> is unstable because the coefficient of the <span class="math inline">\(s^2\)</span> term is <span class="math inline">\(0\)</span>. But this necessary condition doesn’t tell us if <span class="math display">\[ D(s) = s^5 + 4 s^4 + 10s^3 + s^2 + 2 s + 1\]</span> is stable or not.</p>
 <p>The Routh-Hurwitz criterion is a simple algebraic procedure which determines whether a polynomial is stable. The first step is generating what is called a Routh Array.</p>
-<section id="generating-the-routh-array" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="generating-the-routh-array"><span class="header-section-number">1</span> Generating the Routh Array</h2>
+<section id="generating-the-routh-array" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="generating-the-routh-array"><span class="header-section-number">7.1</span> Generating the Routh Array</h2>
 <p>Consider a polynomial <span class="math display">\[ D(s) = a_n s^n + \cdots + a_0. \]</span></p>
 <p>The Routh array is a (non-rectangular) array with <span class="math inline">\(n+1\)</span> rows, indexed by <span class="math inline">\(s^n\)</span>, <span class="math inline">\(s^{n-1}\)</span>, <span class="math inline">\(\dots\)</span>, <span class="math inline">\(s^0\)</span>.</p>
 <ul>
@@ -411,7 +516,7 @@ Solution
 </ul>
 <p>We always follow the above method to fill in the Routh array, irrespective of the size of the polynomial. We illustrate this via some examples.</p>
 <div id="exm-Routh-Hurwitz-1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2</strong></span> Find the Routh Array of <span class="math display">\[ D(s) = s^4 + 2 s^3 + 3 s^2 + 4s + 5. \]</span></p>
+<p><span class="theorem-title"><strong>Example 7.2</strong></span> Find the Routh Array of <span class="math display">\[ D(s) = s^4 + 2 s^3 + 3 s^2 + 4s + 5. \]</span></p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
@@ -435,16 +540,16 @@ Solution
 </div>
 </div>
 </section>
-<section id="interpreting-the-routh-array" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="interpreting-the-routh-array"><span class="header-section-number">2</span> Interpreting the Routh Array</h2>
-<p>We start with the basic case when <strong>there is no zero in the first column</strong> (as is the case in <a href="#exm-Routh-Hurwitz-1" class="quarto-xref">Example&nbsp;2</a>). In this case, we look at the first column and count the number of sign changes (which are highlighted by arrows above). For example, for <a href="#exm-Routh-Hurwitz-1" class="quarto-xref">Example&nbsp;2</a>, we have two sign changes in the first column, as shown below.</p>
+<section id="interpreting-the-routh-array" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="interpreting-the-routh-array"><span class="header-section-number">7.2</span> Interpreting the Routh Array</h2>
+<p>We start with the basic case when <strong>there is no zero in the first column</strong> (as is the case in <a href="#exm-Routh-Hurwitz-1" class="quarto-xref">Example&nbsp;<span>7.2</span></a>). In this case, we look at the first column and count the number of sign changes (which are highlighted by arrows above). For example, for <a href="#exm-Routh-Hurwitz-1" class="quarto-xref">Example&nbsp;<span>7.2</span></a>, we have two sign changes in the first column, as shown below.</p>
 <!-- TODO: Add figure -->
 <p>When there are no zeros in the first column, the polynomial has no roots on the <span class="math inline">\(j ω\)</span>-axis. Moreover,</p>
 <ul>
 <li>No.&nbsp;of roots in the ORHP = no. of sign changes</li>
 <li>No.&nbsp;of roots in the OLHP = degree of polynomial <span class="math inline">\(-\)</span> no. of sign changes.</li>
 </ul>
-<p>So, for <a href="#exm-Routh-Hurwitz-1" class="quarto-xref">Example&nbsp;2</a>, we have</p>
+<p>So, for <a href="#exm-Routh-Hurwitz-1" class="quarto-xref">Example&nbsp;<span>7.2</span></a>, we have</p>
 <ul>
 <li>No.&nbsp;of roots in the ORHP = 2 (no. of sign changes)</li>
 <li>No.&nbsp;of roots in the OLPH = 4 (degree of polynomial) <span class="math inline">\(-\)</span> 2 (no. of sign changes) = 2.</li>
@@ -466,7 +571,7 @@ Solution
 </div>
 </div>
 <div id="exm-Routh-Hurwitz-2" class="theorem example">
-<p><span class="theorem-title"><strong>Example 3</strong></span> Find the location of the poles of a TF with with denominator given by <span class="math display">\[ D(s) = s^4 + 5 s^3 + s^2 + 10s + 1. \]</span></p>
+<p><span class="theorem-title"><strong>Example 7.3</strong></span> Find the location of the poles of a TF with with denominator given by <span class="math display">\[ D(s) = s^4 + 5 s^3 + s^2 + 10s + 1. \]</span></p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
@@ -513,11 +618,11 @@ Solution
 </div>
 </div>
 </div>
-<section id="an-optimization" class="level3" data-number="2.1">
-<h3 data-number="2.1" class="anchored" data-anchor-id="an-optimization"><span class="header-section-number">2.1</span> An optimization</h3>
+<section id="an-optimization" class="level3" data-number="7.2.1">
+<h3 data-number="7.2.1" class="anchored" data-anchor-id="an-optimization"><span class="header-section-number">7.2.1</span> An optimization</h3>
 <p>Since we only care about the signs of the coefficient, we can multiply or divide all elements in a row by a positive number without changing the result. This can sometimes lead to simpler calculations.</p>
 <div id="exm-Routh-Hurwitz-3" class="theorem example">
-<p><span class="theorem-title"><strong>Example 4</strong></span> Find the location of the poles of a TF with with denominator given by <span class="math display">\[ D(s) = s^6 + 4s^5 + 3s^4 + 2s^3 + s^2 + 4s + 4. \]</span></p>
+<p><span class="theorem-title"><strong>Example 7.4</strong></span> Find the location of the poles of a TF with with denominator given by <span class="math display">\[ D(s) = s^6 + 4s^5 + 3s^4 + 2s^3 + s^2 + 4s + 4. \]</span></p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
@@ -568,8 +673,8 @@ Solution
 </div>
 </section>
 </section>
-<section id="special-cases-zero-in-the-first-column" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="special-cases-zero-in-the-first-column"><span class="header-section-number">3</span> Special cases: Zero in the first column</h2>
+<section id="special-cases-zero-in-the-first-column" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="special-cases-zero-in-the-first-column"><span class="header-section-number">7.3</span> Special cases: Zero in the first column</h2>
 <p>We cannot follow the usual method to construct the Routh array if there is zero in the first column. For example, consider <span class="math display">\[ D(s) = s^5 + 2s^4 + 3s^3 + 6s^2 + 5s + 3. \]</span></p>
 <table class="routharray" align="center">
 <tbody><tr>
@@ -628,7 +733,7 @@ Solution
 <li>No.&nbsp;of roots in the OLHP = <span class="math inline">\(\text{degree of polynomial} - \max\{k_{+}, k_{-}\}\)</span>.</li>
 </ul>
 <div id="exm-Routh-Hurwitz-zero-1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 5</strong></span> Find the location of the poles of a TF with with denominator given by <span class="math display">\[ D(s) = s^5 + 2s^4 + 3s^3 + 6s^2 + 5s + 3. \]</span></p>
+<p><span class="theorem-title"><strong>Example 7.5</strong></span> Find the location of the poles of a TF with with denominator given by <span class="math display">\[ D(s) = s^5 + 2s^4 + 3s^3 + 6s^2 + 5s + 3. \]</span></p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
@@ -678,9 +783,9 @@ Solution
 </div>
 </div>
 </div>
-<section id="reciprocal-polynomial" class="level3" data-number="3.1">
-<h3 data-number="3.1" class="anchored" data-anchor-id="reciprocal-polynomial"><span class="header-section-number">3.1</span> Reciprocal polynomial</h3>
-<p>If we get a zero in the first column, we can follow another method but this method is not guaranteed to work. To understand this, we need the notion of a <strong>reciprocal polynomial</strong>: for a polynomial <span class="math inline">\(D(s)\)</span> of degree <span class="math inline">\(n\)</span>, the reciprocal polynomial is <span class="math inline">\(s^n D(\frac 1s)\)</span>. For instance, for <a href="#exm-Routh-Hurwitz-zero-1" class="quarto-xref">Example&nbsp;5</a>, we have</p>
+<section id="reciprocal-polynomial" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="reciprocal-polynomial"><span class="header-section-number">7.3.1</span> Reciprocal polynomial</h3>
+<p>If we get a zero in the first column, we can follow another method but this method is not guaranteed to work. To understand this, we need the notion of a <strong>reciprocal polynomial</strong>: for a polynomial <span class="math inline">\(D(s)\)</span> of degree <span class="math inline">\(n\)</span>, the reciprocal polynomial is <span class="math inline">\(s^n D(\frac 1s)\)</span>. For instance, for <a href="#exm-Routh-Hurwitz-zero-1" class="quarto-xref">Example&nbsp;<span>7.5</span></a>, we have</p>
 <p><span class="math display">\[\begin{align*}
 s^5 D\left(\frac 1s\right) &amp;=
 s^5 \left[ \frac{1}{s^5} + \frac{2}{s^4} + \frac{3}{s^3} + \frac{6}{s^2} + \frac{5}{s} + 3 \right] \\
@@ -708,7 +813,7 @@ p_i = a_i + j b_i \implies \frac {1}{p_i} = \frac{a}{|p_i|} - j\frac{ b_i}{|p_i|
 </div>
 </div>
 <div id="exm-Routh-Hurwitz-zero-2" class="theorem example">
-<p><span class="theorem-title"><strong>Example 6</strong></span> Solve <a href="#exm-Routh-Hurwitz-zero-1" class="quarto-xref">Example&nbsp;5</a> using the reciprocal polynomial.</p>
+<p><span class="theorem-title"><strong>Example 7.6</strong></span> Solve <a href="#exm-Routh-Hurwitz-zero-1" class="quarto-xref">Example&nbsp;<span>7.5</span></a> using the reciprocal polynomial.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
@@ -737,15 +842,15 @@ Solution
 <p>Thus, we see that there are two sign changes in the first column. Therefore,</p>
 <ul>
 <li>No.&nbsp;of roots in the ORHP = 2 (no. of sign changes)</li>
-<li>No.&nbsp;of roots in the OLHP = 5 (degree of polynomial) <span class="math inline">\(-\)</span> 2 (no. of sign changes) = 3. which matches with what we had observed in the solution of <a href="#exm-Routh-Hurwitz-zero-1" class="quarto-xref">Example&nbsp;5</a>.</li>
+<li>No.&nbsp;of roots in the OLHP = 5 (degree of polynomial) <span class="math inline">\(-\)</span> 2 (no. of sign changes) = 3. which matches with what we had observed in the solution of <a href="#exm-Routh-Hurwitz-zero-1" class="quarto-xref">Example&nbsp;<span>7.5</span></a>.</li>
 </ul>
 </div>
 </div>
 </div>
 </section>
 </section>
-<section id="special-cases-entire-row-of-zeros" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="special-cases-entire-row-of-zeros"><span class="header-section-number">4</span> Special cases: Entire row of zeros</h2>
+<section id="special-cases-entire-row-of-zeros" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="special-cases-entire-row-of-zeros"><span class="header-section-number">7.4</span> Special cases: Entire row of zeros</h2>
 <p>Sometimes, we get an entire row of zero. For instance, consider <span class="math display">\[
 D(s) = s^5 + 7s^4 + 6 s^3 + 42 s^2 + 8 s + 56.
 \]</span></p>
@@ -906,7 +1011,7 @@ Roots of even polynomial
 </div>
 </div>
 <div id="exm-Routh-Hurwitz-row-zero-1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 7</strong></span> Consider <span class="math display">\[
+<p><span class="theorem-title"><strong>Example 7.7</strong></span> Consider <span class="math display">\[
 D(s) = (s^2 + 2)(s+2) = s^3 + s^2 + 2s + 2.
 \]</span> Use Routh Hurwitz to find the location of the roots.</p>
 </div>
@@ -977,8 +1082,8 @@ Solution
 </div>
 </div>
 </section>
-<section id="stability-in-state-space" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="stability-in-state-space"><span class="header-section-number">5</span> Stability in state space</h2>
+<section id="stability-in-state-space" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="stability-in-state-space"><span class="header-section-number">7.5</span> Stability in state space</h2>
 <p>So far, we have examined stability of the TF. But we can use Routh-Hurwitz method to determine stability of state-space models as well. For example, consider a SSM <span class="math display">\[
   A = \MATRIX{0 &amp; 0 &amp; 1 \\ 1 &amp; 0 &amp; 1 \\ -10 &amp; -5 &amp; -2},
   \quad
@@ -1029,11 +1134,11 @@ Solution
 </div>
 <p>Since there are no sign changes, the system is stable!</p>
 </section>
-<section id="stable-design-via-routh-hurwitz" class="level2" data-number="6">
-<h2 data-number="6" class="anchored" data-anchor-id="stable-design-via-routh-hurwitz"><span class="header-section-number">6</span> Stable design via Routh-Hurwitz</h2>
+<section id="stable-design-via-routh-hurwitz" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="stable-design-via-routh-hurwitz"><span class="header-section-number">7.6</span> Stable design via Routh-Hurwitz</h2>
 <p>The Routh-Hurwitz criterion can be used to identify values of controller parameters for which a closed loop system is stable. We illustrate this via some examples.</p>
 <div id="exm-stability-1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 8</strong></span> Consider the system shown below:</p>
+<p><span class="theorem-title"><strong>Example 7.8</strong></span> Consider the system shown below:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="figures/svg/routh-hurwitz2.svg" class="img-fluid figure-img"></p>
@@ -1096,7 +1201,7 @@ K &gt; 0
 </div>
 </div>
 <div id="exm-stability-2" class="theorem example">
-<p><span class="theorem-title"><strong>Example 9</strong></span> Consider the system shown below:</p>
+<p><span class="theorem-title"><strong>Example 7.9</strong></span> Consider the system shown below:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="figures/svg/routh-hurwitz3.svg" class="img-fluid figure-img"></p>
@@ -1724,6 +1829,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./output-feedback.html" class="pagination-link" aria-label="State observers and output feedback">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">State observers and output feedback</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./block-diagrams.html" class="pagination-link" aria-label="Block diagrams">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Block diagrams</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

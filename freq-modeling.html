@@ -2,14 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.39">
+<meta name="generator" content="quarto-1.6.43">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2024-12-06">
+<meta name="dcterms.date" content="2025-04-11">
+<meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
-<title>Frequency domain modeling – Linear Systems and Control</title>
+<title>1&nbsp; Frequency domain modeling – Linear Systems and Control</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -66,17 +67,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./state-space-models.html" rel="next">
+<link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-d166b450ba5a8e9f7a0ab969bf6592c1.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-4379b0ccadffce622b03caf4c46266b3.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-9ea16c1cb545fbfebfbd03958c344a8d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-7d03948db9a048ac6b7c3dc6585b4b60.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-7b9821c38c566442c0416ac34ba65a7f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-6b837f0e7ac12effd785ceb15e1f9c2d.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script src="site_libs/quarto-contrib/nutshell-1.0.6/nutshell.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -193,7 +196,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -205,12 +208,13 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./../linear-systems/index.html"> 
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
 <span class="menu-text">Linear Control Systems</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-            <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools tools-wide">
+    <a href="https://github.com/adityam/linear-systems" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
@@ -220,23 +224,124 @@ window.Quarto = {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./freq-modeling.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Course Outline</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./freq-modeling.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./state-space-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">State space models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./step-response.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Step Response</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./matrix-exponential.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Time response of state space models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./state-feedback.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pole placement via statement feedback</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./output-feedback.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">State observers and output feedback</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./routh-hurwitz.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Routh-Hurwitz Stability Criterion</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./block-diagrams.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Block diagrams</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./steady-state-errors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Steady-state errors</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bode-and-nyquist.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Bode and Nyquist plots</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nyquist-stability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Nyquist Stability Criterion</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./safety-margins.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Gain and Phase margins</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lag-lead-compensators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lag-lead compensators</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+    <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#unilateral-laplace-transforms" id="toc-unilateral-laplace-transforms" class="nav-link active" data-scroll-target="#unilateral-laplace-transforms"><span class="header-section-number">1</span> Unilateral Laplace Transforms</a></li>
-  <li><a href="#the-transfer-function" id="toc-the-transfer-function" class="nav-link" data-scroll-target="#the-transfer-function"><span class="header-section-number">2</span> The Transfer Function</a></li>
-  <li><a href="#poles-and-zeros-of-a-transfer-function" id="toc-poles-and-zeros-of-a-transfer-function" class="nav-link" data-scroll-target="#poles-and-zeros-of-a-transfer-function"><span class="header-section-number">3</span> Poles and Zeros of a Transfer Function</a></li>
-  <li><a href="#bibo-stability" id="toc-bibo-stability" class="nav-link" data-scroll-target="#bibo-stability"><span class="header-section-number">4</span> BIBO Stability</a></li>
-  <li><a href="#step-response" id="toc-step-response" class="nav-link" data-scroll-target="#step-response"><span class="header-section-number">5</span> Step Response</a></li>
-  <li><a href="#interconnection-of-lti-systems" id="toc-interconnection-of-lti-systems" class="nav-link" data-scroll-target="#interconnection-of-lti-systems"><span class="header-section-number">6</span> Interconnection of LTI Systems</a></li>
-  <li><a href="#time-delay-systems" id="toc-time-delay-systems" class="nav-link" data-scroll-target="#time-delay-systems"><span class="header-section-number">7</span> Time-delay systems</a></li>
+  <li><a href="#unilateral-laplace-transforms" id="toc-unilateral-laplace-transforms" class="nav-link active" data-scroll-target="#unilateral-laplace-transforms"><span class="header-section-number">1.1</span> Unilateral Laplace Transforms</a></li>
+  <li><a href="#the-transfer-function" id="toc-the-transfer-function" class="nav-link" data-scroll-target="#the-transfer-function"><span class="header-section-number">1.2</span> The Transfer Function</a></li>
+  <li><a href="#poles-and-zeros-of-a-transfer-function" id="toc-poles-and-zeros-of-a-transfer-function" class="nav-link" data-scroll-target="#poles-and-zeros-of-a-transfer-function"><span class="header-section-number">1.3</span> Poles and Zeros of a Transfer Function</a></li>
+  <li><a href="#bibo-stability" id="toc-bibo-stability" class="nav-link" data-scroll-target="#bibo-stability"><span class="header-section-number">1.4</span> BIBO Stability</a></li>
+  <li><a href="#step-response" id="toc-step-response" class="nav-link" data-scroll-target="#step-response"><span class="header-section-number">1.5</span> Step Response</a></li>
+  <li><a href="#interconnection-of-lti-systems" id="toc-interconnection-of-lti-systems" class="nav-link" data-scroll-target="#interconnection-of-lti-systems"><span class="header-section-number">1.6</span> Interconnection of LTI Systems</a></li>
+  <li><a href="#time-delay-systems" id="toc-time-delay-systems" class="nav-link" data-scroll-target="#time-delay-systems"><span class="header-section-number">1.7</span> Time-delay systems</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/freq-modeling.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -245,7 +350,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Frequency domain modeling</h1>
+<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></h1>
 </div>
 
 
@@ -271,7 +376,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 6, 2024</p>
+      <p class="date">April 11, 2025</p>
     </div>
   </div>
   
@@ -297,8 +402,8 @@ window.Quarto = {
 </div>
 </div>
 <p>In this lecture, we will review frequency domain modeling of LTI (linear and time invariant) systems. You have seen this material in Signals and Systems. The purpose of this review is to simply introduce the notation used in this course, in case it happens to be different from the notation used in Signals and Systems. You are strongly encouraged to review your notes on this topic.</p>
-<section id="unilateral-laplace-transforms" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="unilateral-laplace-transforms"><span class="header-section-number">1</span> Unilateral Laplace Transforms</h2>
+<section id="unilateral-laplace-transforms" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="unilateral-laplace-transforms"><span class="header-section-number">1.1</span> Unilateral Laplace Transforms</h2>
 <p>Recall that there are two types of Laplace transforms (LTs): bi-lateral or two-sided LTs and unilateral or one-sided LTs. In this course, we will work exclusively with unilateral LTs.</p>
 <p>Also recall that for two-sided LTs, we need to worry about the ROC (region of convergence). For one-sided LTs, we never explicitly mention the ROC since it is always the right hand plane right to the rightmost pole.</p>
 <p>We will use the notation <span class="math display">\[f(t) \xleftrightarrow{\quad\mathcal L\quad} F(s)\]</span> to denote a LT-pair. We will also use <span class="math display">\[F(s) = \mathcal{L}\{ f(t)\}\]</span> or <span class="math display">\[f(t) = \mathcal L^{-1}\{F(s)\}\]</span> when we want to explicitly write the LT or the inverse LT of a signal.</p>
@@ -312,8 +417,8 @@ window.Quarto = {
 <li>Roots of the denominator are real and repeated.</li>
 </ol>
 </section>
-<section id="the-transfer-function" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="the-transfer-function"><span class="header-section-number">2</span> The Transfer Function</h2>
+<section id="the-transfer-function" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="the-transfer-function"><span class="header-section-number">1.2</span> The Transfer Function</h2>
 <p>In this course, we will work exclusively with LTI systems. Such systems arise in all branches of engineering, e.g., electrical circuits, spring-mass systems, gear systems, and thermodynamics. See Chapter 2 of Nice for detailed modeling examples.</p>
 <p>Consider an LTI system with input <span class="math inline">\(u(t)\)</span> (also called the reference signal sometimes) and output <span class="math inline">\(y(t)\)</span>. We can also represent this as the following block diagram:</p>
 <div id="fig-LTI" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -322,7 +427,7 @@ window.Quarto = {
 <img src="figures/svg/interconnect1.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-LTI-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: An LTI System
+Figure&nbsp;1.1: An LTI System
 </figcaption>
 </figure>
 </div>
@@ -343,7 +448,7 @@ a_n \frac{d^n y(t)}{dt^n}  + a_{n-1} \frac{d^{n-1} y(t)}{dt^{n-1}} + \cdots  a_0
 <img src="figures/svg/interconnect2.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-LTI-s-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: An LTI System
+Figure&nbsp;1.2: An LTI System
 </figcaption>
 </figure>
 </div>
@@ -364,7 +469,7 @@ G(s) = \frac{Y(s)}{U(s)}
 {a_n s^n + a_{n-1} s^{n-1} + \cdots + a_0}.
 \]</span> Thus, we can easily go back and forth between the DE and the transfer function.</p>
 <div id="exr-LDE-TF" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 1</strong></span> Find the transfer function corresponding to the following LDE <span class="math display">\[
+<p><span class="theorem-title"><strong>Exercise 1.1</strong></span> Find the transfer function corresponding to the following LDE <span class="math display">\[
 \frac{d}{dt}y(t) + 2 y(t) = u(t)
 \]</span></p>
 </div>
@@ -385,7 +490,7 @@ Solution
 </div>
 </div>
 <div id="exr-LDE-TF" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 2</strong></span> Find a LDE that implements the following TF <span class="math display">\[
+<p><span class="theorem-title"><strong>Exercise 1.2</strong></span> Find a LDE that implements the following TF <span class="math display">\[
 G(s) = \frac{2s+1}{s^2 + 2s + 3}.
 \]</span></p>
 </div>
@@ -411,8 +516,8 @@ Solution
 <p>We present an alternative representation of the TF (pole-zero plot) in the next section. Later in the course we will also study other equivalent forms of representing the system such as state space equations and Bode plots.</p>
 <p>A final remark. In all the systems that we consider in this course, we will assume that <span class="math inline">\(m &lt; n\)</span>. So, the denominator of the TF has a strictly higher degree than the numerator. Such transfer functions are called <strong>proper</strong>. It is possible to have causal systems where <span class="math inline">\(m=n\)</span> but we will not consider that in this course. As a consequence, when we consider state space representation in future lectures, we will get formulas which are simpler than more general formulas which you may find at other sources.</p>
 </section>
-<section id="poles-and-zeros-of-a-transfer-function" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="poles-and-zeros-of-a-transfer-function"><span class="header-section-number">3</span> Poles and Zeros of a Transfer Function</h2>
+<section id="poles-and-zeros-of-a-transfer-function" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="poles-and-zeros-of-a-transfer-function"><span class="header-section-number">1.3</span> Poles and Zeros of a Transfer Function</h2>
 <p>The TF of an LTI system is always of the form: <span class="math display">\[
 G(s)
 = \frac{b_m s^m + b_{m-1} s^{m-1} + \cdots + b_m}
@@ -449,7 +554,7 @@ G(s)
 </div>
 </div>
 <div id="exm-pole-zero" class="theorem example">
-<p><span class="theorem-title"><strong>Example 1 (Pole-zero plot)</strong></span> Consder <span class="math display">\[G(s) = \frac{s+2}{(s+1)^2 + 1^2}.\]</span> The poles are <span class="math inline">\(-1 \pm j\)</span> and the zero is <span class="math inline">\(-2\)</span>. The pole-zero plot is shown below, where the location of the pole is represented by a “cross” and the location of the zero is represented by a “circle”.</p>
+<p><span class="theorem-title"><strong>Example 1.1 (Pole-zero plot)</strong></span> Consder <span class="math display">\[G(s) = \frac{s+2}{(s+1)^2 + 1^2}.\]</span> The poles are <span class="math inline">\(-1 \pm j\)</span> and the zero is <span class="math inline">\(-2\)</span>. The pole-zero plot is shown below, where the location of the pole is represented by a “cross” and the location of the zero is represented by a “circle”.</p>
 <div class="cell">
 <div class="sourceCode cell-code hidden" id="cb2" data-startfrom="179" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 178;"><span id="cb2-179"><a href="#cb2-179" aria-hidden="true" tabindex="-1"></a><span class="fu">PZplot</span>(</span>
 <span id="cb2-180"><a href="#cb2-180" aria-hidden="true" tabindex="-1"></a>       [ {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span> </span>
@@ -467,8 +572,8 @@ G(s)
 <p>Since the polynomials in the numerator and denominator of <span class="math inline">\(G(s)\)</span> have real coefficients, the roots are either real or occur in complex conjugate pairs. So, the poles and zeros either lie on the <span class="math inline">\(σ\)</span>-axis or are symmetric about the <span class="math inline">\(σ\)</span>-axis.</p>
 <p>Note that the pole-zero plot does not capture the gain of the TF.</p>
 </section>
-<section id="bibo-stability" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="bibo-stability"><span class="header-section-number">4</span> BIBO Stability</h2>
+<section id="bibo-stability" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="bibo-stability"><span class="header-section-number">1.4</span> BIBO Stability</h2>
 <p>Recall from Signals and Systems that an LTI system with impulse response <span class="math inline">\(g(t)\)</span> is BIBO stable if <span class="math display">\[
 \int_{-∞}^{∞} |g(t)| dt &lt; \infty.
 \]</span></p>
@@ -571,17 +676,17 @@ G(s)
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ojs-cell-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Illustration of stable and unstable systems
+Figure&nbsp;1.3: Illustration of stable and unstable systems
 </figcaption>
 </figure>
 </div>
 <p>If there are poles on the <span class="math inline">\(j ω\)</span> axis and the poles have multiplicity 1, then the system is <strong>marginally stable</strong>; if poles have multiplicity greater than 1, then the system is unstable.</p>
 <p>In the next lecture, we will see how to use the poles to identify the step response of the system.</p>
 </section>
-<section id="step-response" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="step-response"><span class="header-section-number">5</span> Step Response</h2>
+<section id="step-response" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="step-response"><span class="header-section-number">1.5</span> Step Response</h2>
 <p>One of the configurations that we will really focus on in the course is the output of a <em>stable</em> system when the <strong>input is a step function.</strong> This is often the case when we specify a reference input such as the desired temperature of a room or the desired speed in cruise control of a car, and are interested in seeing if we get a “good” output. Note that this question is only of interest for stable systems. If the system is unstable, then the output will go to infinity.</p>
-<p>As an example, consider the system of <a href="#exr-LDE-TF" class="quarto-xref">Exercise&nbsp;2</a>. What is the output when the input is a step function (assuming that the system starts from a zero initial state)?</p>
+<p>As an example, consider the system of <a href="#exr-LDE-TF" class="quarto-xref">Exercise&nbsp;<span>1.2</span></a>. What is the output when the input is a step function (assuming that the system starts from a zero initial state)?</p>
 <p>To compute this, recall <span class="math display">\[
 \mathbb{1}(t) \xleftrightarrow{\quad \mathcal L\quad} \frac 1s.
 \]</span></p>
@@ -594,8 +699,8 @@ Y(s) &amp;= G(s) U(s) \\
   y(t) = \left[ \frac 12 - \frac 12 e^{-2t} \right] \mathbb{1}(t).
 \]</span></p>
 </section>
-<section id="interconnection-of-lti-systems" class="level2" data-number="6">
-<h2 data-number="6" class="anchored" data-anchor-id="interconnection-of-lti-systems"><span class="header-section-number">6</span> Interconnection of LTI Systems</h2>
+<section id="interconnection-of-lti-systems" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="interconnection-of-lti-systems"><span class="header-section-number">1.6</span> Interconnection of LTI Systems</h2>
 <p>There are three common ways to inter connect LTI systems shown below.</p>
 <div id="fig-cascade" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -603,7 +708,7 @@ Y(s) &amp;= G(s) U(s) \\
 <img src="figures/svg/interconnect3.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cascade-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: Cascade Connection equivalent to <span class="math inline">\(G_1(s)G_2(s)\)</span>.
+Figure&nbsp;1.4: Cascade Connection equivalent to <span class="math inline">\(G_1(s)G_2(s)\)</span>.
 </figcaption>
 </figure>
 </div>
@@ -613,7 +718,7 @@ Figure&nbsp;4: Cascade Connection equivalent to <span class="math inline">\(G_1(
 <img src="figures/svg/interconnect4.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-parallel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: Parallel Connection equivalent to <span class="math inline">\(G_1(s) + G_2(s)\)</span>.
+Figure&nbsp;1.5: Parallel Connection equivalent to <span class="math inline">\(G_1(s) + G_2(s)\)</span>.
 </figcaption>
 </figure>
 </div>
@@ -623,13 +728,13 @@ Figure&nbsp;5: Parallel Connection equivalent to <span class="math inline">\(G_1
 <img src="figures/svg/interconnect5.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-feedback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6: Feedback Connection equivalent to <span class="math inline">\(\displaystyle \frac{G(s)}{1 + G(s)H(s)}\)</span>.
+Figure&nbsp;1.6: Feedback Connection equivalent to <span class="math inline">\(\displaystyle \frac{G(s)}{1 + G(s)H(s)}\)</span>.
 </figcaption>
 </figure>
 </div>
 </section>
-<section id="time-delay-systems" class="level2" data-number="7">
-<h2 data-number="7" class="anchored" data-anchor-id="time-delay-systems"><span class="header-section-number">7</span> Time-delay systems</h2>
+<section id="time-delay-systems" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="time-delay-systems"><span class="header-section-number">1.7</span> Time-delay systems</h2>
 <p>In a real system, there is often a delay between input and output, which is often modeled by a delay block whose output <span class="math inline">\(y(t)\)</span> is a delayed version of the input <span class="math inline">\(u(t)\)</span>, by a delay time <span class="math inline">\(τ\)</span>, that is <span class="math display">\[
   y(t) = u(t-τ).
 \]</span> Taking the Laplace transform of both sides, we get <span class="math display">\[
@@ -1216,6 +1321,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link" aria-label="Course Outline">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Course Outline</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./state-space-models.html" class="pagination-link" aria-label="State space models">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">State space models</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

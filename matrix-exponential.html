@@ -2,14 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.39">
+<meta name="generator" content="quarto-1.6.43">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2024-12-06">
+<meta name="dcterms.date" content="2025-04-11">
+<meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
-<title>Time response of state space models – Linear Systems and Control</title>
+<title>4&nbsp; Time response of state space models – Linear Systems and Control</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -32,17 +33,19 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./state-feedback.html" rel="next">
+<link href="./step-response.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-d166b450ba5a8e9f7a0ab969bf6592c1.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-4379b0ccadffce622b03caf4c46266b3.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-9ea16c1cb545fbfebfbd03958c344a8d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-7d03948db9a048ac6b7c3dc6585b4b60.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-7b9821c38c566442c0416ac34ba65a7f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-6b837f0e7ac12effd785ceb15e1f9c2d.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script src="site_libs/quarto-contrib/nutshell-1.0.6/nutshell.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -157,7 +160,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -169,12 +172,13 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./../linear-systems/index.html"> 
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
 <span class="menu-text">Linear Control Systems</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-            <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools tools-wide">
+    <a href="https://github.com/adityam/linear-systems" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
@@ -184,23 +188,124 @@ window.Quarto = {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./matrix-exponential.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Time response of state space models</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Course Outline</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./freq-modeling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./state-space-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">State space models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./step-response.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Step Response</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./matrix-exponential.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Time response of state space models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./state-feedback.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pole placement via statement feedback</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./output-feedback.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">State observers and output feedback</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./routh-hurwitz.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Routh-Hurwitz Stability Criterion</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./block-diagrams.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Block diagrams</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./steady-state-errors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Steady-state errors</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bode-and-nyquist.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Bode and Nyquist plots</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nyquist-stability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Nyquist Stability Criterion</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./safety-margins.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Gain and Phase margins</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lag-lead-compensators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lag-lead compensators</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+    <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#solution-to-matrix-differential-equations" id="toc-solution-to-matrix-differential-equations" class="nav-link active" data-scroll-target="#solution-to-matrix-differential-equations"><span class="header-section-number">1</span> Solution to matrix differential equations</a></li>
-  <li><a href="#computing-matrix-exponential" id="toc-computing-matrix-exponential" class="nav-link" data-scroll-target="#computing-matrix-exponential"><span class="header-section-number">2</span> Computing matrix exponential</a>
+  <li><a href="#solution-to-matrix-differential-equations" id="toc-solution-to-matrix-differential-equations" class="nav-link active" data-scroll-target="#solution-to-matrix-differential-equations"><span class="header-section-number">4.1</span> Solution to matrix differential equations</a></li>
+  <li><a href="#computing-matrix-exponential" id="toc-computing-matrix-exponential" class="nav-link" data-scroll-target="#computing-matrix-exponential"><span class="header-section-number">4.2</span> Computing matrix exponential</a>
   <ul class="collapse">
-  <li><a href="#method-1-eigenvalue-diagonalization-method" id="toc-method-1-eigenvalue-diagonalization-method" class="nav-link" data-scroll-target="#method-1-eigenvalue-diagonalization-method"><span class="header-section-number">2.1</span> Method 1: Eigenvalue diagonalization method</a></li>
-  <li><a href="#method-2-laplace-transform-method" id="toc-method-2-laplace-transform-method" class="nav-link" data-scroll-target="#method-2-laplace-transform-method"><span class="header-section-number">2.2</span> Method 2: Laplace transform method</a></li>
+  <li><a href="#method-1-eigenvalue-diagonalization-method" id="toc-method-1-eigenvalue-diagonalization-method" class="nav-link" data-scroll-target="#method-1-eigenvalue-diagonalization-method"><span class="header-section-number">4.2.1</span> Method 1: Eigenvalue diagonalization method</a></li>
+  <li><a href="#method-2-laplace-transform-method" id="toc-method-2-laplace-transform-method" class="nav-link" data-scroll-target="#method-2-laplace-transform-method"><span class="header-section-number">4.2.2</span> Method 2: Laplace transform method</a></li>
   </ul></li>
-  <li><a href="#time-response" id="toc-time-response" class="nav-link" data-scroll-target="#time-response"><span class="header-section-number">3</span> Time response of state space models</a></li>
+  <li><a href="#time-response" id="toc-time-response" class="nav-link" data-scroll-target="#time-response"><span class="header-section-number">4.3</span> Time response of state space models</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/matrix-exponential.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -209,7 +314,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Time response of state space models</h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Time response of state space models</span></h1>
 </div>
 
 
@@ -235,7 +340,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 6, 2024</p>
+      <p class="date">April 11, 2025</p>
     </div>
   </div>
   
@@ -247,8 +352,8 @@ window.Quarto = {
 </header>
 
 
-<section id="solution-to-matrix-differential-equations" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="solution-to-matrix-differential-equations"><span class="header-section-number">1</span> Solution to matrix differential equations</h2>
+<section id="solution-to-matrix-differential-equations" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="solution-to-matrix-differential-equations"><span class="header-section-number">4.1</span> Solution to matrix differential equations</h2>
 <p>Recall that for a scalar differential equation (i.e., <span class="math inline">\(x(t) \in \reals\)</span>): <span class="math display">\[
 \dot x(t) = a x(t), \quad
 \hbox{initial condition } x(0)=x_0
@@ -289,7 +394,7 @@ e^{At} = I + At + \frac{A^2t^2}{2!} + \frac{A^3t^3}{3!} + \cdots
 </div>
 <p>We now present some examples where the matrix exponential can be computed easily.</p>
 <div id="exm-matrix-exponential-finite" class="theorem example">
-<p><span class="theorem-title"><strong>Example 1</strong></span> Compute <span class="math inline">\(e^{At}\)</span> for <span class="math display">\[A = \MATRIX{0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \\ 0 &amp; 0 &amp; 0}. \]</span></p>
+<p><span class="theorem-title"><strong>Example 4.1</strong></span> Compute <span class="math inline">\(e^{At}\)</span> for <span class="math display">\[A = \MATRIX{0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \\ 0 &amp; 0 &amp; 0}. \]</span></p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
@@ -324,7 +429,7 @@ e^{At} &amp;= I + At + \frac 12 A^2 t^2 \\
 </div>
 </div>
 <div id="exm-matrix-exponential-diagonal" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2</strong></span> Compute <span class="math inline">\(e^{At}\)</span> for <span class="math display">\[A = \MATRIX{λ_1 &amp; 0 &amp; 0 \\ 0 &amp; λ_2 &amp; 0 \\ 0 &amp; 0 &amp; λ_3}. \]</span></p>
+<p><span class="theorem-title"><strong>Example 4.2</strong></span> Compute <span class="math inline">\(e^{At}\)</span> for <span class="math display">\[A = \MATRIX{λ_1 &amp; 0 &amp; 0 \\ 0 &amp; λ_2 &amp; 0 \\ 0 &amp; 0 &amp; λ_3}. \]</span></p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
@@ -360,11 +465,11 @@ e^{At} &amp;= I + At + \frac{A^2t^2}{2!} + \frac{A^3t^3}{3!} + \cdots \\
 </div>
 <p>But outside of such few special cases, computing <span class="math inline">\(e^{At}\)</span> via definition <span class="math inline">\(\eqref{eq:matrix-exponential}\)</span> is not computationally feasible. We now present computationally efficient methods to compute the matrix exponential.</p>
 </section>
-<section id="computing-matrix-exponential" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="computing-matrix-exponential"><span class="header-section-number">2</span> Computing matrix exponential</h2>
-<section id="method-1-eigenvalue-diagonalization-method" class="level3" data-number="2.1">
-<h3 data-number="2.1" class="anchored" data-anchor-id="method-1-eigenvalue-diagonalization-method"><span class="header-section-number">2.1</span> Method 1: Eigenvalue diagonalization method</h3>
-<p>As illustrated by <a href="#exm-matrix-exponential-diagonal" class="quarto-xref">Example&nbsp;2</a>, compute matrix exponential is easy for diagonal matrix. So, if the matrix <span class="math inline">\(A\)</span> is diagonalizable (i.e., has distinct eigenvalues) we can do a change of coordinates and compute the matrix exponential in the eigen-coordinates.</p>
+<section id="computing-matrix-exponential" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="computing-matrix-exponential"><span class="header-section-number">4.2</span> Computing matrix exponential</h2>
+<section id="method-1-eigenvalue-diagonalization-method" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="method-1-eigenvalue-diagonalization-method"><span class="header-section-number">4.2.1</span> Method 1: Eigenvalue diagonalization method</h3>
+<p>As illustrated by <a href="#exm-matrix-exponential-diagonal" class="quarto-xref">Example&nbsp;<span>4.2</span></a>, compute matrix exponential is easy for diagonal matrix. So, if the matrix <span class="math inline">\(A\)</span> is diagonalizable (i.e., has distinct eigenvalues) we can do a change of coordinates and compute the matrix exponential in the eigen-coordinates.</p>
 <p>In particular, suppose <span class="math inline">\(A\)</span> has distinct eivenvalues <span class="math inline">\(λ_1, \dots, λ_n\)</span> and <span class="math inline">\(v_1, \dots, v_n\)</span> are the corresponding eigvenvectors. Thus, $ A v_k = λ_k v_k$ for all <span class="math inline">\(k \in \{1,\dots, n\}\)</span>. Writing this in matrix form, we have <span class="math display">\[\begin{align*}
 A \MATRIX{v_1 &amp; v_2 &amp; \cdots &amp; v_n} &amp;=
 \MATRIX{A v_1 &amp; A v_2 &amp; \cdots &amp; A v_n} \\
@@ -403,7 +508,7 @@ e^{At} &amp;= I + At + \frac{A^2 t^2}{2!} + \frac{A^3 t^3}{3!} + \cdots \\
 {e^{At} = T e^{Λt} T^{-1}}
 \]</span></p>
 <div id="exr-diagonalization" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 1</strong></span> Use the eigenvalue diagonalizable method to compute <span class="math inline">\(e^{At}\)</span> for <span class="math inline">\(A = \MATRIX{-6 &amp; 4 \\ -5 &amp; 3 }\)</span>.</p>
+<p><span class="theorem-title"><strong>Exercise 4.1</strong></span> Use the eigenvalue diagonalizable method to compute <span class="math inline">\(e^{At}\)</span> for <span class="math inline">\(A = \MATRIX{-6 &amp; 4 \\ -5 &amp; 3 }\)</span>.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
@@ -437,15 +542,15 @@ e^{At} = \MATRIX{ 4 &amp; 1 \\ 5 &amp; 1 }
 </div>
 </div>
 </section>
-<section id="method-2-laplace-transform-method" class="level3" data-number="2.2">
-<h3 data-number="2.2" class="anchored" data-anchor-id="method-2-laplace-transform-method"><span class="header-section-number">2.2</span> Method 2: Laplace transform method</h3>
+<section id="method-2-laplace-transform-method" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="method-2-laplace-transform-method"><span class="header-section-number">4.2.2</span> Method 2: Laplace transform method</h3>
 <p>Recall that we have <span class="math display">\[ \dot x(t) = A x(t). \]</span> Taking (unilateral) Laplace transforms of both sides gives <span class="math display">\[ s X(s) - x_0 = A X(s). \]</span> Rearranging terms, we get <span class="math display">\[ (sI - A)X(s) = x_0
 \implies X(s) = (sI-A)^{-1} x_0. \]</span> Taking inverse Laplace transforms, we get <span class="math display">\[x(t) = \mathcal L^{-1}( (sI - A)^{-1} ) x_0. \]</span> Comparing it with the solution obtained earlier, we get <span class="math display">\[
 \bbox[5pt,border: 1px solid]
 { e^{At} = \mathcal L^{-1}( (sI - A)^{-1} ).}
 \]</span> In the above, we interpret the inverse Laplace transform of a matrix to mean the inverse Laplace transform of each entry.</p>
 <div id="exr-laplace" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 2</strong></span> Use the Laplace transform method to compute <span class="math inline">\(e^{At}\)</span> for <span class="math inline">\(A = \MATRIX{-6 &amp; 4 \\ -5 &amp; 3 }\)</span>.</p>
+<p><span class="theorem-title"><strong>Exercise 4.2</strong></span> Use the Laplace transform method to compute <span class="math inline">\(e^{At}\)</span> for <span class="math inline">\(A = \MATRIX{-6 &amp; 4 \\ -5 &amp; 3 }\)</span>.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
@@ -484,8 +589,8 @@ Solution
 </div>
 </section>
 </section>
-<section id="time-response" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="time-response"><span class="header-section-number">3</span> Time response of state space models</h2>
+<section id="time-response" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="time-response"><span class="header-section-number">4.3</span> Time response of state space models</h2>
 <p>Now consider a SSM given by <span class="math display">\[\begin{align*}
 \dot x(t) &amp;= A x(t) + B u(t) \\
 y(t) &amp;= C x(t)
@@ -1071,6 +1176,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./step-response.html" class="pagination-link" aria-label="Step Response">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Step Response</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./state-feedback.html" class="pagination-link" aria-label="Pole placement via statement feedback">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pole placement via statement feedback</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

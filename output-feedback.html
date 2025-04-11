@@ -2,14 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.39">
+<meta name="generator" content="quarto-1.6.43">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2024-12-06">
+<meta name="dcterms.date" content="2025-04-11">
+<meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
-<title>State observers and output feedback – Linear Systems and Control</title>
+<title>6&nbsp; State observers and output feedback – Linear Systems and Control</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -66,17 +67,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./routh-hurwitz.html" rel="next">
+<link href="./state-feedback.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-d166b450ba5a8e9f7a0ab969bf6592c1.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-4379b0ccadffce622b03caf4c46266b3.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-9ea16c1cb545fbfebfbd03958c344a8d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-7d03948db9a048ac6b7c3dc6585b4b60.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-7b9821c38c566442c0416ac34ba65a7f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-6b837f0e7ac12effd785ceb15e1f9c2d.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script src="site_libs/quarto-contrib/nutshell-1.0.6/nutshell.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -191,7 +194,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar floating nav-fixed slimcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -203,12 +206,13 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./../linear-systems/index.html"> 
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
 <span class="menu-text">Linear Control Systems</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-            <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools tools-wide">
+    <a href="https://github.com/adityam/linear-systems" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
@@ -218,28 +222,129 @@ window.Quarto = {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./output-feedback.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">State observers and output feedback</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Course Outline</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./freq-modeling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./state-space-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">State space models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./step-response.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Step Response</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./matrix-exponential.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Time response of state space models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./state-feedback.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pole placement via statement feedback</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./output-feedback.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">State observers and output feedback</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./routh-hurwitz.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Routh-Hurwitz Stability Criterion</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./block-diagrams.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Block diagrams</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./steady-state-errors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Steady-state errors</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bode-and-nyquist.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Bode and Nyquist plots</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nyquist-stability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Nyquist Stability Criterion</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./safety-margins.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Gain and Phase margins</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lag-lead-compensators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lag-lead compensators</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+    <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#state-observer" id="toc-state-observer" class="nav-link active" data-scroll-target="#state-observer"><span class="header-section-number">1</span> State observer</a>
+  <li><a href="#state-observer" id="toc-state-observer" class="nav-link active" data-scroll-target="#state-observer"><span class="header-section-number">6.1</span> State observer</a>
   <ul class="collapse">
-  <li><a href="#a-naive-observer" id="toc-a-naive-observer" class="nav-link" data-scroll-target="#a-naive-observer"><span class="header-section-number">1.1</span> A naive observer</a></li>
-  <li><a href="#the-luenberger-observer" id="toc-the-luenberger-observer" class="nav-link" data-scroll-target="#the-luenberger-observer"><span class="header-section-number">1.2</span> The Luenberger observer</a></li>
+  <li><a href="#a-naive-observer" id="toc-a-naive-observer" class="nav-link" data-scroll-target="#a-naive-observer"><span class="header-section-number">6.1.1</span> A naive observer</a></li>
+  <li><a href="#the-luenberger-observer" id="toc-the-luenberger-observer" class="nav-link" data-scroll-target="#the-luenberger-observer"><span class="header-section-number">6.1.2</span> The Luenberger observer</a></li>
   </ul></li>
-  <li><a href="#observer-design-for-systems-in-ocf" id="toc-observer-design-for-systems-in-ocf" class="nav-link" data-scroll-target="#observer-design-for-systems-in-ocf"><span class="header-section-number">2</span> Observer design for systems in OCF</a></li>
-  <li><a href="#observer-design-for-systems-not-in-ocf" id="toc-observer-design-for-systems-not-in-ocf" class="nav-link" data-scroll-target="#observer-design-for-systems-not-in-ocf"><span class="header-section-number">3</span> Observer design for systems not in OCF</a>
+  <li><a href="#observer-design-for-systems-in-ocf" id="toc-observer-design-for-systems-in-ocf" class="nav-link" data-scroll-target="#observer-design-for-systems-in-ocf"><span class="header-section-number">6.2</span> Observer design for systems in OCF</a></li>
+  <li><a href="#observer-design-for-systems-not-in-ocf" id="toc-observer-design-for-systems-not-in-ocf" class="nav-link" data-scroll-target="#observer-design-for-systems-not-in-ocf"><span class="header-section-number">6.3</span> Observer design for systems not in OCF</a>
   <ul class="collapse">
-  <li><a href="#observability-matrix" id="toc-observability-matrix" class="nav-link" data-scroll-target="#observability-matrix"><span class="header-section-number">3.1</span> Observability matrix</a></li>
-  <li><a href="#observer-design" id="toc-observer-design" class="nav-link" data-scroll-target="#observer-design"><span class="header-section-number">3.2</span> Observer design</a></li>
+  <li><a href="#observability-matrix" id="toc-observability-matrix" class="nav-link" data-scroll-target="#observability-matrix"><span class="header-section-number">6.3.1</span> Observability matrix</a></li>
+  <li><a href="#observer-design" id="toc-observer-design" class="nav-link" data-scroll-target="#observer-design"><span class="header-section-number">6.3.2</span> Observer design</a></li>
   </ul></li>
-  <li><a href="#output-feedback" id="toc-output-feedback" class="nav-link" data-scroll-target="#output-feedback"><span class="header-section-number">4</span> Output feedback</a></li>
+  <li><a href="#output-feedback" id="toc-output-feedback" class="nav-link" data-scroll-target="#output-feedback"><span class="header-section-number">6.4</span> Output feedback</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/output-feedback.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -248,7 +353,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">State observers and output feedback</h1>
+<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">State observers and output feedback</span></h1>
 </div>
 
 
@@ -274,7 +379,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 6, 2024</p>
+      <p class="date">April 11, 2025</p>
     </div>
   </div>
   
@@ -286,8 +391,8 @@ window.Quarto = {
 </header>
 
 
-<section id="state-observer" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="state-observer"><span class="header-section-number">1</span> State observer</h2>
+<section id="state-observer" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="state-observer"><span class="header-section-number">6.1</span> State observer</h2>
 <p>So far, we have assumed that the controller has access to the state of the system. In many systems, it is either too expensive or physically impossible to place enough sensors to observe all the components of the state. In such cases, one option is to estimate the state from the inputs and outputs of the system and use the estimated state to chose the control input. The system which generates a state estimate from inputs and outputs is called an <strong>observer</strong>.</p>
 <p>An estimate <span class="math inline">\(\hat x(t)\)</span> of the state <span class="math inline">\(x(t)\)</span> should have two properties:</p>
 <ul>
@@ -295,8 +400,8 @@ window.Quarto = {
 <li>We should be able to control the rate of convergence.</li>
 </ul>
 <p>We state with a naive observer to show that it is possible to obtain asymptotically consistent estimators. We then consider how to modify the naive observer to be able to to control the rate of convergence.</p>
-<section id="a-naive-observer" class="level3" data-number="1.1">
-<h3 data-number="1.1" class="anchored" data-anchor-id="a-naive-observer"><span class="header-section-number">1.1</span> A naive observer</h3>
+<section id="a-naive-observer" class="level3" data-number="6.1.1">
+<h3 data-number="6.1.1" class="anchored" data-anchor-id="a-naive-observer"><span class="header-section-number">6.1.1</span> A naive observer</h3>
 <p>The main idea of building an observer is to start with a (physical or digital) replica of the original system, provide it the same inputs as the original system, and measure the internal state of the replica. In particular, we start with an initial guess <span class="math inline">\(\hat x(0)\)</span> and then update the estimate according to <span class="math display">\[
 \dot {\hat x}(t) = A \hat x(t) + B u(t).
 \]</span></p>
@@ -306,8 +411,8 @@ window.Quarto = {
   e(t) = \exp(At) e(0).
 \]</span> Thus, if <span class="math inline">\(A\)</span> is internally stable (i.e., all the eigenvalues of <span class="math inline">\(A\)</span> lie in the OLHP), then the error <span class="math inline">\(e(t)\)</span> will converge to zero. However, we have no ability to influence the rate of convergence (which depends on the eigenvalues of <span class="math inline">\(A\)</span>).</p>
 </section>
-<section id="the-luenberger-observer" class="level3" data-number="1.2">
-<h3 data-number="1.2" class="anchored" data-anchor-id="the-luenberger-observer"><span class="header-section-number">1.2</span> The Luenberger observer</h3>
+<section id="the-luenberger-observer" class="level3" data-number="6.1.2">
+<h3 data-number="6.1.2" class="anchored" data-anchor-id="the-luenberger-observer"><span class="header-section-number">6.1.2</span> The Luenberger observer</h3>
 <p>The Luenberger observer is given as follows. Start with an initial guess <span class="math inline">\(\hat x(0)\)</span> and update the estimate according to <span class="math display">\[
 \dot {\hat x}(t) = A \hat x(t) + B u(t) + L( y(t) - C \hat x(t))
 \]</span> where <span class="math inline">\(L = \MATRIX{ \ell_0 &amp; \cdots &amp; \ell_{n-1}}^\TRANS\)</span> is called the <strong>observer gain</strong>.</p>
@@ -320,8 +425,8 @@ window.Quarto = {
 <p>As was the case for state feedback, we will start with system in OCF and show that observer design for such systems can be done by simply comparing the coefficients of the characteristic polynomials of the open-loop system and the desired characteristic polynomial of <span class="math inline">\(A - LC\)</span>. We then look at systems that are not in OCF and show that if the system satisfies a condition known as <strong>observability</strong>, we can find a transformation that converts the system to OCF, design the observer gain for the OCF representation, and translate it back to the original coordinate system.</p>
 </section>
 </section>
-<section id="observer-design-for-systems-in-ocf" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="observer-design-for-systems-in-ocf"><span class="header-section-number">2</span> Observer design for systems in OCF</h2>
+<section id="observer-design-for-systems-in-ocf" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="observer-design-for-systems-in-ocf"><span class="header-section-number">6.2</span> Observer design for systems in OCF</h2>
 <p>Consider a state feedback system in OCF with <span class="math display">\[
 A = \MATRIX{ 0 &amp; \cdots &amp; \cdots &amp; 0 &amp; - a_0 \\
              1 &amp; 0 &amp; \cdots &amp; 0 &amp; - a_1 \\
@@ -358,7 +463,7 @@ s^n + (a_{n-1} + \ell_{n-1}) s^{n-1} + \cdots + (a_1 + \ell_1) s + (a_0 + \ell_0
 {L = \MATRIX{ α_0 - a_0 \\ \vdots \\ α_{n-1} - a_{n-1}} }
 \]</span> to place the eigenvalues of <span class="math inline">\(A - LC\)</span> in the desired location.</p>
 <div id="exm-OCF" class="theorem example">
-<p><span class="theorem-title"><strong>Example 1</strong></span> Consider the system <span class="math display">\[
+<p><span class="theorem-title"><strong>Example 6.1</strong></span> Consider the system <span class="math display">\[
 A = \MATRIX{ 0 &amp; -1 \\ 1 &amp; -2 }
 \quad
 C = \MATRIX{ 0 &amp; 1}
@@ -395,8 +500,8 @@ Solution
 </div>
 </div>
 </section>
-<section id="observer-design-for-systems-not-in-ocf" class="level2 page-columns page-full" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="observer-design-for-systems-not-in-ocf"><span class="header-section-number">3</span> Observer design for systems not in OCF</h2>
+<section id="observer-design-for-systems-not-in-ocf" class="level2 page-columns page-full" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="observer-design-for-systems-not-in-ocf"><span class="header-section-number">6.3</span> Observer design for systems not in OCF</h2>
 <p>When a system is not in OCF, we can still use the design of systems in OCF if there is a transformation (or change of coordinates) <span class="math inline">\(x_o(t) = T^{-1} x(t)\)</span> such that the transformed matrices <span class="math inline">\((A_o, B_o, C_o)\)</span> are in OCF. If such a transformation can be found, then we can find the observer gain <span class="math inline">\(L_o\)</span> for the system in OCF using the method of the previous section and use<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> <span class="math display">\[
   L = T L_o
 \]</span> as the observer gain for the original system. So, as was the case for state feedback, the main question is: how do we find such a transformation?</p>
@@ -408,8 +513,8 @@ Solution
 &amp;= T^{-1} A \hat x(t) + T^{-1} B u(t) + L_o(y(t) - C \hat x(t))
 \end{align*}\]</span> where we have used the fact that <span class="math inline">\(\hat x_o(t) = T \hat x(t)\)</span>. Multiplying both sides by <span class="math inline">\(T\)</span>, we get <span class="math display">\[
 \dot {\hat x}(t) = A \hat x(t) + B u(t) + T L_o(y(t) - C \hat x(t)).
-\]</span> Hence, <span class="math inline">\(L = T L_o\)</span>.</p></div></div><section id="observability-matrix" class="level3" data-number="3.1">
-<h3 data-number="3.1" class="anchored" data-anchor-id="observability-matrix"><span class="header-section-number">3.1</span> Observability matrix</h3>
+\]</span> Hence, <span class="math inline">\(L = T L_o\)</span>.</p></div></div><section id="observability-matrix" class="level3" data-number="6.3.1">
+<h3 data-number="6.3.1" class="anchored" data-anchor-id="observability-matrix"><span class="header-section-number">6.3.1</span> Observability matrix</h3>
 <p>The observability matrix of a state space system <span class="math inline">\((A,C)\)</span> is defined as <span class="math display">\[
 \mathcal O_{(A,C)} = \MATRIX{C \\ CA \\ \vdots \\ C A^{n-1}}
 \]</span> Now consider a change of coordinates <span class="math inline">\(x_o(t) = T^{-1} x(t)\)</span>. Recall that the state space representation in the new coordinate system is <span class="math display">\[
@@ -440,8 +545,8 @@ C_o = C T.
   T = \mathcal O_{(A,C)}^{-1} \mathcal O_{(A_o, C_o)}
 \]</span> <em>provided <span class="math inline">\(\mathcal O_{(A,C)}\)</span> is invertible</em> (i.e., has full rank). When that is the case, we say that the system is <strong>observable</strong>.</p>
 </section>
-<section id="observer-design" class="level3" data-number="3.2">
-<h3 data-number="3.2" class="anchored" data-anchor-id="observer-design"><span class="header-section-number">3.2</span> Observer design</h3>
+<section id="observer-design" class="level3" data-number="6.3.2">
+<h3 data-number="6.3.2" class="anchored" data-anchor-id="observer-design"><span class="header-section-number">6.3.2</span> Observer design</h3>
 <p>The general observer design problem is as follows. We are given a system <span class="math inline">\((A,C)\)</span> not in OCF and we want to design a Luenberger observer <span class="math display">\[
 \dot {\hat x}(t) = A \hat x(t) + B u(t) + L (y(t) - C \hat x(t)),
 \quad \text{where }
@@ -482,13 +587,13 @@ T = \bigl[ W \mathcal O_{(A,C)} \bigr]^{-1}
 </ol>
 <p>This method relies on the fact that for a system <span class="math inline">\((A_o,C_o)\)</span> in OCF, <span class="math inline">\(\mathcal O_{(A_o,C_o)} = W^{-1}\)</span>. For a proof, see Lemma 4.5 of William and Lawrence.</p>
 <div id="exm-observer-design" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2</strong></span> Consider the following SSM: <span class="math display">\[ A = \MATRIX{3 &amp; 1 \\ 1 &amp; 2}, B = \MATRIX{2 \\1} \text{ and } C = \MATRIX{ 3 &amp; 2}. \]</span> Design a Luenberger observer (i.e., compute the observer gain <span class="math inline">\(L\)</span>) such that the eigenvalues of <span class="math inline">\(A - LC\)</span> are at <span class="math inline">\(-10 \pm 5j\)</span>.</p>
+<p><span class="theorem-title"><strong>Example 6.2</strong></span> Consider the following SSM: <span class="math display">\[ A = \MATRIX{3 &amp; 1 \\ 1 &amp; 2}, B = \MATRIX{2 \\1} \text{ and } C = \MATRIX{ 3 &amp; 2}. \]</span> Design a Luenberger observer (i.e., compute the observer gain <span class="math inline">\(L\)</span>) such that the eigenvalues of <span class="math inline">\(A - LC\)</span> are at <span class="math inline">\(-10 \pm 5j\)</span>.</p>
 </div>
 </section>
 </section>
 </section>
-<section id="output-feedback" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="output-feedback"><span class="header-section-number">4</span> Output feedback</h2>
+<section id="output-feedback" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="output-feedback"><span class="header-section-number">6.4</span> Output feedback</h2>
 <p>Consider a SSM <span class="math display">\[\begin{align*}
 \dot x(t) &amp;= A x(t) + B u(t) \\
 y(t) &amp;= C x(t)
@@ -500,7 +605,7 @@ y(t) &amp;= C x(t)
 <img src="figures/svg/SSM2.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-block-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Block diagram for output feedback
+Figure&nbsp;6.1: Block diagram for output feedback
 </figcaption>
 </figure>
 </div>
@@ -1099,6 +1204,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./state-feedback.html" class="pagination-link" aria-label="Pole placement via statement feedback">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pole placement via statement feedback</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./routh-hurwitz.html" class="pagination-link" aria-label="Routh-Hurwitz Stability Criterion">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Routh-Hurwitz Stability Criterion</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

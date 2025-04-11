@@ -2,14 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.39">
+<meta name="generator" content="quarto-1.6.43">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2024-12-06">
+<meta name="dcterms.date" content="2025-04-11">
+<meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
-<title>Bode and Nyquist plots – Linear Systems and Control</title>
+<title>10&nbsp; Bode and Nyquist plots – Linear Systems and Control</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -32,17 +33,19 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./nyquist-stability.html" rel="next">
+<link href="./steady-state-errors.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-d166b450ba5a8e9f7a0ab969bf6592c1.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-4379b0ccadffce622b03caf4c46266b3.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-9ea16c1cb545fbfebfbd03958c344a8d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-7d03948db9a048ac6b7c3dc6585b4b60.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-7b9821c38c566442c0416ac34ba65a7f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-6b837f0e7ac12effd785ceb15e1f9c2d.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script src="site_libs/quarto-contrib/nutshell-1.0.6/nutshell.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -160,7 +163,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -172,12 +175,13 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./../linear-systems/index.html"> 
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
 <span class="menu-text">Linear Control Systems</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-            <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools tools-wide">
+    <a href="https://github.com/adityam/linear-systems" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
@@ -187,29 +191,130 @@ window.Quarto = {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./bode-and-nyquist.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Bode and Nyquist plots</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Course Outline</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./freq-modeling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./state-space-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">State space models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./step-response.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Step Response</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./matrix-exponential.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Time response of state space models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./state-feedback.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pole placement via statement feedback</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./output-feedback.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">State observers and output feedback</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./routh-hurwitz.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Routh-Hurwitz Stability Criterion</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./block-diagrams.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Block diagrams</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./steady-state-errors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Steady-state errors</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bode-and-nyquist.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Bode and Nyquist plots</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nyquist-stability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Nyquist Stability Criterion</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./safety-margins.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Gain and Phase margins</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lag-lead-compensators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lag-lead compensators</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+    <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#frequency-response" id="toc-frequency-response" class="nav-link active" data-scroll-target="#frequency-response"><span class="header-section-number">1</span> Frequency response</a></li>
-  <li><a href="#bode-plots" id="toc-bode-plots" class="nav-link" data-scroll-target="#bode-plots"><span class="header-section-number">2</span> Bode Plots</a>
+  <li><a href="#frequency-response" id="toc-frequency-response" class="nav-link active" data-scroll-target="#frequency-response"><span class="header-section-number">10.1</span> Frequency response</a></li>
+  <li><a href="#bode-plots" id="toc-bode-plots" class="nav-link" data-scroll-target="#bode-plots"><span class="header-section-number">10.2</span> Bode Plots</a>
   <ul class="collapse">
-  <li><a href="#bode-plot-of-a-constant-term" id="toc-bode-plot-of-a-constant-term" class="nav-link" data-scroll-target="#bode-plot-of-a-constant-term"><span class="header-section-number">2.1</span> Bode plot of a constant term</a></li>
-  <li><a href="#bode-plot-of-first-order-term" id="toc-bode-plot-of-first-order-term" class="nav-link" data-scroll-target="#bode-plot-of-first-order-term"><span class="header-section-number">2.2</span> Bode plot of first order term</a></li>
-  <li><a href="#bode-plot-of-a-second-order-term" id="toc-bode-plot-of-a-second-order-term" class="nav-link" data-scroll-target="#bode-plot-of-a-second-order-term"><span class="header-section-number">2.3</span> Bode plot of a second order term</a></li>
-  <li><a href="#poles-at-origin" id="toc-poles-at-origin" class="nav-link" data-scroll-target="#poles-at-origin"><span class="header-section-number">2.4</span> Poles at origin</a></li>
-  <li><a href="#the-impact-of-zeros" id="toc-the-impact-of-zeros" class="nav-link" data-scroll-target="#the-impact-of-zeros"><span class="header-section-number">2.5</span> The impact of zeros</a></li>
-  <li><a href="#bode-plot-of-general-transfer-functions" id="toc-bode-plot-of-general-transfer-functions" class="nav-link" data-scroll-target="#bode-plot-of-general-transfer-functions"><span class="header-section-number">2.6</span> Bode plot of general transfer functions</a></li>
-  <li><a href="#system-type-and-steady-state-errors" id="toc-system-type-and-steady-state-errors" class="nav-link" data-scroll-target="#system-type-and-steady-state-errors"><span class="header-section-number">2.7</span> System type and steady state errors</a></li>
-  <li><a href="#system-identification-via-bode-plots" id="toc-system-identification-via-bode-plots" class="nav-link" data-scroll-target="#system-identification-via-bode-plots"><span class="header-section-number">2.8</span> System identification via Bode plots</a></li>
+  <li><a href="#bode-plot-of-a-constant-term" id="toc-bode-plot-of-a-constant-term" class="nav-link" data-scroll-target="#bode-plot-of-a-constant-term"><span class="header-section-number">10.2.1</span> Bode plot of a constant term</a></li>
+  <li><a href="#bode-plot-of-first-order-term" id="toc-bode-plot-of-first-order-term" class="nav-link" data-scroll-target="#bode-plot-of-first-order-term"><span class="header-section-number">10.2.2</span> Bode plot of first order term</a></li>
+  <li><a href="#bode-plot-of-a-second-order-term" id="toc-bode-plot-of-a-second-order-term" class="nav-link" data-scroll-target="#bode-plot-of-a-second-order-term"><span class="header-section-number">10.2.3</span> Bode plot of a second order term</a></li>
+  <li><a href="#poles-at-origin" id="toc-poles-at-origin" class="nav-link" data-scroll-target="#poles-at-origin"><span class="header-section-number">10.2.4</span> Poles at origin</a></li>
+  <li><a href="#the-impact-of-zeros" id="toc-the-impact-of-zeros" class="nav-link" data-scroll-target="#the-impact-of-zeros"><span class="header-section-number">10.2.5</span> The impact of zeros</a></li>
+  <li><a href="#bode-plot-of-general-transfer-functions" id="toc-bode-plot-of-general-transfer-functions" class="nav-link" data-scroll-target="#bode-plot-of-general-transfer-functions"><span class="header-section-number">10.2.6</span> Bode plot of general transfer functions</a></li>
+  <li><a href="#system-type-and-steady-state-errors" id="toc-system-type-and-steady-state-errors" class="nav-link" data-scroll-target="#system-type-and-steady-state-errors"><span class="header-section-number">10.2.7</span> System type and steady state errors</a></li>
+  <li><a href="#system-identification-via-bode-plots" id="toc-system-identification-via-bode-plots" class="nav-link" data-scroll-target="#system-identification-via-bode-plots"><span class="header-section-number">10.2.8</span> System identification via Bode plots</a></li>
   </ul></li>
-  <li><a href="#nyquist-plots" id="toc-nyquist-plots" class="nav-link" data-scroll-target="#nyquist-plots"><span class="header-section-number">3</span> Nyquist plots</a></li>
+  <li><a href="#nyquist-plots" id="toc-nyquist-plots" class="nav-link" data-scroll-target="#nyquist-plots"><span class="header-section-number">10.3</span> Nyquist plots</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/bode-and-nyquist.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -218,7 +323,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Bode and Nyquist plots</h1>
+<h1 class="title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Bode and Nyquist plots</span></h1>
 </div>
 
 
@@ -244,7 +349,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 6, 2024</p>
+      <p class="date">April 11, 2025</p>
     </div>
   </div>
   
@@ -256,8 +361,8 @@ window.Quarto = {
 </header>
 
 
-<section id="frequency-response" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="frequency-response"><span class="header-section-number">1</span> Frequency response</h2>
+<section id="frequency-response" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="frequency-response"><span class="header-section-number">10.1</span> Frequency response</h2>
 <p>The frequency response refers to the Fourier transform of the impulse response; or equivalently, the trasfer function evaluated at <span class="math inline">\(jω\)</span>, which we will denote by <span class="math inline">\(G(jω)\)</span>. We can think of it as a function that maps the frequency <span class="math inline">\(ω\)</span> to a complex number <span class="math inline">\(G(jω)\)</span>.</p>
 <p>Frequency response can be determined experimentally. Recall that complex exponentials are eigenfunctions of LTI systems. Thus, when the input to a LTI system is <span class="math inline">\(e^{jω}\)</span>, the output is <span class="math inline">\(G(jω)e^{jω}\)</span>. Therefore, when the input is <span class="math inline">\(A\cos ωt = A(e^{jω} + e^{-jω})/2\)</span>, the output is <span class="math display">\[\begin{align*}
 \frac A2 G(jω)e^{jω} + \frac A2 G(-jω)e^{-jω} &amp;=
@@ -277,7 +382,7 @@ window.Quarto = {
 <p>There are two ways to plot the frequency response:</p>
 <ol type="1">
 <li><p><strong>Bode plot</strong> where we plot two separate plots: a magitude plot which is the plot of <span class="math inline">\(|G(jω)|\)</span> vs <span class="math inline">\(ω\)</span> and a phase plot which is a plot of <span class="math inline">\(\angle G(jω)\)</span> vs <span class="math inline">\(ω\)</span>.</p>
-<div id="cell-fig-bode" class="cell" data-execution_count="2">
+<div id="cell-fig-bode" class="cell" data-execution_count="3">
 <div id="fig-bode" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bode-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -519,13 +624,13 @@ window.Quarto = {
 </svg>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bode-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Bode plot of <span class="math inline">\(G(s) = \dfrac{1}{s^2 + s + 1}\)</span>.
+Figure&nbsp;10.1: Bode plot of <span class="math inline">\(G(s) = \dfrac{1}{s^2 + s + 1}\)</span>.
 </figcaption>
 </figure>
 </div>
 </div></li>
 <li><p><strong>Nyquist plot</strong> which is a parametric polar plot of <span class="math inline">\(G(jω)\)</span>.</p>
-<div id="cell-fig-nyquist" class="cell" data-execution_count="3">
+<div id="cell-fig-nyquist" class="cell" data-execution_count="4">
 <div id="fig-nyquist" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="4">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-nyquist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -635,7 +740,7 @@ Figure&nbsp;1: Bode plot of <span class="math inline">\(G(s) = \dfrac{1}{s^2 + s
 </svg>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nyquist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Nyquist plot of <span class="math inline">\(G(s) = \dfrac{1}{s^2 + s + 1}\)</span>.
+Figure&nbsp;10.2: Nyquist plot of <span class="math inline">\(G(s) = \dfrac{1}{s^2 + s + 1}\)</span>.
 </figcaption>
 </figure>
 </div>
@@ -643,8 +748,8 @@ Figure&nbsp;2: Nyquist plot of <span class="math inline">\(G(s) = \dfrac{1}{s^2 
 </ol>
 <p>We will first understand how to draw these plots and then use them as a tool to design controllers.</p>
 </section>
-<section id="bode-plots" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="bode-plots"><span class="header-section-number">2</span> Bode Plots</h2>
+<section id="bode-plots" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="bode-plots"><span class="header-section-number">10.2</span> Bode Plots</h2>
 <p>As mentioned earlier, Bode plot refers to a combination of two plots: magnitude vs frequency and phase vs frequency. It is named after <a href="https://en.wikipedia.org/wiki/Hendrik_Wade_Bode">:Hendrik Bode</a></p>
 <p>There are two features of these plots:</p>
 <ul>
@@ -668,13 +773,13 @@ Figure&nbsp;2: Nyquist plot of <span class="math inline">\(G(s) = \dfrac{1}{s^2 
 </div>
 </div>
 </div>
-<section id="bode-plot-of-a-constant-term" class="level3" data-number="2.1">
-<h3 data-number="2.1" class="anchored" data-anchor-id="bode-plot-of-a-constant-term"><span class="header-section-number">2.1</span> Bode plot of a constant term</h3>
+<section id="bode-plot-of-a-constant-term" class="level3" data-number="10.2.1">
+<h3 data-number="10.2.1" class="anchored" data-anchor-id="bode-plot-of-a-constant-term"><span class="header-section-number">10.2.1</span> Bode plot of a constant term</h3>
 <p>Consider the constant term <span class="math display">\[ G(s) = K \]</span> Clearly, the magnitude is a constant <span class="math display">\[ 20 \log |G(jω)| = 20 \log K \]</span> and the phase is a constant <span class="math display">\[ \angle G(jω) = \begin{cases}
 0^∘ &amp; K &gt; 0 \\
 \pm 180 ^∘ &amp; K &lt; 0
 \end{cases}\]</span></p>
-<div id="67eb7bd6" class="cell" data-execution_count="4">
+<div id="67eb7bd6" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-display">
 <!--?xml version="1.0" encoding="utf-8"?-->
 <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="600" height="400" viewbox="0 0 2400 1600">
@@ -977,8 +1082,8 @@ Figure&nbsp;2: Nyquist plot of <span class="math inline">\(G(s) = \dfrac{1}{s^2 
 </div>
 </div>
 </section>
-<section id="bode-plot-of-first-order-term" class="level3" data-number="2.2">
-<h3 data-number="2.2" class="anchored" data-anchor-id="bode-plot-of-first-order-term"><span class="header-section-number">2.2</span> Bode plot of first order term</h3>
+<section id="bode-plot-of-first-order-term" class="level3" data-number="10.2.2">
+<h3 data-number="10.2.2" class="anchored" data-anchor-id="bode-plot-of-first-order-term"><span class="header-section-number">10.2.2</span> Bode plot of first order term</h3>
 <p>Consider a <em>normalized</em> first order system <span class="math display">\[
     G(s) = \frac{a}{s + a} = \frac{1}{1 + \dfrac{s}{a}}.
 \]</span> The frequency <span class="math inline">\(a\)</span> is called the corner frequency (the reason for the name will become clear when we plot the magnitude plot).</p>
@@ -1001,7 +1106,7 @@ Figure&nbsp;2: Nyquist plot of <span class="math inline">\(G(s) = \dfrac{1}{s^2 
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Bode Plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Straight line approximation</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div id="120a539c" class="cell" data-execution_count="5">
+<div id="120a539c" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-display">
 <!--?xml version="1.0" encoding="utf-8"?-->
 <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="600" height="400" viewbox="0 0 2400 1600">
@@ -1326,7 +1431,7 @@ Figure&nbsp;2: Nyquist plot of <span class="math inline">\(G(s) = \dfrac{1}{s^2 
 </div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div id="372c2458" class="cell" data-execution_count="6">
+<div id="372c2458" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-display">
 <!--?xml version="1.0" encoding="utf-8"?-->
 <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="600" height="400" viewbox="0 0 2400 1600">
@@ -1677,13 +1782,13 @@ Figure&nbsp;2: Nyquist plot of <span class="math inline">\(G(s) = \dfrac{1}{s^2 
 </div>
 </div>
 </section>
-<section id="bode-plot-of-a-second-order-term" class="level3" data-number="2.3">
-<h3 data-number="2.3" class="anchored" data-anchor-id="bode-plot-of-a-second-order-term"><span class="header-section-number">2.3</span> Bode plot of a second order term</h3>
+<section id="bode-plot-of-a-second-order-term" class="level3" data-number="10.2.3">
+<h3 data-number="10.2.3" class="anchored" data-anchor-id="bode-plot-of-a-second-order-term"><span class="header-section-number">10.2.3</span> Bode plot of a second order term</h3>
 <p>Consider a <em>normalized</em> second order term is of the form:</p>
 <p><span class="math display">\[
 G(s) = \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2}.
 \]</span></p>
-<p>In this course, we will ignore the impact of damping coefficient on the Bode plot approximate <strong>any</strong> second order system as <span class="math display">\[
+<p>In this course, we will ignore the impact of damping coefficient on the Bode plot approximate <strong>any</strong> <em>underdamped</em> second order system as <span class="math display">\[
 G(s) = \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2} \approx
 \frac{ω_n^2}{(s+ω_n)^2}.
 \]</span></p>
@@ -1692,7 +1797,7 @@ G(s) = \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2} \approx
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Bode Plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Straight line approximation</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<div id="167490a8" class="cell" data-execution_count="7">
+<div id="167490a8" class="cell" data-execution_count="8">
 <div class="cell-output cell-output-display">
 <!--?xml version="1.0" encoding="utf-8"?-->
 <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="600" height="400" viewbox="0 0 2400 1600">
@@ -2009,7 +2114,7 @@ G(s) = \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2} \approx
 </div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
-<div id="319ea783" class="cell" data-execution_count="8">
+<div id="319ea783" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-display">
 <!--?xml version="1.0" encoding="utf-8"?-->
 <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="600" height="400" viewbox="0 0 2400 1600">
@@ -2350,8 +2455,8 @@ G(s) = \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2} \approx
 </div>
 </div>
 </section>
-<section id="poles-at-origin" class="level3" data-number="2.4">
-<h3 data-number="2.4" class="anchored" data-anchor-id="poles-at-origin"><span class="header-section-number">2.4</span> Poles at origin</h3>
+<section id="poles-at-origin" class="level3" data-number="10.2.4">
+<h3 data-number="10.2.4" class="anchored" data-anchor-id="poles-at-origin"><span class="header-section-number">10.2.4</span> Poles at origin</h3>
 <p>Consider the TF with a pole at origin: <span class="math display">\[
 G(s) = \frac 1s
 \]</span></p>
@@ -2362,7 +2467,7 @@ G(s) = \frac 1s
 \]</span> and <span class="math display">\[
 \angle G(jω) = - 90^∘
 \]</span></p>
-<div id="2164dc79" class="cell" data-execution_count="9">
+<div id="2164dc79" class="cell" data-execution_count="10">
 <div class="cell-output cell-output-display">
 <!--?xml version="1.0" encoding="utf-8"?-->
 <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="600" height="400" viewbox="0 0 2400 1600">
@@ -2646,8 +2751,8 @@ G(s) = \frac 1s
 </div>
 </div>
 </section>
-<section id="the-impact-of-zeros" class="level3" data-number="2.5">
-<h3 data-number="2.5" class="anchored" data-anchor-id="the-impact-of-zeros"><span class="header-section-number">2.5</span> The impact of zeros</h3>
+<section id="the-impact-of-zeros" class="level3" data-number="10.2.5">
+<h3 data-number="10.2.5" class="anchored" data-anchor-id="the-impact-of-zeros"><span class="header-section-number">10.2.5</span> The impact of zeros</h3>
 <p>Consider the transfer function <span class="math display">\[
 G(s) = 1 + \frac{s}{a}.
 \]</span></p>
@@ -2656,7 +2761,7 @@ G(s) = 1 + \frac{s}{a}.
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Bode Plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Straight line approximation</a></li></ul>
 <div class="tab-content">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
-<div id="b0608506" class="cell" data-execution_count="10">
+<div id="b0608506" class="cell" data-execution_count="11">
 <div class="cell-output cell-output-display">
 <!--?xml version="1.0" encoding="utf-8"?-->
 <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="600" height="400" viewbox="0 0 2400 1600">
@@ -2981,7 +3086,7 @@ G(s) = 1 + \frac{s}{a}.
 </div>
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
-<div id="7fa3e6e5" class="cell" data-execution_count="11">
+<div id="7fa3e6e5" class="cell" data-execution_count="12">
 <div class="cell-output cell-output-display">
 <!--?xml version="1.0" encoding="utf-8"?-->
 <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="600" height="400" viewbox="0 0 2400 1600">
@@ -3330,8 +3435,8 @@ G(s) = 1 + \frac{s}{a}.
 </div>
 </div>
 </section>
-<section id="bode-plot-of-general-transfer-functions" class="level3" data-number="2.6">
-<h3 data-number="2.6" class="anchored" data-anchor-id="bode-plot-of-general-transfer-functions"><span class="header-section-number">2.6</span> Bode plot of general transfer functions</h3>
+<section id="bode-plot-of-general-transfer-functions" class="level3" data-number="10.2.6">
+<h3 data-number="10.2.6" class="anchored" data-anchor-id="bode-plot-of-general-transfer-functions"><span class="header-section-number">10.2.6</span> Bode plot of general transfer functions</h3>
 <p>We now explain how to plot the Bode plots of a general transfer function via an example. Consider <span class="math display">\[
 G(s) = \frac{100(s+10)}{ (s+1)(s+100) }
 \]</span></p>
@@ -3342,7 +3447,7 @@ G(s) = {10} \left( \frac{1}{1 + s} \right)
 \left( \frac 1{1 + \dfrac{s}{100}} \right)
 \]</span></p>
 <p><strong>Step 2</strong> Separately plot the straight-line Bode plot approximation for each of the terms</p>
-<div id="dedc588c" class="cell" data-execution_count="12">
+<div id="dedc588c" class="cell" data-execution_count="13">
 <div class="cell-output cell-output-display" data-execution_count="13">
 <!--?xml version="1.0" encoding="utf-8"?-->
 <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="800" height="1200" viewbox="0 0 3200 4800">
@@ -4599,7 +4704,7 @@ G(s) = {10} \left( \frac{1}{1 + s} \right)
 </div>
 </div>
 <p><strong>Step 3</strong>: Add all the individual terms to plot the combined Bode plot.</p>
-<div id="b3222caf" class="cell" data-execution_count="13">
+<div id="b3222caf" class="cell" data-execution_count="14">
 <div class="cell-output cell-output-display" data-execution_count="14">
 <!--?xml version="1.0" encoding="utf-8"?-->
 <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="800" height="300" viewbox="0 0 3200 1200">
@@ -4926,23 +5031,23 @@ G(s) = {10} \left( \frac{1}{1 + s} \right)
 </div>
 </div>
 </section>
-<section id="system-type-and-steady-state-errors" class="level3" data-number="2.7">
-<h3 data-number="2.7" class="anchored" data-anchor-id="system-type-and-steady-state-errors"><span class="header-section-number">2.7</span> System type and steady state errors</h3>
+<section id="system-type-and-steady-state-errors" class="level3" data-number="10.2.7">
+<h3 data-number="10.2.7" class="anchored" data-anchor-id="system-type-and-steady-state-errors"><span class="header-section-number">10.2.7</span> System type and steady state errors</h3>
 <p>It is possible to identify the system type and the corresponding error constant from Bode plots. Recall that a general TF of type <span class="math inline">\(k\)</span> can be written as <span class="math display">\[
 \def\1#1{\Bigl(1 + \dfrac{s}{#1}\Bigr)}
 G(s) = \dfrac{K}{s^k} \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
       {\1{p_1}\1{p_2}\cdots\1{p_n}}
 \]</span></p>
-<section id="position-constant-of-type-0-system" class="level4" data-number="2.7.1">
-<h4 data-number="2.7.1" class="anchored" data-anchor-id="position-constant-of-type-0-system"><span class="header-section-number">2.7.1</span> Position constant of type 0 system</h4>
+<section id="position-constant-of-type-0-system" class="level4" data-number="10.2.7.1">
+<h4 data-number="10.2.7.1" class="anchored" data-anchor-id="position-constant-of-type-0-system"><span class="header-section-number">10.2.7.1</span> Position constant of type 0 system</h4>
 <p>The TF of a type 0 system is: <span class="math display">\[
 \def\1#1{\Bigl(1 + \dfrac{s}{#1}\Bigr)}
 G(s) = K_p \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
       {\1{p_1}\1{p_2}\cdots\1{p_n}}
 \]</span></p>
 <p>Thus, <span class="math inline">\(\lim_{s \to 0} G(s) = K_p\)</span>. This means that at low frequency (i.e., <span class="math inline">\(s \to 0\)</span>), the magnitude Bode plot is straight line with 0 dB/decade slope and has a y-offset of <span class="math inline">\(20 \log K_p\)</span>. So, we can find the position constant by inspection.</p>
-<p>An illustration of the Bode plot of a type 0 system is shown in <a href="#fig-type-0" class="quarto-xref">Figure&nbsp;3</a>.</p>
-<div id="cell-fig-type-0" class="cell" data-execution_count="14">
+<p>An illustration of the Bode plot of a type 0 system is shown in <a href="#fig-type-0" class="quarto-xref">Figure&nbsp;<span>10.3</span></a>.</p>
+<div id="cell-fig-type-0" class="cell" data-execution_count="15">
 <div id="fig-type-0" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="15">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-type-0-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -5069,22 +5174,22 @@ G(s) = K_p \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
 </svg>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-type-0-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Bode plot of type 0 system. The magnitude at low frequencies is equal to <span class="math inline">\(20 \log K_p\)</span>.
+Figure&nbsp;10.3: Bode plot of type 0 system. The magnitude at low frequencies is equal to <span class="math inline">\(20 \log K_p\)</span>.
 </figcaption>
 </figure>
 </div>
 </div>
 </section>
-<section id="velocity-constant-of-type-1-system" class="level4" data-number="2.7.2">
-<h4 data-number="2.7.2" class="anchored" data-anchor-id="velocity-constant-of-type-1-system"><span class="header-section-number">2.7.2</span> Velocity constant of type 1 system</h4>
+<section id="velocity-constant-of-type-1-system" class="level4" data-number="10.2.7.2">
+<h4 data-number="10.2.7.2" class="anchored" data-anchor-id="velocity-constant-of-type-1-system"><span class="header-section-number">10.2.7.2</span> Velocity constant of type 1 system</h4>
 <p>The TF of a type 1 system is: <span class="math display">\[
 \def\1#1{\Bigl(1 + \dfrac{s}{#1}\Bigr)}
 G(s) = \dfrac{K_v}{s} \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
       {\1{p_1}\1{p_2}\cdots\1{p_n}}
 \]</span></p>
 <p>Thus, <span class="math inline">\(\lim_{s \to 0} s G(s) = K_v\)</span>. This means that at low frequency (i.e., <span class="math inline">\(s \to 0\)</span>), the magnitude Bode plot is straight line with -20 dB/decade slope. One can identify the velocity constant <span class="math inline">\(K_v\)</span> by extending the initial -20 dB line until it hits 0&nbsp;dB. The frequency at which it happens is <span class="math inline">\(ω = K_v\)</span> (because at that frequency |K_v/j ω| = 1). So, we can find the velocity constant by inspection.</p>
-<p>An illustration of the Bode plot of a type 1 system is shown in <a href="#fig-type-1" class="quarto-xref">Figure&nbsp;4</a>.</p>
-<div id="cell-fig-type-1" class="cell" data-execution_count="15">
+<p>An illustration of the Bode plot of a type 1 system is shown in <a href="#fig-type-1" class="quarto-xref">Figure&nbsp;<span>10.4</span></a>.</p>
+<div id="cell-fig-type-1" class="cell" data-execution_count="16">
 <div id="fig-type-1" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="16">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-type-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -5218,22 +5323,22 @@ G(s) = \dfrac{K_v}{s} \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
 <path clip-path="url(#clip490)" d="M488.889 1136.64 Q485.278 1136.64 483.449 1140.2 Q481.643 1143.74 481.643 1150.87 Q481.643 1157.98 483.449 1161.54 Q485.278 1165.09 488.889 1165.09 Q492.523 1165.09 494.329 1161.54 Q496.157 1157.98 496.157 1150.87 Q496.157 1143.74 494.329 1140.2 Q492.523 1136.64 488.889 1136.64 M488.889 1132.93 Q494.699 1132.93 497.754 1137.54 Q500.833 1142.12 500.833 1150.87 Q500.833 1159.6 497.754 1164.21 Q494.699 1168.79 488.889 1168.79 Q483.079 1168.79 480 1164.21 Q476.944 1159.6 476.944 1150.87 Q476.944 1142.12 480 1137.54 Q483.079 1132.93 488.889 1132.93 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M540.578 1146.13 L540.578 1132.1 L544.838 1132.1 L544.838 1168.12 L540.578 1168.12 L540.578 1164.23 Q539.236 1166.54 537.176 1167.68 Q535.139 1168.79 532.268 1168.79 Q527.569 1168.79 524.606 1165.04 Q521.666 1161.29 521.666 1155.18 Q521.666 1149.07 524.606 1145.32 Q527.569 1141.57 532.268 1141.57 Q535.139 1141.57 537.176 1142.7 Q539.236 1143.81 540.578 1146.13 M526.064 1155.18 Q526.064 1159.88 527.986 1162.56 Q529.93 1165.23 533.31 1165.23 Q536.689 1165.23 538.634 1162.56 Q540.578 1159.88 540.578 1155.18 Q540.578 1150.48 538.634 1147.82 Q536.689 1145.13 533.31 1145.13 Q529.93 1145.13 527.986 1147.82 Q526.064 1150.48 526.064 1155.18 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M558.472 1151.61 L558.472 1164.28 L565.972 1164.28 Q569.745 1164.28 571.55 1162.73 Q573.379 1161.15 573.379 1157.93 Q573.379 1154.69 571.55 1153.17 Q569.745 1151.61 565.972 1151.61 L558.472 1151.61 M558.472 1137.4 L558.472 1147.82 L565.393 1147.82 Q568.819 1147.82 570.486 1146.54 Q572.175 1145.25 572.175 1142.61 Q572.175 1139.99 570.486 1138.7 Q568.819 1137.4 565.393 1137.4 L558.472 1137.4 M553.796 1133.56 L565.74 1133.56 Q571.087 1133.56 573.981 1135.78 Q576.874 1138 576.874 1142.1 Q576.874 1145.27 575.393 1147.15 Q573.911 1149.02 571.041 1149.48 Q574.49 1150.23 576.388 1152.59 Q578.31 1154.92 578.31 1158.44 Q578.31 1163.07 575.161 1165.6 Q572.013 1168.12 566.203 1168.12 L553.796 1168.12 L553.796 1133.56 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M601.203 1132.1 L605.462 1132.1 L605.462 1168.12 L601.203 1168.12 L601.203 1132.1 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M614.374 1142.19 L618.633 1142.19 L618.633 1168.12 L614.374 1168.12 L614.374 1142.19 M614.374 1132.1 L618.633 1132.1 L618.633 1137.49 L614.374 1137.49 L614.374 1132.1 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M649.096 1152.47 L649.096 1168.12 L644.837 1168.12 L644.837 1152.61 Q644.837 1148.93 643.402 1147.1 Q641.967 1145.27 639.096 1145.27 Q635.647 1145.27 633.657 1147.47 Q631.666 1149.67 631.666 1153.47 L631.666 1168.12 L627.383 1168.12 L627.383 1142.19 L631.666 1142.19 L631.666 1146.22 Q633.194 1143.88 635.254 1142.73 Q637.337 1141.57 640.045 1141.57 Q644.513 1141.57 646.805 1144.35 Q649.096 1147.1 649.096 1152.47 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M679.767 1154.09 L679.767 1156.17 L660.184 1156.17 Q660.462 1160.57 662.823 1162.89 Q665.207 1165.18 669.443 1165.18 Q671.897 1165.18 674.189 1164.58 Q676.503 1163.98 678.772 1162.77 L678.772 1166.8 Q676.48 1167.77 674.073 1168.28 Q671.666 1168.79 669.189 1168.79 Q662.985 1168.79 659.351 1165.18 Q655.74 1161.57 655.74 1155.41 Q655.74 1149.04 659.166 1145.32 Q662.615 1141.57 668.448 1141.57 Q673.679 1141.57 676.712 1144.95 Q679.767 1148.3 679.767 1154.09 M675.508 1152.84 Q675.462 1149.35 673.541 1147.26 Q671.642 1145.18 668.494 1145.18 Q664.929 1145.18 662.777 1147.19 Q660.647 1149.21 660.323 1152.86 L675.508 1152.84 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M920.904 389.765 L925.58 389.765 L925.58 424.325 L920.904 424.325 L920.904 389.765 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M956.251 408.677 L956.251 424.325 L951.992 424.325 L951.992 408.816 Q951.992 405.135 950.557 403.307 Q949.122 401.478 946.251 401.478 Q942.802 401.478 940.811 403.677 Q938.821 405.876 938.821 409.672 L938.821 424.325 L934.538 424.325 L934.538 398.399 L938.821 398.399 L938.821 402.427 Q940.348 400.089 942.409 398.932 Q944.492 397.774 947.2 397.774 Q951.668 397.774 953.96 400.552 Q956.251 403.307 956.251 408.677 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M964.747 398.399 L969.006 398.399 L969.006 424.325 L964.747 424.325 L964.747 398.399 M964.747 388.307 L969.006 388.307 L969.006 393.7 L964.747 393.7 L964.747 388.307 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M982.131 391.038 L982.131 398.399 L990.904 398.399 L990.904 401.709 L982.131 401.709 L982.131 415.783 Q982.131 418.955 982.987 419.857 Q983.867 420.76 986.529 420.76 L990.904 420.76 L990.904 424.325 L986.529 424.325 Q981.598 424.325 979.723 422.496 Q977.848 420.645 977.848 415.783 L977.848 401.709 L974.723 401.709 L974.723 398.399 L977.848 398.399 L977.848 391.038 L982.131 391.038 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M996.506 398.399 L1000.76 398.399 L1000.76 424.325 L996.506 424.325 L996.506 398.399 M996.506 388.307 L1000.76 388.307 L1000.76 393.7 L996.506 393.7 L996.506 388.307 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M1021.46 411.293 Q1016.3 411.293 1014.31 412.473 Q1012.32 413.654 1012.32 416.501 Q1012.32 418.77 1013.8 420.112 Q1015.3 421.432 1017.87 421.432 Q1021.41 421.432 1023.54 418.932 Q1025.7 416.408 1025.7 412.242 L1025.7 411.293 L1021.46 411.293 M1029.95 409.533 L1029.95 424.325 L1025.7 424.325 L1025.7 420.39 Q1024.24 422.751 1022.06 423.885 Q1019.89 424.996 1016.74 424.996 Q1012.76 424.996 1010.39 422.774 Q1008.06 420.529 1008.06 416.779 Q1008.06 412.404 1010.97 410.182 Q1013.91 407.959 1019.72 407.959 L1025.7 407.959 L1025.7 407.543 Q1025.7 404.603 1023.75 403.006 Q1021.83 401.385 1018.33 401.385 Q1016.11 401.385 1014.01 401.918 Q1011.9 402.45 1009.95 403.515 L1009.95 399.58 Q1012.29 398.677 1014.49 398.237 Q1016.69 397.774 1018.77 397.774 Q1024.4 397.774 1027.18 400.691 Q1029.95 403.608 1029.95 409.533 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M1038.73 388.307 L1042.99 388.307 L1042.99 424.325 L1038.73 424.325 L1038.73 388.307 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M1064.82 409.441 L1077.29 409.441 L1077.29 413.237 L1064.82 413.237 L1064.82 409.441 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M1088.7 420.39 L1105.02 420.39 L1105.02 424.325 L1083.08 424.325 L1083.08 420.39 Q1085.74 417.635 1090.32 413.006 Q1094.93 408.353 1096.11 407.01 Q1098.36 404.487 1099.24 402.751 Q1100.14 400.992 1100.14 399.302 Q1100.14 396.547 1098.19 394.811 Q1096.27 393.075 1093.17 393.075 Q1090.97 393.075 1088.52 393.839 Q1086.09 394.603 1083.31 396.154 L1083.31 391.432 Q1086.13 390.297 1088.59 389.719 Q1091.04 389.14 1093.08 389.14 Q1098.45 389.14 1101.64 391.825 Q1104.84 394.51 1104.84 399.001 Q1104.84 401.131 1104.03 403.052 Q1103.24 404.95 1101.13 407.543 Q1100.56 408.214 1097.45 411.432 Q1094.35 414.626 1088.7 420.39 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M1124.84 392.844 Q1121.23 392.844 1119.4 396.409 Q1117.59 399.95 1117.59 407.08 Q1117.59 414.186 1119.4 417.751 Q1121.23 421.293 1124.84 421.293 Q1128.47 421.293 1130.28 417.751 Q1132.11 414.186 1132.11 407.08 Q1132.11 399.95 1130.28 396.409 Q1128.47 392.844 1124.84 392.844 M1124.84 389.14 Q1130.65 389.14 1133.7 393.746 Q1136.78 398.33 1136.78 407.08 Q1136.78 415.807 1133.7 420.413 Q1130.65 424.996 1124.84 424.996 Q1119.03 424.996 1115.95 420.413 Q1112.89 415.807 1112.89 407.08 Q1112.89 398.33 1115.95 393.746 Q1119.03 389.14 1124.84 389.14 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M1176.53 402.334 L1176.53 388.307 L1180.79 388.307 L1180.79 424.325 L1176.53 424.325 L1176.53 420.436 Q1175.19 422.751 1173.13 423.885 Q1171.09 424.996 1168.22 424.996 Q1163.52 424.996 1160.56 421.246 Q1157.62 417.496 1157.62 411.385 Q1157.62 405.274 1160.56 401.524 Q1163.52 397.774 1168.22 397.774 Q1171.09 397.774 1173.13 398.909 Q1175.19 400.02 1176.53 402.334 M1162.01 411.385 Q1162.01 416.084 1163.94 418.77 Q1165.88 421.432 1169.26 421.432 Q1172.64 421.432 1174.58 418.77 Q1176.53 416.084 1176.53 411.385 Q1176.53 406.686 1174.58 404.024 Q1172.64 401.339 1169.26 401.339 Q1165.88 401.339 1163.94 404.024 Q1162.01 406.686 1162.01 411.385 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M1194.42 407.82 L1194.42 420.482 L1201.92 420.482 Q1205.69 420.482 1207.5 418.932 Q1209.33 417.357 1209.33 414.14 Q1209.33 410.899 1207.5 409.371 Q1205.69 407.82 1201.92 407.82 L1194.42 407.82 M1194.42 393.608 L1194.42 404.024 L1201.34 404.024 Q1204.77 404.024 1206.44 402.751 Q1208.12 401.455 1208.12 398.816 Q1208.12 396.2 1206.44 394.904 Q1204.77 393.608 1201.34 393.608 L1194.42 393.608 M1189.75 389.765 L1201.69 389.765 Q1207.04 389.765 1209.93 391.987 Q1212.82 394.209 1212.82 398.307 Q1212.82 401.478 1211.34 403.353 Q1209.86 405.228 1206.99 405.691 Q1210.44 406.432 1212.34 408.793 Q1214.26 411.131 1214.26 414.649 Q1214.26 419.279 1211.11 421.802 Q1207.96 424.325 1202.15 424.325 L1189.75 424.325 L1189.75 389.765 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M1229.65 389.765 L1233.59 389.765 L1221.55 428.723 L1217.62 428.723 L1229.65 389.765 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M1255.12 402.334 L1255.12 388.307 L1259.37 388.307 L1259.37 424.325 L1255.12 424.325 L1255.12 420.436 Q1253.77 422.751 1251.71 423.885 Q1249.68 424.996 1246.81 424.996 Q1242.11 424.996 1239.14 421.246 Q1236.2 417.496 1236.2 411.385 Q1236.2 405.274 1239.14 401.524 Q1242.11 397.774 1246.81 397.774 Q1249.68 397.774 1251.71 398.909 Q1253.77 400.02 1255.12 402.334 M1240.6 411.385 Q1240.6 416.084 1242.52 418.77 Q1244.47 421.432 1247.85 421.432 Q1251.23 421.432 1253.17 418.77 Q1255.12 416.084 1255.12 411.385 Q1255.12 406.686 1253.17 404.024 Q1251.23 401.339 1247.85 401.339 Q1244.47 401.339 1242.52 404.024 Q1240.6 406.686 1240.6 411.385 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M1290.32 410.297 L1290.32 412.381 L1270.74 412.381 Q1271.02 416.779 1273.38 419.094 Q1275.76 421.385 1280 421.385 Q1282.45 421.385 1284.74 420.783 Q1287.06 420.182 1289.33 418.978 L1289.33 423.006 Q1287.04 423.978 1284.63 424.487 Q1282.22 424.996 1279.74 424.996 Q1273.54 424.996 1269.91 421.385 Q1266.3 417.774 1266.3 411.617 Q1266.3 405.251 1269.72 401.524 Q1273.17 397.774 1279 397.774 Q1284.24 397.774 1287.27 401.154 Q1290.32 404.51 1290.32 410.297 M1286.06 409.047 Q1286.02 405.552 1284.1 403.469 Q1282.2 401.385 1279.05 401.385 Q1275.49 401.385 1273.33 403.399 Q1271.2 405.413 1270.88 409.07 L1286.06 409.047 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M1315.97 399.395 L1315.97 403.376 Q1314.17 402.381 1312.34 401.895 Q1310.53 401.385 1308.68 401.385 Q1304.54 401.385 1302.24 404.024 Q1299.95 406.64 1299.95 411.385 Q1299.95 416.131 1302.24 418.77 Q1304.54 421.385 1308.68 421.385 Q1310.53 421.385 1312.34 420.899 Q1314.17 420.39 1315.97 419.395 L1315.97 423.33 Q1314.19 424.163 1312.27 424.58 Q1310.37 424.996 1308.22 424.996 Q1302.36 424.996 1298.91 421.316 Q1295.46 417.635 1295.46 411.385 Q1295.46 405.043 1298.93 401.408 Q1302.43 397.774 1308.49 397.774 Q1310.46 397.774 1312.34 398.191 Q1314.21 398.584 1315.97 399.395 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M1354.98 399.163 L1354.98 403.191 Q1353.17 402.265 1351.23 401.802 Q1349.28 401.339 1347.2 401.339 Q1344.03 401.339 1342.43 402.311 Q1340.86 403.283 1340.86 405.228 Q1340.86 406.709 1341.99 407.566 Q1343.12 408.399 1346.55 409.163 L1348.01 409.487 Q1352.55 410.459 1354.44 412.242 Q1356.36 414.001 1356.36 417.172 Q1356.36 420.783 1353.49 422.89 Q1350.65 424.996 1345.65 424.996 Q1343.56 424.996 1341.3 424.58 Q1339.05 424.186 1336.55 423.376 L1336.55 418.978 Q1338.91 420.205 1341.2 420.83 Q1343.49 421.432 1345.74 421.432 Q1348.75 421.432 1350.37 420.413 Q1351.99 419.371 1351.99 417.496 Q1351.99 415.76 1350.81 414.834 Q1349.65 413.908 1345.69 413.052 L1344.21 412.705 Q1340.25 411.871 1338.49 410.158 Q1336.74 408.422 1336.74 405.413 Q1336.74 401.756 1339.33 399.765 Q1341.92 397.774 1346.69 397.774 Q1349.05 397.774 1351.13 398.121 Q1353.22 398.469 1354.98 399.163 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M1363.15 388.307 L1367.41 388.307 L1367.41 424.325 L1363.15 424.325 L1363.15 388.307 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M1386.36 401.385 Q1382.94 401.385 1380.95 404.071 Q1378.96 406.733 1378.96 411.385 Q1378.96 416.038 1380.92 418.723 Q1382.92 421.385 1386.36 421.385 Q1389.77 421.385 1391.76 418.7 Q1393.75 416.015 1393.75 411.385 Q1393.75 406.779 1391.76 404.094 Q1389.77 401.385 1386.36 401.385 M1386.36 397.774 Q1391.92 397.774 1395.09 401.385 Q1398.26 404.996 1398.26 411.385 Q1398.26 417.751 1395.09 421.385 Q1391.92 424.996 1386.36 424.996 Q1380.79 424.996 1377.61 421.385 Q1374.47 417.751 1374.47 411.385 Q1374.47 404.996 1377.61 401.385 Q1380.79 397.774 1386.36 397.774 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M1409.44 420.436 L1409.44 434.186 L1405.16 434.186 L1405.16 398.399 L1409.44 398.399 L1409.44 402.334 Q1410.79 400.02 1412.82 398.909 Q1414.88 397.774 1417.73 397.774 Q1422.45 397.774 1425.39 401.524 Q1428.36 405.274 1428.36 411.385 Q1428.36 417.496 1425.39 421.246 Q1422.45 424.996 1417.73 424.996 Q1414.88 424.996 1412.82 423.885 Q1410.79 422.751 1409.44 420.436 M1423.93 411.385 Q1423.93 406.686 1421.99 404.024 Q1420.07 401.339 1416.69 401.339 Q1413.31 401.339 1411.36 404.024 Q1409.44 406.686 1409.44 411.385 Q1409.44 416.084 1411.36 418.77 Q1413.31 421.432 1416.69 421.432 Q1420.07 421.432 1421.99 418.77 Q1423.93 416.084 1423.93 411.385 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M1457.59 410.297 L1457.59 412.381 L1438.01 412.381 Q1438.29 416.779 1440.65 419.094 Q1443.03 421.385 1447.27 421.385 Q1449.72 421.385 1452.01 420.783 Q1454.33 420.182 1456.6 418.978 L1456.6 423.006 Q1454.3 423.978 1451.9 424.487 Q1449.49 424.996 1447.01 424.996 Q1440.81 424.996 1437.17 421.385 Q1433.56 417.774 1433.56 411.617 Q1433.56 405.251 1436.99 401.524 Q1440.44 397.774 1446.27 397.774 Q1451.5 397.774 1454.54 401.154 Q1457.59 404.51 1457.59 410.297 M1453.33 409.047 Q1453.29 405.552 1451.36 403.469 Q1449.47 401.385 1446.32 401.385 Q1442.75 401.385 1440.6 403.399 Q1438.47 405.413 1438.15 409.07 L1453.33 409.047 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M314.382 749.566 L336.233 749.566 L336.233 753.501 L319.057 753.501 L319.057 763.733 L335.516 763.733 L335.516 767.668 L319.057 767.668 L319.057 780.191 L336.65 780.191 L336.65 784.126 L314.382 784.126 L314.382 749.566 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M365.701 758.2 L356.326 770.816 L366.187 784.126 L361.164 784.126 L353.617 773.941 L346.071 784.126 L341.048 784.126 L351.117 770.561 L341.905 758.2 L346.928 758.2 L353.803 767.436 L360.678 758.2 L365.701 758.2 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M376.418 750.839 L376.418 758.2 L385.191 758.2 L385.191 761.51 L376.418 761.51 L376.418 775.584 Q376.418 778.756 377.275 779.658 Q378.154 780.561 380.816 780.561 L385.191 780.561 L385.191 784.126 L380.816 784.126 Q375.886 784.126 374.011 782.297 Q372.136 780.445 372.136 775.584 L372.136 761.51 L369.011 761.51 L369.011 758.2 L372.136 758.2 L372.136 750.839 L376.418 750.839 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M412.969 770.098 L412.969 772.182 L393.386 772.182 Q393.664 776.58 396.025 778.895 Q398.409 781.186 402.645 781.186 Q405.099 781.186 407.39 780.584 Q409.705 779.982 411.974 778.779 L411.974 782.807 Q409.682 783.779 407.275 784.288 Q404.867 784.797 402.39 784.797 Q396.187 784.797 392.552 781.186 Q388.941 777.575 388.941 771.418 Q388.941 765.052 392.367 761.325 Q395.816 757.575 401.65 757.575 Q406.881 757.575 409.913 760.955 Q412.969 764.311 412.969 770.098 M408.71 768.848 Q408.663 765.353 406.742 763.27 Q404.844 761.186 401.696 761.186 Q398.131 761.186 395.978 763.2 Q393.849 765.214 393.525 768.871 L408.71 768.848 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M441.51 768.478 L441.51 784.126 L437.251 784.126 L437.251 768.617 Q437.251 764.936 435.816 763.108 Q434.381 761.279 431.511 761.279 Q428.061 761.279 426.071 763.478 Q424.08 765.677 424.08 769.473 L424.08 784.126 L419.798 784.126 L419.798 758.2 L424.08 758.2 L424.08 762.228 Q425.608 759.89 427.668 758.733 Q429.751 757.575 432.46 757.575 Q436.927 757.575 439.219 760.353 Q441.51 763.108 441.51 768.478 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M467.066 762.135 L467.066 748.108 L471.325 748.108 L471.325 784.126 L467.066 784.126 L467.066 780.237 Q465.723 782.552 463.663 783.686 Q461.626 784.797 458.756 784.797 Q454.057 784.797 451.094 781.047 Q448.154 777.297 448.154 771.186 Q448.154 765.075 451.094 761.325 Q454.057 757.575 458.756 757.575 Q461.626 757.575 463.663 758.709 Q465.723 759.821 467.066 762.135 M452.552 771.186 Q452.552 775.885 454.473 778.57 Q456.418 781.232 459.797 781.232 Q463.177 781.232 465.121 778.57 Q467.066 775.885 467.066 771.186 Q467.066 766.487 465.121 763.825 Q463.177 761.14 459.797 761.14 Q456.418 761.14 454.473 763.825 Q452.552 766.487 452.552 771.186 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M502.274 770.098 L502.274 772.182 L482.691 772.182 Q482.969 776.58 485.33 778.895 Q487.714 781.186 491.95 781.186 Q494.404 781.186 496.695 780.584 Q499.01 779.982 501.279 778.779 L501.279 782.807 Q498.987 783.779 496.58 784.288 Q494.172 784.797 491.695 784.797 Q485.492 784.797 481.857 781.186 Q478.246 777.575 478.246 771.418 Q478.246 765.052 481.672 761.325 Q485.121 757.575 490.955 757.575 Q496.186 757.575 499.218 760.955 Q502.274 764.311 502.274 770.098 M498.015 768.848 Q497.968 765.353 496.047 763.27 Q494.149 761.186 491.001 761.186 Q487.436 761.186 485.283 763.2 Q483.154 765.214 482.83 768.871 L498.015 768.848 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M526.325 762.135 L526.325 748.108 L530.584 748.108 L530.584 784.126 L526.325 784.126 L526.325 780.237 Q524.982 782.552 522.922 783.686 Q520.885 784.797 518.015 784.797 Q513.316 784.797 510.353 781.047 Q507.413 777.297 507.413 771.186 Q507.413 765.075 510.353 761.325 Q513.316 757.575 518.015 757.575 Q520.885 757.575 522.922 758.709 Q524.982 759.821 526.325 762.135 M511.811 771.186 Q511.811 775.885 513.732 778.57 Q515.677 781.232 519.056 781.232 Q522.436 781.232 524.38 778.57 Q526.325 775.885 526.325 771.186 Q526.325 766.487 524.38 763.825 Q522.436 761.14 519.056 761.14 Q515.677 761.14 513.732 763.825 Q511.811 766.487 511.811 771.186 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M554.427 758.2 L558.686 758.2 L558.686 784.126 L554.427 784.126 L554.427 758.2 M554.427 748.108 L558.686 748.108 L558.686 753.501 L554.427 753.501 L554.427 748.108 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M589.149 768.478 L589.149 784.126 L584.889 784.126 L584.889 768.617 Q584.889 764.936 583.454 763.108 Q582.019 761.279 579.149 761.279 Q575.7 761.279 573.709 763.478 Q571.718 765.677 571.718 769.473 L571.718 784.126 L567.436 784.126 L567.436 758.2 L571.718 758.2 L571.718 762.228 Q573.246 759.89 575.306 758.733 Q577.389 757.575 580.098 757.575 Q584.565 757.575 586.857 760.353 Q589.149 763.108 589.149 768.478 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M597.644 758.2 L601.903 758.2 L601.903 784.126 L597.644 784.126 L597.644 758.2 M597.644 748.108 L601.903 748.108 L601.903 753.501 L597.644 753.501 L597.644 748.108 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M615.028 750.839 L615.028 758.2 L623.801 758.2 L623.801 761.51 L615.028 761.51 L615.028 775.584 Q615.028 778.756 615.885 779.658 Q616.764 780.561 619.426 780.561 L623.801 780.561 L623.801 784.126 L619.426 784.126 Q614.496 784.126 612.621 782.297 Q610.746 780.445 610.746 775.584 L610.746 761.51 L607.621 761.51 L607.621 758.2 L610.746 758.2 L610.746 750.839 L615.028 750.839 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M629.403 758.2 L633.662 758.2 L633.662 784.126 L629.403 784.126 L629.403 758.2 M629.403 748.108 L633.662 748.108 L633.662 753.501 L629.403 753.501 L629.403 748.108 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M654.357 771.094 Q649.195 771.094 647.204 772.274 Q645.213 773.455 645.213 776.302 Q645.213 778.57 646.695 779.913 Q648.199 781.232 650.769 781.232 Q654.31 781.232 656.44 778.732 Q658.593 776.209 658.593 772.043 L658.593 771.094 L654.357 771.094 M662.852 769.334 L662.852 784.126 L658.593 784.126 L658.593 780.191 Q657.134 782.552 654.958 783.686 Q652.782 784.797 649.634 784.797 Q645.653 784.797 643.292 782.575 Q640.954 780.33 640.954 776.58 Q640.954 772.205 643.87 769.983 Q646.81 767.76 652.62 767.76 L658.593 767.76 L658.593 767.344 Q658.593 764.404 656.648 762.807 Q654.727 761.186 651.232 761.186 Q649.009 761.186 646.903 761.719 Q644.796 762.251 642.852 763.316 L642.852 759.381 Q645.19 758.478 647.389 758.038 Q649.588 757.575 651.671 757.575 Q657.296 757.575 660.074 760.492 Q662.852 763.409 662.852 769.334 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M671.625 748.108 L675.884 748.108 L675.884 784.126 L671.625 784.126 L671.625 748.108 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M716.393 758.964 L716.393 762.992 Q714.588 762.066 712.643 761.603 Q710.699 761.14 708.616 761.14 Q705.444 761.14 703.847 762.112 Q702.273 763.084 702.273 765.029 Q702.273 766.51 703.407 767.367 Q704.541 768.2 707.967 768.964 L709.426 769.288 Q713.963 770.26 715.861 772.043 Q717.782 773.802 717.782 776.973 Q717.782 780.584 714.912 782.691 Q712.065 784.797 707.065 784.797 Q704.981 784.797 702.713 784.381 Q700.467 783.987 697.967 783.177 L697.967 778.779 Q700.329 780.006 702.62 780.631 Q704.912 781.232 707.157 781.232 Q710.166 781.232 711.787 780.214 Q713.407 779.172 713.407 777.297 Q713.407 775.561 712.227 774.635 Q711.069 773.709 707.111 772.853 L705.629 772.506 Q701.671 771.672 699.912 769.959 Q698.153 768.223 698.153 765.214 Q698.153 761.557 700.745 759.566 Q703.338 757.575 708.106 757.575 Q710.467 757.575 712.551 757.922 Q714.634 758.27 716.393 758.964 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M724.565 748.108 L728.824 748.108 L728.824 784.126 L724.565 784.126 L724.565 748.108 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M747.782 761.186 Q744.356 761.186 742.365 763.871 Q740.375 766.533 740.375 771.186 Q740.375 775.839 742.342 778.524 Q744.333 781.186 747.782 781.186 Q751.185 781.186 753.175 778.501 Q755.166 775.816 755.166 771.186 Q755.166 766.58 753.175 763.895 Q751.185 761.186 747.782 761.186 M747.782 757.575 Q753.338 757.575 756.509 761.186 Q759.68 764.797 759.68 771.186 Q759.68 777.552 756.509 781.186 Q753.338 784.797 747.782 784.797 Q742.203 784.797 739.032 781.186 Q735.884 777.552 735.884 771.186 Q735.884 764.797 739.032 761.186 Q742.203 757.575 747.782 757.575 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M770.861 780.237 L770.861 793.987 L766.578 793.987 L766.578 758.2 L770.861 758.2 L770.861 762.135 Q772.203 759.821 774.24 758.709 Q776.3 757.575 779.148 757.575 Q783.87 757.575 786.81 761.325 Q789.772 765.075 789.772 771.186 Q789.772 777.297 786.81 781.047 Q783.87 784.797 779.148 784.797 Q776.3 784.797 774.24 783.686 Q772.203 782.552 770.861 780.237 M785.351 771.186 Q785.351 766.487 783.407 763.825 Q781.485 761.14 778.106 761.14 Q774.726 761.14 772.782 763.825 Q770.861 766.487 770.861 771.186 Q770.861 775.885 772.782 778.57 Q774.726 781.232 778.106 781.232 Q781.485 781.232 783.407 778.57 Q785.351 775.885 785.351 771.186 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M819.008 770.098 L819.008 772.182 L799.425 772.182 Q799.703 776.58 802.064 778.895 Q804.448 781.186 808.684 781.186 Q811.138 781.186 813.43 780.584 Q815.745 779.982 818.013 778.779 L818.013 782.807 Q815.721 783.779 813.314 784.288 Q810.907 784.797 808.43 784.797 Q802.226 784.797 798.592 781.186 Q794.981 777.575 794.981 771.418 Q794.981 765.052 798.407 761.325 Q801.856 757.575 807.689 757.575 Q812.921 757.575 815.953 760.955 Q819.008 764.311 819.008 770.098 M814.749 768.848 Q814.703 765.353 812.782 763.27 Q810.883 761.186 807.735 761.186 Q804.171 761.186 802.018 763.2 Q799.888 765.214 799.564 768.871 L814.749 768.848 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M851.3 748.154 Q848.198 753.478 846.693 758.686 Q845.189 763.895 845.189 769.242 Q845.189 774.589 846.693 779.844 Q848.221 785.075 851.3 790.376 L847.596 790.376 Q844.124 784.936 842.388 779.682 Q840.675 774.427 840.675 769.242 Q840.675 764.08 842.388 758.848 Q844.101 753.617 847.596 748.154 L851.3 748.154 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M859.564 758.2 L863.823 758.2 L863.823 784.126 L859.564 784.126 L859.564 758.2 M859.564 748.108 L863.823 748.108 L863.823 753.501 L859.564 753.501 L859.564 748.108 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M885.86 748.108 L885.86 751.649 L881.786 751.649 Q879.494 751.649 878.591 752.575 Q877.712 753.501 877.712 755.909 L877.712 758.2 L884.726 758.2 L884.726 761.51 L877.712 761.51 L877.712 784.126 L873.429 784.126 L873.429 761.51 L869.355 761.51 L869.355 758.2 L873.429 758.2 L873.429 756.395 Q873.429 752.066 875.443 750.098 Q877.457 748.108 881.832 748.108 L885.86 748.108 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M926.045 768.478 L926.045 784.126 L921.786 784.126 L921.786 768.617 Q921.786 764.936 920.35 763.108 Q918.915 761.279 916.045 761.279 Q912.596 761.279 910.605 763.478 Q908.614 765.677 908.614 769.473 L908.614 784.126 L904.332 784.126 L904.332 758.2 L908.614 758.2 L908.614 762.228 Q910.142 759.89 912.202 758.733 Q914.286 757.575 916.994 757.575 Q921.462 757.575 923.753 760.353 Q926.045 763.108 926.045 768.478 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M956.716 770.098 L956.716 772.182 L937.133 772.182 Q937.411 776.58 939.772 778.895 Q942.156 781.186 946.392 781.186 Q948.846 781.186 951.137 780.584 Q953.452 779.982 955.721 778.779 L955.721 782.807 Q953.429 783.779 951.022 784.288 Q948.614 784.797 946.137 784.797 Q939.934 784.797 936.299 781.186 Q932.688 777.575 932.688 771.418 Q932.688 765.052 936.114 761.325 Q939.563 757.575 945.397 757.575 Q950.628 757.575 953.661 760.955 Q956.716 764.311 956.716 770.098 M952.457 768.848 Q952.411 765.353 950.489 763.27 Q948.591 761.186 945.443 761.186 Q941.878 761.186 939.725 763.2 Q937.596 765.214 937.272 768.871 L952.457 768.848 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M985.883 770.098 L985.883 772.182 L966.299 772.182 Q966.577 776.58 968.938 778.895 Q971.322 781.186 975.559 781.186 Q978.012 781.186 980.304 780.584 Q982.619 779.982 984.887 778.779 L984.887 782.807 Q982.596 783.779 980.188 784.288 Q977.781 784.797 975.304 784.797 Q969.1 784.797 965.466 781.186 Q961.855 777.575 961.855 771.418 Q961.855 765.052 965.281 761.325 Q968.73 757.575 974.563 757.575 Q979.795 757.575 982.827 760.955 Q985.883 764.311 985.883 770.098 M981.623 768.848 Q981.577 765.353 979.656 763.27 Q977.758 761.186 974.609 761.186 Q971.045 761.186 968.892 763.2 Q966.762 765.214 966.438 768.871 L981.623 768.848 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M1009.93 762.135 L1009.93 748.108 L1014.19 748.108 L1014.19 784.126 L1009.93 784.126 L1009.93 780.237 Q1008.59 782.552 1006.53 783.686 Q1004.49 784.797 1001.62 784.797 Q996.924 784.797 993.961 781.047 Q991.021 777.297 991.021 771.186 Q991.021 765.075 993.961 761.325 Q996.924 757.575 1001.62 757.575 Q1004.49 757.575 1006.53 758.709 Q1008.59 759.821 1009.93 762.135 M995.42 771.186 Q995.42 775.885 997.341 778.57 Q999.285 781.232 1002.66 781.232 Q1006.04 781.232 1007.99 778.57 Q1009.93 775.885 1009.93 771.186 Q1009.93 766.487 1007.99 763.825 Q1006.04 761.14 1002.66 761.14 Q999.285 761.14 997.341 763.825 Q995.42 766.487 995.42 771.186 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M1045.14 770.098 L1045.14 772.182 L1025.56 772.182 Q1025.84 776.58 1028.2 778.895 Q1030.58 781.186 1034.82 781.186 Q1037.27 781.186 1039.56 780.584 Q1041.88 779.982 1044.15 778.779 L1044.15 782.807 Q1041.85 783.779 1039.45 784.288 Q1037.04 784.797 1034.56 784.797 Q1028.36 784.797 1024.72 781.186 Q1021.11 777.575 1021.11 771.418 Q1021.11 765.052 1024.54 761.325 Q1027.99 757.575 1033.82 757.575 Q1039.05 757.575 1042.09 760.955 Q1045.14 764.311 1045.14 770.098 M1040.88 768.848 Q1040.84 765.353 1038.91 763.27 Q1037.02 761.186 1033.87 761.186 Q1030.3 761.186 1028.15 763.2 Q1026.02 765.214 1025.7 768.871 L1040.88 768.848 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M1069.19 762.135 L1069.19 748.108 L1073.45 748.108 L1073.45 784.126 L1069.19 784.126 L1069.19 780.237 Q1067.85 782.552 1065.79 783.686 Q1063.75 784.797 1060.88 784.797 Q1056.18 784.797 1053.22 781.047 Q1050.28 777.297 1050.28 771.186 Q1050.28 765.075 1053.22 761.325 Q1056.18 757.575 1060.88 757.575 Q1063.75 757.575 1065.79 758.709 Q1067.85 759.821 1069.19 762.135 M1054.68 771.186 Q1054.68 775.885 1056.6 778.57 Q1058.54 781.232 1061.92 781.232 Q1065.3 781.232 1067.25 778.57 Q1069.19 775.885 1069.19 771.186 Q1069.19 766.487 1067.25 763.825 Q1065.3 761.14 1061.92 761.14 Q1058.54 761.14 1056.6 763.825 Q1054.68 766.487 1054.68 771.186 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip490)" d="M1081.55 748.154 L1085.26 748.154 Q1088.73 753.617 1090.44 758.848 Q1092.18 764.08 1092.18 769.242 Q1092.18 774.427 1090.44 779.682 Q1088.73 784.936 1085.26 790.376 L1081.55 790.376 Q1084.63 785.075 1086.14 779.844 Q1087.66 774.589 1087.66 769.242 Q1087.66 763.895 1086.14 758.686 Q1084.63 753.478 1081.55 748.154 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path></svg>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-type-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: Bode plot of type 1 system. The initial slope of -20 dB/dec intercepts the 0 dB line at <span class="math inline">\(K_v\)</span>.
+Figure&nbsp;10.4: Bode plot of type 1 system. The initial slope of -20 dB/dec intercepts the 0 dB line at <span class="math inline">\(K_v\)</span>.
 </figcaption>
 </figure>
 </div>
 </div>
 </section>
-<section id="acceleration-constant-of-type-2-system" class="level4" data-number="2.7.3">
-<h4 data-number="2.7.3" class="anchored" data-anchor-id="acceleration-constant-of-type-2-system"><span class="header-section-number">2.7.3</span> Acceleration constant of type 2 system</h4>
+<section id="acceleration-constant-of-type-2-system" class="level4" data-number="10.2.7.3">
+<h4 data-number="10.2.7.3" class="anchored" data-anchor-id="acceleration-constant-of-type-2-system"><span class="header-section-number">10.2.7.3</span> Acceleration constant of type 2 system</h4>
 <p>The TF of a type 1 system is: <span class="math display">\[
 \def\1#1{\Bigl(1 + \dfrac{s}{#1}\Bigr)}
 G(s) = \dfrac{K_a}{s^2} \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
       {\1{p_1}\1{p_2}\cdots\1{p_n}}
 \]</span></p>
 <p>Thus, <span class="math inline">\(\lim_{s \to 0} s^2 G(s) = K_a\)</span>. This means that at low frequency (i.e., <span class="math inline">\(s \to 0\)</span>), the magnitude Bode plot is straight line with -40 dB/decade slope. One can identify the acceleration constant <span class="math inline">\(K_v\)</span> by extending the initial -40 dB line until it hits 0&nbsp;dB. The frequency at which it happens is <span class="math inline">\(ω = \sqrt{K_a}\)</span> (because at that frequency |K_a/(j ω)^2| = 1). So, we can find the acceleration constant by inspection.</p>
-<p>An illustration of the Bode plot of a type 2 system is shown in <a href="#fig-type-2" class="quarto-xref">Figure&nbsp;5</a>.</p>
-<div id="cell-fig-type-2" class="cell" data-execution_count="16">
+<p>An illustration of the Bode plot of a type 2 system is shown in <a href="#fig-type-2" class="quarto-xref">Figure&nbsp;<span>10.5</span></a>.</p>
+<div id="cell-fig-type-2" class="cell" data-execution_count="17">
 <div id="fig-type-2" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="17">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-type-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -5368,14 +5473,14 @@ G(s) = \dfrac{K_a}{s^2} \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
 <path clip-path="url(#clip580)" d="M488.889 1135.07 Q485.278 1135.07 483.449 1138.63 Q481.643 1142.17 481.643 1149.3 Q481.643 1156.41 483.449 1159.97 Q485.278 1163.52 488.889 1163.52 Q492.523 1163.52 494.329 1159.97 Q496.157 1156.41 496.157 1149.3 Q496.157 1142.17 494.329 1138.63 Q492.523 1135.07 488.889 1135.07 M488.889 1131.36 Q494.699 1131.36 497.754 1135.97 Q500.833 1140.55 500.833 1149.3 Q500.833 1158.03 497.754 1162.64 Q494.699 1167.22 488.889 1167.22 Q483.079 1167.22 480 1162.64 Q476.944 1158.03 476.944 1149.3 Q476.944 1140.55 480 1135.97 Q483.079 1131.36 488.889 1131.36 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M540.578 1144.56 L540.578 1130.53 L544.838 1130.53 L544.838 1166.55 L540.578 1166.55 L540.578 1162.66 Q539.236 1164.97 537.176 1166.11 Q535.139 1167.22 532.268 1167.22 Q527.569 1167.22 524.606 1163.47 Q521.666 1159.72 521.666 1153.61 Q521.666 1147.5 524.606 1143.75 Q527.569 1140 532.268 1140 Q535.139 1140 537.176 1141.13 Q539.236 1142.24 540.578 1144.56 M526.064 1153.61 Q526.064 1158.31 527.986 1160.99 Q529.93 1163.65 533.31 1163.65 Q536.689 1163.65 538.634 1160.99 Q540.578 1158.31 540.578 1153.61 Q540.578 1148.91 538.634 1146.25 Q536.689 1143.56 533.31 1143.56 Q529.93 1143.56 527.986 1146.25 Q526.064 1148.91 526.064 1153.61 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M558.472 1150.04 L558.472 1162.7 L565.972 1162.7 Q569.745 1162.7 571.55 1161.15 Q573.379 1159.58 573.379 1156.36 Q573.379 1153.12 571.55 1151.59 Q569.745 1150.04 565.972 1150.04 L558.472 1150.04 M558.472 1135.83 L558.472 1146.25 L565.393 1146.25 Q568.819 1146.25 570.486 1144.97 Q572.175 1143.68 572.175 1141.04 Q572.175 1138.42 570.486 1137.13 Q568.819 1135.83 565.393 1135.83 L558.472 1135.83 M553.796 1131.99 L565.74 1131.99 Q571.087 1131.99 573.981 1134.21 Q576.874 1136.43 576.874 1140.53 Q576.874 1143.7 575.393 1145.58 Q573.911 1147.45 571.041 1147.91 Q574.49 1148.65 576.388 1151.02 Q578.31 1153.35 578.31 1156.87 Q578.31 1161.5 575.161 1164.02 Q572.013 1166.55 566.203 1166.55 L553.796 1166.55 L553.796 1131.99 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M601.203 1130.53 L605.462 1130.53 L605.462 1166.55 L601.203 1166.55 L601.203 1130.53 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M614.374 1140.62 L618.633 1140.62 L618.633 1166.55 L614.374 1166.55 L614.374 1140.62 M614.374 1130.53 L618.633 1130.53 L618.633 1135.92 L614.374 1135.92 L614.374 1130.53 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M649.096 1150.9 L649.096 1166.55 L644.837 1166.55 L644.837 1151.04 Q644.837 1147.36 643.402 1145.53 Q641.967 1143.7 639.096 1143.7 Q635.647 1143.7 633.657 1145.9 Q631.666 1148.1 631.666 1151.89 L631.666 1166.55 L627.383 1166.55 L627.383 1140.62 L631.666 1140.62 L631.666 1144.65 Q633.194 1142.31 635.254 1141.15 Q637.337 1140 640.045 1140 Q644.513 1140 646.805 1142.77 Q649.096 1145.53 649.096 1150.9 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M679.767 1152.52 L679.767 1154.6 L660.184 1154.6 Q660.462 1159 662.823 1161.32 Q665.207 1163.61 669.443 1163.61 Q671.897 1163.61 674.189 1163.01 Q676.503 1162.4 678.772 1161.2 L678.772 1165.23 Q676.48 1166.2 674.073 1166.71 Q671.666 1167.22 669.189 1167.22 Q662.985 1167.22 659.351 1163.61 Q655.74 1160 655.74 1153.84 Q655.74 1147.47 659.166 1143.75 Q662.615 1140 668.448 1140 Q673.679 1140 676.712 1143.38 Q679.767 1146.73 679.767 1152.52 M675.508 1151.27 Q675.462 1147.77 673.541 1145.69 Q671.642 1143.61 668.494 1143.61 Q664.929 1143.61 662.777 1145.62 Q660.647 1147.64 660.323 1151.29 L675.508 1151.27 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M920.904 389.241 L925.58 389.241 L925.58 423.801 L920.904 423.801 L920.904 389.241 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M956.251 408.153 L956.251 423.801 L951.992 423.801 L951.992 408.292 Q951.992 404.612 950.557 402.783 Q949.122 400.954 946.251 400.954 Q942.802 400.954 940.811 403.153 Q938.821 405.352 938.821 409.149 L938.821 423.801 L934.538 423.801 L934.538 397.875 L938.821 397.875 L938.821 401.903 Q940.348 399.565 942.409 398.408 Q944.492 397.25 947.2 397.25 Q951.668 397.25 953.96 400.028 Q956.251 402.783 956.251 408.153 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M964.747 397.875 L969.006 397.875 L969.006 423.801 L964.747 423.801 L964.747 397.875 M964.747 387.783 L969.006 387.783 L969.006 393.176 L964.747 393.176 L964.747 387.783 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M982.131 390.514 L982.131 397.875 L990.904 397.875 L990.904 401.186 L982.131 401.186 L982.131 415.26 Q982.131 418.431 982.987 419.334 Q983.867 420.236 986.529 420.236 L990.904 420.236 L990.904 423.801 L986.529 423.801 Q981.598 423.801 979.723 421.973 Q977.848 420.121 977.848 415.26 L977.848 401.186 L974.723 401.186 L974.723 397.875 L977.848 397.875 L977.848 390.514 L982.131 390.514 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M996.506 397.875 L1000.76 397.875 L1000.76 423.801 L996.506 423.801 L996.506 397.875 M996.506 387.783 L1000.76 387.783 L1000.76 393.176 L996.506 393.176 L996.506 387.783 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M1021.46 410.769 Q1016.3 410.769 1014.31 411.949 Q1012.32 413.13 1012.32 415.977 Q1012.32 418.246 1013.8 419.588 Q1015.3 420.908 1017.87 420.908 Q1021.41 420.908 1023.54 418.408 Q1025.7 415.885 1025.7 411.718 L1025.7 410.769 L1021.46 410.769 M1029.95 409.01 L1029.95 423.801 L1025.7 423.801 L1025.7 419.866 Q1024.24 422.227 1022.06 423.361 Q1019.89 424.473 1016.74 424.473 Q1012.76 424.473 1010.39 422.25 Q1008.06 420.005 1008.06 416.255 Q1008.06 411.88 1010.97 409.658 Q1013.91 407.436 1019.72 407.436 L1025.7 407.436 L1025.7 407.019 Q1025.7 404.079 1023.75 402.482 Q1021.83 400.862 1018.33 400.862 Q1016.11 400.862 1014.01 401.394 Q1011.9 401.926 1009.95 402.991 L1009.95 399.056 Q1012.29 398.153 1014.49 397.713 Q1016.69 397.25 1018.77 397.25 Q1024.4 397.25 1027.18 400.167 Q1029.95 403.084 1029.95 409.01 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M1038.73 387.783 L1042.99 387.783 L1042.99 423.801 L1038.73 423.801 L1038.73 387.783 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M1064.82 408.917 L1077.29 408.917 L1077.29 412.713 L1064.82 412.713 L1064.82 408.917 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M1097.52 393.315 L1085.72 411.764 L1097.52 411.764 L1097.52 393.315 M1096.3 389.241 L1102.18 389.241 L1102.18 411.764 L1107.11 411.764 L1107.11 415.653 L1102.18 415.653 L1102.18 423.801 L1097.52 423.801 L1097.52 415.653 L1081.92 415.653 L1081.92 411.139 L1096.3 389.241 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M1124.84 392.32 Q1121.23 392.32 1119.4 395.885 Q1117.59 399.426 1117.59 406.556 Q1117.59 413.662 1119.4 417.227 Q1121.23 420.769 1124.84 420.769 Q1128.47 420.769 1130.28 417.227 Q1132.11 413.662 1132.11 406.556 Q1132.11 399.426 1130.28 395.885 Q1128.47 392.32 1124.84 392.32 M1124.84 388.616 Q1130.65 388.616 1133.7 393.223 Q1136.78 397.806 1136.78 406.556 Q1136.78 415.283 1133.7 419.889 Q1130.65 424.473 1124.84 424.473 Q1119.03 424.473 1115.95 419.889 Q1112.89 415.283 1112.89 406.556 Q1112.89 397.806 1115.95 393.223 Q1119.03 388.616 1124.84 388.616 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M1176.53 401.811 L1176.53 387.783 L1180.79 387.783 L1180.79 423.801 L1176.53 423.801 L1176.53 419.912 Q1175.19 422.227 1173.13 423.361 Q1171.09 424.473 1168.22 424.473 Q1163.52 424.473 1160.56 420.723 Q1157.62 416.973 1157.62 410.861 Q1157.62 404.75 1160.56 401 Q1163.52 397.25 1168.22 397.25 Q1171.09 397.25 1173.13 398.385 Q1175.19 399.496 1176.53 401.811 M1162.01 410.861 Q1162.01 415.561 1163.94 418.246 Q1165.88 420.908 1169.26 420.908 Q1172.64 420.908 1174.58 418.246 Q1176.53 415.561 1176.53 410.861 Q1176.53 406.162 1174.58 403.5 Q1172.64 400.815 1169.26 400.815 Q1165.88 400.815 1163.94 403.5 Q1162.01 406.162 1162.01 410.861 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M1194.42 407.297 L1194.42 419.959 L1201.92 419.959 Q1205.69 419.959 1207.5 418.408 Q1209.33 416.834 1209.33 413.616 Q1209.33 410.375 1207.5 408.848 Q1205.69 407.297 1201.92 407.297 L1194.42 407.297 M1194.42 393.084 L1194.42 403.5 L1201.34 403.5 Q1204.77 403.5 1206.44 402.227 Q1208.12 400.931 1208.12 398.292 Q1208.12 395.676 1206.44 394.38 Q1204.77 393.084 1201.34 393.084 L1194.42 393.084 M1189.75 389.241 L1201.69 389.241 Q1207.04 389.241 1209.93 391.463 Q1212.82 393.686 1212.82 397.783 Q1212.82 400.954 1211.34 402.829 Q1209.86 404.704 1206.99 405.167 Q1210.44 405.908 1212.34 408.269 Q1214.26 410.607 1214.26 414.125 Q1214.26 418.755 1211.11 421.278 Q1207.96 423.801 1202.15 423.801 L1189.75 423.801 L1189.75 389.241 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M1229.65 389.241 L1233.59 389.241 L1221.55 428.199 L1217.62 428.199 L1229.65 389.241 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M1255.12 401.811 L1255.12 387.783 L1259.37 387.783 L1259.37 423.801 L1255.12 423.801 L1255.12 419.912 Q1253.77 422.227 1251.71 423.361 Q1249.68 424.473 1246.81 424.473 Q1242.11 424.473 1239.14 420.723 Q1236.2 416.973 1236.2 410.861 Q1236.2 404.75 1239.14 401 Q1242.11 397.25 1246.81 397.25 Q1249.68 397.25 1251.71 398.385 Q1253.77 399.496 1255.12 401.811 M1240.6 410.861 Q1240.6 415.561 1242.52 418.246 Q1244.47 420.908 1247.85 420.908 Q1251.23 420.908 1253.17 418.246 Q1255.12 415.561 1255.12 410.861 Q1255.12 406.162 1253.17 403.5 Q1251.23 400.815 1247.85 400.815 Q1244.47 400.815 1242.52 403.5 Q1240.6 406.162 1240.6 410.861 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M1290.32 409.774 L1290.32 411.857 L1270.74 411.857 Q1271.02 416.255 1273.38 418.57 Q1275.76 420.861 1280 420.861 Q1282.45 420.861 1284.74 420.26 Q1287.06 419.658 1289.33 418.454 L1289.33 422.482 Q1287.04 423.454 1284.63 423.963 Q1282.22 424.473 1279.74 424.473 Q1273.54 424.473 1269.91 420.861 Q1266.3 417.25 1266.3 411.093 Q1266.3 404.727 1269.72 401 Q1273.17 397.25 1279 397.25 Q1284.24 397.25 1287.27 400.63 Q1290.32 403.987 1290.32 409.774 M1286.06 408.524 Q1286.02 405.028 1284.1 402.945 Q1282.2 400.862 1279.05 400.862 Q1275.49 400.862 1273.33 402.875 Q1271.2 404.889 1270.88 408.547 L1286.06 408.524 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M1315.97 398.871 L1315.97 402.852 Q1314.17 401.857 1312.34 401.371 Q1310.53 400.862 1308.68 400.862 Q1304.54 400.862 1302.24 403.5 Q1299.95 406.116 1299.95 410.861 Q1299.95 415.607 1302.24 418.246 Q1304.54 420.861 1308.68 420.861 Q1310.53 420.861 1312.34 420.375 Q1314.17 419.866 1315.97 418.871 L1315.97 422.806 Q1314.19 423.639 1312.27 424.056 Q1310.37 424.473 1308.22 424.473 Q1302.36 424.473 1298.91 420.792 Q1295.46 417.111 1295.46 410.861 Q1295.46 404.519 1298.93 400.885 Q1302.43 397.25 1308.49 397.25 Q1310.46 397.25 1312.34 397.667 Q1314.21 398.061 1315.97 398.871 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M1354.98 398.639 L1354.98 402.667 Q1353.17 401.741 1351.23 401.278 Q1349.28 400.815 1347.2 400.815 Q1344.03 400.815 1342.43 401.787 Q1340.86 402.76 1340.86 404.704 Q1340.86 406.186 1341.99 407.042 Q1343.12 407.875 1346.55 408.639 L1348.01 408.963 Q1352.55 409.936 1354.44 411.718 Q1356.36 413.477 1356.36 416.648 Q1356.36 420.26 1353.49 422.366 Q1350.65 424.473 1345.65 424.473 Q1343.56 424.473 1341.3 424.056 Q1339.05 423.662 1336.55 422.852 L1336.55 418.454 Q1338.91 419.681 1341.2 420.306 Q1343.49 420.908 1345.74 420.908 Q1348.75 420.908 1350.37 419.889 Q1351.99 418.848 1351.99 416.973 Q1351.99 415.236 1350.81 414.311 Q1349.65 413.385 1345.69 412.528 L1344.21 412.181 Q1340.25 411.348 1338.49 409.635 Q1336.74 407.899 1336.74 404.889 Q1336.74 401.232 1339.33 399.241 Q1341.92 397.25 1346.69 397.25 Q1349.05 397.25 1351.13 397.598 Q1353.22 397.945 1354.98 398.639 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M1363.15 387.783 L1367.41 387.783 L1367.41 423.801 L1363.15 423.801 L1363.15 387.783 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M1386.36 400.862 Q1382.94 400.862 1380.95 403.547 Q1378.96 406.209 1378.96 410.861 Q1378.96 415.514 1380.92 418.199 Q1382.92 420.861 1386.36 420.861 Q1389.77 420.861 1391.76 418.176 Q1393.75 415.491 1393.75 410.861 Q1393.75 406.255 1391.76 403.57 Q1389.77 400.862 1386.36 400.862 M1386.36 397.25 Q1391.92 397.25 1395.09 400.862 Q1398.26 404.473 1398.26 410.861 Q1398.26 417.227 1395.09 420.861 Q1391.92 424.473 1386.36 424.473 Q1380.79 424.473 1377.61 420.861 Q1374.47 417.227 1374.47 410.861 Q1374.47 404.473 1377.61 400.862 Q1380.79 397.25 1386.36 397.25 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M1409.44 419.912 L1409.44 433.662 L1405.16 433.662 L1405.16 397.875 L1409.44 397.875 L1409.44 401.811 Q1410.79 399.496 1412.82 398.385 Q1414.88 397.25 1417.73 397.25 Q1422.45 397.25 1425.39 401 Q1428.36 404.75 1428.36 410.861 Q1428.36 416.973 1425.39 420.723 Q1422.45 424.473 1417.73 424.473 Q1414.88 424.473 1412.82 423.361 Q1410.79 422.227 1409.44 419.912 M1423.93 410.861 Q1423.93 406.162 1421.99 403.5 Q1420.07 400.815 1416.69 400.815 Q1413.31 400.815 1411.36 403.5 Q1409.44 406.162 1409.44 410.861 Q1409.44 415.561 1411.36 418.246 Q1413.31 420.908 1416.69 420.908 Q1420.07 420.908 1421.99 418.246 Q1423.93 415.561 1423.93 410.861 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M1457.59 409.774 L1457.59 411.857 L1438.01 411.857 Q1438.29 416.255 1440.65 418.57 Q1443.03 420.861 1447.27 420.861 Q1449.72 420.861 1452.01 420.26 Q1454.33 419.658 1456.6 418.454 L1456.6 422.482 Q1454.3 423.454 1451.9 423.963 Q1449.49 424.473 1447.01 424.473 Q1440.81 424.473 1437.17 420.861 Q1433.56 417.25 1433.56 411.093 Q1433.56 404.727 1436.99 401 Q1440.44 397.25 1446.27 397.25 Q1451.5 397.25 1454.54 400.63 Q1457.59 403.987 1457.59 409.774 M1453.33 408.524 Q1453.29 405.028 1451.36 402.945 Q1449.47 400.862 1446.32 400.862 Q1442.75 400.862 1440.6 402.875 Q1438.47 404.889 1438.15 408.547 L1453.33 408.524 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M314.382 748.518 L336.233 748.518 L336.233 752.454 L319.057 752.454 L319.057 762.685 L335.516 762.685 L335.516 766.62 L319.057 766.62 L319.057 779.143 L336.65 779.143 L336.65 783.078 L314.382 783.078 L314.382 748.518 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M365.701 757.153 L356.326 769.768 L366.187 783.078 L361.164 783.078 L353.617 772.893 L346.071 783.078 L341.048 783.078 L351.117 769.514 L341.905 757.153 L346.928 757.153 L353.803 766.389 L360.678 757.153 L365.701 757.153 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M376.418 749.792 L376.418 757.153 L385.191 757.153 L385.191 760.463 L376.418 760.463 L376.418 774.537 Q376.418 777.708 377.275 778.611 Q378.154 779.514 380.816 779.514 L385.191 779.514 L385.191 783.078 L380.816 783.078 Q375.886 783.078 374.011 781.25 Q372.136 779.398 372.136 774.537 L372.136 760.463 L369.011 760.463 L369.011 757.153 L372.136 757.153 L372.136 749.792 L376.418 749.792 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M412.969 769.051 L412.969 771.134 L393.386 771.134 Q393.664 775.532 396.025 777.847 Q398.409 780.139 402.645 780.139 Q405.099 780.139 407.39 779.537 Q409.705 778.935 411.974 777.731 L411.974 781.759 Q409.682 782.731 407.275 783.24 Q404.867 783.75 402.39 783.75 Q396.187 783.75 392.552 780.139 Q388.941 776.527 388.941 770.37 Q388.941 764.004 392.367 760.278 Q395.816 756.528 401.65 756.528 Q406.881 756.528 409.913 759.907 Q412.969 763.264 412.969 769.051 M408.71 767.801 Q408.663 764.305 406.742 762.222 Q404.844 760.139 401.696 760.139 Q398.131 760.139 395.978 762.153 Q393.849 764.166 393.525 767.824 L408.71 767.801 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M441.51 767.43 L441.51 783.078 L437.251 783.078 L437.251 767.569 Q437.251 763.889 435.816 762.06 Q434.381 760.231 431.511 760.231 Q428.061 760.231 426.071 762.43 Q424.08 764.629 424.08 768.426 L424.08 783.078 L419.798 783.078 L419.798 757.153 L424.08 757.153 L424.08 761.18 Q425.608 758.842 427.668 757.685 Q429.751 756.528 432.46 756.528 Q436.927 756.528 439.219 759.305 Q441.51 762.06 441.51 767.43 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M467.066 761.088 L467.066 747.06 L471.325 747.06 L471.325 783.078 L467.066 783.078 L467.066 779.19 Q465.723 781.504 463.663 782.639 Q461.626 783.75 458.756 783.75 Q454.057 783.75 451.094 780 Q448.154 776.25 448.154 770.139 Q448.154 764.028 451.094 760.278 Q454.057 756.528 458.756 756.528 Q461.626 756.528 463.663 757.662 Q465.723 758.773 467.066 761.088 M452.552 770.139 Q452.552 774.838 454.473 777.523 Q456.418 780.185 459.797 780.185 Q463.177 780.185 465.121 777.523 Q467.066 774.838 467.066 770.139 Q467.066 765.44 465.121 762.778 Q463.177 760.092 459.797 760.092 Q456.418 760.092 454.473 762.778 Q452.552 765.44 452.552 770.139 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M502.274 769.051 L502.274 771.134 L482.691 771.134 Q482.969 775.532 485.33 777.847 Q487.714 780.139 491.95 780.139 Q494.404 780.139 496.695 779.537 Q499.01 778.935 501.279 777.731 L501.279 781.759 Q498.987 782.731 496.58 783.24 Q494.172 783.75 491.695 783.75 Q485.492 783.75 481.857 780.139 Q478.246 776.527 478.246 770.37 Q478.246 764.004 481.672 760.278 Q485.121 756.528 490.955 756.528 Q496.186 756.528 499.218 759.907 Q502.274 763.264 502.274 769.051 M498.015 767.801 Q497.968 764.305 496.047 762.222 Q494.149 760.139 491.001 760.139 Q487.436 760.139 485.283 762.153 Q483.154 764.166 482.83 767.824 L498.015 767.801 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M526.325 761.088 L526.325 747.06 L530.584 747.06 L530.584 783.078 L526.325 783.078 L526.325 779.19 Q524.982 781.504 522.922 782.639 Q520.885 783.75 518.015 783.75 Q513.316 783.75 510.353 780 Q507.413 776.25 507.413 770.139 Q507.413 764.028 510.353 760.278 Q513.316 756.528 518.015 756.528 Q520.885 756.528 522.922 757.662 Q524.982 758.773 526.325 761.088 M511.811 770.139 Q511.811 774.838 513.732 777.523 Q515.677 780.185 519.056 780.185 Q522.436 780.185 524.38 777.523 Q526.325 774.838 526.325 770.139 Q526.325 765.44 524.38 762.778 Q522.436 760.092 519.056 760.092 Q515.677 760.092 513.732 762.778 Q511.811 765.44 511.811 770.139 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M554.427 757.153 L558.686 757.153 L558.686 783.078 L554.427 783.078 L554.427 757.153 M554.427 747.06 L558.686 747.06 L558.686 752.454 L554.427 752.454 L554.427 747.06 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M589.149 767.43 L589.149 783.078 L584.889 783.078 L584.889 767.569 Q584.889 763.889 583.454 762.06 Q582.019 760.231 579.149 760.231 Q575.7 760.231 573.709 762.43 Q571.718 764.629 571.718 768.426 L571.718 783.078 L567.436 783.078 L567.436 757.153 L571.718 757.153 L571.718 761.18 Q573.246 758.842 575.306 757.685 Q577.389 756.528 580.098 756.528 Q584.565 756.528 586.857 759.305 Q589.149 762.06 589.149 767.43 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M597.644 757.153 L601.903 757.153 L601.903 783.078 L597.644 783.078 L597.644 757.153 M597.644 747.06 L601.903 747.06 L601.903 752.454 L597.644 752.454 L597.644 747.06 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M615.028 749.792 L615.028 757.153 L623.801 757.153 L623.801 760.463 L615.028 760.463 L615.028 774.537 Q615.028 777.708 615.885 778.611 Q616.764 779.514 619.426 779.514 L623.801 779.514 L623.801 783.078 L619.426 783.078 Q614.496 783.078 612.621 781.25 Q610.746 779.398 610.746 774.537 L610.746 760.463 L607.621 760.463 L607.621 757.153 L610.746 757.153 L610.746 749.792 L615.028 749.792 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M629.403 757.153 L633.662 757.153 L633.662 783.078 L629.403 783.078 L629.403 757.153 M629.403 747.06 L633.662 747.06 L633.662 752.454 L629.403 752.454 L629.403 747.06 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M654.357 770.046 Q649.195 770.046 647.204 771.227 Q645.213 772.407 645.213 775.254 Q645.213 777.523 646.695 778.865 Q648.199 780.185 650.769 780.185 Q654.31 780.185 656.44 777.685 Q658.593 775.162 658.593 770.995 L658.593 770.046 L654.357 770.046 M662.852 768.287 L662.852 783.078 L658.593 783.078 L658.593 779.143 Q657.134 781.504 654.958 782.639 Q652.782 783.75 649.634 783.75 Q645.653 783.75 643.292 781.527 Q640.954 779.282 640.954 775.532 Q640.954 771.157 643.87 768.935 Q646.81 766.713 652.62 766.713 L658.593 766.713 L658.593 766.296 Q658.593 763.356 656.648 761.759 Q654.727 760.139 651.232 760.139 Q649.009 760.139 646.903 760.671 Q644.796 761.203 642.852 762.268 L642.852 758.333 Q645.19 757.43 647.389 756.991 Q649.588 756.528 651.671 756.528 Q657.296 756.528 660.074 759.444 Q662.852 762.361 662.852 768.287 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M671.625 747.06 L675.884 747.06 L675.884 783.078 L671.625 783.078 L671.625 747.06 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M716.393 757.916 L716.393 761.944 Q714.588 761.018 712.643 760.555 Q710.699 760.092 708.616 760.092 Q705.444 760.092 703.847 761.065 Q702.273 762.037 702.273 763.981 Q702.273 765.463 703.407 766.319 Q704.541 767.153 707.967 767.916 L709.426 768.24 Q713.963 769.213 715.861 770.995 Q717.782 772.754 717.782 775.926 Q717.782 779.537 714.912 781.643 Q712.065 783.75 707.065 783.75 Q704.981 783.75 702.713 783.333 Q700.467 782.939 697.967 782.129 L697.967 777.731 Q700.329 778.958 702.62 779.583 Q704.912 780.185 707.157 780.185 Q710.166 780.185 711.787 779.166 Q713.407 778.125 713.407 776.25 Q713.407 774.514 712.227 773.588 Q711.069 772.662 707.111 771.805 L705.629 771.458 Q701.671 770.625 699.912 768.912 Q698.153 767.176 698.153 764.166 Q698.153 760.509 700.745 758.518 Q703.338 756.528 708.106 756.528 Q710.467 756.528 712.551 756.875 Q714.634 757.222 716.393 757.916 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M724.565 747.06 L728.824 747.06 L728.824 783.078 L724.565 783.078 L724.565 747.06 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M747.782 760.139 Q744.356 760.139 742.365 762.824 Q740.375 765.486 740.375 770.139 Q740.375 774.791 742.342 777.477 Q744.333 780.139 747.782 780.139 Q751.185 780.139 753.175 777.453 Q755.166 774.768 755.166 770.139 Q755.166 765.532 753.175 762.847 Q751.185 760.139 747.782 760.139 M747.782 756.528 Q753.338 756.528 756.509 760.139 Q759.68 763.75 759.68 770.139 Q759.68 776.504 756.509 780.139 Q753.338 783.75 747.782 783.75 Q742.203 783.75 739.032 780.139 Q735.884 776.504 735.884 770.139 Q735.884 763.75 739.032 760.139 Q742.203 756.528 747.782 756.528 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M770.861 779.19 L770.861 792.939 L766.578 792.939 L766.578 757.153 L770.861 757.153 L770.861 761.088 Q772.203 758.773 774.24 757.662 Q776.3 756.528 779.148 756.528 Q783.87 756.528 786.81 760.278 Q789.772 764.028 789.772 770.139 Q789.772 776.25 786.81 780 Q783.87 783.75 779.148 783.75 Q776.3 783.75 774.24 782.639 Q772.203 781.504 770.861 779.19 M785.351 770.139 Q785.351 765.44 783.407 762.778 Q781.485 760.092 778.106 760.092 Q774.726 760.092 772.782 762.778 Q770.861 765.44 770.861 770.139 Q770.861 774.838 772.782 777.523 Q774.726 780.185 778.106 780.185 Q781.485 780.185 783.407 777.523 Q785.351 774.838 785.351 770.139 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M819.008 769.051 L819.008 771.134 L799.425 771.134 Q799.703 775.532 802.064 777.847 Q804.448 780.139 808.684 780.139 Q811.138 780.139 813.43 779.537 Q815.745 778.935 818.013 777.731 L818.013 781.759 Q815.721 782.731 813.314 783.24 Q810.907 783.75 808.43 783.75 Q802.226 783.75 798.592 780.139 Q794.981 776.527 794.981 770.37 Q794.981 764.004 798.407 760.278 Q801.856 756.528 807.689 756.528 Q812.921 756.528 815.953 759.907 Q819.008 763.264 819.008 769.051 M814.749 767.801 Q814.703 764.305 812.782 762.222 Q810.883 760.139 807.735 760.139 Q804.171 760.139 802.018 762.153 Q799.888 764.166 799.564 767.824 L814.749 767.801 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M851.3 747.106 Q848.198 752.43 846.693 757.639 Q845.189 762.847 845.189 768.194 Q845.189 773.541 846.693 778.796 Q848.221 784.027 851.3 789.328 L847.596 789.328 Q844.124 783.889 842.388 778.634 Q840.675 773.379 840.675 768.194 Q840.675 763.032 842.388 757.801 Q844.101 752.569 847.596 747.106 L851.3 747.106 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M859.564 757.153 L863.823 757.153 L863.823 783.078 L859.564 783.078 L859.564 757.153 M859.564 747.06 L863.823 747.06 L863.823 752.454 L859.564 752.454 L859.564 747.06 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M885.86 747.06 L885.86 750.602 L881.786 750.602 Q879.494 750.602 878.591 751.528 Q877.712 752.454 877.712 754.861 L877.712 757.153 L884.726 757.153 L884.726 760.463 L877.712 760.463 L877.712 783.078 L873.429 783.078 L873.429 760.463 L869.355 760.463 L869.355 757.153 L873.429 757.153 L873.429 755.347 Q873.429 751.018 875.443 749.051 Q877.457 747.06 881.832 747.06 L885.86 747.06 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M926.045 767.43 L926.045 783.078 L921.786 783.078 L921.786 767.569 Q921.786 763.889 920.35 762.06 Q918.915 760.231 916.045 760.231 Q912.596 760.231 910.605 762.43 Q908.614 764.629 908.614 768.426 L908.614 783.078 L904.332 783.078 L904.332 757.153 L908.614 757.153 L908.614 761.18 Q910.142 758.842 912.202 757.685 Q914.286 756.528 916.994 756.528 Q921.462 756.528 923.753 759.305 Q926.045 762.06 926.045 767.43 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M956.716 769.051 L956.716 771.134 L937.133 771.134 Q937.411 775.532 939.772 777.847 Q942.156 780.139 946.392 780.139 Q948.846 780.139 951.137 779.537 Q953.452 778.935 955.721 777.731 L955.721 781.759 Q953.429 782.731 951.022 783.24 Q948.614 783.75 946.137 783.75 Q939.934 783.75 936.299 780.139 Q932.688 776.527 932.688 770.37 Q932.688 764.004 936.114 760.278 Q939.563 756.528 945.397 756.528 Q950.628 756.528 953.661 759.907 Q956.716 763.264 956.716 769.051 M952.457 767.801 Q952.411 764.305 950.489 762.222 Q948.591 760.139 945.443 760.139 Q941.878 760.139 939.725 762.153 Q937.596 764.166 937.272 767.824 L952.457 767.801 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M985.883 769.051 L985.883 771.134 L966.299 771.134 Q966.577 775.532 968.938 777.847 Q971.322 780.139 975.559 780.139 Q978.012 780.139 980.304 779.537 Q982.619 778.935 984.887 777.731 L984.887 781.759 Q982.596 782.731 980.188 783.24 Q977.781 783.75 975.304 783.75 Q969.1 783.75 965.466 780.139 Q961.855 776.527 961.855 770.37 Q961.855 764.004 965.281 760.278 Q968.73 756.528 974.563 756.528 Q979.795 756.528 982.827 759.907 Q985.883 763.264 985.883 769.051 M981.623 767.801 Q981.577 764.305 979.656 762.222 Q977.758 760.139 974.609 760.139 Q971.045 760.139 968.892 762.153 Q966.762 764.166 966.438 767.824 L981.623 767.801 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M1009.93 761.088 L1009.93 747.06 L1014.19 747.06 L1014.19 783.078 L1009.93 783.078 L1009.93 779.19 Q1008.59 781.504 1006.53 782.639 Q1004.49 783.75 1001.62 783.75 Q996.924 783.75 993.961 780 Q991.021 776.25 991.021 770.139 Q991.021 764.028 993.961 760.278 Q996.924 756.528 1001.62 756.528 Q1004.49 756.528 1006.53 757.662 Q1008.59 758.773 1009.93 761.088 M995.42 770.139 Q995.42 774.838 997.341 777.523 Q999.285 780.185 1002.66 780.185 Q1006.04 780.185 1007.99 777.523 Q1009.93 774.838 1009.93 770.139 Q1009.93 765.44 1007.99 762.778 Q1006.04 760.092 1002.66 760.092 Q999.285 760.092 997.341 762.778 Q995.42 765.44 995.42 770.139 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M1045.14 769.051 L1045.14 771.134 L1025.56 771.134 Q1025.84 775.532 1028.2 777.847 Q1030.58 780.139 1034.82 780.139 Q1037.27 780.139 1039.56 779.537 Q1041.88 778.935 1044.15 777.731 L1044.15 781.759 Q1041.85 782.731 1039.45 783.24 Q1037.04 783.75 1034.56 783.75 Q1028.36 783.75 1024.72 780.139 Q1021.11 776.527 1021.11 770.37 Q1021.11 764.004 1024.54 760.278 Q1027.99 756.528 1033.82 756.528 Q1039.05 756.528 1042.09 759.907 Q1045.14 763.264 1045.14 769.051 M1040.88 767.801 Q1040.84 764.305 1038.91 762.222 Q1037.02 760.139 1033.87 760.139 Q1030.3 760.139 1028.15 762.153 Q1026.02 764.166 1025.7 767.824 L1040.88 767.801 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M1069.19 761.088 L1069.19 747.06 L1073.45 747.06 L1073.45 783.078 L1069.19 783.078 L1069.19 779.19 Q1067.85 781.504 1065.79 782.639 Q1063.75 783.75 1060.88 783.75 Q1056.18 783.75 1053.22 780 Q1050.28 776.25 1050.28 770.139 Q1050.28 764.028 1053.22 760.278 Q1056.18 756.528 1060.88 756.528 Q1063.75 756.528 1065.79 757.662 Q1067.85 758.773 1069.19 761.088 M1054.68 770.139 Q1054.68 774.838 1056.6 777.523 Q1058.54 780.185 1061.92 780.185 Q1065.3 780.185 1067.25 777.523 Q1069.19 774.838 1069.19 770.139 Q1069.19 765.44 1067.25 762.778 Q1065.3 760.092 1061.92 760.092 Q1058.54 760.092 1056.6 762.778 Q1054.68 765.44 1054.68 770.139 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip580)" d="M1081.55 747.106 L1085.26 747.106 Q1088.73 752.569 1090.44 757.801 Q1092.18 763.032 1092.18 768.194 Q1092.18 773.379 1090.44 778.634 Q1088.73 783.889 1085.26 789.328 L1081.55 789.328 Q1084.63 784.027 1086.14 778.796 Q1087.66 773.541 1087.66 768.194 Q1087.66 762.847 1086.14 757.639 Q1084.63 752.43 1081.55 747.106 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path></svg>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-type-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: Bode plot of type 2 system. The initial slope of -40 dB/dec intercepts the 0 dB line at <span class="math inline">\(\sqrt{K_a}\)</span>.
+Figure&nbsp;10.5: Bode plot of type 2 system. The initial slope of -40 dB/dec intercepts the 0 dB line at <span class="math inline">\(\sqrt{K_a}\)</span>.
 </figcaption>
 </figure>
 </div>
 </div>
 <div id="exr-system-type" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 1</strong></span> For each of the following systems, identify the system type and the corresponding error constant.</p>
-<div id="9ee2e6a7" class="cell" data-execution_count="17">
+<p><span class="theorem-title"><strong>Exercise 10.1</strong></span> For each of the following systems, identify the system type and the corresponding error constant.</p>
+<div id="9ee2e6a7" class="cell" data-execution_count="18">
 <div class="cell-output cell-output-display" data-execution_count="18">
 <!--?xml version="1.0" encoding="utf-8"?-->
 <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="750" height="900" viewbox="0 0 3000 3600">
@@ -5857,12 +5962,12 @@ Figure&nbsp;5: Bode plot of type 2 system. The initial slope of -40 dB/dec inter
 </div>
 </section>
 </section>
-<section id="system-identification-via-bode-plots" class="level3" data-number="2.8">
-<h3 data-number="2.8" class="anchored" data-anchor-id="system-identification-via-bode-plots"><span class="header-section-number">2.8</span> System identification via Bode plots</h3>
+<section id="system-identification-via-bode-plots" class="level3" data-number="10.2.8">
+<h3 data-number="10.2.8" class="anchored" data-anchor-id="system-identification-via-bode-plots"><span class="header-section-number">10.2.8</span> System identification via Bode plots</h3>
 <p>Since there is a one-to-one correspondence between transfer functions and Bode plots, we can identify a system transfer function from its Bode plot. We illustrate this via an example.</p>
 <div id="exr-sys-id-bode" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 2</strong></span> Find the minimum phase transfer function which has a magnitude Bode plot as shown below.</p>
-<div id="3af8b85f" class="cell" data-execution_count="18">
+<p><span class="theorem-title"><strong>Exercise 10.2</strong></span> Find the minimum phase transfer function which has a magnitude Bode plot as shown below.</p>
+<div id="3af8b85f" class="cell" data-execution_count="19">
 <div class="cell-output cell-output-display" data-execution_count="19">
 <!--?xml version="1.0" encoding="utf-8"?-->
 <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="750" height="300" viewbox="0 0 3000 1200">
@@ -6030,9 +6135,9 @@ Solution
 </div>
 </section>
 </section>
-<section id="nyquist-plots" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="nyquist-plots"><span class="header-section-number">3</span> Nyquist plots</h2>
-<p>Nquist plot is a polar plot of the frequency response, that is, we plot <span class="math inline">\(G(jω)\)</span> as a complex number for different values of <span class="math inline">\(ω\)</span>. Unlike the Bode plot, we plot the Nyquist plot for all <span class="math inline">\(ω \in (-∞, ∞)\)</span> and usually also draw an arrow indicating the direction. An example is shown in <a href="#fig-nyquist" class="quarto-xref">Figure&nbsp;2</a>. In the <a href="./nyquist-stability.html">next lecture</a>, we will show how to use Nyquist plot to determine stability of a unity feedback system.</p>
+<section id="nyquist-plots" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="nyquist-plots"><span class="header-section-number">10.3</span> Nyquist plots</h2>
+<p>Nquist plot is a polar plot of the frequency response, that is, we plot <span class="math inline">\(G(jω)\)</span> as a complex number for different values of <span class="math inline">\(ω\)</span>. Unlike the Bode plot, we plot the Nyquist plot for all <span class="math inline">\(ω \in (-∞, ∞)\)</span> and usually also draw an arrow indicating the direction. An example is shown in <a href="nyquist-stability.html#fig-nyquist" class="quarto-xref">Figure&nbsp;<span>11.10</span></a>. In the <a href="./nyquist-stability.html">next lecture</a>, we will show how to use Nyquist plot to determine stability of a unity feedback system.</p>
 
 
 </section>
@@ -6599,6 +6704,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./steady-state-errors.html" class="pagination-link" aria-label="Steady-state errors">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Steady-state errors</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./nyquist-stability.html" class="pagination-link" aria-label="Nyquist Stability Criterion">
+        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Nyquist Stability Criterion</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

@@ -2,14 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.39">
+<meta name="generator" content="quarto-1.6.43">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2024-12-06">
+<meta name="dcterms.date" content="2025-04-11">
+<meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
-<title>Block diagrams – Linear Systems and Control</title>
+<title>8&nbsp; Block diagrams – Linear Systems and Control</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -32,17 +33,19 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./steady-state-errors.html" rel="next">
+<link href="./routh-hurwitz.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-d166b450ba5a8e9f7a0ab969bf6592c1.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-4379b0ccadffce622b03caf4c46266b3.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-9ea16c1cb545fbfebfbd03958c344a8d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-7d03948db9a048ac6b7c3dc6585b4b60.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-7b9821c38c566442c0416ac34ba65a7f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-6b837f0e7ac12effd785ceb15e1f9c2d.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script src="site_libs/quarto-contrib/nutshell-1.0.6/nutshell.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -157,7 +160,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -169,12 +172,13 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./../linear-systems/index.html"> 
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
 <span class="menu-text">Linear Control Systems</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-            <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools tools-wide">
+    <a href="https://github.com/adityam/linear-systems" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
@@ -184,19 +188,120 @@ window.Quarto = {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./block-diagrams.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Block diagrams</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Course Outline</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./freq-modeling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./state-space-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">State space models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./step-response.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Step Response</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./matrix-exponential.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Time response of state space models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./state-feedback.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pole placement via statement feedback</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./output-feedback.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">State observers and output feedback</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./routh-hurwitz.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Routh-Hurwitz Stability Criterion</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./block-diagrams.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Block diagrams</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./steady-state-errors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Steady-state errors</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bode-and-nyquist.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Bode and Nyquist plots</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nyquist-stability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Nyquist Stability Criterion</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./safety-margins.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Gain and Phase margins</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lag-lead-compensators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lag-lead compensators</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+    <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#simple-inteconnection-of-blocks" id="toc-simple-inteconnection-of-blocks" class="nav-link active" data-scroll-target="#simple-inteconnection-of-blocks"><span class="header-section-number">1</span> Simple inteconnection of blocks</a></li>
-  <li><a href="#moving-pickup-points-and-adders-around-blocks" id="toc-moving-pickup-points-and-adders-around-blocks" class="nav-link" data-scroll-target="#moving-pickup-points-and-adders-around-blocks"><span class="header-section-number">2</span> Moving pickup points and adders around blocks</a></li>
-  <li><a href="#back-to-the-example" id="toc-back-to-the-example" class="nav-link" data-scroll-target="#back-to-the-example"><span class="header-section-number">3</span> Back to the example</a></li>
+  <li><a href="#simple-inteconnection-of-blocks" id="toc-simple-inteconnection-of-blocks" class="nav-link active" data-scroll-target="#simple-inteconnection-of-blocks"><span class="header-section-number">8.1</span> Simple inteconnection of blocks</a></li>
+  <li><a href="#moving-pickup-points-and-adders-around-blocks" id="toc-moving-pickup-points-and-adders-around-blocks" class="nav-link" data-scroll-target="#moving-pickup-points-and-adders-around-blocks"><span class="header-section-number">8.2</span> Moving pickup points and adders around blocks</a></li>
+  <li><a href="#back-to-the-example" id="toc-back-to-the-example" class="nav-link" data-scroll-target="#back-to-the-example"><span class="header-section-number">8.3</span> Back to the example</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/block-diagrams.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -205,7 +310,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Block diagrams</h1>
+<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Block diagrams</span></h1>
 </div>
 
 
@@ -231,7 +336,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 6, 2024</p>
+      <p class="date">April 11, 2025</p>
     </div>
   </div>
   
@@ -243,8 +348,8 @@ window.Quarto = {
 </header>
 
 
-<section id="simple-inteconnection-of-blocks" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="simple-inteconnection-of-blocks"><span class="header-section-number">1</span> Simple inteconnection of blocks</h2>
+<section id="simple-inteconnection-of-blocks" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="simple-inteconnection-of-blocks"><span class="header-section-number">8.1</span> Simple inteconnection of blocks</h2>
 <p>We have already seen three basic forms of block diagrams:</p>
 <div id="fig-cascade" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -252,7 +357,7 @@ window.Quarto = {
 <img src="figures/svg/interconnect3.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cascade-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Cascade Connection equivalent to <span class="math inline">\(G_1(s)G_2(s)\)</span>.
+Figure&nbsp;8.1: Cascade Connection equivalent to <span class="math inline">\(G_1(s)G_2(s)\)</span>.
 </figcaption>
 </figure>
 </div>
@@ -262,7 +367,7 @@ Figure&nbsp;1: Cascade Connection equivalent to <span class="math inline">\(G_1(
 <img src="figures/svg/interconnect4.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-parallel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Parallel Connection equivalent to <span class="math inline">\(G_1(s) + G_2(s)\)</span>.
+Figure&nbsp;8.2: Parallel Connection equivalent to <span class="math inline">\(G_1(s) + G_2(s)\)</span>.
 </figcaption>
 </figure>
 </div>
@@ -272,13 +377,13 @@ Figure&nbsp;2: Parallel Connection equivalent to <span class="math inline">\(G_1
 <img src="figures/svg/interconnect5.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-feedback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Feedback Connection equivalent to <span class="math inline">\(\displaystyle \frac{G(s)}{1 + G(s)H(s)}\)</span>.
+Figure&nbsp;8.3: Feedback Connection equivalent to <span class="math inline">\(\displaystyle \frac{G(s)}{1 + G(s)H(s)}\)</span>.
 </figcaption>
 </figure>
 </div>
 <p>We can use the basic rules above to simplify block diagrams. We provide a few examples below.</p>
 <div id="exm-blocks-1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 1</strong></span> Simplify the block diagram shown below.</p>
+<p><span class="theorem-title"><strong>Example 8.1</strong></span> Simplify the block diagram shown below.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Original diagram</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Step 1</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Step 2</a></li></ul>
 <div class="tab-content">
@@ -286,7 +391,7 @@ Figure&nbsp;3: Feedback Connection equivalent to <span class="math inline">\(\di
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="figures/svg/blocks1.svg" class="img-fluid figure-img"></p>
-<figcaption>Block diagram for <a href="#exm-blocks-1" class="quarto-xref">Example&nbsp;1</a></figcaption>
+<figcaption>Block diagram for <a href="#exm-blocks-1" class="quarto-xref">Example&nbsp;<span>8.1</span></a></figcaption>
 </figure>
 </div>
 </div>
@@ -314,11 +419,11 @@ T(s) = \frac{G_1(s) G_2(s) G_3(s) } { 1 + G_1(s) G_2(s) G_3(s) H_1(s) H_2(s) }.
 </div>
 </div>
 <div id="exm-blocks-2" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2</strong></span> Simplify the block diagram shown below.</p>
+<p><span class="theorem-title"><strong>Example 8.2</strong></span> Simplify the block diagram shown below.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="figures/svg/blocks4.svg" class="img-fluid figure-img"></p>
-<figcaption>Block diagram for <a href="#exm-blocks-2" class="quarto-xref">Example&nbsp;2</a></figcaption>
+<figcaption>Block diagram for <a href="#exm-blocks-2" class="quarto-xref">Example&nbsp;<span>8.2</span></a></figcaption>
 </figure>
 </div>
 </div>
@@ -339,7 +444,7 @@ Approach 1: Nested feedback loops
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="figures/svg/blocks4.svg" class="img-fluid figure-img"></p>
-<figcaption>Block diagram for <a href="#exm-blocks-2" class="quarto-xref">Example&nbsp;2</a></figcaption>
+<figcaption>Block diagram for <a href="#exm-blocks-2" class="quarto-xref">Example&nbsp;<span>8.2</span></a></figcaption>
 </figure>
 </div>
 </div>
@@ -418,7 +523,7 @@ Approach 2: Parallel feedback loops
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="figures/svg/blocks4.svg" class="img-fluid figure-img"></p>
-<figcaption>Block diagram for <a href="#exm-blocks-2" class="quarto-xref">Example&nbsp;2</a></figcaption>
+<figcaption>Block diagram for <a href="#exm-blocks-2" class="quarto-xref">Example&nbsp;<span>8.2</span></a></figcaption>
 </figure>
 </div>
 </div>
@@ -447,18 +552,18 @@ Approach 2: Parallel feedback loops
 </div>
 <p>The above two examples show that we can simplify block diagrams using the simple rules for interconnected blocks. However, these simple ideas are unable to simplify more complicated block diagrams shown below.</p>
 <div id="exm-blocks-3" class="theorem example">
-<p><span class="theorem-title"><strong>Example 3</strong></span> Simplify the block diagram shown below.</p>
+<p><span class="theorem-title"><strong>Example 8.3</strong></span> Simplify the block diagram shown below.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="figures/svg/blocks11.svg" class="img-fluid figure-img"></p>
-<figcaption>Block diagram for <a href="#exm-blocks-3" class="quarto-xref">Example&nbsp;3</a></figcaption>
+<figcaption>Block diagram for <a href="#exm-blocks-3" class="quarto-xref">Example&nbsp;<span>8.3</span></a></figcaption>
 </figure>
 </div>
 </div>
 <p>In order to simplify such diagrams, we need to develop rules for moving pick up points and adders around blocks.</p>
 </section>
-<section id="moving-pickup-points-and-adders-around-blocks" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="moving-pickup-points-and-adders-around-blocks"><span class="header-section-number">2</span> Moving pickup points and adders around blocks</h2>
+<section id="moving-pickup-points-and-adders-around-blocks" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="moving-pickup-points-and-adders-around-blocks"><span class="header-section-number">8.2</span> Moving pickup points and adders around blocks</h2>
 <p>There are four basic rules for simplifying block diagrams.</p>
 <ol type="1">
 <li><p><strong>Moving a pickup point after a block to before a block.</strong></p>
@@ -475,9 +580,9 @@ Approach 2: Parallel feedback loops
 <p>In both cases, <span class="math inline">\(Z(s) = X(s)G(s) + Y(s)G(s)\)</span>.</p></li>
 </ol>
 </section>
-<section id="back-to-the-example" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="back-to-the-example"><span class="header-section-number">3</span> Back to the example</h2>
-<p>We now see how we can use the rule above to simplify the block diagram of <a href="#exm-blocks-3" class="quarto-xref">Example&nbsp;3</a>.</p>
+<section id="back-to-the-example" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="back-to-the-example"><span class="header-section-number">8.3</span> Back to the example</h2>
+<p>We now see how we can use the rule above to simplify the block diagram of <a href="#exm-blocks-3" class="quarto-xref">Example&nbsp;<span>8.3</span></a>.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Original diagram</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">Moving a pickup point</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-3" role="tab" aria-controls="tabset-4-3" aria-selected="false">Simplified diagram</a></li></ul>
 <div class="tab-content">
@@ -485,7 +590,7 @@ Approach 2: Parallel feedback loops
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="figures/svg/blocks11.svg" class="img-fluid figure-img"></p>
-<figcaption>Block diagram for <a href="#exm-blocks-3" class="quarto-xref">Example&nbsp;3</a></figcaption>
+<figcaption>Block diagram for <a href="#exm-blocks-3" class="quarto-xref">Example&nbsp;<span>8.3</span></a></figcaption>
 </figure>
 </div>
 </div>
@@ -538,7 +643,7 @@ Approach 2: Parallel feedback loops
 </div>
 </div>
 </div>
-<p>The final diagram now has three adders in feedback, similar to <a href="#exm-blocks-2" class="quarto-xref">Example&nbsp;2</a>. Therefore, we can simplify the TF as</p>
+<p>The final diagram now has three adders in feedback, similar to <a href="#exm-blocks-2" class="quarto-xref">Example&nbsp;<span>8.2</span></a>. Therefore, we can simplify the TF as</p>
 <p><span class="math display">\[
 \dfrac{G_1(s) G_2(s) G_3(s) G_4(s)}
 {1 + G_2(s)G_3(s)G_4(s) \Bigl[ \dfrac{H_1(s)}{G_2(s)} + \dfrac{H_2(s)}{G_4(s)} + H_3(s)G_1(s) \Bigr]}.
@@ -1109,6 +1214,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./routh-hurwitz.html" class="pagination-link" aria-label="Routh-Hurwitz Stability Criterion">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Routh-Hurwitz Stability Criterion</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./steady-state-errors.html" class="pagination-link" aria-label="Steady-state errors">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Steady-state errors</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 
