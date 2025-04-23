@@ -7,7 +7,91 @@ execute:
   cache: true
 ---
 
-In practice, we never know the transfer function perfectly. So, it is important to understand the effect of model uncertainty on system stability. This is called the **robustness** of the stability of the system
+In practice, we never know the transfer function perfectly. So, it is important to understand the effect of model uncertainty on system stability. This is called the **robustness** of the stability of the system.
+
+```{julia}
+#| output: false
+# Install packages
+
+# using Pkg; Pkg.activate(".")
+# for pkg in ["IJulia", "Revise", "ControlSystems", "Plots", "StatsPlots", "LaTeXStrings", "DataFrames", "JSON"]
+#    Pkg.add(pkg)
+# end
+# 
+# # Installing Jupyter Cache
+# Pkg.add("Conda")
+# using Conda
+# Conda.add("jupyter-cache")
+
+using Revise
+
+using ControlSystems, StatsPlots, LaTeXStrings, Plots.PlotMeasures
+setPlotScale("dB")
+
+include("julia/bode.jl")
+
+current_theme = :bright
+current_colors = theme_palette(current_theme)
+theme(current_theme)
+default(linewidth=2, gridalpha=0.5, minorgridalpha=0.25)
+```
+
+
+For instance, consider the system of @exm-nyquist-1 with $K=100$:
+$$
+  G(s) = \frac{100}{(s-2)(s+6)(s+8)}.
+$$
+As we can see for the Nyquist plot that the plot encircle $(-1 + j0)$ once in the clockwise direction. Hence, we can infer from the Nyquist plot that the system is stable. 
+```{julia}
+ begin
+ N = 50
+ R = 50
+ Z = 10 
+ sCurve = vcat(range(0.0+0im, 0.0+Z*im, N),
+               range(0.0+Z*im, 0.0+R*im, N),
+               [R*cis(θ) for θ in range(π/2, -π/2, N)],
+               range(0.0-R*im, 0.0-Z*im, N),
+               range(0.0-Z*im, 0.0-0*im, N))
+GG(s) = 100/((s-2)*(s+6)*(s+8))
+GCurve = GG.(sCurve)
+
+plot(size=(750,375), framestyle=:origin)
+plot!(real(GCurve), imag(GCurve), legend=false,aspect_ratio=1) 
+plot!(real(GCurve[[11,13]]), imag(GCurve[[11,13]]), arrow=true, color=current_colors[1])
+end
+```
+
+Now suppose that there some uncertainty about the location of the unstable pole: we don't know its exact value but know that it lies in the interval $[1.9, 2.1]$. Can we still infer that the system is stable? @fig-nyquist-robust shows the impact of parameter uncertainty on the Nyquist plot. We notice that for some values of parameters in this range, the system is unstable!
+
+```{julia}
+#| label: fig-nyquist-robust
+#| fig-cap: Nyquist plot with parameter uncertainty. The blue plot is the nominal Nyquist plot and the red curves show the envelop of uncertainty.
+
+ begin
+ N = 50
+ R = 50
+ Z = 10 
+ sCurve = vcat(range(0.0+0im, 0.0+Z*im, N),
+               range(0.0+Z*im, 0.0+R*im, N),
+               [R*cis(θ) for θ in range(π/2, -π/2, N)],
+               range(0.0-R*im, 0.0-Z*im, N),
+               range(0.0-Z*im, 0.0-0*im, N))
+GG(s) = 100/((s-2)*(s+6)*(s+8))
+GCurve = GG.(sCurve)
+
+plot(size=(750,375), framestyle=:origin)
+plot!(real(GCurve), imag(GCurve), legend=false,aspect_ratio=1) 
+
+GG(s) = 100/((s-2.1)*(s+6)*(s+8))
+GCurve = GG.(sCurve)
+plot!(real(GCurve), imag(GCurve), legend=false,aspect_ratio=1, linestyle=:dash) 
+
+GG(s) = 100/((s-1.9)*(s+6)*(s+8))
+GCurve = GG.(sCurve)
+plot!(real(GCurve), imag(GCurve), legend=false,aspect_ratio=1, linestyle=:dash, color=current_colors[2]) 
+end
+```
+
 
 Using Nyquist plots, we can define two qualitative measures of how "close" the system is from unstability. The usual practice is to measure this closeness in terms of **gain margin (GM)** and **phase margin (PM)**. 
 
