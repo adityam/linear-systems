@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2025-04-11">
+<meta name="dcterms.date" content="2025-04-23">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>2&nbsp; State space models – Linear Systems and Control</title>
@@ -44,8 +44,8 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-4379b0ccadffce622b03caf4c46266b3.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-7b9821c38c566442c0416ac34ba65a7f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-6b837f0e7ac12effd785ceb15e1f9c2d.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-2273ddc98e28bcf7e1550d84726b362d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-fd5cdd387564c229e11e0838b268e228.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script src="site_libs/quarto-contrib/nutshell-1.0.6/nutshell.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -359,7 +359,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 11, 2025</p>
+      <p class="date">April 23, 2025</p>
     </div>
   </div>
   
@@ -619,16 +619,16 @@ Figure&nbsp;2.4: A simple circuit
 </figure>
 </div>
 <p>We construct the state space model as follows.</p>
-<section id="step-1-select-the-state-variables" class="level4" data-number="2.4.1.1">
-<h4 data-number="2.4.1.1" class="anchored" data-anchor-id="step-1-select-the-state-variables"><span class="header-section-number">2.4.1.1</span> Step 1: Select the state variables</h4>
+<section id="step-1-select-the-state-variables" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="step-1-select-the-state-variables">Step 1: Select the state variables</h4>
 <p>We write the appropriate relation for the two energy storage elements: <span class="math display">\[\begin{align*}
 C \frac{d v_C(t)}{dt} &amp;= i_C(t) = i_L(t) \\
 L \frac{d i_L(t)}{dt} &amp;= v_L(t)
 \end{align*}\]</span></p>
 <p>Thus, we use <span class="math inline">\(\MATRIX{ v_C(t) \\ i_L(t) }\)</span> as state.</p>
 </section>
-<section id="step-2-use-kclkvl-to-simplify-the-rhs-of-step-1" class="level4" data-number="2.4.1.2">
-<h4 data-number="2.4.1.2" class="anchored" data-anchor-id="step-2-use-kclkvl-to-simplify-the-rhs-of-step-1"><span class="header-section-number">2.4.1.2</span> Step 2: Use KCL/KVL to simplify the RHS of step 1</h4>
+<section id="step-2-use-kclkvl-to-simplify-the-rhs-of-step-1" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="step-2-use-kclkvl-to-simplify-the-rhs-of-step-1">Step 2: Use KCL/KVL to simplify the RHS of step 1</h4>
 <p>We want the RHS of the above equations to be expressed in terms of input <span class="math inline">\(u(t)\)</span> and state <span class="math inline">\((v_C(t), i_L(t))\)</span>. Note that <span class="math inline">\(dv_C(t)/dt\)</span> is already in terms of <span class="math inline">\(i_L(t)\)</span>. We now use KVL to find an expression for <span class="math inline">\(v_L(t)\)</span> in terms of the other variables: <span class="math display">\[u(t) = v_R(t) + v_L(t) + v_C(t)\]</span> Thus, <span class="math display">\[
 v_L(t) = -v_R(t) - v_C(t) + u(t) = - R i_L(t) - v_C(t) + u(t).
 \]</span></p>
@@ -680,16 +680,16 @@ Figure&nbsp;2.5: An RCL circuit
 </figure>
 </div>
 <p>We construct the state space model as follows.</p>
-<section id="step-1-select-the-state-variables-1" class="level4" data-number="2.4.2.1">
-<h4 data-number="2.4.2.1" class="anchored" data-anchor-id="step-1-select-the-state-variables-1"><span class="header-section-number">2.4.2.1</span> Step 1: Select the state variables</h4>
+<section id="step-1-select-the-state-variables-1" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="step-1-select-the-state-variables-1">Step 1: Select the state variables</h4>
 <p>We write the appropriate relation for the two energy storage elements: <span class="math display">\[\begin{align*}
 C \frac{d v_C(t)}{dt} &amp;= i_C(t) \\
 L \frac{d i_L(t)}{dt} &amp;= v_L(t)
 \end{align*}\]</span></p>
 <p>Thus, we use <span class="math inline">\(\MATRIX{ v_C(t) \\ i_L(t) }\)</span> as state.</p>
 </section>
-<section id="step-2-use-kclkvl-to-simplify-the-rhs-of-step-1-1" class="level4" data-number="2.4.2.2">
-<h4 data-number="2.4.2.2" class="anchored" data-anchor-id="step-2-use-kclkvl-to-simplify-the-rhs-of-step-1-1"><span class="header-section-number">2.4.2.2</span> Step 2: Use KCL/KVL to simplify the RHS of step 1</h4>
+<section id="step-2-use-kclkvl-to-simplify-the-rhs-of-step-1-1" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="step-2-use-kclkvl-to-simplify-the-rhs-of-step-1-1">Step 2: Use KCL/KVL to simplify the RHS of step 1</h4>
 <p>We use KCL/KVL to write the right hand side of Step 1 as a linear combination of state and input. From KCL we have <span class="math display">\[\begin{align*}
 i_L(t) &amp;= i_R(t) + i_C(t) \\
 \implies i_C(t) &amp;= i_L(t) - i_R(t) \\
@@ -734,6 +734,19 @@ B =
 \quad
 C = \MATRIX{1 &amp; 0 }
 \]</span></p>
+<div id="exm-circuit" class="theorem example">
+<p><span class="theorem-title"><strong>Example 2.2</strong></span> Find the state space model of the circuit shown in <a href="#fig-circuit-exm" class="quarto-xref">Figure&nbsp;<span>2.6</span></a></p>
+<div id="fig-circuit-exm" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-circuit-exm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/circuits10.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-circuit-exm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.6: A complicated circuit
+</figcaption>
+</figure>
+</div>
+</div>
 </section>
 </section>
 </section>
@@ -778,13 +791,13 @@ Y(s) &amp;= C(sI - A)^{-1} B U(s)
 <img src="figures/svg/circuits6.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-block-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.6: Block diagram of SSM
+Figure&nbsp;2.7: Block diagram of SSM
 </figcaption>
 </figure>
 </div>
 <p>The TF can be “read backwards” from the block diagram.</p>
 <div id="exm-SS-to-TF-1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2.2</strong></span> Let <span class="math inline">\(A = \MATRIX{-1 &amp; 2 \\ 3 &amp; -1}\)</span>, <span class="math inline">\(B = \MATRIX{1 \\ 0}\)</span>, and <span class="math inline">\(C = \MATRIX{2 &amp; 1}\)</span>. Find the TF?</p>
+<p><span class="theorem-title"><strong>Example 2.3</strong></span> Let <span class="math inline">\(A = \MATRIX{-1 &amp; 2 \\ 3 &amp; -1}\)</span>, <span class="math inline">\(B = \MATRIX{1 \\ 0}\)</span>, and <span class="math inline">\(C = \MATRIX{2 &amp; 1}\)</span>. Find the TF?</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
@@ -825,7 +838,7 @@ e_2 = \MATRIX{0 \\ 1}.
 \]</span> then we can say that the vector is equal to <span class="math inline">\(\MATRIX{\tilde x_1 \\ \tilde x_2}\)</span> in the coordinate system <span class="math inline">\((v_1, v_2)\)</span>. Note that the vector hasn’t changed, only the coodinate system has.</p>
 <p>We use the following example to illustrate how to move from one coordinate system to another</p>
 <div id="exm-change-of-coordinates" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2.3</strong></span> Let <span class="math inline">\(x = \MATRIX{2 \\ 3}\)</span>. Find its representation in the coordinate system <span class="math display">\[v_1 = \MATRIX{1 \\ 0}
+<p><span class="theorem-title"><strong>Example 2.4</strong></span> Let <span class="math inline">\(x = \MATRIX{2 \\ 3}\)</span>. Find its representation in the coordinate system <span class="math display">\[v_1 = \MATRIX{1 \\ 0}
 \quad\text{and}\quad
 v_2 = \MATRIX{1 \\ 1}.
 \]</span></p>
@@ -877,7 +890,7 @@ Solution
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-change-of-coordinates-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.7: Vector <span class="math inline">\(x\)</span> in different coordinate systems
+Figure&nbsp;2.8: Vector <span class="math inline">\(x\)</span> in different coordinate systems
 </figcaption>
 </figure>
 </div>
@@ -900,7 +913,7 @@ f(α_1 x_1 + α_2 x_2) = α_1 f(x_1) + α_2 f(x_2).
 <p>Suppose we were free to choose the coordinate system in which we evaluate <span class="math inline">\(f\)</span>. Which coordinate system should we choose? This is where eigenvalues and eigenvectors come in.</p>
 <p>An <strong>eigenvector</strong> is a special vector <span class="math inline">\(x\)</span> such that <span class="math inline">\(f(x)\)</span> is a scaled (and possibly flipped) version of <span class="math inline">\(x\)</span> (i.e., <span class="math inline">\(f(x)\)</span> lies in the linear subspace spanned by <span class="math inline">\(x\)</span>). Mathematically, there exists a scalar <span class="math inline">\(λ\)</span> such that <span class="math display">\[ A x = λ x \]</span></p>
 <div id="exm-permutation" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2.4</strong></span> Consider <span class="math inline">\(A = \MATRIX{0 &amp; 1 \\ 1 &amp; 0}\)</span>. This is a permultation matrix. <span class="math display">\[
+<p><span class="theorem-title"><strong>Example 2.5</strong></span> Consider <span class="math inline">\(A = \MATRIX{0 &amp; 1 \\ 1 &amp; 0}\)</span>. This is a permultation matrix. <span class="math display">\[
 A \MATRIX{x_1 \\ x_2} = \MATRIX{x_2 \\ x_1}.
 \]</span></p>
 <ul>
@@ -943,7 +956,7 @@ Some special cases
 </div>
 </div>
 <div id="exm-eigenvalues" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2.5</strong></span> Find the eigenvalues and eigenvectors of <span class="math inline">\(A = \MATRIX{3 &amp; 1 \\ 1 &amp; 3 }\)</span>.</p>
+<p><span class="theorem-title"><strong>Example 2.6</strong></span> Find the eigenvalues and eigenvectors of <span class="math inline">\(A = \MATRIX{3 &amp; 1 \\ 1 &amp; 3 }\)</span>.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="true" aria-label="Toggle callout">
@@ -993,12 +1006,12 @@ Which eigenvector to pick?
 </div>
 <div class="callout-body-container callout-body">
 <p>For any eigenvalue <span class="math inline">\(λ\)</span>, the matrix <span class="math inline">\(λ I - A\)</span> is singular. Therefore, the equation <span class="math inline">\((λI - A) x = 0\)</span> will have multiple solutions. Which solution to pick?</p>
-<p>The standard convention (especially when you are using a mathematical programming language to compute eigenvectors) is to pick the <strong>unit vector</strong>. For example, in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>2.5</span></a>, one would pick:</p>
+<p>The standard convention (especially when you are using a mathematical programming language to compute eigenvectors) is to pick the <strong>unit vector</strong>. For example, in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>2.6</span></a>, one would pick:</p>
 <ul>
 <li>For <span class="math inline">\(λ = 4\)</span>, the eigenvector is <span class="math inline">\(\MATRIX{ \frac{1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}}}\)</span>.</li>
 <li>For <span class="math inline">\(λ = 2\)</span>, the eigenvector is <span class="math inline">\(\MATRIX{ \frac{-1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}}}\)</span>.</li>
 </ul>
-<p>However, when doing analysis by hand, it is often more convenient to pick eigenvectors which are easier to represent. For example, in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>2.5</span></a>, one would pick</p>
+<p>However, when doing analysis by hand, it is often more convenient to pick eigenvectors which are easier to represent. For example, in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>2.6</span></a>, one would pick</p>
 <ul>
 <li>For <span class="math inline">\(λ = 4\)</span>, the eigenvector is <span class="math inline">\(\MATRIX{1 \\ 1}\)</span>.</li>
 <li>For <span class="math inline">\(λ = 2\)</span>, the eigenvector is <span class="math inline">\(\MATRIX{-1 \\ 1}\)</span>.</li>
@@ -1016,12 +1029,12 @@ Some remarks
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li><p>Note that in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>2.5</span></a>, the matrix <span class="math inline">\(A\)</span> is symmetric. Symmetric matrices have real eigenvalues.</p></li>
+<li><p>Note that in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>2.6</span></a>, the matrix <span class="math inline">\(A\)</span> is symmetric. Symmetric matrices have real eigenvalues.</p></li>
 <li><p>We can show that <span class="math display">\[
   λ_1 + λ_2 + \cdots + λ_n = \text{Trace}(A)
 \]</span> (where <span class="math inline">\(\text{Trace}(A)\)</span> means the sum of diagonal elements of <span class="math inline">\(A\)</span> and <span class="math display">\[
   λ_1 λ_2 \cdots λ_n = \det(A).
-\]</span> You can verify these properties for <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>2.5</span></a>.</p></li>
+\]</span> You can verify these properties for <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>2.6</span></a>.</p></li>
 <li><p>In general for any <span class="math inline">\(2 × 2\)</span> matrix, <span class="math display">\[
   \det(λI - A) = λ^2 - \text{Trace}(A) λ + \det(A).
 \]</span></p></li>
@@ -1030,7 +1043,7 @@ Some remarks
 </div>
 <p>If the matrix is not symmetric, then the eigenvalues may be complex.</p>
 <div id="exm-imaginary-eigenvalues" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2.6 (Complex eigenvalues)</strong></span> Find the eigenvalues of the rotation matrix <span class="math inline">\(A = \MATRIX{0 &amp; -1 \\ 1 &amp; 0}\)</span>.</p>
+<p><span class="theorem-title"><strong>Example 2.7 (Complex eigenvalues)</strong></span> Find the eigenvalues of the rotation matrix <span class="math inline">\(A = \MATRIX{0 &amp; -1 \\ 1 &amp; 0}\)</span>.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
@@ -1053,7 +1066,7 @@ Solution
 </section>
 <section id="why-are-eigenvalues-useful" class="level3" data-number="2.7.2">
 <h3 data-number="2.7.2" class="anchored" data-anchor-id="why-are-eigenvalues-useful"><span class="header-section-number">2.7.2</span> Why are eigenvalues useful?</h3>
-<p>Let’s consider an example. Suppose <span class="math inline">\(A = \MATRIX{3 &amp; 1 \\ 1 &amp; 3}\)</span>. We have seen in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>2.5</span></a> that the eigenvalues are <span class="math inline">\(λ_1 = 4\)</span> and <span class="math inline">\(λ_2 = 2\)</span> and the corresponding eigenvectors are <span class="math display">\[
+<p>Let’s consider an example. Suppose <span class="math inline">\(A = \MATRIX{3 &amp; 1 \\ 1 &amp; 3}\)</span>. We have seen in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>2.6</span></a> that the eigenvalues are <span class="math inline">\(λ_1 = 4\)</span> and <span class="math inline">\(λ_2 = 2\)</span> and the corresponding eigenvectors are <span class="math display">\[
 v_1 = \MATRIX{1 \\ 1}, \quad
 v_2 = \MATRIX{-1 \\ 1}.
 \]</span></p>
@@ -1091,28 +1104,28 @@ A^{100} = T Λ^{100} T^{-1}.
 <section id="where-have-you-seen-this-before" class="level3" data-number="2.7.3">
 <h3 data-number="2.7.3" class="anchored" data-anchor-id="where-have-you-seen-this-before"><span class="header-section-number">2.7.3</span> Where have you seen this before?</h3>
 <p>The basic idea that we should <strong>always work in the eigen-coordinate system</strong> is at the heart of all we do in linear algebra, signals and systems, and differential equations (and as we shall see in this course, in control systems).</p>
-<p>How are eigenvalues and eigenvectors related to Signals and Systems? Consider an LTI system shown in <a href="#fig-LTI" class="quarto-xref">Figure&nbsp;<span>2.8</span></a></p>
+<p>How are eigenvalues and eigenvectors related to Signals and Systems? Consider an LTI system shown in <a href="#fig-LTI" class="quarto-xref">Figure&nbsp;<span>2.9</span></a></p>
 <div id="fig-LTI" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-LTI-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/svg/eigenfunctions1.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-LTI-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.8: An LTI system with input <span class="math inline">\(x(t)\)</span>, impulse response <span class="math inline">\(g(t)\)</span> and output <span class="math inline">\(y(t)\)</span>.
+Figure&nbsp;2.9: An LTI system with input <span class="math inline">\(x(t)\)</span>, impulse response <span class="math inline">\(g(t)\)</span> and output <span class="math inline">\(y(t)\)</span>.
 </figcaption>
 </figure>
 </div>
 <p>We know that <span class="math display">\[
 y(t) = x(t) * g(t) = \int_{-∞}^{∞} g(τ) x(t-τ) d τ.
 \]</span> Note that an LTI system is also a “linear transform”. So it has eigenvalues and eigenvectors. What are they?</p>
-<p><strong>Claim.</strong> Complex exponentials (i.e., <span class="math inline">\(e^{st}\)</span>) are <strong>eigenfunctions</strong> of LTI systems (see <a href="#fig-LTI-laplace" class="quarto-xref">Figure&nbsp;<span>2.9</span></a>)</p>
+<p><strong>Claim.</strong> Complex exponentials (i.e., <span class="math inline">\(e^{st}\)</span>) are <strong>eigenfunctions</strong> of LTI systems (see <a href="#fig-LTI-laplace" class="quarto-xref">Figure&nbsp;<span>2.10</span></a>)</p>
 <div id="fig-LTI-laplace" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-LTI-laplace-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/svg/eigenfunctions2.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-LTI-laplace-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.9: <span class="math inline">\(G(s)\)</span> is the eigenvalue corresponding to <span class="math inline">\(e^{st}\)</span>
+Figure&nbsp;2.10: <span class="math inline">\(G(s)\)</span> is the eigenvalue corresponding to <span class="math inline">\(e^{st}\)</span>
 </figcaption>
 </figure>
 </div>
