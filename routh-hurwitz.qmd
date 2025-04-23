@@ -647,3 +647,38 @@ B > 0.
 $$
 
 :::
+
+:::{#exm-stability-3}
+Consider the system shown below:
+
+![Another proportional controller](figures/svg/routh-hurwitz4.svg)
+
+Find the value of $K$ for which the system is stable.
+:::
+
+:::{.callout-note collapse="true"} 
+### Solution
+
+The closed loop transfer function is given by
+$$
+T(s) = \frac{K G(s)}{1 + K G(s)}
+= \frac{6K}{s^3 + 6s^2 + 11s + 6(1+K)}
+$$
+
+Therefore, the Routh array is given by
+
+```{julia}
+@variables K
+(html, RA) = RouthArray([1, 6, 11, 6 + 6K])
+html
+```
+
+For stability, all terms in the first column must be positive. Thus, we have
+$$
+10 - K > 0
+\quad\text{and}\quad
+6(1+K) > 0
+$$
+which is equivalent to
+$$ -1 < K < 10 $$
+:::
