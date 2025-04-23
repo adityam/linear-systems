@@ -1,9 +1,9 @@
 project:
-  type: website
+  type: book
   output-dir: docs/
   # resources:
 
-website:
+book:
   title: Linear Systems and Control
   description: "Course Notes for ECSE 307 (McGill University)"
   site-url: "https://adityam.github.io/linear-systems/"
@@ -19,10 +19,24 @@ website:
     pinned: false
     search: false
     left:
-    - href: ../linear-systems/index.html
+    - href: index.html
       text: Linear Control Systems
-        # - href: ../multi-agent-systems/index.html
-        #   text: Multi-Agent Systems
+    
+  chapters:
+      - index.qmd
+      - freq-modeling.qmd
+      - state-space-models.qmd
+      - step-response.qmd
+      - matrix-exponential.qmd
+      - state-feedback.qmd
+      - output-feedback.qmd
+      - routh-hurwitz.qmd
+      - block-diagrams.qmd
+      - steady-state-errors.qmd
+      - bode-and-nyquist.qmd
+      - nyquist-stability.qmd
+      - safety-margins.qmd
+      - lag-lead-compensators.qmd
 
 format:
   html:
