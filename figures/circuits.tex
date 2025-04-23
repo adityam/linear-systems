@@ -180,4 +180,21 @@
 \stopcircuitikz}
 \stopTEXpage
 
+% Fig P2.7 From Khalil, Control System
+\startTEXpage[offset=1dk]
+\scale[scale=1500]{\startcircuitikz[american voltages,thick]
+  \draw (0,0) to[V=$u(t)$,invert] (0,3) 
+              to[-*] (2,3) 
+              to[R=$R_2$, -*] (5,3)
+              to[R=$R_3$, -*] (8,3)
+              node[label={[font=\SMALL]right:$v_C(t)$}] {}
+              to[C=$C$]  (8,0)
+              to (0,0);
+
+  \draw (2,3) to[R=$R_1$, *-] (2,0);
+  \draw (5,3) to[L=$L$] (5,0);
+
+\stopcircuitikz}
+\stopTEXpage
+
 \stoptext

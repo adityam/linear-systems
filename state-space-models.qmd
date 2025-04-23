@@ -248,7 +248,7 @@ As an example, let's start with a simple example to understand how state space m
 
 We construct the state space model as follows.
 
-#### Step 1: Select the state variables
+#### Step 1: Select the state variables {-}
 We write the appropriate relation for the two energy storage elements:
 \begin{align*}
 C \frac{d v_C(t)}{dt} &= i_C(t) = i_L(t) \\
@@ -257,7 +257,7 @@ L \frac{d i_L(t)}{dt} &= v_L(t)
 
 Thus, we use $\MATRIX{ v_C(t) \\ i_L(t) }$ as state.
 
-#### Step 2: Use KCL/KVL to simplify the RHS of step 1
+#### Step 2: Use KCL/KVL to simplify the RHS of step 1 {-}
 
 We want the RHS of the above equations to be expressed in terms of input $u(t)$ and state $(v_C(t), i_L(t))$. Note that $dv_C(t)/dt$ is already in terms of $i_L(t)$. We now use KVL to find an expression for $v_L(t)$
 in terms of the other variables:
@@ -313,7 +313,7 @@ Now consider the example shown in @fig-rcl2
 
 We construct the state space model as follows.
 
-#### Step 1: Select the state variables
+#### Step 1: Select the state variables {-}
 We write the appropriate relation for the two energy storage elements:
 \begin{align*}
 C \frac{d v_C(t)}{dt} &= i_C(t) \\
@@ -322,7 +322,7 @@ L \frac{d i_L(t)}{dt} &= v_L(t)
 
 Thus, we use $\MATRIX{ v_C(t) \\ i_L(t) }$ as state.
 
-#### Step 2: Use KCL/KVL to simplify the RHS of step 1
+#### Step 2: Use KCL/KVL to simplify the RHS of step 1 {-}
 
 We use KCL/KVL to write the right hand side of Step 1 as a linear combination of state and input. From KCL we have
 \begin{align*}
@@ -377,6 +377,13 @@ B =
 \quad
 C = \MATRIX{1 & 0 }
 $$
+
+:::{#exm-circuit}
+Find the state space model of the circuit shown in @fig-circuit-exm
+
+![A complicated circuit](figures/svg/circuits10.svg){#fig-circuit-exm}
+
+:::
 
 ## From state space models to transfer functions
 
