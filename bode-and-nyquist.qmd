@@ -174,14 +174,14 @@ Observe the following:
 - For $ω/a \ll 1$, (i.e., $ω \ll a$)
   $$20 \log |G(jω)| \approx 10 \log \frac{1}{1} = 0
   \quad\text{and}\quad
-  \angle \log G(jω) \approx -\tan^{-1} 0 = 0^∘$$
+  \angle G(jω) \approx -\tan^{-1} 0 = 0^∘$$
 
   Thus, the magnitude is $0$ dB and the phase is $0^∘$.
 
 - For $ω/a \gg 1$, (i.e., $ω \gg a$)
   $$20 \log |G(jω)| \approx 10 \log \frac{1}{\dfrac{ω}{a}} = -20 \log ω + 20 \log ω
   \quad\text{and}\quad
-  \angle \log G(jω) \approx -\tan^{-1} ∞ = 90^∘$$
+  \angle G(jω) \approx -\tan^{-1} ∞ = -90^∘$$
 
   Thus, the magnitude is a straight line with a slope of $-20$ dB/decade and the phase is $-90^∘$.
 
@@ -738,5 +738,150 @@ $$
 
 ## Nyquist plots
 
-Nquist plot is a polar plot of the frequency response, that is, we plot $G(jω)$ as a complex number for different values of $ω$. Unlike the Bode plot, we plot the Nyquist plot for all $ω \in (-∞, ∞)$ and usually also draw an arrow indicating the direction. An example is shown in @fig-nyquist. In the [next lecture](nyquist-stability.qmd), we will show how to use Nyquist plot to determine stability of a unity feedback system.
+Nquist plot is a polar plot of the frequency response, that is, we plot $G(jω)$ as a complex number for different values of $ω$. Unlike the Bode plot, we plot the Nyquist plot for all $ω \in (-∞, ∞)$ and usually also draw an arrow indicating the direction. An example is shown in @fig-nyquist. 
+
+We will not come up with general rules for plotting Nyquist plot but simply give a few example of Nyquist plots.
+
+### Nyquist plot of first order system
+
+Consider a first order system 
+$$
+  G(s) = K \frac{a}{s + a}.
+$$
+
+From the Bode plot, we can determine that
+- As $ω \to 0$,
+  $$
+    | G(j ω) | = K
+    \quad\text{and}\quad
+    \angle G(j ω) = 0^∘
+  $$
+
+- As $ω \to ∞$
+  $$
+    | G(j ω) | = 0
+    \quad\text{and}\quad
+    \angle G(j ω) = -90^∘
+  $$
+
+The Nyquist plot is as shown in @fig-nyquist-1st. At $ω = 0$, the plot starts at $(K,0)$. As $ω$ increases, $\angle G(j ω)$ becomes negative and the plot moves into the lower half of the plane. There is no intersection with the axes until the plot reaches the origin as $ω$ tends to infinity. Because the limit of $\angle G(j ω)$ is $-90 ^∘$, the plot is tangent to the imaginary axis as the plot approaches the origin.  Note that for $ω < 0$, the plot is the mirror image of the plot for $ω > 0$ (about the real-axis).
+
+```{julia}
+#| fig-cap: Nyquist plot of first order system $G(s) = 5 ⋅ 2/(s+2)$
+#| label: fig-nyquist-1st
+
+ begin
+ N = 500
+ R = 500
+ Z = 5
+ sCurve = vcat(range(0.0+0im, 0.0+Z*im, N),
+               range(0.0+Z*im, 0.0+R*im, N),
+               [R*cis(θ) for θ in range(π/2, -π/2, N)],
+               range(0.0-R*im, 0.0-Z*im, N),
+               range(0.0-Z*im, 0.0-0*im, N))
+GG(s) = 5*2/(s+2)
+GCurve = GG.(sCurve)
+
+plot(size=(750,375), framestyle=:origin)
+plot!(real(GCurve), imag(GCurve), legend=false, aspect_ratio=1) 
+  plot!(real(GCurve[[1,4]]), imag(GCurve[[1,4]]), arrow=true, color=current_colors[1])
+end
+```
+
+### Nyquist plot of second order system
+
+For simplicity, we consider the second order system 
+$$
+  G(s) = K \frac{1}{s} \cdot \frac{a}{s+a}
+$$
+
+From the Bode plot, we can determine that
+- As $ω \to 0$,
+  $$
+    | G(j ω) | = ∞
+    \quad\text{and}\quad
+    \angle G(j ω) = -90^∘
+  $$
+
+- As $ω \to ∞$
+  $$
+    | G(j ω) | = 0
+    \quad\text{and}\quad
+    \angle G(j ω) = -180^∘
+  $$
+
+The Nyquist plot is as shown in @fig-nyquist-2nd. At $ω = 0$, the plot approaches $-∞$ asymptotic to the vertical line $\text{Re}(G(j ω)) = -K/a$ in the lower half of the plane (since $\angle G(j ω) = -90 ^∘$. As $ω$ increases, and approaches the origin, tangent to the real axis (since $\angle G(j ω) \to -180 ^∘$). Note that for $ω < 0$, the plot is the mirror image of the plot for $ω > 0$ (about the real-axis).
+
+```{julia}
+#| fig-cap: Nyquist plot of second order system $G(s) = 5 ⋅ 2/(s(s+2))$
+#| label: fig-nyquist-2nd
+
+ begin
+ N = 50
+ R = 20
+ Z = 10 
+ sCurve = vcat(range(0.0+0im, 0.0+Z*im, N),
+               range(0.0+Z*im, 0.0+R*im, N),
+               [R*cis(θ) for θ in range(π/2, -π/2, N)],
+               range(0.0-R*im, 0.0-Z*im, N),
+               range(0.0-Z*im, 0.0-0*im, N))
+GG(s) = 5*2/(s*(s+2))
+GCurve = GG.(sCurve)
+
+plot(size=(750,375), framestyle=:origin, xlims=(-10,10), ylim=(-10,10))
+plot!(real(GCurve), imag(GCurve), legend=false,aspect_ratio=1) 
+  plot!(real(GCurve[[1,4]]), imag(GCurve[[1,4]]), arrow=true, color=current_colors[1])
+end
+```
+
+### Nyquist plot of higher order system
+
+Some examples of Nyquist plots of higher order systems are shown below.
+
+
+```{julia}
+#| fig-cap: Nyquist plot of third order system $G(s) = 5 ⋅ 2 ⋅ 3/(s(s+2)(s+3))$
+#| label: fig-nyquist-3rd-1
+
+ begin
+ N = 50
+ R = 20
+ Z = 10 
+ sCurve = vcat(range(0.0+0im, 0.0+Z*im, N),
+               range(0.0+Z*im, 0.0+R*im, N),
+               [R*cis(θ) for θ in range(π/2, -π/2, N)],
+               range(0.0-R*im, 0.0-Z*im, N),
+               range(0.0-Z*im, 0.0-0*im, N))
+GG(s) = 5*2*3/(s*(s+2)*(s+3))
+GCurve = GG.(sCurve)
+
+plot(size=(750,375), framestyle=:origin, xlims=(-5,2.5), ylim=(-10,10))
+plot!(real(GCurve), imag(GCurve), legend=false,aspect_ratio=1) 
+  plot!(real(GCurve[[1,4]]), imag(GCurve[[1,4]]), arrow=true, color=current_colors[1])
+end
+```
+
+```{julia}
+#| fig-cap: Nyquist plot of third order system $G(s) = 5 ⋅ 2 ⋅ 10/(s(s+2)(s+2.5))$
+#| label: fig-nyquist-3rd-2
+
+ begin
+ N = 100
+ R = 10
+ Z = 5 
+ sCurve = vcat(range(0.0+0im, 0.0+Z*im, N),
+               range(0.0+Z*im, 0.0+R*im, N),
+               [R*cis(θ) for θ in range(π/2, -π/2, N)],
+               range(0.0-R*im, 0.0-Z*im, N),
+               range(0.0-Z*im, 0.0-0*im, N))
+GG(s) = 5*2*10/((s+1)*(s+2)*(s+2.5))
+GCurve = GG.(sCurve)
+
+plot(size=(750,375), framestyle=:origin)
+plot!(real(GCurve), imag(GCurve), legend=false,aspect_ratio=1) 
+  plot!(real(GCurve[[10,11]]), imag(GCurve[[10,11]]), arrow=true, color=current_colors[1])
+end
+```
+
+In the [next lecture](nyquist-stability.qmd), we will show how to use Nyquist plot to determine stability of a unity feedback system.
 
