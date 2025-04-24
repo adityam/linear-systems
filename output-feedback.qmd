@@ -292,6 +292,15 @@ $$ A = \MATRIX{3 & 1 \\ 1 & 2}, B = \MATRIX{2 \\1} \text{ and } C = \MATRIX{ 3 &
 Design a Luenberger observer (i.e., compute the observer gain $L$) such that the eigenvalues of $A - LC$ are at $-10 \pm 5j$. 
 :::
 
+:::{.callout-tip }
+#### Duality
+
+The process of observer design is the *dual* of the process of controller design. In particular, 
+$$
+  (A,C)~\text{observable} ≡ (A^\TRANS, C^\TRANS)~\text{controllable}
+$$
+Moreover, the procedure for observer design (placing the poles of $(A - LC)$ is equivalent to the procedure for controller design (placing the poles of $(A^\TRANS - C^\TRANS L^\TRANS)$. 
+:::
 
 ## Output feedback
 
@@ -330,7 +339,7 @@ $$
 By using the transformation $T = \MATRIX{I & 0 \\ I & -I}$, we get
 $$
 \MATRIX{ \dot x(t) \\ \dot e(t) } =
-\MATRIX{ A - BK & BK \\ 0 & A - LC } 
+\MATRIX{ A - BK & -BK \\ 0 & A - LC } 
 \MATRIX{ x(t) \\ e(t) }.
 $$
 Thus, the characteristic polynomial of the closed loop system is
