@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2025-04-23">
+<meta name="dcterms.date" content="2025-04-24">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>4&nbsp; Time response of state space models – Linear Systems and Control</title>
@@ -340,7 +340,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 23, 2025</p>
+      <p class="date">April 24, 2025</p>
     </div>
   </div>
   
@@ -393,8 +393,8 @@ e^{At} = I + At + \frac{A^2t^2}{2!} + \frac{A^3t^3}{3!} + \cdots
 </div>
 </div>
 <p>We now present some examples where the matrix exponential can be computed easily.</p>
-<div id="exm-matrix-exponential-finite" class="theorem example">
-<p><span class="theorem-title"><strong>Example 4.1</strong></span> Compute <span class="math inline">\(e^{At}\)</span> for <span class="math display">\[A = \MATRIX{0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \\ 0 &amp; 0 &amp; 0}. \]</span></p>
+<div id="exm-matrix-exponential-2nd" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.1</strong></span> Compute <span class="math inline">\(e^{At}\)</span> for <span class="math display">\[A = \MATRIX{0 &amp; 1 \\ 0 &amp; 0}. \]</span></p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
@@ -410,10 +410,41 @@ Solution
 <div class="callout-body-container callout-body">
 <p>We compute the terms of&nbsp;<span class="math inline">\(\eqref{eq:matrix-exponential}\)</span>:</p>
 <ul>
+<li><span class="math inline">\(A^2 = \MATRIX{0 &amp; 0 \\ 0 &amp; 0}\)</span>.</li>
+</ul>
+<p>which means that <span class="math inline">\(A^k = 0\)</span> for <span class="math inline">\(k \ge 2\)</span>. Thus, the right hand side of&nbsp;<span class="math inline">\(\eqref{eq:matrix-exponential}\)</span> contains only a finite number of nonzero terms: <span class="math display">\[\begin{align*}
+e^{At} &amp;= I + At \\
+&amp;=
+\MATRIX{1 &amp; 0 \\ 0 &amp; 1}
++
+\MATRIX{0 &amp; t \\ 0 &amp; 0 }
+\\
+&amp;=\MATRIX{1 &amp; t \\ 0 &amp; 1}.
+\end{align*}\]</span></p>
+</div>
+</div>
+</div>
+<div id="exm-matrix-exponential-finite" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4.2</strong></span> Compute <span class="math inline">\(e^{At}\)</span> for <span class="math display">\[A = \MATRIX{0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \\ 0 &amp; 0 &amp; 0}. \]</span></p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We compute the terms of&nbsp;<span class="math inline">\(\eqref{eq:matrix-exponential}\)</span>:</p>
+<ul>
 <li><span class="math inline">\(A^2 = \MATRIX{0 &amp; 0 &amp; 1 \\ 0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 0 }\)</span>.</li>
 <li><span class="math inline">\(A^3 = \MATRIX{0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 0 }\)</span>.</li>
 </ul>
-<p>which means that <span class="math inline">\(A^k = 0\)</span> for <span class="math inline">\(k \ge 0\)</span>. Thus, the right hand side of&nbsp;<span class="math inline">\(\eqref{eq:matrix-exponential}\)</span> contains only a finite number of nonzero terms: <span class="math display">\[\begin{align*}
+<p>which means that <span class="math inline">\(A^k = 0\)</span> for <span class="math inline">\(k \ge 3\)</span>. Thus, the right hand side of&nbsp;<span class="math inline">\(\eqref{eq:matrix-exponential}\)</span> contains only a finite number of nonzero terms: <span class="math display">\[\begin{align*}
 e^{At} &amp;= I + At + \frac 12 A^2 t^2 \\
 &amp;=
 \MATRIX{1 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 }
@@ -429,10 +460,10 @@ e^{At} &amp;= I + At + \frac 12 A^2 t^2 \\
 </div>
 </div>
 <div id="exm-matrix-exponential-diagonal" class="theorem example">
-<p><span class="theorem-title"><strong>Example 4.2</strong></span> Compute <span class="math inline">\(e^{At}\)</span> for <span class="math display">\[A = \MATRIX{λ_1 &amp; 0 &amp; 0 \\ 0 &amp; λ_2 &amp; 0 \\ 0 &amp; 0 &amp; λ_3}. \]</span></p>
+<p><span class="theorem-title"><strong>Example 4.3</strong></span> Compute <span class="math inline">\(e^{At}\)</span> for <span class="math display">\[A = \MATRIX{λ_1 &amp; 0 &amp; 0 \\ 0 &amp; λ_2 &amp; 0 \\ 0 &amp; 0 &amp; λ_3}. \]</span></p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -441,7 +472,7 @@ Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>We compute the terms of&nbsp;<span class="math inline">\(\eqref{eq:matrix-exponential}\)</span>:</p>
 <ul>
@@ -469,7 +500,7 @@ e^{At} &amp;= I + At + \frac{A^2t^2}{2!} + \frac{A^3t^3}{3!} + \cdots \\
 <h2 data-number="4.2" class="anchored" data-anchor-id="computing-matrix-exponential"><span class="header-section-number">4.2</span> Computing matrix exponential</h2>
 <section id="method-1-eigenvalue-diagonalization-method" class="level3" data-number="4.2.1">
 <h3 data-number="4.2.1" class="anchored" data-anchor-id="method-1-eigenvalue-diagonalization-method"><span class="header-section-number">4.2.1</span> Method 1: Eigenvalue diagonalization method</h3>
-<p>As illustrated by <a href="#exm-matrix-exponential-diagonal" class="quarto-xref">Example&nbsp;<span>4.2</span></a>, compute matrix exponential is easy for diagonal matrix. So, if the matrix <span class="math inline">\(A\)</span> is diagonalizable (i.e., has distinct eigenvalues) we can do a change of coordinates and compute the matrix exponential in the eigen-coordinates.</p>
+<p>As illustrated by <a href="#exm-matrix-exponential-diagonal" class="quarto-xref">Example&nbsp;<span>4.3</span></a>, compute matrix exponential is easy for diagonal matrix. So, if the matrix <span class="math inline">\(A\)</span> is diagonalizable (i.e., has distinct eigenvalues) we can do a change of coordinates and compute the matrix exponential in the eigen-coordinates.</p>
 <p>In particular, suppose <span class="math inline">\(A\)</span> has distinct eivenvalues <span class="math inline">\(λ_1, \dots, λ_n\)</span> and <span class="math inline">\(v_1, \dots, v_n\)</span> are the corresponding eigvenvectors. Thus, $ A v_k = λ_k v_k$ for all <span class="math inline">\(k \in \{1,\dots, n\}\)</span>. Writing this in matrix form, we have <span class="math display">\[\begin{align*}
 A \MATRIX{v_1 &amp; v_2 &amp; \cdots &amp; v_n} &amp;=
 \MATRIX{A v_1 &amp; A v_2 &amp; \cdots &amp; A v_n} \\
@@ -511,7 +542,7 @@ e^{At} &amp;= I + At + \frac{A^2 t^2}{2!} + \frac{A^3 t^3}{3!} + \cdots \\
 <p><span class="theorem-title"><strong>Exercise 4.1</strong></span> Use the eigenvalue diagonalizable method to compute <span class="math inline">\(e^{At}\)</span> for <span class="math inline">\(A = \MATRIX{-6 &amp; 4 \\ -5 &amp; 3 }\)</span>.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -520,7 +551,7 @@ Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>We start by computing the eigenvalues and eigenvectors of <span class="math inline">\(A\)</span>.</p>
 <p>To compute the eigenvalues: <span class="math display">\[sI - A = \MATRIX{s + 6 &amp; -4 \\ 5 &amp; s-3 }\]</span> Therefore, the characteristic equation is <span class="math display">\[\det(sI - A) = s^2 + 3s + 2 = (s+1)(s+2) \]</span> Hence, the eigenvalues of <span class="math inline">\(A\)</span> are <span class="math inline">\(λ_1 = -1\)</span> and <span class="math inline">\(λ_2 = -2\)</span>.</p>
@@ -553,7 +584,7 @@ e^{At} = \MATRIX{ 4 &amp; 1 \\ 5 &amp; 1 }
 <p><span class="theorem-title"><strong>Exercise 4.2</strong></span> Use the Laplace transform method to compute <span class="math inline">\(e^{At}\)</span> for <span class="math inline">\(A = \MATRIX{-6 &amp; 4 \\ -5 &amp; 3 }\)</span>.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -562,7 +593,7 @@ Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>We first compute <span class="math display">\[sI - A = \MATRIX{s + 6 &amp; -4 \\ 5 &amp; s-3 }\]</span> Therefore, <span class="math display">\[\det(sI - A) = s^2 + 3s + 2 = (s+1)(s+2) \]</span> and <span class="math display">\[ (sI - A)^{-1} =
 \MATRIX{

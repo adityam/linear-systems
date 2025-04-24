@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2025-04-23">
+<meta name="dcterms.date" content="2025-04-24">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>6&nbsp; State observers and output feedback – Linear Systems and Control</title>
@@ -379,7 +379,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 23, 2025</p>
+      <p class="date">April 24, 2025</p>
     </div>
   </div>
   
@@ -485,7 +485,7 @@ Solution
 <p>The current characteristic polynomial is (since the system is in OCF, we can determine it by inspection) <span class="math display">\[ \det(sI - A) = s^2 + 2s + 1. \]</span></p>
 <p>Therefore, the required output feedback gain is <span class="math display">\[ L = \MATRIX{ 125 - 1 \\ 20 - 2 } = \MATRIX{ 124 \\ 18 }. \]</span></p>
 <p>We verify the solution below.</p>
-<div id="c24076e2" class="cell" data-execution_count="3">
+<div id="e0cb20e8" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> [<span class="fl">0</span> <span class="op">-</span><span class="fl">1</span> ; <span class="fl">1</span> <span class="op">-</span><span class="fl">2</span>]</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> [<span class="fl">0</span>  <span class="fl">1</span>]</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> [<span class="op">-</span><span class="fl">10</span> <span class="op">+</span> <span class="fl">5im</span>, <span class="op">-</span><span class="fl">10</span> <span class="op">-</span> <span class="fl">5im</span>]</span>
@@ -589,6 +589,21 @@ T = \bigl[ W \mathcal O_{(A,C)} \bigr]^{-1}
 <div id="exm-observer-design" class="theorem example">
 <p><span class="theorem-title"><strong>Example 6.2</strong></span> Consider the following SSM: <span class="math display">\[ A = \MATRIX{3 &amp; 1 \\ 1 &amp; 2}, B = \MATRIX{2 \\1} \text{ and } C = \MATRIX{ 3 &amp; 2}. \]</span> Design a Luenberger observer (i.e., compute the observer gain <span class="math inline">\(L\)</span>) such that the eigenvalues of <span class="math inline">\(A - LC\)</span> are at <span class="math inline">\(-10 \pm 5j\)</span>.</p>
 </div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Duality
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The process of observer design is the <em>dual</em> of the process of controller design. In particular, <span class="math display">\[
+  (A,C)~\text{observable} ≡ (A^\TRANS, C^\TRANS)~\text{controllable}
+\]</span> Moreover, the procedure for observer design (placing the poles of <span class="math inline">\((A - LC)\)</span> is equivalent to the procedure for controller design (placing the poles of <span class="math inline">\((A^\TRANS - C^\TRANS L^\TRANS)\)</span>.</p>
+</div>
+</div>
 </section>
 </section>
 </section>
@@ -625,7 +640,7 @@ K = \MATRIX{k_0 &amp; \cdots &amp; k_{n-1}}.
 \MATRIX{ x(t) \\ \hat x(t) }.
 \]</span> By using the transformation <span class="math inline">\(T = \MATRIX{I &amp; 0 \\ I &amp; -I}\)</span>, we get <span class="math display">\[
 \MATRIX{ \dot x(t) \\ \dot e(t) } =
-\MATRIX{ A - BK &amp; BK \\ 0 &amp; A - LC }
+\MATRIX{ A - BK &amp; -BK \\ 0 &amp; A - LC }
 \MATRIX{ x(t) \\ e(t) }.
 \]</span> Thus, the characteristic polynomial of the closed loop system is <span class="math display">\[
 \DET{ A - BK &amp; -BK \\ 0 &amp; A - LC }  =
