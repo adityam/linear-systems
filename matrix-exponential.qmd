@@ -61,6 +61,29 @@ $$ x(t) = e^{At} x_0. $$
 
 We now present some examples where the matrix exponential can be computed easily. 
 
+:::{#exm-matrix-exponential-2nd}
+Compute $e^{At}$ for 
+$$A = \MATRIX{0 & 1 \\ 0 & 0}. $$
+:::
+
+:::{.callout-note collapse="true"} 
+#### Solution
+We compute the terms of \eqref{eq:matrix-exponential}:
+
+- $A^2 = \MATRIX{0 & 0 \\ 0 & 0}$.
+
+which means that $A^k = 0$ for $k \ge 2$. Thus, the right hand side of \eqref{eq:matrix-exponential} contains only a finite number of nonzero terms:
+\begin{align*}
+e^{At} &= I + At \\
+&= 
+\MATRIX{1 & 0 \\ 0 & 1}
++
+\MATRIX{0 & t \\ 0 & 0 }
+\\
+&=\MATRIX{1 & t \\ 0 & 1}.
+\end{align*}
+:::
+
 :::{#exm-matrix-exponential-finite}
 Compute $e^{At}$ for 
 $$A = \MATRIX{0 & 1 & 0 \\ 0 & 0 & 1 \\ 0 & 0 & 0}. $$
@@ -73,7 +96,7 @@ We compute the terms of \eqref{eq:matrix-exponential}:
 - $A^2 = \MATRIX{0 & 0 & 1 \\ 0 & 0 & 0 \\ 0 & 0 & 0 }$.
 - $A^3 = \MATRIX{0 & 0 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & 0 }$.
 
-which means that $A^k = 0$ for $k \ge 0$. Thus, the right hand side of \eqref{eq:matrix-exponential} contains only a finite number of nonzero terms:
+which means that $A^k = 0$ for $k \ge 3$. Thus, the right hand side of \eqref{eq:matrix-exponential} contains only a finite number of nonzero terms:
 \begin{align*}
 e^{At} &= I + At + \frac 12 A^2 t^2 \\
 &= 
