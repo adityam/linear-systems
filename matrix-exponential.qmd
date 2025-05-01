@@ -64,6 +64,12 @@ We now present some examples where the matrix exponential can be computed easily
 :::{#exm-matrix-exponential-2nd}
 Compute $e^{At}$ for 
 $$A = \MATRIX{0 & 1 \\ 0 & 0}. $$
+
+Based on the solution, solve the vector differential equation
+$$
+  \dot x(t) = A x(t), \quad x_0 = \MATRIX{α_1 \\ α_2}.
+$$
+
 :::
 
 :::{.callout-note collapse="true"} 
@@ -82,11 +88,23 @@ e^{At} &= I + At \\
 \\
 &=\MATRIX{1 & t \\ 0 & 1}.
 \end{align*}
+
+Thus, the solution of the vector differential equation $\dot x(t) = A x(t)$ is given by 
+$$
+  x(t) = e^{At} x_0 = \MATRIX{1 & t \\ 0 & 1} \MATRIX{α_1 \\ α_2}
+  = \MATRIX{α_1 + α_2 t \\ α_2}.
+$$
+
 :::
 
 :::{#exm-matrix-exponential-finite}
 Compute $e^{At}$ for 
 $$A = \MATRIX{0 & 1 & 0 \\ 0 & 0 & 1 \\ 0 & 0 & 0}. $$
+
+Based on the solution, solve the vector differential equation
+$$
+  \dot x(t) = A x(t), \quad x_0 = \MATRIX{α_1 \\ α_2 \\ α_3}.
+$$
 :::
 
 :::{.callout-note collapse="true"} 
@@ -109,11 +127,22 @@ e^{At} &= I + At + \frac 12 A^2 t^2 \\
 \\
 &=\MATRIX{1 & t & \frac 12 t^2 \\ 0 & 1 & t \\ 0 & 0 & 1}.
 \end{align*}
+
+Thus, the solution of the vector differential equation $\dot x(t) = A x(t)$ is given by 
+$$
+  x(t) = e^{At} x_0 = \MATRIX{1 & t & \frac 12 t^2 \\ 0 & 1 & t \\ 0 & 0 & 1} \MATRIX{α_1 \\ α_2 \\ α_3}
+  = \MATRIX{α_1 + α_2 t + \frac 12 α_3^2 \\ α_2 + α_3 t \\ α_3}.
+$$
 :::
 
 :::{#exm-matrix-exponential-diagonal}
 Compute $e^{At}$ for 
 $$A = \MATRIX{λ_1 & 0 & 0 \\ 0 & λ_2 & 0 \\ 0 & 0 & λ_3}. $$
+
+Based on the solution, solve the vector differential equation
+$$
+  \dot x(t) = A x(t), \quad x_0 = \MATRIX{α_1 \\ α_2 \\ α_3}.
+$$
 :::
 
 :::{.callout-note collapse="true"} 
@@ -136,6 +165,14 @@ e^{At} &= I + At + \frac{A^2t^2}{2!} + \frac{A^3t^3}{3!} + \cdots \\
            0 & 0 & 1 + λ_3 t + \frac 12 λ_3^2 t^2 + \cdots} \\[10pt]
 &= \MATRIX{e^{λ_1t} & 0 & 0 \\ 0 & e^{λ_2 t} & 0 \\ 0 & 0 & e^{λ_3 t}}
 \end{align*}
+
+Thus, the solution of the vector differential equation $\dot x(t) = A x(t)$ is given by 
+$$
+  x(t) = e^{At} x_0 = 
+  \MATRIX{e^{λ_1t} & 0 & 0 \\ 0 & e^{λ_2 t} & 0 \\ 0 & 0 & e^{λ_3 t}}
+  \MATRIX{α_1 \\ α_2 \\ α_3}
+  = \MATRIX{α_1 e^{λ_1 t} \\ α_2 e^{λ_2 t} \\ α_3 e^{λ_3 t}}.
+$$
 :::
 
 But outside of such few special cases, computing $e^{At}$ via definition \eqref{eq:matrix-exponential} is not computationally feasible. We now present computationally efficient methods to compute the matrix exponential. 
