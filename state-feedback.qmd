@@ -585,3 +585,81 @@ $$
   = \MATRIX{ -2 - 3z & - z \\ -z & 1 }.
 $$
 For $z = -1$ or $z = -2$, the change of coordinates is not full rank!
+
+## State-feedback via digital controllers
+
+In the labs, we will conduct hardware experiments to control a DC motor via state and output feedback controllers written in MATLAB. To do so, we take the output of the DC motor, convert it to a discrete-time signal using an A/D (analog-to-digital) converter, manipulate the sampled signal in discrete-time (using code written in MATLAB) to generate a discrete-time control signal, which is then converted to continuous-time using a D/A (digital-to-analog) converter and is then used to actuate the DC motor. In this section, we provide details of such digital design.
+
+Consider a continuous-time LTI system
+\begin{align*}
+  \dot x(t) &= A x(t) + B u(t) \\
+  y(t) &= C x(t)
+\end{align*}
+
+Suppose we drive the continuous-time system with a discrete-time ontrol sequence_ $u_d(⋅) = \{u_d(k)\}_{k=0}^{∞}$. Applying this sequence to a (zero-order hold) D/A converter with a sampling period of $Δt$ produces a _piecewise-constant_ continuous-time signal given by
+$$
+  u(t) = u_d(k), \quad t \in (kΔt, (k+1)Δt).
+$$
+Applying this (continuous-time) signal $u(⋅)$ as the control input the continuous-time LTI system will provide a continuous-time output $y(t)$. Let $y_d(⋅) = \{ y_d(k) \}_{k=0}^{∞}$ denote the discrete-time _output sequence_ obtained by sampling $y(⋅)$ using a A/D converter. We are interested in obtaining a state-space representation for the discrete-time system with input $u_d$ and output $y_d$.
+
+Since the continuous-time system is driven by a piecewise-constant signal $u_d(k)$ for $t \in (kΔt, (k+1)Δt)$, we have
+\begin{align*}
+  x((k+1)Δt) &= e^{AΔt} x(kΔt) + \int_{kΔt}^{(k+1)Δt} e^{A (t-τ)} B u_c(τ) d τ \\
+  &= e^{AΔt} x(kΔt) + \biggl[\int_{0}^{Δt} e^{A τ} B d τ \biggr] u_d(k)  \\
+  y(kΔt) &= C x(kΔt)
+\end{align*}
+
+For simplicity, define
+$$
+  A_d = e^{AΔt}, \quad
+  B_d = \int_{0}^{Δt} e^{A τ} B d τ, \quad
+  C_d = C
+$$
+and define the disrete-time signal $x_d(k) = x(kΔt)$. Then, we can write
+\begin{align*}
+  x_d(k+1) &= A_d x_d(k) + B_d u_d(k) \\
+  y_d(k)   &= C_d x_d(k).
+\end{align*}
+This describes the discrete-time LTI system obtained by sampling the continuous-time LTI system with a period of $Δt$. 
+
+:::{.callout-tip}
+#### Obtaining equivalent discrete-time signal in MATLAB
+
+MATLAB provides a function `c2d`, which can be used as follows:
+
+```
+Sc = ss(A,B,C,0); % Cts-time SSM
+Sd = c2d(Sc, Δt, 'zoh'); % where Δt is the sampling period
+```
+:::
+
+:::{#exm-simplify-Bd}
+
+Suppose that the system matrix $A$ is inverible. Show that
+$$
+  B_d = A^{-1}(e^{A Δt} - I) B.
+$$
+
+:::
+
+:::{.callout-note collapse="true"} 
+#### Solution
+The expression for $B_d$ can be simplified as follows:
+\begin{align*}
+  B_d &= \biggl[ \int_{0}^{Δt} e^{A τ} d τ \biggr] B \\
+  &= \biggl[ \int_{0}^{Δt} \biggl(I + A τ + \frac{A^2 τ^2}{2!} + \dots \biggr) d τ \biggr] B \\
+  &= \biggl[ Δt + \frac{A(Δt)^2}{2!} + \frac{A^2(Δt)^3}{3!} + \cdots \biggr] B \\
+  &= A^{-1}(e^{At} - I)B.
+\end{align*}
+:::
+
+### Pole placement for digital controllers
+
+We will not go into the mathematical details of pole placement for digital controllers but simply state the main steps:
+
+1. Let $\{p_1, \dots, p_n\}$ be the desired eigenvalues for the closed-loop continuous-time system. Then, the desired eievenvalues of the discrete-time system are:
+   $$ \{ e^{p_1 Δt}, \dots, e^{p_n Δt} \}. $$
+
+2. The pole placement problem for the discrete-time system is as follows: Given the system matrices $(A_d, B_d)$, choose a state feedback matrix $K_d$ such that the eigenvalues of $(A_d - B_d K_d)$ are equal to the desired eigenvalues (for the discrete-time system, as obtained in the previous step).
+
+3. The procedure for solving the pole  placement problem for discrete-time systems is exactly the same as the procedure for solving it for continuous-time system. In particular, we can simply use the MATLAB function `place` to find the desired feedback gain.
