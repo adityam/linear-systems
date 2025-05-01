@@ -2,7 +2,7 @@
 title: Time response of state space models
 ---
 
-## Solution to matrix differential equations
+## Solution to vector differential equations
 
 Recall that for a scalar differential equation (i.e., $x(t) \in \reals$):
 $$
@@ -12,7 +12,7 @@ $$
 has the solution
 $$ x(t) = e^{at} x_0. $$
 
-Can we say the same for vector systems? That is, can we define **matrix exponential** $e^{At}$ in such a way that the matrix differential equation (i.e., $x(t) \in \reals^n$):
+Can we say the same for vector systems? That is, can we define **matrix exponential** $e^{At}$ in such a way that the vector differential equation (i.e., $x(t) \in \reals^n$):
 $$
 \dot x(t) = A x(t), \quad
 \hbox{initial condition } x(0) = x_0
@@ -42,7 +42,7 @@ $$
 \left[ \frac{d}{dt} e^{At} \right] x_0 = 
 A e^{At} x_0 = A x(t).
 $$
-Thus, our candidate solution satisfies the matrix differential equation!
+Thus, our candidate solution satisfies the vector differential equation!
 
 :::{.callout-tip appearance="simple"}
 If we define $e^{At}$ as
@@ -50,7 +50,7 @@ If we define $e^{At}$ as
 e^{At} = I + At + \frac{A^2t^2}{2!} + \frac{A^3t^3}{3!} + \cdots
 \end{equation}
 
-Then, we can write the solution of the matrix differential equation (i.e., $x(t) \in \reals^n$)
+Then, we can write the solution of the vector differential equation (i.e., $x(t) \in \reals^n$)
 $$
 \dot x(t) = A x(t), \quad
 \hbox{initial condition } x(0) = x_0
