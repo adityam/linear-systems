@@ -147,7 +147,10 @@ G(s)
 \frac{(s-z_1)(s-z_2) \cdots (s - z_m)}
 {(s-p_1)(s-p_2)\cdots (s-p_n)}.
 $$
-The roots of the numerator are called the **zeros** (because $G(z_i) = 0$). The roots of the denominator are called **poles** (because $G(p_i) = \infty$ and if we plot $G(s)$ it will have a peak going to $∞$ at $p_i$; this peak looks like a pole). The constant $K$ is called the **gain** (because, when none of the poles and zeros are at origin, the step response of $G(s)$ will have a steady state value of $K$). 
+
+- The roots of the numerator are called **zeros** (because $G(z_i) = 0$). 
+- The roots of the denominator are called **poles** (because $G(p_i) = \infty$ and if we plot $G(s)$ it will have a peak going to $∞$ at $p_i$; this peak looks like a pole). 
+- The constant $K$ is called the **gain** (because, when none of the poles and zeros are at origin, the step response of $G(s)$ will have a steady state value of $K$). 
 
 We often represent the poles and zeros using a **pole-zero plot.**
 
@@ -305,3 +308,6 @@ Therefore, the TF of time-delay unit is $e^{-τs}$, which is different from the 
 
 - **Second-order Padé approximation:**
   $$ e^{-τs} \approx \dfrac{1 - τs/2 + (τs)^2/12}{1 + τs/2 + (τs)^2/12}. $$
+
+
+However, we will not study time-delay systems in the course. 
