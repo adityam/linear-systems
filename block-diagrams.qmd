@@ -1,10 +1,12 @@
 ---
 title: Block diagrams
+
+engine: julia
 execute:
   echo: false
+  freeze: true
+  cache: true
 ---
-
-In this section
 
 ## Simple inteconnection of blocks
 

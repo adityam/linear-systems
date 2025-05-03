@@ -1,7 +1,11 @@
 ---
 title: Frequency domain modeling
+
+engine: julia
 execute:
   echo: false
+  freeze: true
+  cache: true
 ---
 
 :::{.callout-note icon=false appearance="simple"}
