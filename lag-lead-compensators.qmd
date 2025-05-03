@@ -1,6 +1,7 @@
 ---
 title: Lag-lead compensators
 
+engine: julia
 execute:
   echo: false
   freeze: true
@@ -765,3 +766,6 @@ In the above plot $y_1(t)$ is the ramp response of the uncompensated system, $y_
 Note that the uncompensated system has a large error (because it has a small error constant); the gain compensated system has a small steady-state error, but has overshoot and oscillations (because it has small phase margin); while the lead compensatoed system has small steady-state error  but has little overshoot or oscillations. (Even though we did not achieve the target PM of $60 ^∘$, the achieved PM of $46.78 ^∘$ is still good, so the ramp response is good.  
 :::
 
+## Lag-Lead compensators
+
+To be written

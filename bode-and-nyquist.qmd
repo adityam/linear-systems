@@ -1,6 +1,7 @@
 ---
 title: Bode and Nyquist plots
 
+engine: julia
 execute:
   echo: false
   freeze: true

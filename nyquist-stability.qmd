@@ -1,6 +1,7 @@
 ---
 title: Nyquist Stability Criterion
 
+engine: julia
 execute:
   echo: false
   freeze: true

@@ -1,6 +1,7 @@
 ---
 title: Steady-state errors
 
+engine: julia
 execute:
   echo: false
   freeze: true

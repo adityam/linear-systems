@@ -309,5 +309,4 @@ Therefore, the TF of time-delay unit is $e^{-τs}$, which is different from the 
 - **Second-order Padé approximation:**
   $$ e^{-τs} \approx \dfrac{1 - τs/2 + (τs)^2/12}{1 + τs/2 + (τs)^2/12}. $$
 
-
-However, we will not study time-delay systems in the course. 
+We will not study time-delay systems in the course. 

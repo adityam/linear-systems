@@ -1,6 +1,7 @@
 ---
 title: State observers and output feedback
 
+engine: julia
 execute:
   echo: false
   freeze: true

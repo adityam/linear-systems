@@ -1,6 +1,7 @@
 ---
 title: Gain and Phase margins
 
+engine: julia
 execute:
   echo: false
   freeze: true
@@ -26,6 +27,8 @@ In practice, we never know the transfer function perfectly. So, it is important 
 using Revise
 
 using ControlSystems, StatsPlots, LaTeXStrings, Plots.PlotMeasures
+using Hyperscript, Printf
+
 setPlotScale("dB")
 
 include("julia/bode.jl")
@@ -100,35 +103,6 @@ The general idea is that for a minimal phase system, the closer the Nyquist plot
 
 The GM and PM are easier to compute proxies for the distance of $G(jω)$ from the $-1 + j0$ point. 
 The reason that GM and PM are used as a proxy is that a minimal phase system is stable if and only if **both GM and PM are positive** (this can be inferred from Nyquist stability criterion). However, GM and PM are a crude proxy for robustness, but we will not study more nuanced techniques in this course. 
-
-```{julia}
-#| output: false
-# Install packages
-
-# using Pkg; Pkg.activate(".")
-# for pkg in ["IJulia", "Revise", "ControlSystems", "Plots", "StatsPlots", "LaTeXStrings", "DataFrames", "JSON"]
-#    Pkg.add(pkg)
-# end
-# 
-# # Installing Jupyter Cache
-# Pkg.add("Conda")
-# using Conda
-# Conda.add("jupyter-cache")
-
-using Revise
-using DataFrames
-
-using ControlSystems, StatsPlots, LaTeXStrings, Hyperscript, Printf
-
-include("julia/bode.jl")
-
-current_theme = :bright
-current_colors = theme_palette(current_theme)
-theme(current_theme)
-default(linewidth=2)
-
-```
-
 
 ## The gain and phase margins
 

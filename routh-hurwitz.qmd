@@ -1,6 +1,7 @@
 ---
 title: Routh-Hurwitz Stability Criterion
 
+engine: julia
 execute:
   echo: false
   freeze: true
@@ -29,9 +30,7 @@ Consider a unity feedback system as shown in @fig-feedback. In such a setting, w
 using Revise
 
 include("julia/routh-hurwitz.jl")
-
 ```
-
 :::{#exm-PI}
 Consider the system shown in @fig-feedback with
 $$ G(s) = \frac{1}{s-1}. $$

@@ -1,6 +1,10 @@
 ---
 title: Block diagrams
+execute:
+  echo: false
 ---
+
+In this section
 
 ## Simple inteconnection of blocks
 
