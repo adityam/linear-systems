@@ -13,6 +13,31 @@ execute:
 In Signals and Systems, we used $u(t)$ to denote the step function. In this course, we will use $u(t)$ to denote the control input. So, to avoid confusion, we will use $\mathbb{1}(t)$ to denote the step function. _Note that the book uses $u(t)$, which can get confusing, in my opinion._
 :::
 
+```{julia}
+#| output: false
+# Install packages
+
+# using Pkg; Pkg.activate(".")
+# for pkg in ["IJulia", "Revise", "ControlSystems", "Plots", "LaTeXStrings", "DataFrames", "JSON"]
+#    Pkg.add(pkg)
+# end
+# 
+# # Installing Jupyter Cache
+# Pkg.add("Conda")
+# using Conda
+# Conda.add("jupyter-cache")
+
+using Revise
+
+using ControlSystems, Plots, LaTeXStrings
+
+current_theme = :bright
+current_colors = theme_palette(current_theme)
+theme(current_theme)
+default(linewidth=2)
+
+```
+
 In this lecture, we will review frequency domain modeling of LTI (linear and time invariant) systems. You have seen this material in Signals and Systems. The purpose of this review is to simply introduce the notation used in this course, in case it happens to be different from the notation used in Signals and Systems. You are strongly encouraged to review your notes on this topic.
 
 ## Unilateral Laplace Transforms
@@ -39,7 +64,7 @@ where $\sigma$ is chosen such that $(\sigma,0)$ is in the ROC.
 
 In this course, we will **never** explicitly use these formulas to compute LTs. We will **always** use LT tables. You do not need to memorize the LT table; one will be provided during the examples. What you do need is the understanding of how to use the LT tables to compute LTs of complicated expressions and to compute inverse LTs using partial fraction expansion.
 
-I will not review this material in class. Please go back to your SS notes or review Sec 2.1--2.2 of the textbook. In is important to understand the following three cases:
+I will not review this material in class. Please go back to your SS notes or review Sec 2.1--2.2 of the textbook. It is important to understand the following three cases:
 
 1. Roots of the denominator are real and distinct
 2. Roots of the denominator are complex and distinct
@@ -125,7 +150,7 @@ $$
 #### Solution
 From inspection, we have
 $$
-\frac{d^2c(t)}{dt} + 2\frac{d y(t)}{dt} + 3c(t) = 2\frac{d u(t)}{dt} + u(t).
+\frac{d^2y(t)}{dt} + 2\frac{d y(t)}{dt} + 3c(t) = 2\frac{d u(t)}{dt} + u(t).
 $$
 :::
 
@@ -284,6 +309,20 @@ Thus,
 $$
   y(t) = \left[ \frac 12 - \frac 12 e^{-2t} \right] \mathbb{1}(t).
 $$
+
+We can verify this by simulation.[^code]
+
+```{julia}
+#| echo: true
+using ControlSystems, Plots
+
+G = zpk([], [-2], 1)
+T = 4
+
+plot(step(G, T), label=L"G(s)", size=(500,250))
+```
+
+[^code]: In the lab, we will use Matlab for simulating LTI systems. However, in the course notes, I use Julia which makes it easier to directly include the output in a webpage. 
 
 ## Interconnection of LTI Systems
 
