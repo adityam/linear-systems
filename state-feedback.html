@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2025-05-01">
+<meta name="dcterms.date" content="2025-05-03">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>5&nbsp; Pole placement via statement feedback – Linear Systems and Control</title>
@@ -550,7 +550,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 1, 2025</p>
+      <p class="date">May 3, 2025</p>
     </div>
   </div>
   
@@ -657,12 +657,12 @@ Solution
 <p>The current characteristic polynomial is (since the system is in CCF, we can determine it by inspection) <span class="math display">\[\det(sI - A) = s^2 + 3s + 1.\]</span></p>
 <p>Thus, the required state feedback matrix is <span class="math display">\[K = \MATRIX{13 - 1 &amp; 6 - 3} = \MATRIX{12 &amp; 3}.\]</span></p>
 <p>We verify the solution below:</p>
-<div id="e4971d30" class="cell" data-execution_count="3">
+<div id="4" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> [<span class="fl">0</span> <span class="fl">1</span>; <span class="op">-</span><span class="fl">1</span> <span class="op">-</span><span class="fl">3</span>]</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> [<span class="fl">0</span>; <span class="fl">1</span>]</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> [<span class="op">-</span><span class="fl">3</span><span class="op">+</span><span class="fl">2im</span> <span class="op">-</span><span class="fl">3</span><span class="op">-</span><span class="fl">2im</span>]</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>K <span class="op">=</span> <span class="fu">place</span>(A,B,p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="8">
+<div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>1×2 Matrix{ComplexF64}:
  12.0+0.0im  3.0+0.0im</code></pre>
 </div>
@@ -823,12 +823,12 @@ T^{-1} &amp;= \mathcal C_{(A_c,B_c)} \mathcal C_{(A,B)}^{-1}
 <li><p>Thus, <span class="math display">\[ K = K_c T^{-1} = \MATRIX{3 &amp; 9} \MATRIX{-1 &amp; 2 \\ -1 &amp; 3} = \MATRIX{-12 &amp; 33}. \]</span></p></li>
 </ol>
 <p>We can verify that the gain is correct.</p>
-<div id="1380b04e" class="cell" data-execution_count="4">
+<div id="6" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> [<span class="fl">3</span> <span class="fl">1</span>;<span class="fl">1</span> <span class="fl">2</span>]</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> [<span class="fl">2</span>; <span class="fl">1</span>]</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> [<span class="op">-</span><span class="fl">2</span><span class="op">+</span><span class="fl">2im</span> <span class="op">-</span><span class="fl">2</span><span class="op">-</span><span class="fl">2im</span>]</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>K <span class="op">=</span> <span class="fu">place</span>(A,B,p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="9">
+<div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>1×2 Matrix{ComplexF64}:
  -12.0+0.0im  33.0+0.0im</code></pre>
 </div>
