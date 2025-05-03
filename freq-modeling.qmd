@@ -104,7 +104,7 @@ $$
 $$
 :::
 
-::: {.callout-tip collapse="true"}
+::: {.callout-note collapse="true"}
 #### Solution
 From inspection, we have
 $$G(s) = \frac{1}{s + 2}$$
@@ -117,7 +117,7 @@ G(s) = \frac{2s+1}{s^2 + 2s + 3}.
 $$
 :::
 
-::: {.callout-tip collapse="true"}
+::: {.callout-note collapse="true"}
 #### Solution
 From inspection, we have
 $$
