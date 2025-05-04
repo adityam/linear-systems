@@ -42,7 +42,7 @@ Y(s) = \frac{y(0) s + (a_1 y(0) + \dot y(0))}{s^2 + a_1 s + a_0}.
 $$
 We can now simplify the above using partial fractions expansion to compute $y(t)$. 
 
-State space models provide a nicer way to solve such DEs. In particular, we will provide a method to convert general $2$-nd order LDE into a vector equation
+State space models provide a nicer way to solve such DEs. In particular, we will provide a method to convert general 2nd order LDE into a vector equation
 \begin{align*}
 \dot x(t) &= A x(t) \\
 y(t) &= C x(t)
