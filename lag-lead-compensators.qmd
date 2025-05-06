@@ -1,7 +1,7 @@
 ---
 title: Lag-lead compensators
 
-engine: julia
+engine: jupyter
 execute:
   echo: false
   freeze: true
@@ -297,7 +297,7 @@ We now follow the steps to find $K$, $T$, and $α$ parameters of the lag compens
 
     From @fig-example, we can see that $ω^d_{\rm gc} \in (1, 10)$. From the straight line approximation plot, we have that
     $$
-    \frac{P_1 - P_{ω}}{\log 1 - \log ω^d_{\rm gc}} = -45 ^∘
+    \frac{P_1 - P_{ω}}{\log 1 - \log ω^d_{\rm gc}} = -45 ^∘.
     $$
 
     ```{julia}
