@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.7.30">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2025-05-03">
+<meta name="dcterms.date" content="2025-05-06">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>2&nbsp; State space models – Linear Systems and Control</title>
@@ -41,9 +41,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-0815c480559380816a4d1ea211a47e91.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-748b535e376f14d4692bf2b2e5fd6380.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-0815c480559380816a4d1ea211a47e91.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-de070a7b0ab54f8780927367ac907214.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-2b3e328b71be8d25427581baeb23079b.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-de070a7b0ab54f8780927367ac907214.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-843992339650117429655d0212779966.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
@@ -317,6 +317,7 @@ window.Quarto = {
       toggleColorMode(toAlternate);
       setStyleSentinel(toAlternate);
       toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
     };
     // Switch to dark mode if need be
     if (hasAlternateSentinel()) {
@@ -524,7 +525,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 3, 2025</p>
+      <p class="date">May 6, 2025</p>
     </div>
   </div>
   
@@ -555,7 +556,7 @@ a_2 Y_0(s) = 0
 \end{equation*}\]</span> Hence, <span class="math display">\[
 Y(s) = \frac{y(0) s + (a_1 y(0) + \dot y(0))}{s^2 + a_1 s + a_0}.
 \]</span> We can now simplify the above using partial fractions expansion to compute <span class="math inline">\(y(t)\)</span>.</p>
-<p>State space models provide a nicer way to solve such DEs. In particular, we will provide a method to convert general <span class="math inline">\(2\)</span>-nd order LDE into a vector equation <span class="math display">\[\begin{align*}
+<p>State space models provide a nicer way to solve such DEs. In particular, we will provide a method to convert general 2nd order LDE into a vector equation <span class="math display">\[\begin{align*}
 \dot x(t) &amp;= A x(t) \\
 y(t) &amp;= C x(t)
 \end{align*}\]</span> where <span class="math inline">\(x(t) \in \reals^2\)</span>, <span class="math inline">\(A \in \reals^{2 × 2}\)</span> and <span class="math inline">\(C \in \reals^{1 \times 2}\)</span>.</p>
