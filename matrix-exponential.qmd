@@ -271,6 +271,7 @@ e^{At} = \MATRIX{ 4 & 1 \\ 5 & 1 }
 $$
 :::
 
+
 ### Method 2: Laplace transform method
 
 Recall that we have
@@ -326,6 +327,39 @@ $$ e^{At} = \mathcal L^{-1}(sI - A)^{-1} =
 5 e^{-t} - 4 e^{-2t}}
 $$
 :::
+
+## Implication of matrix exponential
+
+As stated in the beginning of the lecture, matrix exponential allows us to solve the vector differential equation 
+$$
+  \dot x(t) = A x(t), \quad \text{initial condition } x(0) = x_0
+$$
+in the same manner as a scalar linear differential equation. The solution is given by 
+$$
+  x(t) = e^{At} x_0.
+$$
+
+When $A$ is diagonoal, say $A = \diag(λ_1, \dots, λ_n)$, then from @exm-matrix-exponential-diagonal, we know that 
+$$
+  x(t) = \diag(e^{λ_1 t}, \dots, e^{λ_n t}) x_0
+  = \sum_{i=1}^n x_{0,i} e^{λ_i t} e_i
+$$
+where $x_{0,i}$ is the $i$-th component of $x_0$ and $e_i$ is the unit vector in the $i$-th direction. Thus, the response of the dynamical system $\dot x(t) = A x(t)$ is a composition of motions along each unit direction. 
+
+When $A$ is diagonalizable, we can write $A = T Λ T^{-1}$, where
+$$
+  T = \MATRIX{v_1 & v_2 & \cdots & v_n}
+  \quad\text{and}\quad
+  Λ = \diag(λ_1, \dots, λ_n).
+$$
+Let $(w_1, \dots, w_n)$ denote the rows of $T^{-1}$. Then, we know that
+$$
+  x(t) = T e^{Λ t} T^{-1} x_0 
+  = \sum_{i=1}^n (w_i x_0) e^{-λ_i t} v_i.
+$$
+Thus, the response of the dynamical system $\dot x(t) = A x(t)$$ is a combination of motions along the eigenvectors of the matrix $A$. Each eigendirection is called a _mode_ of the system. A particular mode is _excited_ by choosing an initial condition to have a component $w_i x_0$ along that eigendirection. 
+
+
 
 ## Time response of state space models {#time-response}
 
