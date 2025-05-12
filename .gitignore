@@ -5,3 +5,4 @@
 *.pgf
 .jupyter_cache/
 /docs/
+/_book/
