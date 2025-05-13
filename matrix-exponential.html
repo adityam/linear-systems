@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.30">
+<meta name="generator" content="quarto-1.7.31">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2025-05-12">
+<meta name="dcterms.date" content="2025-05-13">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>4&nbsp; Time response of state space models – Linear Systems and Control</title>
@@ -41,9 +41,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-de070a7b0ab54f8780927367ac907214.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-2b3e328b71be8d25427581baeb23079b.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-de070a7b0ab54f8780927367ac907214.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-8ef56b68f8fa1e9d2ba328e99e439f80.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-0ce16eb97ae22d0af5c70fac26f808a2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
@@ -470,7 +470,7 @@ window.Quarto = {
   <li><a href="#method-1-eigenvalue-diagonalization-method" id="toc-method-1-eigenvalue-diagonalization-method" class="nav-link" data-scroll-target="#method-1-eigenvalue-diagonalization-method"><span class="header-section-number">4.2.1</span> Method 1: Eigenvalue diagonalization method</a></li>
   <li><a href="#method-2-laplace-transform-method" id="toc-method-2-laplace-transform-method" class="nav-link" data-scroll-target="#method-2-laplace-transform-method"><span class="header-section-number">4.2.2</span> Method 2: Laplace transform method</a></li>
   </ul></li>
-  <li><a href="#implication-of-matrix-exponential" id="toc-implication-of-matrix-exponential" class="nav-link" data-scroll-target="#implication-of-matrix-exponential"><span class="header-section-number">4.3</span> Implication of matrix exponential</a></li>
+  <li><a href="#internal-stability" id="toc-internal-stability" class="nav-link" data-scroll-target="#internal-stability"><span class="header-section-number">4.3</span> Internal stability</a></li>
   <li><a href="#time-response" id="toc-time-response" class="nav-link" data-scroll-target="#time-response"><span class="header-section-number">4.4</span> Time response of state space models</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/matrix-exponential.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
@@ -507,7 +507,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 12, 2025</p>
+      <p class="date">May 13, 2025</p>
     </div>
   </div>
   
@@ -745,7 +745,7 @@ Solution
 <div class="callout-body-container callout-body">
 <p>We start by computing the eigenvalues and eigenvectors of <span class="math inline">\(A\)</span>.</p>
 <p>To compute the eigenvalues: <span class="math display">\[sI - A = \MATRIX{s + 6 &amp; -4 \\ 5 &amp; s-3 }\]</span> Therefore, the characteristic equation is <span class="math display">\[\det(sI - A) = s^2 + 3s + 2 = (s+1)(s+2) \]</span> Hence, the eigenvalues of <span class="math inline">\(A\)</span> are <span class="math inline">\(λ_1 = -1\)</span> and <span class="math inline">\(λ_2 = -2\)</span>.</p>
-<p>We now compute the eigenvalues. Recall that for any eigenvalue <span class="math inline">\(λ\)</span>, the eigen-vector satisfies <span class="math inline">\((λI - A) v = 0\)</span>. We start wtih <span class="math inline">\(λ_1 = -1\)</span>. Then, <span class="math display">\[
+<p>We now compute the eigenvectors. Recall that for any eigenvalue <span class="math inline">\(λ\)</span>, the eigen-vector satisfies <span class="math inline">\((λI - A) v = 0\)</span>. We start wtih <span class="math inline">\(λ_1 = -1\)</span>. Then, <span class="math display">\[
 \MATRIX{5 &amp; -4 \\ 5 &amp; -4 } \MATRIX{ v_{11} \\ v_{12} } = 0
 \]</span> We set <span class="math inline">\(v_{11} = 4\)</span>. Then, <span class="math inline">\(v_{12} = 5\)</span>. Thus, the eigenvector <span class="math display">\[ v_1 = \MATRIX{ 4 \\ 5}. \]</span></p>
 <p>Similarly, for <span class="math inline">\(λ_2 = -2\)</span>, we have <span class="math display">\[
@@ -762,16 +762,8 @@ e^{At} = \MATRIX{ 4 &amp; 1 \\ 5 &amp; 1 }
 </div>
 </div>
 </div>
-</section>
-<section id="method-2-laplace-transform-method" class="level3" data-number="4.2.2">
-<h3 data-number="4.2.2" class="anchored" data-anchor-id="method-2-laplace-transform-method"><span class="header-section-number">4.2.2</span> Method 2: Laplace transform method</h3>
-<p>Recall that we have <span class="math display">\[ \dot x(t) = A x(t). \]</span> Taking (unilateral) Laplace transforms of both sides gives <span class="math display">\[ s X(s) - x_0 = A X(s). \]</span> Rearranging terms, we get <span class="math display">\[ (sI - A)X(s) = x_0
-\implies X(s) = (sI-A)^{-1} x_0. \]</span> Taking inverse Laplace transforms, we get <span class="math display">\[x(t) = \mathcal L^{-1}( (sI - A)^{-1} ) x_0. \]</span> Comparing it with the solution obtained earlier, we get <span class="math display">\[
-\bbox[5pt,border: 1px solid]
-{ e^{At} = \mathcal L^{-1}( (sI - A)^{-1} ).}
-\]</span> In the above, we interpret the inverse Laplace transform of a matrix to mean the inverse Laplace transform of each entry.</p>
-<div id="exr-laplace" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 4.2</strong></span> Use the Laplace transform method to compute <span class="math inline">\(e^{At}\)</span> for <span class="math inline">\(A = \MATRIX{-6 &amp; 4 \\ -5 &amp; 3 }\)</span>.</p>
+<div id="exr-diagonalization-2" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 4.2</strong></span> Use the eigenvalue diagonalizable method to compute <span class="math inline">\(e^{At}\)</span> for <span class="math inline">\(A = \MATRIX{1 &amp; 2 \\ -1 &amp; 4}\)</span>.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
@@ -784,6 +776,48 @@ Solution
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We start by computing the eigenvalues and eigenvectors of <span class="math inline">\(A\)</span>.</p>
+<p>To compute the eigenvalues: <span class="math display">\[sI - A = \MATRIX{s - 1 &amp; -2 \\ 1 &amp; s-4 }\]</span> Therefore, the characteristic equation is <span class="math display">\[\det(sI - A) = s^2 - 5s + 6 = (s-2)(s-3). \]</span> Hence, the eigenvalues of <span class="math inline">\(A\)</span> are <span class="math inline">\(λ_1 = 2\)</span> and <span class="math inline">\(λ_2 = 3\)</span>.</p>
+<p>We now compute the eigenvectors. Recall that for any eigenvalue <span class="math inline">\(λ\)</span>, the eigen-vector satisfies <span class="math inline">\((λI - A) v = 0\)</span>. We start wtih <span class="math inline">\(λ_1 = 2\)</span>. Then, <span class="math display">\[
+\MATRIX{1 &amp; -2 \\ 1 &amp; -2 } \MATRIX{ v_{11} \\ v_{12} } = 0
+\]</span> We set <span class="math inline">\(v_{11} = 2\)</span>. Then, <span class="math inline">\(v_{12} = 1\)</span>. Thus, the eigenvector <span class="math display">\[ v_1 = \MATRIX{ 2 \\ 1}. \]</span></p>
+<p>Similarly, for <span class="math inline">\(λ_2 = 3\)</span>, we have <span class="math display">\[
+\MATRIX{2 &amp; -2 \\ 1 &amp; -1 } \MATRIX{ v_{21} \\ v_{22} }
+= 0
+\]</span> We set <span class="math inline">\(v_{21} = 1\)</span>. Then, <span class="math inline">\(v_{22} = 1\)</span>. Thus, the eigenvector <span class="math display">\[ v_2 = \MATRIX{ 1 \\ 1}. \]</span></p>
+<p>Thus, <span class="math inline">\(T = \MATRIX{ 2 &amp; 1 \\ 1 &amp; 1 }\)</span> and therefore <span class="math inline">\(T^{-1} = \MATRIX{1 &amp; -1 \\ -1 &amp; 2 }\)</span>. Hence, <span class="math display">\[
+e^{At} = \MATRIX{ 2 &amp; 1 \\ 1 &amp; 1 }
+\MATRIX{e^{2t} &amp; 0 \\ 0 &amp; e^{3t} }
+\MATRIX{1 &amp; -1 \\ -1 &amp; 2 } =
+\MATRIX{ 2 e^{2t} -  e^{3t} &amp; -2 e^{2t} + 2 e^{3t} \\
+           e^{2t} -  e^{3t} &amp;  - e^{2t} + 2 e^{3t} }
+\]</span></p>
+</div>
+</div>
+</div>
+</section>
+<section id="method-2-laplace-transform-method" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="method-2-laplace-transform-method"><span class="header-section-number">4.2.2</span> Method 2: Laplace transform method</h3>
+<p>Recall that we have <span class="math display">\[ \dot x(t) = A x(t). \]</span> Taking (unilateral) Laplace transforms of both sides gives <span class="math display">\[ s X(s) - x_0 = A X(s). \]</span> Rearranging terms, we get <span class="math display">\[ (sI - A)X(s) = x_0
+\implies X(s) = (sI-A)^{-1} x_0. \]</span> Taking inverse Laplace transforms, we get <span class="math display">\[x(t) = \mathcal L^{-1}( (sI - A)^{-1} ) x_0. \]</span> Comparing it with the solution obtained earlier, we get <span class="math display">\[
+\bbox[5pt,border: 1px solid]
+{ e^{At} = \mathcal L^{-1}( (sI - A)^{-1} ).}
+\]</span> In the above, we interpret the inverse Laplace transform of a matrix to mean the inverse Laplace transform of each entry.</p>
+<div id="exr-laplace" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 4.3</strong></span> Use the Laplace transform method to compute <span class="math inline">\(e^{At}\)</span> for <span class="math inline">\(A = \MATRIX{-6 &amp; 4 \\ -5 &amp; 3 }\)</span>.</p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>We first compute <span class="math display">\[sI - A = \MATRIX{s + 6 &amp; -4 \\ 5 &amp; s-3 }\]</span> Therefore, <span class="math display">\[\det(sI - A) = s^2 + 3s + 2 = (s+1)(s+2) \]</span> and <span class="math display">\[ (sI - A)^{-1} =
 \MATRIX{
@@ -810,25 +844,53 @@ Solution
 </div>
 </section>
 </section>
-<section id="implication-of-matrix-exponential" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="implication-of-matrix-exponential"><span class="header-section-number">4.3</span> Implication of matrix exponential</h2>
+<section id="internal-stability" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="internal-stability"><span class="header-section-number">4.3</span> Internal stability</h2>
 <p>As stated in the beginning of the lecture, matrix exponential allows us to solve the vector differential equation <span class="math display">\[
   \dot x(t) = A x(t), \quad \text{initial condition } x(0) = x_0
 \]</span> in the same manner as a scalar linear differential equation. The solution is given by <span class="math display">\[
   x(t) = e^{At} x_0.
 \]</span></p>
-<p>When <span class="math inline">\(A\)</span> is diagonoal, say <span class="math inline">\(A = \diag(λ_1, \dots, λ_n)\)</span>, then from <a href="#exm-matrix-exponential-diagonal" class="quarto-xref">Example&nbsp;<span>4.3</span></a>, we know that <span class="math display">\[
-  x(t) = \diag(e^{λ_1 t}, \dots, e^{λ_n t}) x_0
-  = \sum_{i=1}^n x_{0,i} e^{λ_i t} e_i
-\]</span> where <span class="math inline">\(x_{0,i}\)</span> is the <span class="math inline">\(i\)</span>-th component of <span class="math inline">\(x_0\)</span> and <span class="math inline">\(e_i\)</span> is the unit vector in the <span class="math inline">\(i\)</span>-th direction. Thus, the response of the dynamical system <span class="math inline">\(\dot x(t) = A x(t)\)</span> is a composition of motions along each unit direction.</p>
-<p>When <span class="math inline">\(A\)</span> is diagonalizable, we can write <span class="math inline">\(A = T Λ T^{-1}\)</span>, where <span class="math display">\[
-  T = \MATRIX{v_1 &amp; v_2 &amp; \cdots &amp; v_n}
-  \quad\text{and}\quad
-  Λ = \diag(λ_1, \dots, λ_n).
-\]</span> Let <span class="math inline">\((w_1, \dots, w_n)\)</span> denote the rows of <span class="math inline">\(T^{-1}\)</span>. Then, we know that <span class="math display">\[
-  x(t) = T e^{Λ t} T^{-1} x_0
-  = \sum_{i=1}^n (w_i x_0) e^{-λ_i t} v_i.
-\]</span> Thus, the response of the dynamical system <span class="math inline">\(\dot x(t) = A x(t)\)</span>$ is a combination of motions along the eigenvectors of the matrix <span class="math inline">\(A\)</span>. Each eigendirection is called a <em>mode</em> of the system. A particular mode is <em>excited</em> by choosing an initial condition to have a component <span class="math inline">\(w_i x_0\)</span> along that eigendirection.</p>
+<p>Suppose <span class="math inline">\(A\)</span> has distinct eigenvalues <span class="math inline">\((λ_1, \dots, λ_n)\)</span> with corresponding (linearly independent) eigenvalues <span class="math inline">\((v_1, \dots, v_n)\)</span>.</p>
+<p>Recall that for any eigenvector <span class="math inline">\(v_j\)</span>, <span class="math inline">\(A^k v_j = λ_j^k v_j\)</span>. Thus, if the system starts from the intial condition <span class="math inline">\(x_0 = v_j\)</span>, then <span class="math display">\[\begin{align*}
+x(t) &amp;= e^{At} x_0 = e^{At} v_j \\
+&amp;= \biggl[ I + At + \frac{A^2 t^2}{2!} + \frac{A^3 t^3}{3!} + \cdots \biggr] v_j \\
+&amp;= \biggl[ v_j + λ_j t v_j + \frac{λ_j^2 t^2}{2!} v_j +
+  \frac{λ_j^3 t^3 }{3!} v_j + \cdots \biggr] \\
+&amp;= e^{λ_jt} v_j
+\end{align*}\]</span> Therefore, if we start along an eigenvector of <span class="math inline">\(A\)</span>, the system trajectory <span class="math inline">\(x(t)\)</span> remains along that direction, with the length scaling as <span class="math inline">\(e^{λ_jt}\)</span>.</p>
+<p>In general, since the eigenvectors <span class="math inline">\((v_1, \dots, v_n)\)</span> are linearly independent, an arbitrary initial condition <span class="math inline">\(x_0\)</span> can be written as <span class="math display">\[
+  x_0 = α_1 v_1 + \cdots + α_n v_n.
+\]</span> Therefore, <span class="math display">\[\begin{align*}
+  x(t) &amp;= e^{At} x_0
+  = e^{At} \bigl[ α_1 v_1 + \cdots + α_n v_n \bigr] \\
+  &amp;= α_1 e^{At} v_1 + \cdots + α_n e^{At} v_n  \\
+  &amp;= α_1 e^{λ_1t} v_1 + \cdots + α_n e^{λ_n t} v_n
+\end{align*}\]</span></p>
+<p>Thus, the response of the dynamical system <span class="math inline">\(\dot x(t) = A x(t)\)</span> is a combination of motions along the eigenvectors of the matrix <span class="math inline">\(A\)</span>. Each eigendirection is called a <em>mode</em> of the system. A particular mode is <em>excited</em> by choosing an initial condition to have a component <span class="math inline">\(α_i\)</span> along that eigendirection.</p>
+<p>An implication of the above is the following: the state <span class="math inline">\(x(t) \to 0\)</span> as <span class="math inline">\(t \to ∞\)</span> for all initial states <span class="math inline">\(x_0\)</span> if and only if all eigenvalues of <span class="math inline">\(A\)</span> lie in the open left-hand plane.</p>
+<p>A SSM where all eigenvalues of the <span class="math inline">\(A\)</span> matrix lie in the open-left hand plane is called <strong>internally stable</strong>.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Internal stability vs BIBO stability
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The TF of a SSM is given by <span class="math display">\[
+  G(s) = C(sI - A)^{-1}B = \frac{C \text{adj}(sI - A) B}{\det(sI - A)}.
+\]</span> The elements of adjoint of <span class="math inline">\((sI - A)\)</span> are all polynomials in <span class="math inline">\(s\)</span>. Thus, the numerator is a polynomial in <span class="math inline">\(s\)</span>. So, is the denominator. Moreover, the denominator equals the characteristic equation of <span class="math inline">\(A\)</span>; thus, the roots of the denominator are the eigenvalues of <span class="math inline">\(A\)</span>.</p>
+<p>The numerator and denominator may have common roots that cancel each other. So, in general, <span class="math display">\[
+  \{\text{eigenvalues of } A \} \supseteq \{\text{poles of } G(s) \}.
+\]</span> Hence, if <span class="math inline">\(A\)</span> is internally stable (i.e., all its eigenvalues are in the open left-hand plane) then <span class="math inline">\(G(s)\)</span> is BIBO stable (i.e., all its poles are in the open left-hand plane).</p>
+<p>However, the converse is not true there may be pole-zero cancellations. For example, consider <span class="math inline">\(A = \MATRIX{-1 &amp; 0 \\  0 &amp; 2 }\)</span>, <span class="math inline">\(B = \MATRIX{1 \\ 0}\)</span>, <span class="math inline">\(C = \MATRIX{1 &amp; 0}\)</span>. Then, <span class="math display">\[
+  G(s) = \frac{s-2}{(s+1)(s-2)} = \frac{1}{s+1}.
+\]</span> Notice that the TF is BIBO stable but the SSM is not internally stable! Any initial condition that activates the mode corresponding to eigenvalue <span class="math inline">\(2\)</span> will cause <span class="math inline">\(x(t)\)</span> to diverge to infinity.</p>
+</div>
+</div>
 </section>
 <section id="time-response" class="level2" data-number="4.4">
 <h2 data-number="4.4" class="anchored" data-anchor-id="time-response"><span class="header-section-number">4.4</span> Time response of state space models</h2>
