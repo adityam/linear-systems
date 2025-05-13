@@ -246,7 +246,7 @@ Therefore, the characteristic equation is
 $$\det(sI - A) = s^2 + 3s + 2 = (s+1)(s+2) $$
 Hence, the eigenvalues of $A$ are $λ_1 = -1$ and $λ_2 = -2$. 
 
-We now compute the eigenvalues. Recall that for any eigenvalue $λ$, the eigen-vector satisfies $(λI - A) v = 0$. We start wtih $λ_1 = -1$. Then,
+We now compute the eigenvectors. Recall that for any eigenvalue $λ$, the eigen-vector satisfies $(λI - A) v = 0$. We start wtih $λ_1 = -1$. Then,
 $$
 \MATRIX{5 & -4 \\ 5 & -4 } \MATRIX{ v_{11} \\ v_{12} } = 0
 $$
@@ -271,6 +271,45 @@ e^{At} = \MATRIX{ 4 & 1 \\ 5 & 1 }
 $$
 :::
 
+::: {#exr-diagonalization-2}
+Use the eigenvalue diagonalizable method to compute $e^{At}$ for $A = \MATRIX{1 & 2 \\ -1 & 4}$.
+:::
+
+:::{.callout-note collapse="true"} 
+#### Solution
+
+We start by computing the eigenvalues and eigenvectors of $A$. 
+
+To compute the eigenvalues: 
+$$sI - A = \MATRIX{s - 1 & -2 \\ 1 & s-4 }$$
+Therefore, the characteristic equation is
+$$\det(sI - A) = s^2 - 5s + 6 = (s-2)(s-3). $$
+Hence, the eigenvalues of $A$ are $λ_1 = 2$ and $λ_2 = 3$. 
+
+We now compute the eigenvectors. Recall that for any eigenvalue $λ$, the eigen-vector satisfies $(λI - A) v = 0$. We start wtih $λ_1 = 2$. Then,
+$$
+\MATRIX{1 & -2 \\ 1 & -2 } \MATRIX{ v_{11} \\ v_{12} } = 0
+$$
+We set $v_{11} = 2$. Then, $v_{12} = 1$. Thus, the eigenvector 
+$$ v_1 = \MATRIX{ 2 \\ 1}. $$
+
+Similarly, for $λ_2 = 3$, we have
+$$
+\MATRIX{2 & -2 \\ 1 & -1 } \MATRIX{ v_{21} \\ v_{22} }
+= 0
+$$
+We set $v_{21} = 1$. Then, $v_{22} = 1$. Thus, the eigenvector 
+$$ v_2 = \MATRIX{ 1 \\ 1}. $$
+
+Thus, $T = \MATRIX{ 2 & 1 \\ 1 & 1 }$ and therefore $T^{-1} = \MATRIX{1 & -1 \\ -1 & 2 }$. Hence,
+$$
+e^{At} = \MATRIX{ 2 & 1 \\ 1 & 1 }
+\MATRIX{e^{2t} & 0 \\ 0 & e^{3t} }
+\MATRIX{1 & -1 \\ -1 & 2 } =
+\MATRIX{ 2 e^{2t} -  e^{3t} & -2 e^{2t} + 2 e^{3t} \\
+           e^{2t} -  e^{3t} &  - e^{2t} + 2 e^{3t} }
+$$
+:::
 
 ### Method 2: Laplace transform method
 
@@ -328,7 +367,7 @@ $$ e^{At} = \mathcal L^{-1}(sI - A)^{-1} =
 $$
 :::
 
-## Implication of matrix exponential
+## Internal stability
 
 As stated in the beginning of the lecture, matrix exponential allows us to solve the vector differential equation 
 $$
@@ -339,27 +378,59 @@ $$
   x(t) = e^{At} x_0.
 $$
 
-When $A$ is diagonoal, say $A = \diag(λ_1, \dots, λ_n)$, then from @exm-matrix-exponential-diagonal, we know that 
-$$
-  x(t) = \diag(e^{λ_1 t}, \dots, e^{λ_n t}) x_0
-  = \sum_{i=1}^n x_{0,i} e^{λ_i t} e_i
-$$
-where $x_{0,i}$ is the $i$-th component of $x_0$ and $e_i$ is the unit vector in the $i$-th direction. Thus, the response of the dynamical system $\dot x(t) = A x(t)$ is a composition of motions along each unit direction. 
+Suppose $A$ has distinct eigenvalues $(λ_1, \dots, λ_n)$ with corresponding (linearly independent) eigenvalues $(v_1, \dots, v_n)$. 
 
-When $A$ is diagonalizable, we can write $A = T Λ T^{-1}$, where
+Recall that for any eigenvector $v_j$, $A^k v_j = λ_j^k v_j$. Thus, if the system starts from the intial condition $x_0 = v_j$, then
+\begin{align*}
+x(t) &= e^{At} x_0 = e^{At} v_j \\
+&= \biggl[ I + At + \frac{A^2 t^2}{2!} + \frac{A^3 t^3}{3!} + \cdots \biggr] v_j \\
+&= \biggl[ v_j + λ_j t v_j + \frac{λ_j^2 t^2}{2!} v_j +
+  \frac{λ_j^3 t^3 }{3!} v_j + \cdots \biggr] \\
+&= e^{λ_jt} v_j
+\end{align*}
+Therefore, if we start along an eigenvector of $A$, the system trajectory $x(t)$ remains along that direction, with the length scaling as $e^{λ_jt}$. 
+
+In general, since the eigenvectors $(v_1, \dots, v_n)$ are linearly independent, an arbitrary initial condition $x_0$ can be written as 
 $$
-  T = \MATRIX{v_1 & v_2 & \cdots & v_n}
-  \quad\text{and}\quad
-  Λ = \diag(λ_1, \dots, λ_n).
+  x_0 = α_1 v_1 + \cdots + α_n v_n.
 $$
-Let $(w_1, \dots, w_n)$ denote the rows of $T^{-1}$. Then, we know that
-$$
-  x(t) = T e^{Λ t} T^{-1} x_0 
-  = \sum_{i=1}^n (w_i x_0) e^{-λ_i t} v_i.
-$$
-Thus, the response of the dynamical system $\dot x(t) = A x(t)$$ is a combination of motions along the eigenvectors of the matrix $A$. Each eigendirection is called a _mode_ of the system. A particular mode is _excited_ by choosing an initial condition to have a component $w_i x_0$ along that eigendirection. 
+Therefore,
+\begin{align*}
+  x(t) &= e^{At} x_0 
+  = e^{At} \bigl[ α_1 v_1 + \cdots + α_n v_n \bigr] \\
+  &= α_1 e^{At} v_1 + \cdots + α_n e^{At} v_n  \\
+  &= α_1 e^{λ_1t} v_1 + \cdots + α_n e^{λ_n t} v_n 
+\end{align*}
+
+Thus, the response of the dynamical system $\dot x(t) = A x(t)$ is a combination of motions along the eigenvectors of the matrix $A$. Each eigendirection is called a _mode_ of the system. A particular mode is _excited_ by choosing an initial condition to have a component $α_i$ along that eigendirection. 
 
 
+An implication of the above is the following: the state $x(t) \to 0$ as $t \to ∞$ for all initial states $x_0$ if and only if all eigenvalues of $A$ lie in the open left-hand plane. 
+
+A SSM where all eigenvalues of the $A$ matrix lie in the open-left hand plane is called **internally stable**.
+
+:::{.callout-warning}
+#### Internal stability vs BIBO stability
+
+The TF of a SSM is given by 
+$$
+  G(s) = C(sI - A)^{-1}B = \frac{C \text{adj}(sI - A) B}{\det(sI - A)}.
+$$
+The elements of adjoint of $(sI - A)$ are all polynomials in $s$. Thus, the numerator is a polynomial in $s$. So, is the denominator. Moreover, the denominator equals the characteristic equation of $A$; thus, the roots of the denominator are the eigenvalues of $A$.
+
+The numerator and denominator may have common roots that cancel each other. So, in general, 
+$$
+  \{\text{eigenvalues of } A \} \supseteq \{\text{poles of } G(s) \}.
+$$
+Hence, if $A$ is internally stable (i.e., all its eigenvalues are in the open left-hand plane) then $G(s)$ is BIBO stable (i.e., all its poles are in the open left-hand plane). 
+
+However, the converse is not true there may be pole-zero cancellations. For example, consider $A = \MATRIX{-1 & 0 \\  0 & 2 }$, $B = \MATRIX{1 \\ 0}$, $C = \MATRIX{1 & 0}$. Then,
+$$
+  G(s) = \frac{s-2}{(s+1)(s-2)} = \frac{1}{s+1}.
+$$
+Notice that the TF is BIBO stable but the SSM is not internally stable! Any initial condition that activates the mode corresponding to eigenvalue $2$ will cause $x(t)$ to diverge to infinity.
+
+:::
 
 ## Time response of state space models {#time-response}
 
