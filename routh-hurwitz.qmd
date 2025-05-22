@@ -46,7 +46,7 @@ Thus, the closed-loop transfer function has a pole at $1 - K$. The system is sta
 $$ K > 1. $$
 :::
 
-In the above example, we could identify the roots of the closed loop transfer function and thereby determine the values of gain $K$ for which the system is stable. However, we can only factorize lower order polynomials; for polynomials with degree greater than $t$, we need to resort to numerical methods. Doing so, makes it difficult to find the range of values of $K$ for which a polynomial is stable. 
+In the above example, we could identify the roots of the closed loop transfer function and thereby determine the values of gain $K$ for which the system is stable. However, we can only factorize lower order polynomials; for polynomials with degree greater than $5$, we need to resort to numerical methods. Doing so, makes it difficult to find the range of values of $K$ for which a polynomial is stable. 
 
 However, for determine the stability of a system, we don't need to find the roots of the denominator polynomial; we simply need to verify that all the roots are in the OLHP. The following result shows that we can determine if roots lie in the ORHP without factorizing a polynomial. 
 
@@ -128,18 +128,21 @@ We follow the procedure described above. The first column of the table is highli
 
 ```{julia}
 #| html-table-processing: none
-RouthArray([1,2,3,4,5], normalize=false) |> first
+(html, RA) = RouthArray([1,2,3,4,5], normalize=false) 
+html
 ```
-
 :::
 
 ## Interpreting the Routh Array
 
-We start with the basic case when **there is no zero in the first column** (as is the case in @exm-Routh-Hurwitz-1). In this case, we look at the first column and count the number of sign changes (which are highlighted by arrows above). For example, for @exm-Routh-Hurwitz-1, we have two sign changes in the first column, as shown below.
+We start with the basic case when **there is no zero in the first column** (as is the case in @exm-Routh-Hurwitz-1). In this case, we look at the first column and count the number of sign changes. For example, the signs of the entries in the first column of @exm-Routh-Hurwitz-1 are shown below, from which we can see that there are two sign changes in the first column (going from row $s^2$ to row $s^1$ and going from row $s^1$ to row $s^0$). 
 
-<!-- TODO: Add figure -->
+```{julia}
+#| html-table-processing: none
+sign_changes(RA)
+```
 
-When there are no zeros in the first column, the polynomial has no roots on the $j ω$-axis. Moreover, 
+When there are no zeros in the first column, it implies that the polynomial has no roots on the $j ω$-axis. Moreover, 
 
 - No. of roots in the ORHP = no. of sign changes
 - No. of roots in the OLHP = degree of polynomial $-$ no. of sign changes.
