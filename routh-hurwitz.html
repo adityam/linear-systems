@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2025-05-22">
+<meta name="dcterms.date" content="2025-05-30">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>7&nbsp; Routh-Hurwitz Stability Criterion – Linear Systems and Control</title>
@@ -81,9 +81,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-7263492bad4ccc98f3eaefc836413586.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-4ca1566cb97c8f2c5c02e80060cec76c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-7263492bad4ccc98f3eaefc836413586.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-c4ce8fe306d609df0af01aa43cbd944b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-8e830286f409ed6807e82d6ca25ab3a3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-c4ce8fe306d609df0af01aa43cbd944b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/nutshell-1.0.6/nutshell.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -549,7 +549,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 22, 2025</p>
+      <p class="date">May 30, 2025</p>
     </div>
   </div>
   
@@ -897,12 +897,13 @@ Solution
 <li>Count the number of sign changes as <span class="math inline">\(ε \to 0^{+}\)</span> (<span class="math inline">\(ε\)</span> goes to zero from above). Let this number be <span class="math inline">\(k_{+}\)</span>.</li>
 <li>Count the number of sign changes as <span class="math inline">\(ε \to 0^{-}\)</span> (<span class="math inline">\(ε\)</span> goes to zero from below). Let this number be <span class="math inline">\(k_{-}\)</span>.</li>
 </ul>
-<p>Then, we have</p>
+<p>In all cases, we will have <span class="math inline">\(k_{+} = k_{-}\)</span>. Therefore, we have</p>
 <ul>
-<li>No.&nbsp;of roots in the ORHP = <span class="math inline">\(\min\{k_{+}, k_{-}\}\)</span></li>
-<li>No.&nbsp;of roots on the <span class="math inline">\(j ω\)</span>-axis = <span class="math inline">\(|k_{+} - k_{-}|\)</span>.</li>
-<li>No.&nbsp;of roots in the OLHP = <span class="math inline">\(\text{degree of polynomial} - \max\{k_{+}, k_{-}\}\)</span>.</li>
+<li>No.&nbsp;of roots in the ORHP = <span class="math inline">\(k_{+} = k_{-}\)</span></li>
+<li>No.&nbsp;of roots on the <span class="math inline">\(j ω\)</span>-axis = 0$.</li>
+<li>No.&nbsp;of roots in the OLHP = <span class="math inline">\(\text{degree of polynomial} - k_{+}\)</span> = <span class="math inline">\(\text{degree of polynomial} - k_{-}\)</span>.</li>
 </ul>
+<p><strong>Therefore, in practice, we may only consider the limit <span class="math inline">\(ε \to 0^{+}\)</span>.</strong> See below for why some textbooks recommend taking both limits.</p>
 <div id="exm-Routh-Hurwitz-zero-1" class="theorem example">
 <p><span class="theorem-title"><strong>Example 7.5</strong></span> Find the location of the poles of a TF with with denominator given by <span class="math display">\[ D(s) = s^5 + 2s^4 + 3s^3 + 6s^2 + 5s + 3. \]</span></p>
 </div>
@@ -926,7 +927,6 @@ Solution
 </div>
 <p>We now look at the signs of the terms in the first column:</p>
 <div id="24" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sign_changes</span>(RA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <table class="routhsigns"><thead><tr><td>Term</td><td>$ ε \to 0^{+}$</td><td>$ ε \to 0^{-}$</td></tr></thead><tbody><tr><td>$s^{5}$</td><td>$+$</td><td>$+$</td></tr><tr><td>$s^{4}$</td><td>$+$</td><td>$+$</td></tr><tr><td>$s^{3}$</td><td>$+$</td><td>$-$</td></tr><tr><td>$s^{2}$</td><td>$-$</td><td>$+$</td></tr><tr><td>$s^{1}$</td><td>$+$</td><td>$+$</td></tr><tr><td>$s^{0}$</td><td>$+$</td><td>$+$</td></tr></tbody></table>
 </div>
@@ -952,6 +952,125 @@ Solution
 </div>
 </div>
 </div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Why do we replace zero with epsilon?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When we get a zero in the first column (but the rest of the row is not zero), we cannot proceed with the construction of the Routh array. The intuition behind replacing the zero with epsilon is as follows.</p>
+<ul>
+<li><p>Roots of a polynomial are a continuous function of the coefficients. So, if we make an infinitesimally small change in the coefficients, the roots will move by an infinitesimally small amount (and therefore not change location from OLHP to ORHP or vice-versa).</p></li>
+<li><p>An infinitesimally small perturbation of the coefficients will change the entries of the Routh array by an infinitesimally small amount. This will change the zero in the first column to an infinitesimally small positive or negative value.</p></li>
+<li><p>We can think of replacing zero by epsilon as the result of such an infinitesimally small perturbation.</p></li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Why do textbooks do it differently?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Most textbooks explain the procedure as follows. Compute <span class="math inline">\(k_{+}\)</span> and <span class="math inline">\(k_{-}\)</span> as above. Then, we have</p>
+<ul>
+<li>No.&nbsp;of roots in the ORHP = <span class="math inline">\(\min\{k_{+}, k_{-}\}\)</span></li>
+<li>No.&nbsp;of roots on the <span class="math inline">\(j ω\)</span>-axis = <span class="math inline">\(|k_{+} - k_{-}|\)</span>.</li>
+<li>No.&nbsp;of roots in the OLHP = <span class="math inline">\(\text{degree of polynomial} - \max\{k_{+}, k_{-}\}\)</span>.</li>
+</ul>
+<p>A typical example for using such a procedure is the following:</p>
+<p>Find the location of the poles of a TF with with denominator given by <span class="math display">\[ D(s) = s^3 + 2s^2 + s^1 + 2. \]</span></p>
+<p>We first compute the Routh Array</p>
+<div id="28" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<table class="routharray"><tbody><tr><td>$s^{3}$</td><td>$1$</td><td>$1$</td></tr><tr><td>$s^{2}$</td><td>$\cancel{2} 1$</td><td>$\cancel{2} 1$</td></tr><tr><td>$s^{1}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 1 \\ 1 &amp; 1}}{1} = \cancel{0} \epsilon$</td></tr><tr><td>$s^{0}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 1 \\ \epsilon &amp; 0}}{\epsilon} = 1$</td></tr></tbody></table>
+</div>
+</div>
+<p>We now look at the signs of the terms in the first column:</p>
+<div id="30" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<table class="routhsigns"><thead><tr><td>Term</td><td>$ ε \to 0^{+}$</td><td>$ ε \to 0^{-}$</td></tr></thead><tbody><tr><td>$s^{3}$</td><td>$+$</td><td>$+$</td></tr><tr><td>$s^{2}$</td><td>$+$</td><td>$+$</td></tr><tr><td>$s^{1}$</td><td>$+$</td><td>$-$</td></tr><tr><td>$s^{0}$</td><td>$+$</td><td>$+$</td></tr></tbody></table>
+</div>
+</div>
+<p>There are no sign changes when <span class="math inline">\(ε \to 0^{+}\)</span>. Thus, <span class="math inline">\(k_{+} = 0\)</span>. But, there are two sign changes when <span class="math inline">\(ε \to 0^{-}\)</span>. Thus, <span class="math inline">\(k_{-} = 2\)</span>. Thus, we have</p>
+<ul>
+<li>No.&nbsp;of roots in the ORHP = <span class="math inline">\(\min\{k_{+}, k_{-}\} = 0\)</span>.</li>
+<li>No.&nbsp;of roots on the <span class="math inline">\(j ω\)</span>-axis = <span class="math inline">\(|k_{+} - k_{-}| = 2\)</span>.</li>
+<li>No.&nbsp;of roots in the OLHP = <span class="math inline">\(\text{degree of polynomial} - \max\{k_{+}, k_{-}\} = 1\)</span>.</li>
+</ul>
+<p>We can verify this by factorizing <span class="math inline">\(D(s)\)</span>, which gives <span class="math display">\[
+  s^3 + 2s^2 + s^2 + 2 = (s+2)(s^2 + 1)
+\]</span> Thus, there is indeed one root in the OLHP and two roots on the <span class="math inline">\(j ω\)</span> axis.</p>
+<section id="so-why-dont-i-follow-this-procedure" class="level4" data-number="7.3.0.1">
+<h4 data-number="7.3.0.1" class="anchored" data-anchor-id="so-why-dont-i-follow-this-procedure"><span class="header-section-number">7.3.0.1</span> So, why don’t I follow this procedure?</h4>
+<p>In the above example, we have roots on the <span class="math inline">\(j ω\)</span> axis. So, when we perturb the coefficients slightly, the roots may go either to the OLHP or the ORHP, depending on the sign of the perturbation.</p>
+<p>Personally, I don’t think that we need to use such an elaborate procedure to capture this case. The roots on the <span class="math inline">\(j ω\)</span>-axis always come in complex conjugate pairs. So, when we have roots on the <span class="math inline">\(j ω\)</span> axis, a polynomial of the form <span class="math inline">\((s^2 + ω^2)\)</span> factorizes <span class="math inline">\(D(s)\)</span>.</p>
+<p>Since an even polynomial divides <span class="math inline">\(D(s)\)</span>, there will be <strong>a row of zero</strong> in the Routh array (we explain that below). In fact, since this even polynomial is of degree two, we know that it is the <span class="math inline">\(s^1\)</span> row that will be zero.</p>
+<p>The main question is: <strong>when the <span class="math inline">\(s^1\)</span> row is zero, should we treat is as a row with zero in the first column (but the entire row not being zero) or a row with all zeros?</strong></p>
+<p>Many textbooks treat it as a zero in the first column because the method to deal with it is simpler. But, it complicates how the general procedure for dealing with zero in the first column (separately take limits as <span class="math inline">\(ε \to 0^{+}\)</span> and <span class="math inline">\(ε \to 0^{-}\)</span>.</p>
+<p>My opinion is that we should treat zero in the first column of the <span class="math inline">\(s^1\)</span> row as a row of all zeros (because mathematically that is what it is). So, we will need to follow the more elaborate method of dealing with the row of zero. To me, this is the proper way to do it.</p>
+<p>Once you have read how to deal with a row of zeros, we can resolve the above example <em>correctly</em> as follows:</p>
+<div id="32" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<table class="routharray"><tbody><tr><td>$s^{3}$</td><td>$1$</td><td>$1$</td></tr><tr><td>$s^{2}$</td><td>$\cancel{2} 1$</td><td>$\cancel{2} 1$</td></tr><tr><td>$s^{1}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 1 \\ 1 &amp; 1}}{1} = \cancel{0} 2$</td></tr><tr><td>$s^{0}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 1 \\ 2 &amp; 0}}{2} = 1$</td></tr></tbody></table>
+</div>
+</div>
+<p>We now look at the signs of the terms in the first column:</p>
+<div id="34" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<table class="routhsigns"><thead><tr><td>Term</td><td>Sign</td></tr></thead><tbody><tr><td>$s^{3}$</td><td>$+$</td></tr><tr><td>$s^{2}$</td><td>$+$</td></tr><tr><td>$s^{1}$</td><td>$+$</td></tr><tr><td>$s^{0}$</td><td>$+$</td></tr></tbody></table>
+</div>
+</div>
+<p>Since we have a row of zeros, we split our analysis into two cases. The remainder polynomial, which is rows <span class="math inline">\(s^3\)</span> to <span class="math inline">\(s^2\)</span> and has no sign change, and the divisor polynomial, which is rows <span class="math inline">\(s^2\)</span> to <span class="math inline">\(s^0\)</span> and has no sign changes either. So, we have</p>
+<table class="table-striped caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Polynomial</th>
+<th style="text-align: center;">degree</th>
+<th style="text-align: center;">no. of sign changes</th>
+<th style="text-align: center;">ORHP</th>
+<th style="text-align: center;">OLHP</th>
+<th style="text-align: left;"><span class="math inline">\(j ω\)</span>-axis</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Remainder</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Divisor</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(D(s)\)</span></td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">2</td>
+</tr>
+</tbody>
+</table>
+</section>
 </div>
 </div>
 <section id="reciprocal-polynomial" class="level3" data-number="7.3.1">
@@ -987,7 +1106,7 @@ p_i = a_i + j b_i \implies \frac {1}{p_i} = \frac{a}{|p_i|} - j\frac{ b_i}{|p_i|
 <p><span class="theorem-title"><strong>Example 7.6</strong></span> Solve <a href="#exm-Routh-Hurwitz-zero-1" class="quarto-xref">Example&nbsp;<span>7.5</span></a> using the reciprocal polynomial.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -996,18 +1115,18 @@ Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>We have already computed the reciprocal polynomial above. We now construct the Routh array</p>
-<div id="28" class="cell" data-execution_count="1">
+<div id="36" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
-<table class="routharray"><tbody><tr><td>$s^{5}$</td><td>$3$</td><td>$6$</td><td>$2$</td></tr><tr><td>$s^{4}$</td><td>$5$</td><td>$3$</td><td>$1$</td></tr><tr><td>$s^{3}$</td><td>$\displaystyle -\frac{\DET{ 3 &amp; 6 \\ 5 &amp; 3}}{5} = \frac{21}{5}$</td><td>$\displaystyle -\frac{\DET{ 3 &amp; 2 \\ 5 &amp; 1}}{5} = \frac{7}{5}$</td></tr><tr><td>$s^{2}$</td><td>$\displaystyle -\frac{\DET{ 5 &amp; 3 \\ \frac{21}{5} &amp; \frac{7}{5}}}{\frac{21}{5}} = \frac{4}{3}$</td><td>$\displaystyle -\frac{\DET{ 5 &amp; 1 \\ \frac{21}{5} &amp; 0}}{\frac{21}{5}} = 1$</td></tr><tr><td>$s^{1}$</td><td>$\displaystyle -\frac{\DET{ \frac{21}{5} &amp; \frac{7}{5} \\ \frac{4}{3} &amp; 1}}{\frac{4}{3}} = \frac{-7}{4}$</td></tr><tr><td>$s^{0}$</td><td>$\displaystyle -\frac{\DET{ \frac{4}{3} &amp; 1 \\ \frac{-7}{4} &amp; 0}}{\frac{-7}{4}} = 1$</td></tr></tbody></table>
+<table class="routharray"><tbody><tr><td>$s^{3}$</td><td>$\cancel{2} 1$</td><td>$\cancel{2} 1$</td></tr><tr><td>$s^{2}$</td><td>$1$</td><td>$1$</td></tr><tr><td>$s^{1}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 1 \\ 1 &amp; 1}}{1} = \cancel{0} 2$</td></tr><tr><td>$s^{0}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 1 \\ 2 &amp; 0}}{2} = 1$</td></tr></tbody></table>
 </div>
 </div>
 <p>We now look at the signs of the terms in the first column:</p>
-<div id="30" class="cell" data-execution_count="1">
+<div id="38" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
-<table class="routhsigns"><thead><tr><td>Term</td><td>Sign</td></tr></thead><tbody><tr><td>$s^{5}$</td><td>$+$</td></tr><tr><td>$s^{4}$</td><td>$+$</td></tr><tr><td>$s^{3}$</td><td>$+$</td></tr><tr><td>$s^{2}$</td><td>$+$</td></tr><tr><td>$s^{1}$</td><td>$-$</td></tr><tr><td>$s^{0}$</td><td>$+$</td></tr></tbody></table>
+<table class="routhsigns"><thead><tr><td>Term</td><td>Sign</td></tr></thead><tbody><tr><td>$s^{3}$</td><td>$+$</td></tr><tr><td>$s^{2}$</td><td>$+$</td></tr><tr><td>$s^{1}$</td><td>$+$</td></tr><tr><td>$s^{0}$</td><td>$+$</td></tr></tbody></table>
 </div>
 </div>
 <p>Thus, we see that there are two sign changes in the first column. Therefore,</p>
@@ -1117,13 +1236,13 @@ Roots of even polynomial
 </div>
 <p>The rows that we have encountered until the row of all zeros corresponds to the remainder polynomial. We interpret is the same way we did the normal case.</p>
 <p>We first compute the Routh Array</p>
-<div id="32" class="cell" data-execution_count="1">
+<div id="40" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
 <table class="routharray"><tbody><tr><td>$s^{5}$</td><td>$1$</td><td>$6$</td><td>$8$</td></tr><tr><td>$s^{4}$</td><td>$\cancel{7} 1$</td><td>$\cancel{42} 6$</td><td>$\cancel{56} 8$</td></tr><tr><td>$s^{3}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 6 \\ 1 &amp; 6}}{1} = \cancel{0} \cancel{4} 1$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 8 \\ 1 &amp; 8}}{1} = \cancel{0} \cancel{12} 3$</td></tr><tr><td>$s^{2}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 6 \\ 1 &amp; 3}}{1} = 3$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 8 \\ 1 &amp; 0}}{1} = 8$</td></tr><tr><td>$s^{1}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 3 \\ 3 &amp; 8}}{3} = \frac{1}{3}$</td></tr><tr><td>$s^{0}$</td><td>$\displaystyle -\frac{\DET{ 3 &amp; 8 \\ \frac{1}{3} &amp; 0}}{\frac{1}{3}} = 8$</td></tr></tbody></table>
 </div>
 </div>
 <p>We now look at the signs of the terms in the first column:</p>
-<div id="34" class="cell" data-execution_count="1">
+<div id="42" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
 <table class="routhsigns"><thead><tr><td>Term</td><td>Sign</td></tr></thead><tbody><tr><td>$s^{5}$</td><td>$+$</td></tr><tr><td>$s^{4}$</td><td>$+$</td></tr><tr><td>$s^{3}$</td><td>$+$</td></tr><tr><td>$s^{2}$</td><td>$+$</td></tr><tr><td>$s^{1}$</td><td>$+$</td></tr><tr><td>$s^{0}$</td><td>$+$</td></tr></tbody></table>
 </div>
@@ -1168,7 +1287,7 @@ Roots of even polynomial
 </tbody>
 </table>
 <p>We can verify this by factorizing <span class="math inline">\(D(s)\)</span>, which gives (there are four roots on the <span class="math inline">\(j ω\)</span> axis but we get small error in the location of the roots due to numerical accuracy)</p>
-<div id="36" class="cell" data-execution_count="1">
+<div id="44" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-stdout">
 <pre><code>D(s) = 56 + 8*s + 42*s^2 + 6*s^3 + 7*s^4 + s^5</code></pre>
 </div>
@@ -1183,11 +1302,11 @@ Roots of even polynomial
 </div>
 <div id="exm-Routh-Hurwitz-row-zero-1" class="theorem example">
 <p><span class="theorem-title"><strong>Example 7.7</strong></span> Consider <span class="math display">\[
-D(s) = (s^2 + 2)(s+2) = s^3 + s^2 + 2s + 2.
+D(s) = (s^2 + 2)(s+1) = s^3 + s^2 + 2s + 2.
 \]</span> Use Routh Hurwitz to find the location of the roots.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1196,16 +1315,16 @@ Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>We write the Routh Array</p>
-<div id="38" class="cell" data-execution_count="1">
+<div id="46" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
 <table class="routharray"><tbody><tr><td>$s^{3}$</td><td>$1$</td><td>$2$</td></tr><tr><td>$s^{2}$</td><td>$1$</td><td>$2$</td></tr><tr><td>$s^{1}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 2 \\ 1 &amp; 2}}{1} = \cancel{0} 2$</td></tr><tr><td>$s^{0}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 2 \\ 2 &amp; 0}}{2} = 2$</td></tr></tbody></table>
 </div>
 </div>
 <p>We now look at the signs of the terms in the first column:</p>
-<div id="40" class="cell" data-execution_count="1">
+<div id="48" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
 <table class="routhsigns"><thead><tr><td>Term</td><td>Sign</td></tr></thead><tbody><tr><td>$s^{3}$</td><td>$+$</td></tr><tr><td>$s^{2}$</td><td>$+$</td></tr><tr><td>$s^{1}$</td><td>$+$</td></tr><tr><td>$s^{0}$</td><td>$+$</td></tr></tbody></table>
 </div>
@@ -1269,7 +1388,7 @@ Solution
 &amp;= s^3 + 2 s^2 + 15s + 5
 \end{align*}\]</span></p>
 <p>We can determine if the SSM is stable by checking the stability of the characteristic polynomial of <span class="math inline">\(A\)</span>. In this instance, we have</p>
-<div id="42" class="cell" data-execution_count="1">
+<div id="50" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
 <table class="routharray caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <tbody>
@@ -1298,7 +1417,7 @@ Solution
 </div>
 </div>
 <p>We now look at the sign of the terms in the first column:</p>
-<div id="44" class="cell" data-execution_count="1">
+<div id="52" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
 <table class="routhsigns"><thead><tr><td>Term</td><td>Sign</td></tr></thead><tbody><tr><td>$s^{3}$</td><td>$+$</td></tr><tr><td>$s^{2}$</td><td>$+$</td></tr><tr><td>$s^{1}$</td><td>$+$</td></tr><tr><td>$s^{0}$</td><td>$+$</td></tr></tbody></table>
 </div>
@@ -1319,7 +1438,7 @@ Solution
 <p>Find the value of <span class="math inline">\(K\)</span> for which the system is stable.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1328,14 +1447,14 @@ Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The closed loop transfer function is given by <span class="math display">\[
 T(s) = \frac{K G(s)}{1 + K G(s)}
 = \frac{K(s+1)}{s^3 + 5s^2 + (K-6)s + K
 \]</span></p>
 <p>Therefore, the Routh array is given by</p>
-<div id="46" class="cell" data-execution_count="1">
+<div id="54" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
 <table class="routharray caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <tbody>
@@ -1382,7 +1501,7 @@ K &gt; 0
 <p>Find the values of <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> for which the system is stable.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1391,14 +1510,14 @@ Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The closed loop transfer function is given by <span class="math display">\[
 T(s) = \frac{\left(A + \dfrac{B}{s}\right) G(s)}{1 + \left(A + \dfrac{B}{s}\right)G(s)}
 = \frac{As + B}{s^3 + 3s^2 + (A + 2)s + B}.
 \]</span></p>
 <p>Therefore, the Routh array is given by</p>
-<div id="48" class="cell" data-execution_count="1">
+<div id="56" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
 <table class="routharray caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <tbody>
@@ -1445,7 +1564,7 @@ B &gt; 0.
 <p>Find the value of <span class="math inline">\(K\)</span> for which the system is stable.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1454,14 +1573,14 @@ Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The closed loop transfer function is given by <span class="math display">\[
 T(s) = \frac{K G(s)}{1 + K G(s)}
 = \frac{6K}{s^3 + 6s^2 + 11s + 6(1+K)}
 \]</span></p>
 <p>Therefore, the Routh array is given by</p>
-<div id="50" class="cell" data-execution_count="1">
+<div id="58" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
 <table class="routharray caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <tbody>
