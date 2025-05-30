@@ -2,7 +2,7 @@ using Polynomials
 
 using Hyperscript, Symbolics, Printf, LinearAlgebra, Latexify
 
-function RouthArray(polynomial; details=true, normalize=true)
+function RouthArray(polynomial; details=true, normalize=true, s1zero=true)
   @variables ϵ 
   coeffs = length(polynomial) 
   n_rows = coeffs
@@ -38,7 +38,8 @@ function RouthArray(polynomial; details=true, normalize=true)
    ## Handle row of zero
    check_row = RA[row-1,:] .== 0
    check_first = RA[row-1,1] == 0
-   if (all(typeof.(check_row) .== Bool) && all(check_row))
+   flag = (row != n_rows) || s1zero
+   if (all(typeof.(check_row) .== Bool) && all(check_row) && flag)
      flags[row-1] = 2
      row_order  = coeffs - (row - 2)
      row_powers = row_order:-2:0

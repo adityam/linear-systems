@@ -280,11 +280,13 @@ we proceed as follows
 - Count the number of sign changes as $ε \to 0^{+}$ ($ε$ goes to zero from above). Let this number be $k_{+}$. 
 - Count the number of sign changes as $ε \to 0^{-}$ ($ε$ goes to zero from below). Let this number be $k_{-}$. 
 
-Then, we have
+In all cases, we will have $k_{+} = k_{-}$. Therefore, we have
 
-- No. of roots in the ORHP = $\min\{k_{+}, k_{-}\}$
-- No. of roots on the $j ω$-axis = $|k_{+} - k_{-}|$. 
-- No. of roots in the OLHP = $\text{degree of polynomial} - \max\{k_{+}, k_{-}\}$. 
+- No. of roots in the ORHP = $k_{+} = k_{-}$
+- No. of roots on the $j ω$-axis = 0$. 
+- No. of roots in the OLHP = $\text{degree of polynomial} - k_{+}$ = $\text{degree of polynomial} - k_{-}$. 
+
+**Therefore, in practice, we may only consider the limit $ε \to 0^{+}$.** See below for why some textbooks recommend taking both limits.
 
 :::{#exm-Routh-Hurwitz-zero-1}
 Find the location of the poles of a TF with with denominator given by
@@ -307,7 +309,6 @@ We now look at the signs of the terms in the first column:
 
 ```{julia}
 #| html-table-processing: none
-#| echo: true
 sign_changes(RA)
 ```
 
@@ -325,9 +326,105 @@ D = Polynomial(reverse(c), :s)
 println("D(s) = ", D)
 roots(D)
 ```
-
 :::
 
+:::{.callout-tip}
+#### Why do we replace zero with epsilon?
+
+When we get a zero in the first column (but the rest of the row is not zero), we cannot proceed with the construction of the Routh array. The intuition behind replacing the zero with epsilon is as follows.
+
+- Roots of a polynomial are a continuous function of the coefficients. So, if we make an infinitesimally small change in the coefficients, the roots will move by an infinitesimally small amount (and therefore not change location from OLHP to ORHP or vice-versa).
+
+- An infinitesimally small perturbation of the coefficients will change the entries of the Routh array by an infinitesimally small amount. This will change the zero in the first column to an infinitesimally small positive or negative value. 
+
+- We can think of replacing zero by epsilon as the result of such an infinitesimally small perturbation.
+:::
+
+:::{.callout-warning}
+#### Why do textbooks do it differently?
+
+Most textbooks explain the procedure as follows. Compute $k_{+}$ and $k_{-}$ as above. Then, we have
+
+- No. of roots in the ORHP = $\min\{k_{+}, k_{-}\}$
+- No. of roots on the $j ω$-axis = $|k_{+} - k_{-}|$. 
+- No. of roots in the OLHP = $\text{degree of polynomial} - \max\{k_{+}, k_{-}\}$. 
+
+A typical example for using such a procedure is the following:
+
+Find the location of the poles of a TF with with denominator given by
+$$ D(s) = s^3 + 2s^2 + s^1 + 2. $$
+
+We first compute the Routh Array
+```{julia}
+#| html-table-processing: none
+c = [1, 2, 1, 2]
+# s1zero=false ensures that zero in the first col in the s1 row 
+# is not treated as a row of zero
+(html, RA) = RouthArray(c, s1zero=false) 
+html
+```
+We now look at the signs of the terms in the first column:
+
+```{julia}
+#| html-table-processing: none
+sign_changes(RA)
+```
+There are no sign changes when $ε \to 0^{+}$. Thus, $k_{+} = 0$. But, there are two sign changes when $ε \to 0^{-}$. Thus, $k_{-} = 2$. Thus, we have
+
+- No. of roots in the ORHP = $\min\{k_{+}, k_{-}\} = 0$.
+- No. of roots on the $j ω$-axis = $|k_{+} - k_{-}| = 2$. 
+- No. of roots in the OLHP = $\text{degree of polynomial} - \max\{k_{+}, k_{-}\} = 1$. 
+
+We can verify this by factorizing $D(s)$, which gives
+$$
+  s^3 + 2s^2 + s^2 + 2 = (s+2)(s^2 + 1)
+$$
+Thus, there is indeed one root in the OLHP and two roots on the $j ω$ axis.
+
+#### So, why don't I follow this procedure?
+
+In the above example, we have roots on the $j ω$ axis. So, when we perturb the coefficients slightly, the roots may go either to the OLHP or the ORHP, depending on the sign of the perturbation.
+
+Personally, I don't think that we need to use such an elaborate procedure to capture this case. The roots on the $j ω$-axis always come in complex conjugate pairs. So, when we have roots on the $j ω$ axis, a polynomial of the form $(s^2 + ω^2)$ factorizes $D(s)$. 
+
+Since an even polynomial divides $D(s)$, there will be **a row of zero** in the Routh array (we explain that below). In fact, since this even polynomial is of degree two, we know that it is the $s^1$ row that will be zero. 
+
+The main question is: **when the $s^1$ row is zero, should we treat is as a row with zero in the first column (but the entire row not being zero) or a row with all zeros?** 
+
+Many textbooks treat it as a zero in the first column because the method to deal with it is simpler. But, it complicates how the general procedure for dealing with zero in the first column (separately take limits as $ε \to 0^{+}$ and $ε \to 0^{-}$. 
+
+My opinion is that we should treat zero in the first column of the $s^1$ row as a row of all zeros (because mathematically that is what it is). So, we will need to follow the more elaborate method of dealing with the row of zero. To me, this is the proper way to do it.
+
+Once you have read how to deal with a row of zeros, we can resolve the above example _correctly_ as follows:
+
+```{julia}
+#| html-table-processing: none
+c = [1, 2, 1, 2]
+# s1zero=false ensures that zero in the first col in the s1 row 
+# is not treated as a row of zero
+(html, RA) = RouthArray(c, s1zero=true) 
+html
+```
+We now look at the signs of the terms in the first column:
+
+```{julia}
+#| html-table-processing: none
+sign_changes(RA)
+```
+Since we have a row of zeros, we split our analysis into two cases. The remainder polynomial, which is rows $s^3$ to $s^2$ and has no sign change, and the divisor polynomial, which is rows $s^2$ to $s^0$ and has no sign changes either. So, we have
+
+| Polynomial | degree | no. of sign changes | ORHP | OLHP | $j ω$-axis |
+|:----------:|:------:|:-------------------:|:----:|:----:|:-----------|
+| Remainder  | 1 | 0 | 0 | 1 | 0 | 
+| Divisor    | 2 | 0 | 0 | 0 | 2 |
+| $D(s)$     | 3 |   | 0 | 1 | 2 |
+
+: {.striped}
+
+
+
+
+:::
 
 ### Reciprocal polynomial
 
@@ -506,7 +603,7 @@ roots(D)
 :::{#exm-Routh-Hurwitz-row-zero-1}
 Consider 
 $$
-D(s) = (s^2 + 2)(s+2) = s^3 + s^2 + 2s + 2.
+D(s) = (s^2 + 2)(s+1) = s^3 + s^2 + 2s + 2.
 $$
 Use Routh Hurwitz to find the location of the roots.
 :::
