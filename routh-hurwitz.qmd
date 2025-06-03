@@ -241,9 +241,76 @@ D = Polynomial(reverse(c), :s)
 println("D(s) = ", D)
 roots(D)
 ```
-
 :::
 
+
+## Why does it work?
+
+All this appears to be magic! To get some intuition behind on why Routh-Hurwitz argument works, let's look at some special case. 
+
+- **Degree 1 polynomials**
+
+    Consider $D(s) = a_1 s + a_0$. The Routh array is given by
+
+    <table class="routharray-simple" align="center">
+    <tr>
+      <td>$s^1$</td>
+      <td>$a_{1}$</td>
+    </tr>
+    <tr>
+      <td>$s^{0}$</td>
+      <td>$a_{0}$</td>
+    </tr>
+    </table>
+
+    The Routh-Hurwitz criteria states that if $a_0$ and $a_1$ are non-zero and have the same signs, then all roots of $D(s)$ are in the OLHP. It is easy to verify that this is true as the root of $D(s)$ is $-a_0/a_1$.
+
+- **Degree 2 polynomials**
+
+    Consider $D(s) = a_2 s^2 + a_1 s + a_0$. The Routh array is given by
+
+    <table class="routharray-simple" align="center">
+    <tr>
+      <td>$s^2$</td>
+      <td>$a_{2}$</td>
+      <td>$a_{0}$
+    </tr>
+    <tr>
+      <td>$s^1$</td>
+      <td>$a_{1}$</td>
+    </tr>
+    <tr>
+      <td>$s^{0}$</td>
+      <td>$a_{0}$</td>
+    </tr>
+    </table>
+
+    The Routh-Hurwitz criteria states that if $a_0$, $a_1$, and $a_2$ are non-zero and have the same signs, then all roots of $D(s)$ are in the OLHP. It is easy to verify that this is true as the roots of $D(s)$ are given by
+    $$
+        \frac{-a_1 \pm \sqrt{a_1^2 - 4 a_0 a_2}}{2a_0}
+    $$
+    which either are complex valued with negative real part, or are negative real valued. 
+
+But the above line of argument is going to be difficult to generalize because we don't have closed form formulas for the roots of polynomials. So, let's look at the degree 2 polynomial differently. Define
+$$
+  P_2(s) = a_2 s^2 + a_0,
+  \quad
+  P_1(s) = a_1 s,
+  \quad\text{and}\quad
+  P_0(s) = a_0
+$$
+to be the polynomials corresponding to each row of the Routh array.
+
+Simple algebra shows that
+$$
+  P_2(s) = \frac{a_2 s}{a_1} P_1(s) + P_0(s),
+$$
+that is, the $P_0(s)$ polynomial is the remainder when $P_2(s)$ is divided by $P_1(s)$. 
+
+For ease of notation, let $q_2(s)$ denote $a_2 s/a_1$ and define $Q_2(s) = P_2(s) + P_1(s)$ and $Q_1(s) = P_1(s) + P_0(s)$. 
+The **key property** that implies the Routh-Hurwitz criteria is that the polynomials $Q_2(s)$ and $(1 + q_2(s))Q_1(s)$ have the same number of roots in the OLHP and ORHP. Moreover, they have identical roots on the $jω$-axis.
+
+For the quadratic case, the key property is easy to verify via the formula for the roots. For the general case, see [this paper](https://doi.org/10.1109/MCS.2019.2949974) for two proofs of the key property based on continuity properties of polynomials and [Nyquist stability criterion](nyquist-stability.qmd).
 
 
 ## Special cases: Zero in the first column
