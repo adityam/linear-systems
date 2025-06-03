@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2025-05-30">
+<meta name="dcterms.date" content="2025-06-03">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>7&nbsp; Routh-Hurwitz Stability Criterion – Linear Systems and Control</title>
@@ -507,13 +507,14 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#an-optimization" id="toc-an-optimization" class="nav-link" data-scroll-target="#an-optimization"><span class="header-section-number">7.2.1</span> An optimization</a></li>
   </ul></li>
-  <li><a href="#special-cases-zero-in-the-first-column" id="toc-special-cases-zero-in-the-first-column" class="nav-link" data-scroll-target="#special-cases-zero-in-the-first-column"><span class="header-section-number">7.3</span> Special cases: Zero in the first column</a>
+  <li><a href="#why-does-it-work" id="toc-why-does-it-work" class="nav-link" data-scroll-target="#why-does-it-work"><span class="header-section-number">7.3</span> Why does it work?</a></li>
+  <li><a href="#special-cases-zero-in-the-first-column" id="toc-special-cases-zero-in-the-first-column" class="nav-link" data-scroll-target="#special-cases-zero-in-the-first-column"><span class="header-section-number">7.4</span> Special cases: Zero in the first column</a>
   <ul class="collapse">
-  <li><a href="#reciprocal-polynomial" id="toc-reciprocal-polynomial" class="nav-link" data-scroll-target="#reciprocal-polynomial"><span class="header-section-number">7.3.1</span> Reciprocal polynomial</a></li>
+  <li><a href="#reciprocal-polynomial" id="toc-reciprocal-polynomial" class="nav-link" data-scroll-target="#reciprocal-polynomial"><span class="header-section-number">7.4.1</span> Reciprocal polynomial</a></li>
   </ul></li>
-  <li><a href="#special-cases-entire-row-of-zeros" id="toc-special-cases-entire-row-of-zeros" class="nav-link" data-scroll-target="#special-cases-entire-row-of-zeros"><span class="header-section-number">7.4</span> Special cases: Entire row of zeros</a></li>
-  <li><a href="#stability-in-state-space" id="toc-stability-in-state-space" class="nav-link" data-scroll-target="#stability-in-state-space"><span class="header-section-number">7.5</span> Stability in state space</a></li>
-  <li><a href="#stable-design-via-routh-hurwitz" id="toc-stable-design-via-routh-hurwitz" class="nav-link" data-scroll-target="#stable-design-via-routh-hurwitz"><span class="header-section-number">7.6</span> Stable design via Routh-Hurwitz</a></li>
+  <li><a href="#special-cases-entire-row-of-zeros" id="toc-special-cases-entire-row-of-zeros" class="nav-link" data-scroll-target="#special-cases-entire-row-of-zeros"><span class="header-section-number">7.5</span> Special cases: Entire row of zeros</a></li>
+  <li><a href="#stability-in-state-space" id="toc-stability-in-state-space" class="nav-link" data-scroll-target="#stability-in-state-space"><span class="header-section-number">7.6</span> Stability in state space</a></li>
+  <li><a href="#stable-design-via-routh-hurwitz" id="toc-stable-design-via-routh-hurwitz" class="nav-link" data-scroll-target="#stable-design-via-routh-hurwitz"><span class="header-section-number">7.7</span> Stable design via Routh-Hurwitz</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/routh-hurwitz.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -549,7 +550,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 30, 2025</p>
+      <p class="date">June 3, 2025</p>
     </div>
   </div>
   
@@ -844,8 +845,80 @@ Solution
 </div>
 </section>
 </section>
-<section id="special-cases-zero-in-the-first-column" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="special-cases-zero-in-the-first-column"><span class="header-section-number">7.3</span> Special cases: Zero in the first column</h2>
+<section id="why-does-it-work" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="why-does-it-work"><span class="header-section-number">7.3</span> Why does it work?</h2>
+<p>All this appears to be magic! To get some intuition behind on why Routh-Hurwitz argument works, let’s look at some special case.</p>
+<ul>
+<li><p><strong>Degree 1 polynomials</strong></p>
+<p>Consider <span class="math inline">\(D(s) = a_1 s + a_0\)</span>. The Routh array is given by</p>
+<table class="routharray-simple" align="center">
+<tbody><tr>
+<td>
+<p><span class="math inline">\(s^1\)</span></p>
+</td>
+<td>
+<p><span class="math inline">\(a_{1}\)</span></p>
+</td>
+</tr>
+<tr>
+<td>
+<p><span class="math inline">\(s^{0}\)</span></p>
+</td>
+<td>
+<p><span class="math inline">\(a_{0}\)</span></p>
+</td>
+</tr>
+</tbody></table>
+<p>The Routh-Hurwitz criteria states that if <span class="math inline">\(a_0\)</span> and <span class="math inline">\(a_1\)</span> are non-zero and have the same signs, then all roots of <span class="math inline">\(D(s)\)</span> are in the OLHP. It is easy to verify that this is true as the root of <span class="math inline">\(D(s)\)</span> is <span class="math inline">\(-a_0/a_1\)</span>.</p></li>
+<li><p><strong>Degree 2 polynomials</strong></p>
+<p>Consider <span class="math inline">\(D(s) = a_2 s^2 + a_1 s + a_0\)</span>. The Routh array is given by</p>
+<table class="routharray-simple" align="center">
+<tbody><tr>
+<td>
+<p><span class="math inline">\(s^2\)</span></p>
+</td>
+<td>
+<p><span class="math inline">\(a_{2}\)</span></p>
+</td>
+<td>
+<p><span class="math inline">\(a_{0}\)</span></p>
+</td></tr>
+<tr>
+<td>
+<p><span class="math inline">\(s^1\)</span></p>
+</td>
+<td>
+<p><span class="math inline">\(a_{1}\)</span></p>
+</td>
+</tr>
+<tr>
+<td>
+<p><span class="math inline">\(s^{0}\)</span></p>
+</td>
+<td>
+<p><span class="math inline">\(a_{0}\)</span></p>
+</td>
+</tr>
+</tbody></table>
+<p>The Routh-Hurwitz criteria states that if <span class="math inline">\(a_0\)</span>, <span class="math inline">\(a_1\)</span>, and <span class="math inline">\(a_2\)</span> are non-zero and have the same signs, then all roots of <span class="math inline">\(D(s)\)</span> are in the OLHP. It is easy to verify that this is true as the roots of <span class="math inline">\(D(s)\)</span> are given by <span class="math display">\[
+      \frac{-a_1 \pm \sqrt{a_1^2 - 4 a_0 a_2}}{2a_0}
+  \]</span> which either are complex valued with negative real part, or are negative real valued.</p></li>
+</ul>
+<p>But the above line of argument is going to be difficult to generalize because we don’t have closed form formulas for the roots of polynomials. So, let’s look at the degree 2 polynomial differently. Define <span class="math display">\[
+  P_2(s) = a_2 s^2 + a_0,
+  \quad
+  P_1(s) = a_1 s,
+  \quad\text{and}\quad
+  P_0(s) = a_0
+\]</span> to be the polynomials corresponding to each row of the Routh array.</p>
+<p>Simple algebra shows that <span class="math display">\[
+  P_2(s) = \frac{a_2 s}{a_1} P_1(s) + P_0(s),
+\]</span> that is, the <span class="math inline">\(P_0(s)\)</span> polynomial is the remainder when <span class="math inline">\(P_2(s)\)</span> is divided by <span class="math inline">\(P_1(s)\)</span>.</p>
+<p>For ease of notation, let <span class="math inline">\(q_2(s)\)</span> denote <span class="math inline">\(a_2 s/a_1\)</span> and define <span class="math inline">\(Q_2(s) = P_2(s) + P_1(s)\)</span> and <span class="math inline">\(Q_1(s) = P_1(s) + P_0(s)\)</span>. The <strong>key property</strong> that implies the Routh-Hurwitz criteria is that the polynomials <span class="math inline">\(Q_2(s)\)</span> and <span class="math inline">\((1 + q_2(s))Q_1(s)\)</span> have the same number of roots in the OLHP and ORHP. Moreover, they have identical roots on the <span class="math inline">\(jω\)</span>-axis.</p>
+<p>For the quadratic case, the key property is easy to verify via the formula for the roots. For the general case, see <a href="https://doi.org/10.1109/MCS.2019.2949974">this paper</a> for two proofs of the key property based on continuity properties of polynomials and <a href="./nyquist-stability.html">Nyquist stability criterion</a>.</p>
+</section>
+<section id="special-cases-zero-in-the-first-column" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="special-cases-zero-in-the-first-column"><span class="header-section-number">7.4</span> Special cases: Zero in the first column</h2>
 <p>We cannot follow the usual method to construct the Routh array if there is zero in the first column. For example, consider <span class="math display">\[ D(s) = s^5 + 2s^4 + 3s^3 + 6s^2 + 5s + 3. \]</span></p>
 <table class="routharray" align="center">
 <tbody><tr>
@@ -1011,8 +1084,8 @@ Why do textbooks do it differently?
 <p>We can verify this by factorizing <span class="math inline">\(D(s)\)</span>, which gives <span class="math display">\[
   s^3 + 2s^2 + s^2 + 2 = (s+2)(s^2 + 1)
 \]</span> Thus, there is indeed one root in the OLHP and two roots on the <span class="math inline">\(j ω\)</span> axis.</p>
-<section id="so-why-dont-i-follow-this-procedure" class="level4" data-number="7.3.0.1">
-<h4 data-number="7.3.0.1" class="anchored" data-anchor-id="so-why-dont-i-follow-this-procedure"><span class="header-section-number">7.3.0.1</span> So, why don’t I follow this procedure?</h4>
+<section id="so-why-dont-i-follow-this-procedure" class="level4" data-number="7.4.0.1">
+<h4 data-number="7.4.0.1" class="anchored" data-anchor-id="so-why-dont-i-follow-this-procedure"><span class="header-section-number">7.4.0.1</span> So, why don’t I follow this procedure?</h4>
 <p>In the above example, we have roots on the <span class="math inline">\(j ω\)</span> axis. So, when we perturb the coefficients slightly, the roots may go either to the OLHP or the ORHP, depending on the sign of the perturbation.</p>
 <p>Personally, I don’t think that we need to use such an elaborate procedure to capture this case. The roots on the <span class="math inline">\(j ω\)</span>-axis always come in complex conjugate pairs. So, when we have roots on the <span class="math inline">\(j ω\)</span> axis, a polynomial of the form <span class="math inline">\((s^2 + ω^2)\)</span> factorizes <span class="math inline">\(D(s)\)</span>.</p>
 <p>Since an even polynomial divides <span class="math inline">\(D(s)\)</span>, there will be <strong>a row of zero</strong> in the Routh array (we explain that below). In fact, since this even polynomial is of degree two, we know that it is the <span class="math inline">\(s^1\)</span> row that will be zero.</p>
@@ -1073,8 +1146,8 @@ Why do textbooks do it differently?
 </section>
 </div>
 </div>
-<section id="reciprocal-polynomial" class="level3" data-number="7.3.1">
-<h3 data-number="7.3.1" class="anchored" data-anchor-id="reciprocal-polynomial"><span class="header-section-number">7.3.1</span> Reciprocal polynomial</h3>
+<section id="reciprocal-polynomial" class="level3" data-number="7.4.1">
+<h3 data-number="7.4.1" class="anchored" data-anchor-id="reciprocal-polynomial"><span class="header-section-number">7.4.1</span> Reciprocal polynomial</h3>
 <p>If we get a zero in the first column, we can follow another method but this method is not guaranteed to work. To understand this, we need the notion of a <strong>reciprocal polynomial</strong>: for a polynomial <span class="math inline">\(D(s)\)</span> of degree <span class="math inline">\(n\)</span>, the reciprocal polynomial is <span class="math inline">\(s^n D(\frac 1s)\)</span>. For instance, for <a href="#exm-Routh-Hurwitz-zero-1" class="quarto-xref">Example&nbsp;<span>7.5</span></a>, we have</p>
 <p><span class="math display">\[\begin{align*}
 s^5 D\left(\frac 1s\right) &amp;=
@@ -1139,8 +1212,8 @@ Solution
 </div>
 </section>
 </section>
-<section id="special-cases-entire-row-of-zeros" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="special-cases-entire-row-of-zeros"><span class="header-section-number">7.4</span> Special cases: Entire row of zeros</h2>
+<section id="special-cases-entire-row-of-zeros" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="special-cases-entire-row-of-zeros"><span class="header-section-number">7.5</span> Special cases: Entire row of zeros</h2>
 <p>Sometimes, we get an entire row of zero. For instance, consider <span class="math display">\[
 D(s) = s^5 + 7s^4 + 6 s^3 + 42 s^2 + 8 s + 56.
 \]</span></p>
@@ -1372,8 +1445,8 @@ Solution
 </div>
 </div>
 </section>
-<section id="stability-in-state-space" class="level2" data-number="7.5">
-<h2 data-number="7.5" class="anchored" data-anchor-id="stability-in-state-space"><span class="header-section-number">7.5</span> Stability in state space</h2>
+<section id="stability-in-state-space" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="stability-in-state-space"><span class="header-section-number">7.6</span> Stability in state space</h2>
 <p>So far, we have examined stability of the TF. But we can use Routh-Hurwitz method to determine stability of state-space models as well. For example, consider a SSM <span class="math display">\[
   A = \MATRIX{0 &amp; 0 &amp; 1 \\ 1 &amp; 0 &amp; 1 \\ -10 &amp; -5 &amp; -2},
   \quad
@@ -1424,8 +1497,8 @@ Solution
 </div>
 <p>Since there are no sign changes, the system is stable!</p>
 </section>
-<section id="stable-design-via-routh-hurwitz" class="level2" data-number="7.6">
-<h2 data-number="7.6" class="anchored" data-anchor-id="stable-design-via-routh-hurwitz"><span class="header-section-number">7.6</span> Stable design via Routh-Hurwitz</h2>
+<section id="stable-design-via-routh-hurwitz" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="stable-design-via-routh-hurwitz"><span class="header-section-number">7.7</span> Stable design via Routh-Hurwitz</h2>
 <p>The Routh-Hurwitz criterion can be used to identify values of controller parameters for which a closed loop system is stable. We illustrate this via some examples.</p>
 <div id="exm-stability-1" class="theorem example">
 <p><span class="theorem-title"><strong>Example 7.8</strong></span> Consider the system shown below:</p>
