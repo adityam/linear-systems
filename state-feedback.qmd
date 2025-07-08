@@ -1,5 +1,5 @@
 ---
-title: Pole placement via statement feedback
+title: Pole placement via state feedback
 
 engine: julia
 execute:
