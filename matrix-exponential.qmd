@@ -466,3 +466,4 @@ $$
 \underbrace{C e^{At} x_0}_{\text{zero-input response}} 
 + \underbrace{\int_{0}^t C e^{A (t-τ) } B u(τ) d τ}_{\text{zero-state response}}}
 $$
+The zero-input response is also sometimes called the _transient response_ and the zero-state response is also called the _steady-state response_ (expecially as $t \to ∞$). We will discuss the state-state response in more detail in the lecture on [steady-state errors](steady-state-errors.qmd). 
