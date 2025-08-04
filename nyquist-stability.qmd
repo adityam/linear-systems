@@ -726,7 +726,7 @@ This is consistent with the contour in @fig-pole-fix. Thus, there are no encircl
 
 We now do a few practise exercises.
 
-:::{#exr-nyquist-fix-pole-1}
+:::{#exm-nyquist-fix-pole-1}
 Consider $GH = \dfrac{K}{s(s+1)(2s+1)}$. The Nyquist plot for $K=1$ is shown in @fig-pole-1. Find the values of $K$ for which the closed loop system is stable. 
 
 ```{julia}
@@ -800,7 +800,7 @@ Thus, the system is stable for $K \in (0, 1.5)$.
 
 :::
 
-:::{#exr-nyquist-fix-pole-2}
+:::{#exm-nyquist-fix-pole-2}
 Consider $GH = \dfrac{K}{s^2(s+1)}$. Find the values of $K$ for which the closed loop system is stable. 
 
 ```{julia}

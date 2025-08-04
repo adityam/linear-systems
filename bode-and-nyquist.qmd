@@ -676,7 +676,7 @@ scatter!(mag_plt, [1e3], [0], color="gray")
 plot!(mag_plt, [1e3, 1e3], [0, -30], linewidth=1, color="gray")
 ```
 
-:::{#exr-system-type}
+:::{#exm-system-type}
 For each of the following systems, identify the system type and the corresponding error constant.
 
 ```{julia}
@@ -711,7 +711,7 @@ plot(mag_plt1, mag_plt2, mag_plt3, legend=false,
 
 Since there is a one-to-one correspondence between transfer functions and Bode plots, we can identify a system transfer function from its Bode plot. We illustrate this via an example. 
 
-:::{#exr-sys-id-bode}
+:::{#exm-sys-id-bode}
 
 Find the minimum phase transfer function which has a magnitude Bode plot as shown below.
 

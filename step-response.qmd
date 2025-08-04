@@ -71,7 +71,7 @@ $$
 
 Thus, we can obtain the **form** of the output without any explicit calculations.
 
-:::{#exr-step-response-form}
+:::{#exm-step-response-form}
 Find the general form of the step response of the following systems:
 
 a. $\displaystyle
@@ -621,7 +621,7 @@ Plot.plot({
 
 ```
 
-:::{#exr-2nd-order}
+:::{#exm-2nd-order}
 Indentify the category of the following second order systems:
 
 a. $\dfrac{12}{s^2 + 8s + 12}.$
@@ -1035,7 +1035,7 @@ Plot.plot({
 })
 ```
 
-:::{#exr-specifications}
+:::{#exm-specifications}
 For a generic second order system, where should the poles lie in the $s$-plane to meet the following specifications:
 
 - $\%{\rm OS} \le 10\%$

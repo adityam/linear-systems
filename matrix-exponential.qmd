@@ -231,7 +231,7 @@ $$
 {e^{At} = T e^{Λt} T^{-1}}
 $$
 
-::: {#exr-diagonalization}
+::: {#exm-diagonalization}
 Use the eigenvalue diagonalizable method to compute $e^{At}$ for $A = \MATRIX{-6 & 4 \\ -5 & 3 }$.
 :::
 
@@ -271,7 +271,7 @@ e^{At} = \MATRIX{ 4 & 1 \\ 5 & 1 }
 $$
 :::
 
-::: {#exr-diagonalization-2}
+::: {#exm-diagonalization-2}
 Use the eigenvalue diagonalizable method to compute $e^{At}$ for $A = \MATRIX{1 & 2 \\ -1 & 4}$.
 :::
 
@@ -329,7 +329,7 @@ $$
 $$
 In the above, we interpret the inverse Laplace transform of a matrix to mean the inverse Laplace transform of each entry. 
 
-::: {#exr-laplace}
+::: {#exm-laplace}
 Use the Laplace transform method to compute $e^{At}$ for $A = \MATRIX{-6 & 4 \\ -5 & 3 }$.
 :::
 

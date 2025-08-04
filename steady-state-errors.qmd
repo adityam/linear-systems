@@ -134,7 +134,7 @@ Thus, for our purposes, in order to apply the final value theorem, we need to ma
 
 :::
 
-:::{#exr-steady-state-error-open-loop}
+:::{#exm-steady-state-error-open-loop}
 Find the steady-state error of the open loop system with TF
 $$
 T(s) = \frac{2s + 10}{s^2 + 3s + 15}.
@@ -307,7 +307,7 @@ In summary, the steady-state error of different types of system for different ty
 
 
 
-:::{#exr-unity-feedback-1}
+:::{#exm-unity-feedback-1}
 Consider a unity feedback system with open-loop transfer function
 $$
 G(s) = \dfrac{100(s+3)}{(s+1)(s+6)}
@@ -348,7 +348,7 @@ e_{\rm para}(∞) = \frac{1}{K_a} = ∞.
 $$ 
 :::
 
-:::{#exr-unity-feedback-2}
+:::{#exm-unity-feedback-2}
 Consider a unity feedback system with open-loop transfer function
 $$
 G(s) = \dfrac{100(s+3)}{s(s+1)(s+6)}
@@ -390,7 +390,7 @@ $$
 
 Steady-state errors are often part of the system specification. Depending on the system type, a constraint on the steady state error can be translated to a constraint on the appropriate error constant, which in turn can be used as a constraint on the tuneable parameters of the controller. 
 
-:::{#exr-unity-feedback-specification}
+:::{#exm-unity-feedback-specification}
 Consider the system
 
 ![](figures/svg/steady-state-error-block-diagrams3.svg)
@@ -477,7 +477,7 @@ $$
 {G_e(s) = \frac{G(s)}{1 + G(s)H(s) - G(s)}}
 $$
 
-:::{#exr-non-unity-feedback}
+:::{#exm-non-unity-feedback}
 Consider the system
 
 ![](figures/svg/steady-state-error-block-diagrams8.svg)
