@@ -8,10 +8,19 @@ execute:
   cache: true
 ---
 
-:::{.callout-note icon=false appearance="simple"}
-## <i class="bi bi-journal-text text-primary"></i> A comment about notation
-In Signals and Systems, we used $u(t)$ to denote the step function. In this course, we will use $u(t)$ to denote the control input. So, to avoid confusion, we will use $\mathbb{1}(t)$ to denote the step function. _Note that the book uses $u(t)$, which can get confusing, in my opinion._
-:::
+## Introduction
+
+- Recall from Signals and Systems, we know that a **system** is a process or a device that takes one or more signals as inputs and generates one or more signals as outputs. 
+
+- The simplest systems are those with one input and one output, often called **single input single output (SISO) systems**. For example, a microphone may be viewed as a SISO system which has a single input (the acoustic pressure) which causes the diaphragm to vibrate and produce a single output (electrical voltage). 
+
+- A system can have **multiple inputs and multiple outputs (MIMO)**. For example, the stereo microphone has two inputs (typically, a left microphone and a right microphone) and generates two voltage signals as outputs. 
+
+- Some fundamental properties of systems that you studied in signals and systems are: **linearity**, **time-invariance**, and **causality**. Please review your notes from signals and systems to ensure that you understand these properties. 
+
+- In this course, we will almost exclusively study causal SISO systems that are linear and time-invariant (LTI for short). Such systems arise in all branches of engineering, e.g., electrical circuits, spring-mass systems, gear systems, and thermodynamics. See Chapter 2 of Nice for detailed modeling examples. 
+
+- In this lecture, we will review frequency domain modeling of LTI systems. You have seen this material in Signals and Systems. The purpose of this review is to simply introduce the notation used in this course, in case it happens to be different from the notation used in Signals and Systems. You are strongly encouraged to review your notes on this topic.
 
 ```{julia}
 #| output: false
@@ -38,9 +47,14 @@ default(linewidth=2)
 
 ```
 
-In this lecture, we will review frequency domain modeling of LTI (linear and time invariant) systems. You have seen this material in Signals and Systems. The purpose of this review is to simply introduce the notation used in this course, in case it happens to be different from the notation used in Signals and Systems. You are strongly encouraged to review your notes on this topic.
 
 ## Unilateral Laplace Transforms
+
+
+:::{.callout-note icon=false appearance="simple"}
+## <i class="bi bi-journal-text text-primary"></i> A comment about notation
+In Signals and Systems, we used $u(t)$ to denote the step function. In this course, we will use $u(t)$ to denote the control input. So, to avoid confusion, we will use $\mathbb{1}(t)$ to denote the step function. _Note that the book uses $u(t)$, which can get confusing, in my opinion._
+:::
 
 Recall that there are two types of Laplace transforms (LTs): bi-lateral or two-sided LTs and unilateral or one-sided LTs. In this course, we will work exclusively with unilateral LTs.
 
@@ -72,8 +86,6 @@ I will not review this material in class. Please go back to your SS notes or rev
 
 
 ## The Transfer Function
-
-In this course, we will work exclusively with LTI systems. Such systems arise in all branches of engineering, e.g., electrical circuits, spring-mass systems, gear systems, and thermodynamics. See Chapter 2 of Nice for detailed modeling examples. 
 
 Consider an LTI system with input $u(t)$ (also called the reference signal sometimes) and output $y(t)$. We can also represent this as the following block diagram:
 
@@ -126,7 +138,7 @@ G(s) = \frac{Y(s)}{U(s)}
 $$
 Thus, we can easily go back and forth between the DE and the transfer function.
 
-:::{#exr-LDE-TF}
+:::{#exm-LDE-TF}
 Find the transfer function corresponding to the following LDE
 $$
 \frac{d}{dt}y(t) + 2 y(t) = u(t)
@@ -139,7 +151,7 @@ From inspection, we have
 $$G(s) = \frac{1}{s + 2}$$
 :::
 
-:::{#exr-LDE-TF}
+:::{#exm-LDE-TF}
 Find a LDE that implements the following TF
 $$
 G(s) = \frac{2s+1}{s^2 + 2s + 3}.
@@ -291,7 +303,7 @@ In the next lecture, we will see how to use the poles to identify the step respo
 
 One of the configurations that we will really focus on in the course is the output of a _stable_ system when the **input is a step function.** This is often the case when we specify a reference input such as the desired temperature of a room or the desired speed in cruise control of a car, and are interested in seeing if we get a "good" output. Note that this question is only of interest for stable systems. If the system is unstable, then the output will go to infinity. 
 
-As an example, consider the system of @exr-LDE-TF. What is the output when the input is a step function (assuming that the system starts from a zero initial state)?
+As an example, consider the system of @exm-LDE-TF. What is the output when the input is a step function (assuming that the system starts from a zero initial state)?
 
 To compute this, recall
 $$
