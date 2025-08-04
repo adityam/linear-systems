@@ -37,7 +37,7 @@ default(linewidth=2)
 
 ## Step response from pole-zero plot
 
-To understand how to infer the step response from the pole-zero plot, let's revisit [the example from last lecture]:
+To understand how to infer the step response from the pole-zero plot, let's revisit [the example from a a previous lecture]:
 
 ![Block diagram for a simple LTI system](figures/svg/step-response-block-diagrams1.svg){#fig-ex-motivating}
 
@@ -95,7 +95,7 @@ K_1 + K_2 e^{-t} + K_3 e^{-5t}  + K_4 e^{-20t}
 
 ## DC Gain
 
-In the above examples, the system does not have a pole at origin. Such systems are called **type 0** systems. For stable type 0 systems, the step response always settles to a steady state value known as the **DC gain**. For a type 0 system with TF $G(s)$, the DC gain is given by
+In the above examples, the system does not have a pole at origin. Such systems are called **type 0** systems (which we will [study later in detail](steady-state-errors.qmd#system-type)). For stable type 0 systems, the step response always settles to a steady state value known as the **DC gain**. For a type 0 system with TF $G(s)$, the DC gain is given by
 $$
 \text{DC-gain} = G(0).
 $$
