@@ -1,19 +1,20 @@
 ---
 course:
-  term: "Fall 2024"
+  term: "Fall 2025"
   office-hours: "TBD"
   teaching-assistants: "TBD"
-  mid-term: "Oct 10"
+  mid-term: "Oct 9"
   lectures:
-    - "10:05am–11:25am Tuesday, Thursday (ENGMC 11)"
+    - "11:35am–12:55am Tuesday, Thursday (MASS 10)"
   tutorials:
-    - "8:35am–10:25am Friday, (ENGMC 11)"
+    - "3:35pm–5:25pm Wednesday, (ENGMC 11)"
   labs:
     - "1:35pm-3:25pm Monday (TR 4090)"
     - "3:35pm–5:25pm Monday (TR 4090)"
     - "1:35pm–3:25pm Tuesday (TR 4090)"
-    - "1:35pm–3:25pm Wednesday (TR 4090)"
+    - "1:35pm-3:25pm Wednesday (TR 4090)"
     - "1:35pm–3:25pm Friday (TR 4090)"
+    - "3:35pm–5:25pm Friday (TR 4090)"
 format: 
   html: 
     number-sections: false
@@ -39,11 +40,13 @@ Tutorials
 Everyone **must** be registered for the tutorial. Tutorials start from the **second** week of classes.
 
 Labs
+
 : - {{< meta course.labs.1 >}} 
 : - {{< meta course.labs.2 >}} 
 : - {{< meta course.labs.3 >}} 
 : - {{< meta course.labs.4 >}} 
 : - {{< meta course.labs.5 >}} 
+: - {{< meta course.labs.6 >}} 
 
 Everyone **must** be registered for one lab. Labs start from the **second** week of classes.
 
@@ -78,7 +81,7 @@ Upon the successful completion of this course, the student students will have de
 |------|:-----------------|
 | 1    | [Review of LTI Systems and Laplace Transforms](freq-modeling.qmd) <br /> _Reading_: Nise Ch. 2 |
 | 2    | [State-space modeling, canoncial forms, transfer function of state space models](state-space-models.qmd) <br /> _Reading_: William and Lawrence Ch. 1 and Ch. 2 |
-| 3    | [Pole Zero Plot Step response of first and second order systems, dominant pole approximation](step-response.qmd) <br /> _Reading_: Nise Ch. 4 |
+| 3    | [Pole Zero Plot, Step response of first and second order systems, dominant pole approximation](step-response.qmd) <br /> _Reading_: Nise Ch. 4 |
 | 4    | [Matrix exponential and solution of matrix differential equations, time response of state space models](matrix-exponential.qmd) | 
 | 5    | [Pole placement, controllability, and state feedback](state-feedback.qmd) <br /> _Reading_: William and Lawrence Ch. 3 and Ch. 7|
 | 6    | [Luenberger observer, observability, output feedback, and separation principle](output-feedback.qmd) <br /> _Reading_: William and Lawrence Ch. 4 and Ch. 8|
@@ -96,7 +99,7 @@ Upon the successful completion of this course, the student students will have de
 
 | Week | Lab | 
 |------|:-----------------|
-| 1    | No Labs | 
+| 1    | No Lab | 
 | 2    | Lab 1 : Introduction to Matlab |
 | 3    | Lab 2 : Transfer functions and step response | 
 | 4    | Lab 3 : Eigenvalues and eigenvectors
@@ -158,7 +161,8 @@ Reference Books
 
 - Any request for reevaluation of a mid-term or an assignment must be made **in writing within a week of its return**. Note that requesting a re-grade will mean that you **WHOLE** assignment or exam will be re-graded.
 
-- [Due to paucity of grading hours, only one or two randomly selected questions will be graded in each assignment.]{.text-danger}
+- Practice is the only way to learn the material. Each assignment has 4-5 questions to help understand the material. However, according to the current grading allocation, the TA has about 3-4 minutes to grade one assignment from a student. Clearly, that's not sufficient time to grade 4-5 questions. [**So, only 1 or 2 randomly selected questions in each assignment will be graded.**]{.text-danger}
+
 
 - The lowest two assignments and labs will be dropped. There will be no make-up for missed assignments and labs, _even if it is for a valid reason._ The whole point of dropping the lowest two assignments/labs is to reduce the administrative overhead of keeping track of such missed assignments/labs.
 
