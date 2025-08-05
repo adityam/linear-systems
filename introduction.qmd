@@ -1,0 +1,224 @@
+---
+title: Introduction 
+
+engine: julia
+execute:
+  echo: false
+  freeze: true
+  cache: true
+---
+
+
+- Recall from Signals and Systems, we know that a **system** is a process or a device that takes one or more signals as inputs and generates one or more signals as outputs. 
+
+- The simplest systems are those with one input and one output, often called **single input single output (SISO) systems**. For example, a microphone may be viewed as a SISO system which has a single input (the acoustic pressure) which causes the diaphragm to vibrate and produce a single output (electrical voltage). 
+
+- A system can have **multiple inputs and multiple outputs (MIMO)**. For example, the stereo microphone has two inputs (typically, a left microphone and a right microphone) and generates two voltage signals as outputs. 
+
+- Some fundamental properties of systems that you studied in signals and systems are: **linearity**, **time-invariance**, and **causality**. Please review your notes from signals and systems to ensure that you understand these properties. 
+
+- In this course, we will almost exclusively study causal SISO systems that are linear and time-invariant (LTI for short). Such systems arise in all branches of engineering, e.g., electrical circuits, spring-mass systems, gear systems, and thermodynamics. See Chapter 2 of Nise for detailed modeling examples. 
+
+- However, keep in mind that LTI systems are a mathematical modeling idealization. Real systems are never LTI. A resistor will burn if you apply too high voltage across it. A spring will break if you apply too high force. However, there are regimes under which some systems behave like LTI systems.  
+
+- The objective of **control systems** is to choose the input of the system so that the output has desired properties. Such a control input can be chosen in **open loop** (i.e., determine a control signal as a function of time) or in **closed loop** (i.e., determine the control at each time as a function of the output of the system). 
+
+- As we illustrate via examples below, such **closed-loop feedback control** provides several benefits, including stabilizing unstable systems and robustness against disturbances, and model uncertainty. 
+
+- The idea of feedback control has a long history: from the ancient water clocks of Ktesibios (3rd century BC) that used float regulators, to James Watt’s centrifugal governor (18th century) that automatically controlled the speed of steam engines, and to modern applications such as robotics, aerospace, automobiles, control of HVAC systems, power control in communication systems, load frequency control in power systems, industrial process control, and increasing control of learning algorithms. **Automatic control** is often regarded as [the hidden technology](https://doi.org/10.1007/978-1-4471-0853-5_1) that makes modern engineering systems work. See [Control: A prespective](https://doi.org/10.1016/j.automatica.2013.10.012) for a rich history of the field. 
+
+
+## Closed-loop control may stabilize an unstable system
+
+In this section, we present a simple example of designing a closed-loop controller for a [:Segway](https://en.wikipedia.org/wiki/Segway) to show that **feedback control can stabilize an unstable system**. 
+
+We model the Segway as an **inverted pendulum** with mass $m$ located at the end of a rigid rod of length $L$, pivoting at the wheel axis. Let $θ(t)$ denote the tilt angle (measured from the upright position) and $u(t)$ denote the torque applied by the rotor. Three torques act on the mass: 
+
+- internal torque $m L^2 \ddot \theta(t)$
+- gravitational torque $mg L \sin θ(t)$ 
+- external torque $u(t)$. 
+
+From Newton's second law, we have
+$$
+  m L^2 \frac{d^2 θ(t)}{dt^2} = mgL \sin θ(t) + u(t)
+$$
+which is a non-linear differential equation. 
+
+
+One key idea in analyzing such systems is **linearization**. Assuming $θ(t)$ is small, we can approximate $\sin θ(t) \approx θ(t)$, giving
+$$
+  \frac{d^2 θ(t)}{dt^2} = \frac{g}{L} θ(t) + \frac{1}{mL^2} u(t),
+$$
+which is a causal LTI system. 
+
+The system is open loop unstable. If we don't apply any torque and the system is not perfectly upright (i.e., $θ(t) \neq 0$), then gravity will cause the tilt to increase until the Segway falls over.
+
+Let's rewrite the dynamics as follows
+$$
+  \frac{d^2 θ(t)}{dt^2} - a θ(t) = b u(t),
+$$
+where $a = g/L$ and $b = 1/mL^2$. As we shall see later, the transfer function of this system is given by
+$$
+  G(s) = \frac{b}{s^2 - a} = \frac{b}{(s - \sqrt{a})(s + \sqrt{a})}$.
+$$
+The transfer function has two roots, one in the open left hand plane (OLHP) and the other in the open right hand place (ORHP). Since there is a pole in ORHP, the system is unstable. 
+
+Suppose we have a sensor that can measure the angle $θ(t)$. Consider a **proportional plus derivative controller,** i.e., a controller given by
+$$
+  u(t) = - K_p θ(t) - K_d \dot θ(t)
+$$
+where $K_p$ provides the restoring torque and $K_d$ provides damping. 
+
+Substituting into the linearized dynamics gives gives
+$$
+  \frac{d^2 θ(t)}{dt^2} + b K_d  \frac{ d θ(t)}{dt} + (b K_p  - a) θ(t) = 0.
+$$
+Using ideas that we will learn using [Routh Hurwitz criterion](routh-hurwitz.qmd), we can see that this system is stable if all coefficients are positive, i.e.,
+
+- $b K_p  - a > 0$
+- $b K_d  > 0$
+
+To illustrate this, we solve the above differential equation for different values of $K_p$ with $a = 2$, $b = 1$, and $K_d = 1$, assuming that the system starts with an initial angle of $θ(0) = 0.2$ rad and $\dot θ(0) = 0$. 
+
+```{julia}
+using DifferentialEquations, Plots
+using DataFrames
+
+# Parameters
+a = 2.0
+b = 1.0
+Kd = 1.0
+
+Kp_values = 1.0:0.1:3.0
+
+# Define the ODE in first-order form
+# x[1] = θ, x[2] = dθ/dt
+function pendulum!(du, u, p, t)
+    Kp = p[1]
+    θ = u[1]
+    dθ = u[2]
+    du[1] = dθ
+    du[2] = -b*Kd*dθ - b*Kp*θ + a*θ # Could replace by sin(θ)
+end
+
+# Initial conditions and time span
+u0 = [0.2, 0.0]  
+tspan = (0.0, 15.0)
+t_eval = range(tspan[1],tspan[2], length=100) 
+
+# Use Float16 to reduce the size of data passed to OJS
+df=DataFrame(θn=Float16[],time=Float16[],Kp=Float16[])
+
+for Kp in Kp_values 
+  # Solve ODE
+  prob = ODEProblem(pendulum!, u0, tspan, [Kp])
+  sol = solve(prob, Tsit5(), saveat=t_eval)
+
+  for (i, u) in enumerate(sol.u)
+        push!(df, (θn=Float16(u[1]), time=Float16(t_eval[i]), Kp=Float16(Kp)))
+  end
+end
+
+ojs_define(segway = df)
+
+```
+
+```{ojs}
+  viewof Kp = Object.assign(Inputs.range([1, 3], {label: "Kp", step: 0.1, value: 2.5 }), {style: '--label-width:20px'})
+```
+
+```{ojs}
+Plot.plot({
+  grid: true,
+  y: { domain: [0, 1] },
+  x: { domain: [0, 15] },
+  marks: [
+    // Axes
+    Plot.ruleX([0]),
+    Plot.ruleY([0]),
+    // Data
+    // Kp is still 64 bit float while the dataframe is 16 bit float. So we do a crude comparison for equality. 
+    Plot.line(segway.filter(d => Math.abs(d.Kp - Kp) <= 0.01), 
+              {x:"time", y:"θn", stroke: "darkblue" }),
+  ]
+})
+```
+
+This example illustrates the biggest benefit of feedback: **feedback can stabilize unstable systems.**
+
+## Closed-loop control provides robustness against disturbances and model uncertainty
+
+In this section, we present by a simple example of designing the cruise control of a car to illustrate that feedback control can provide robustness against model uncertainty. This example is adapted from Khalil (Chapter 1).
+
+Consider a car of mass $m$ moving at velocity $v(t)$. Assume that when the accelerator is pressed at an angle $u(t)$, the engine produces a thrust $K_e u(t)$, where $K_e$ is the engine gain. The car experiences friction, which is assumed to be $bv(t)$, where $b$ is the equivalent damping coefficient. In addition, there is air drag, rolling resistance, and other factors, all of which we model as **disturbance** $w(t)$. 
+
+Then, by Newton's second law, the simplified model of the dynamics can be written as 
+$$
+  m \frac{dv(t)}{dt} = K_e u(t) - b v(t) + w(t)
+$$
+Note that this is a causal LTI system with two inputs: the control input $u(t)$ and the disturbance $w(t)$; and one output: the velocity $v(t)$. 
+
+The objective of the cruise control is as follows. Given a reference velocity $v_{\mathrm{ref}}$, design a control input $u(t)$ to ensure that actual velocity equals $v_{\mathrm{ref}}$ in steady state. 
+
+The system designer knows the engine gain $K_e$, but the other parameters, mass $m$ and damping coefficient $b$, depend on operating conditions.
+
+We will design a controller assuming some nominal values $\hat m$ and $\hat b$ for $m$ and $b$, respectively and then check how the system performs when these parameters take their true value.
+
+### Open loop control {-}
+
+The simplest control strategy is open-loop control in which we apply a step input $u(t) = N \IND(t)$, where the gain $N$ is chosen to ensure that the steady state output equals $v_{\mathrm{ref}}$. Assuming $w(t) = 0$, the nominal dynamics are given by
+$$
+  \hat m \frac{dv(t)}{dt} = N K_e - b v(t).
+$$
+At steady state, $dv(t)/dt = 0$. Hence, to ensure that the steady-state value of $v(t)$ is $v_{\mathrm{ref}}$, we must choose $N$ such that
+$$
+  \frac{N K_e}{\hat b} = v_{\mathrm{ref}}
+  \implies
+   N = \frac{ v_{\mathrm{ref}} \hat b }{K_e}.
+$$
+
+When this control is applied to the actual system with the true parameters $m$ and $b$, the system dynamics are given by
+$$
+   m \frac{dv(t)}{dt} = \hat b v_{\mathrm{ref}}  - b v(t) + w(t).
+$$
+As before, at steady state $dv(t)/dt = 0$, so the steady state value of the velocity is given by
+$$
+  v_{\mathrm{ss}} = \frac{v_{\mathrm{ref}} \hat b}{b} + \frac{1}{b} w(t)
+$$
+which leads to a steady state error of
+$$
+  v_{\mathrm{ref}} - v_{\mathrm{ss}} = v_{\mathrm{ref}} \left(\frac{b - \hat b}{b}\right)
+  - \frac{1}{b} w(t).
+$$
+
+### Closed-loop control {-}
+
+In closed loop control, we assume that the speed is measured by a speedometer and the controller uses this measurement to determine the control input $u$. 
+
+The simplest closed-loop strategy is that of *proportional controller*, where we apply a control input 
+$$
+  u(t) = \frac{v_{\mathrm{ref}} \hat b}{b} + K (v_{\mathrm{ref}} - v(t) )
+$$
+where $K$ is called the **feedback gain**. Under this control, the closed-loop system is given by (assuming $w(t) = 0$)
+$$
+  m \frac{d v(t)}{dt} = \hat b v_{\mathrm{ref}} + K K_e (v_{\mathrm{ref}} - v(t) ) - b v
+  = -(b + K K_e) v(t) + (\hat b + K K_e) v_{\mathrm{ref}} + w(t)
+$$
+At steady state, $dv(t)/dt = 0$, so we have
+$$
+  v_{\mathrm{ss}} = v_{\mathrm{ref}} \left(\frac{\hat b + KK_e}{b + K K_e}\right)
+  + \left( \frac{1}{b + K K_e} \right) w(t)
+$$
+Thus, the steady-state error is given by
+$$
+  v_{\mathrm{ref}} - v_{\mathrm{ss}}
+  = \left( \frac{b - \hat b}{b + K K_e} \right) v_{\mathrm{ref}}
+  - \left( \frac{1}{b + K K_e} \right) w(t)
+$$
+
+Suppose $w(t) = 0$. Comparing the steady-state error of open-loop and closed-loop control, we observe that the denominator $b$ in open-loop expression has been replaced by $b + K K_e$. If the feedback gain $K$ is designed to be large, then the steady-state error of closed-loop control will be much smaller than the steady-state error of open-loop control. Thus, **closed-loop control provides robustness against model uncertainty.**
+
+Now suppose $w(t) \neq 0$. Comparing the impact of disturbance on steady-state error for open- and closed-loop control, we observe that as before the denominator $b$ in open-loop expression has been replaced by $b + K K_e$. Thus, if the feedback gain $K$ is designed to be large, the impact of disturbances on closed-loop system is small. Thus, **closed-loop control helps in disturbance rejection.**
+
+In a real-system, we need to understand the impact of disturbances, measurement noise, and time-delay between applying a control input (increasing the throttle) and the actuation (increased thrust generated by the engine). For the most part, in this course we will ignore these practical constraints and focus on understanding the analysis and synthesis of control system under idealized assumptions. 
+

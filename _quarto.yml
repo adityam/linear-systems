@@ -24,6 +24,7 @@ book:
     
   chapters:
       - index.qmd
+      - introduction.qmd
       - freq-modeling.qmd
       - state-space-models.qmd
       - step-response.qmd
