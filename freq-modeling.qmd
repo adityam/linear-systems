@@ -18,7 +18,9 @@ execute:
 
 - Some fundamental properties of systems that you studied in signals and systems are: **linearity**, **time-invariance**, and **causality**. Please review your notes from signals and systems to ensure that you understand these properties. 
 
-- In this course, we will almost exclusively study causal SISO systems that are linear and time-invariant (LTI for short). Such systems arise in all branches of engineering, e.g., electrical circuits, spring-mass systems, gear systems, and thermodynamics. See Chapter 2 of Nice for detailed modeling examples. 
+- In this course, we will almost exclusively study causal SISO systems that are linear and time-invariant (LTI for short). Such systems arise in all branches of engineering, e.g., electrical circuits, spring-mass systems, gear systems, and thermodynamics. See Chapter 2 of Nise for detailed modeling examples. 
+
+- However, keep in mind that LTI systems are a mathematical modeling idealization. Real systems are never LTI. A resistor will burn if you apply too high voltage across it. A spring will break if you apply too high force. However, there are regimes under which some systems behave like LTI systems.  
 
 - In this lecture, we will review frequency domain modeling of LTI systems. You have seen this material in Signals and Systems. The purpose of this review is to simply introduce the notation used in this course, in case it happens to be different from the notation used in Signals and Systems. You are strongly encouraged to review your notes on this topic.
 
@@ -46,6 +48,9 @@ theme(current_theme)
 default(linewidth=2)
 
 ```
+## A simple example
+
+To understand the basics of _control_ systems, we take the following simplistic model of cruise control of a car borrowed from the book: Khalil, "Control Systems: An Introduction,"
 
 
 ## Unilateral Laplace Transforms
