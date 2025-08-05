@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2025-06-03">
+<meta name="dcterms.date" content="2025-08-05">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>Linear Systems and Control</title>
@@ -40,14 +40,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-8ef56b68f8fa1e9d2ba328e99e439f80.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-c4ce8fe306d609df0af01aa43cbd944b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-8e830286f409ed6807e82d6ca25ab3a3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-c4ce8fe306d609df0af01aa43cbd944b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-7099be0d4a40a56ccb81779c78679504.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-6b92bf55388de74d0d491143cae84547.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-7099be0d4a40a56ccb81779c78679504.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/nutshell-1.0.6/nutshell.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -373,7 +373,7 @@ window.MathJax = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./state-feedback.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pole placement via statement feedback</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pole placement via state feedback</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -436,7 +436,7 @@ window.MathJax = {
   <ul>
   <li><a href="#course-outline" id="toc-course-outline" class="nav-link active" data-scroll-target="#course-outline">Course Outline</a>
   <ul class="collapse">
-  <li><a href="#general-information" id="toc-general-information" class="nav-link" data-scroll-target="#general-information">General Information (Fall 2024)</a></li>
+  <li><a href="#general-information" id="toc-general-information" class="nav-link" data-scroll-target="#general-information">General Information (Fall 2025)</a></li>
   <li><a href="#graduate-attributes-and-learning-outcomes" id="toc-graduate-attributes-and-learning-outcomes" class="nav-link" data-scroll-target="#graduate-attributes-and-learning-outcomes">Graduate Attributes and Learning Outcomes</a></li>
   <li><a href="#course-content" id="toc-course-content" class="nav-link" data-scroll-target="#course-content">Course Content</a></li>
   <li><a href="#lab-schedule" id="toc-lab-schedule" class="nav-link" data-scroll-target="#lab-schedule">Lab Schedule</a></li>
@@ -486,7 +486,7 @@ window.MathJax = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 3, 2025</p>
+      <p class="date">August 5, 2025</p>
     </div>
   </div>
   
@@ -501,7 +501,7 @@ window.MathJax = {
 <section id="course-outline" class="level1 unnumbered">
 <h1 class="unnumbered">Course Outline</h1>
 <section id="general-information" class="level2">
-<h2 class="anchored" data-anchor-id="general-information">General Information (Fall 2024)</h2>
+<h2 class="anchored" data-anchor-id="general-information">General Information (Fall 2025)</h2>
 <dl>
 <dt>Instructor</dt>
 <dd>
@@ -519,13 +519,13 @@ window.MathJax = {
 <dt>Lectures</dt>
 <dd>
 <ul>
-<li><p>10:05am–11:25am Tuesday, Thursday (ENGMC 11)</p></li>
+<li><p>11:35am–12:55am Tuesday, Thursday (MASS 10)</p></li>
 </ul>
 </dd>
 <dt>Tutorials</dt>
 <dd>
 <ul>
-<li><p>8:35am–10:25am Friday, (ENGMC 11)</p></li>
+<li><p>3:35pm–5:25pm Wednesday, (ENGMC 11)</p></li>
 </ul>
 </dd>
 </dl>
@@ -549,12 +549,17 @@ window.MathJax = {
 </dd>
 <dd>
 <ul>
-<li><p>1:35pm–3:25pm Wednesday (TR 4090)</p></li>
+<li><p>1:35pm-3:25pm Wednesday (TR 4090)</p></li>
 </ul>
 </dd>
 <dd>
 <ul>
 <li><p>1:35pm–3:25pm Friday (TR 4090)</p></li>
+</ul>
+</dd>
+<dd>
+<ul>
+<li><p>3:35pm–5:25pm Friday (TR 4090)</p></li>
 </ul>
 </dd>
 </dl>
@@ -638,7 +643,7 @@ window.MathJax = {
 </tr>
 <tr class="odd">
 <td>3</td>
-<td style="text-align: left;"><a href="./step-response.html">Pole Zero Plot Step response of first and second order systems, dominant pole approximation</a> <br> <em>Reading</em>: Nise Ch. 4</td>
+<td style="text-align: left;"><a href="./step-response.html">Pole Zero Plot, Step response of first and second order systems, dominant pole approximation</a> <br> <em>Reading</em>: Nise Ch. 4</td>
 </tr>
 <tr class="even">
 <td>4</td>
@@ -699,7 +704,7 @@ window.MathJax = {
 <tbody>
 <tr class="odd">
 <td>1</td>
-<td style="text-align: left;">No Labs</td>
+<td style="text-align: left;">No Lab</td>
 </tr>
 <tr class="even">
 <td>2</td>
@@ -782,7 +787,7 @@ window.MathJax = {
 <ul>
 <li><p><strong>Assignments (20%)</strong> Weekly homework assignments. Typically, each assignment will consist of four questions, out of which one or two randomly selected questions will be grader. The lowest two homework assignments will be dropped.</p></li>
 <li><p><strong>Laboratory (20%)</strong> In-person weekly labs, to be conducted in groups of two. At the end of each lab, each group has to submit a lab report by filling in a Matlab Livescript template provided as part of the lab assignment.</p></li>
-<li><p><strong>Mid Term (20%)</strong> Closed book in-class exam. <span class="text-danger"><strong>Oct 10</strong></span> (during class time)</p></li>
+<li><p><strong>Mid Term (20%)</strong> Closed book in-class exam. <span class="text-danger"><strong>Oct 9</strong></span> (during class time)</p></li>
 <li><p><strong>Final Exam (40%)</strong> Closed book, in-person exam. Will be scheduled by the exam office and the dates will be announced later.</p>
 <p>The final exam will cover <strong>all</strong> the material seen in the class during the term.</p></li>
 </ul>
@@ -798,7 +803,7 @@ window.MathJax = {
 <li><p>Students who miss the mid-term exam for any other reason (e.g., no medical note, going to the exam at the wrong time, or on the wrong day, etc.) will get zero marks on the exam.</p></li>
 </ul></li>
 <li><p>Any request for reevaluation of a mid-term or an assignment must be made <strong>in writing within a week of its return</strong>. Note that requesting a re-grade will mean that you <strong>WHOLE</strong> assignment or exam will be re-graded.</p></li>
-<li><p><span class="text-danger">Due to paucity of grading hours, only one or two randomly selected questions will be graded in each assignment.</span></p></li>
+<li><p>Practice is the only way to learn the material. Each assignment has 4-5 questions to help understand the material. However, according to the current grading allocation, the TA has about 3-4 minutes to grade one assignment from a student. Clearly, that’s not sufficient time to grade 4-5 questions. <span class="text-danger"><strong>So, only 1 or 2 randomly selected questions in each assignment will be graded.</strong></span></p></li>
 <li><p>The lowest two assignments and labs will be dropped. There will be no make-up for missed assignments and labs, <em>even if it is for a valid reason.</em> The whole point of dropping the lowest two assignments/labs is to reduce the administrative overhead of keeping track of such missed assignments/labs.</p></li>
 </ul>
 <dl>
