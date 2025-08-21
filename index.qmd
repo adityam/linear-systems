@@ -2,7 +2,7 @@
 course:
   term: "Fall 2025"
   office-hours: "TBD"
-  teaching-assistants: "TBD"
+  teaching-assistants: "Yiwen Chen and Yiping Liu"
   mid-term: "Oct 9"
   lectures:
     - "11:35am–12:55am Tuesday, Thursday (MASS 10)"
