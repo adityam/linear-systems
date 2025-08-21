@@ -368,3 +368,40 @@ Therefore, the TF of time-delay unit is $e^{-τs}$, which is different from the 
   $$ e^{-τs} \approx \dfrac{1 - τs/2 + (τs)^2/12}{1 + τs/2 + (τs)^2/12}. $$
 
 We will not study time-delay systems in the course. 
+
+## Exercises {-}
+
+:::{#exr-laplace-transform}
+Find the Laplace transform for the following signals:
+
+a. $\frac{1}{2} e^{-2t} \IND(t) + \frac{1}{3}e^{-3t} \IND(t)$.
+
+b. $-\frac{1}{2} e^{2t} \IND(t) + \frac{1}{3}e^{-3t} \IND(t)$.
+
+c. $\frac{1}{2} e^{2t} \IND(t) - \frac{1}{3}e^{3t} \IND(t)$.
+
+d. $\frac{1}{2} e^{-2t} \IND(t) + \frac{1}{3}e^{3t} \IND(t)$.
+
+:::
+
+:::{#exr-inverse-laplace-transform}
+Using partial fraction expansion, find the inverse Laplace transform of the following.
+
+a. $\dfrac{s+1}{s^2 + 2s}$
+
+b. $\dfrac{s^2 + 1}{s^3 + 2s^2}$
+
+c. $\dfrac{s+3}{(s+5)(s^2 + 4s + 5)}$
+
+:::
+
+:::{#exr-step-response}
+Consider the system described by the following differential equation:
+$$
+  \frac{d^2 y(t)}{dt^2} + 4 \frac{dy(t)}{dt} + 8 y(t)
+  = \frac{du(t)}{dt} + 4u(t).
+$$
+
+a. Identify the system transfer function.
+b. Using Laplace transforms, find step response of the system.
+:::
