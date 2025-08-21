@@ -1,0 +1,39 @@
+project:
+  type: book
+
+book:
+  title: Linear Systems and Control
+  description: "Course Notes for ECSE 307 (McGill University)"
+  site-url: "https://adityam.github.io/linear-systems/"
+
+  repo-url: "https://github.com/adityam/linear-systems"
+  repo-actions: [edit]
+  repo-branch: quarto
+  reader-mode: true
+
+  navbar:
+    background: dark
+    title: false
+    pinned: false
+    search: false
+    left:
+    - href: index.html
+      text: Linear Control Systems
+
+  chapters:
+      - index.qmd
+      - introduction.qmd
+      - freq-modeling.qmd
+      - state-space-models.qmd
+      - step-response.qmd
+      - matrix-exponential.qmd
+      - state-feedback.qmd
+      - output-feedback.qmd
+      - routh-hurwitz.qmd
+      - block-diagrams.qmd
+      - steady-state-errors.qmd
+      - bode-and-nyquist.qmd
+      - nyquist-stability.qmd
+      - safety-margins.qmd
+      - lag-lead-compensators.qmd
+
