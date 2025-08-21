@@ -2,15 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.7.33">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2025-08-05">
+<meta name="dcterms.date" content="2025-08-21">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
-<title>9&nbsp; Steady-state errors – Linear Systems and Control</title>
+<title>10&nbsp; Steady-state errors – Linear Systems and Control</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -76,14 +76,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-bc185b5c5bdbcb35c2eb49d8a876ef70.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-7099be0d4a40a56ccb81779c78679504.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-6b92bf55388de74d0d491143cae84547.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-7099be0d4a40a56ccb81779c78679504.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-8545327574da039649cbdd200ac864eb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-07b0747d72fcd748d306d7e0a9991ca0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-8545327574da039649cbdd200ac864eb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/nutshell-1.0.6/nutshell.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -398,7 +398,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./steady-state-errors.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Steady-state errors</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./steady-state-errors.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Steady-state errors</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -418,80 +418,86 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./freq-modeling.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./state-space-models.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">State space models</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">State space models</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./step-response.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Step Response</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Step Response</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./matrix-exponential.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Time response of state space models</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Time response of state space models</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./state-feedback.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pole placement via state feedback</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Pole placement via state feedback</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./output-feedback.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">State observers and output feedback</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">State observers and output feedback</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./routh-hurwitz.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Routh-Hurwitz Stability Criterion</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Routh-Hurwitz Stability Criterion</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./block-diagrams.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Block diagrams</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Block diagrams</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./steady-state-errors.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Steady-state errors</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Steady-state errors</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./bode-and-nyquist.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Bode and Nyquist plots</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Bode and Nyquist plots</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./nyquist-stability.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Nyquist Stability Criterion</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Nyquist Stability Criterion</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./safety-margins.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Gain and Phase margins</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Gain and Phase margins</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lag-lead-compensators.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lag-lead compensators</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lag-lead compensators</span></span></a>
   </div>
 </li>
     </ul>
@@ -504,20 +510,20 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#steady-state-errors-for-general-systems" id="toc-steady-state-errors-for-general-systems" class="nav-link active" data-scroll-target="#steady-state-errors-for-general-systems"><span class="header-section-number">9.1</span> Steady-state errors for general systems</a></li>
-  <li><a href="#system-type" id="toc-system-type" class="nav-link" data-scroll-target="#system-type"><span class="header-section-number">9.2</span> System Type</a></li>
-  <li><a href="#steady-state-errors-for-unity-feedback-systems" id="toc-steady-state-errors-for-unity-feedback-systems" class="nav-link" data-scroll-target="#steady-state-errors-for-unity-feedback-systems"><span class="header-section-number">9.3</span> Steady-state errors for unity feedback systems</a>
+  <li><a href="#steady-state-errors-for-general-systems" id="toc-steady-state-errors-for-general-systems" class="nav-link active" data-scroll-target="#steady-state-errors-for-general-systems"><span class="header-section-number">10.1</span> Steady-state errors for general systems</a></li>
+  <li><a href="#system-type" id="toc-system-type" class="nav-link" data-scroll-target="#system-type"><span class="header-section-number">10.2</span> System Type</a></li>
+  <li><a href="#steady-state-errors-for-unity-feedback-systems" id="toc-steady-state-errors-for-unity-feedback-systems" class="nav-link" data-scroll-target="#steady-state-errors-for-unity-feedback-systems"><span class="header-section-number">10.3</span> Steady-state errors for unity feedback systems</a>
   <ul class="collapse">
-  <li><a href="#step-input" id="toc-step-input" class="nav-link" data-scroll-target="#step-input"><span class="header-section-number">9.3.1</span> Step Input</a></li>
-  <li><a href="#ramp-input" id="toc-ramp-input" class="nav-link" data-scroll-target="#ramp-input"><span class="header-section-number">9.3.2</span> Ramp input</a></li>
-  <li><a href="#parabola-input" id="toc-parabola-input" class="nav-link" data-scroll-target="#parabola-input"><span class="header-section-number">9.3.3</span> Parabola input</a></li>
-  <li><a href="#note-about-stability" id="toc-note-about-stability" class="nav-link" data-scroll-target="#note-about-stability"><span class="header-section-number">9.3.4</span> Note about stability</a></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">9.3.5</span> Summary</a></li>
+  <li><a href="#step-input" id="toc-step-input" class="nav-link" data-scroll-target="#step-input"><span class="header-section-number">10.3.1</span> Step Input</a></li>
+  <li><a href="#ramp-input" id="toc-ramp-input" class="nav-link" data-scroll-target="#ramp-input"><span class="header-section-number">10.3.2</span> Ramp input</a></li>
+  <li><a href="#parabola-input" id="toc-parabola-input" class="nav-link" data-scroll-target="#parabola-input"><span class="header-section-number">10.3.3</span> Parabola input</a></li>
+  <li><a href="#note-about-stability" id="toc-note-about-stability" class="nav-link" data-scroll-target="#note-about-stability"><span class="header-section-number">10.3.4</span> Note about stability</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">10.3.5</span> Summary</a></li>
   </ul></li>
-  <li><a href="#steady-state-errors-for-non-unity-feedback-systems" id="toc-steady-state-errors-for-non-unity-feedback-systems" class="nav-link" data-scroll-target="#steady-state-errors-for-non-unity-feedback-systems"><span class="header-section-number">9.4</span> Steady-state errors for non-unity feedback systems</a></li>
-  <li><a href="#steady-state-error-for-systems-in-ssm" id="toc-steady-state-error-for-systems-in-ssm" class="nav-link" data-scroll-target="#steady-state-error-for-systems-in-ssm"><span class="header-section-number">9.5</span> Steady-state error for systems in SSM</a></li>
-  <li><a href="#steady-state-errors-for-disturbances" id="toc-steady-state-errors-for-disturbances" class="nav-link" data-scroll-target="#steady-state-errors-for-disturbances"><span class="header-section-number">9.6</span> Steady-state errors for disturbances</a></li>
-  <li><a href="#disturbance-rejection-for-non-unity-feedback-systems" id="toc-disturbance-rejection-for-non-unity-feedback-systems" class="nav-link" data-scroll-target="#disturbance-rejection-for-non-unity-feedback-systems"><span class="header-section-number">9.7</span> Disturbance rejection for non-unity feedback systems</a></li>
+  <li><a href="#steady-state-errors-for-non-unity-feedback-systems" id="toc-steady-state-errors-for-non-unity-feedback-systems" class="nav-link" data-scroll-target="#steady-state-errors-for-non-unity-feedback-systems"><span class="header-section-number">10.4</span> Steady-state errors for non-unity feedback systems</a></li>
+  <li><a href="#steady-state-error-for-systems-in-ssm" id="toc-steady-state-error-for-systems-in-ssm" class="nav-link" data-scroll-target="#steady-state-error-for-systems-in-ssm"><span class="header-section-number">10.5</span> Steady-state error for systems in SSM</a></li>
+  <li><a href="#steady-state-errors-for-disturbances" id="toc-steady-state-errors-for-disturbances" class="nav-link" data-scroll-target="#steady-state-errors-for-disturbances"><span class="header-section-number">10.6</span> Steady-state errors for disturbances</a></li>
+  <li><a href="#disturbance-rejection-for-non-unity-feedback-systems" id="toc-disturbance-rejection-for-non-unity-feedback-systems" class="nav-link" data-scroll-target="#disturbance-rejection-for-non-unity-feedback-systems"><span class="header-section-number">10.7</span> Disturbance rejection for non-unity feedback systems</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/steady-state-errors.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -527,7 +533,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Steady-state errors</span></h1>
+<h1 class="title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Steady-state errors</span></h1>
 </div>
 
 
@@ -553,7 +559,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">August 5, 2025</p>
+      <p class="date">August 21, 2025</p>
     </div>
   </div>
   
@@ -667,7 +673,7 @@ window.Quarto = {
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ojs-cell-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.1: Commonly used reference signals
+Figure&nbsp;10.1: Commonly used reference signals
 </figcaption>
 </figure>
 </div>
@@ -708,15 +714,15 @@ Figure&nbsp;9.1: Commonly used reference signals
 </tbody>
 </table>
 <p>Since we are interested in steady state errors, we restrict attention to stable systems. The formulas that we derive <strong>will not be applicable to unstable systems</strong>.</p>
-<section id="steady-state-errors-for-general-systems" class="level2" data-number="9.1">
-<h2 data-number="9.1" class="anchored" data-anchor-id="steady-state-errors-for-general-systems"><span class="header-section-number">9.1</span> Steady-state errors for general systems</h2>
+<section id="steady-state-errors-for-general-systems" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="steady-state-errors-for-general-systems"><span class="header-section-number">10.1</span> Steady-state errors for general systems</h2>
 <div id="fig-open-loop" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-open-loop-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/svg/steady-state-error-block-diagrams1.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-open-loop-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.2: An open loop system
+Figure&nbsp;10.2: An open loop system
 </figcaption>
 </figure>
 </div>
@@ -751,7 +757,7 @@ The Final Value Theorem
 </div>
 </div>
 <div id="exm-steady-state-error-open-loop" class="theorem example">
-<p><span class="theorem-title"><strong>Example 9.1</strong></span> Find the steady-state error of the open loop system with TF <span class="math display">\[
+<p><span class="theorem-title"><strong>Example 10.1</strong></span> Find the steady-state error of the open loop system with TF <span class="math display">\[
 T(s) = \frac{2s + 10}{s^2 + 3s + 15}.
 \]</span> to a step input.</p>
 </div>
@@ -910,8 +916,8 @@ Solution
 </div>
 </div>
 </section>
-<section id="system-type" class="level2" data-number="9.2">
-<h2 data-number="9.2" class="anchored" data-anchor-id="system-type"><span class="header-section-number">9.2</span> System Type</h2>
+<section id="system-type" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="system-type"><span class="header-section-number">10.2</span> System Type</h2>
 <p>Before looking at more general systems, we discuss the notion of a system type. A general TF can be written as <span class="math display">\[
 \def\1#1{\Bigl(1 + \dfrac{s}{#1}\Bigr)}
 G(s) = K \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
@@ -970,19 +976,19 @@ G(s) = \dfrac{K_a}{s^2} \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
 </table>
 <p>These constants play an important role in understanding the steady-state error for unity feedback systems, as explained below.</p>
 </section>
-<section id="steady-state-errors-for-unity-feedback-systems" class="level2" data-number="9.3">
-<h2 data-number="9.3" class="anchored" data-anchor-id="steady-state-errors-for-unity-feedback-systems"><span class="header-section-number">9.3</span> Steady-state errors for unity feedback systems</h2>
+<section id="steady-state-errors-for-unity-feedback-systems" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="steady-state-errors-for-unity-feedback-systems"><span class="header-section-number">10.3</span> Steady-state errors for unity feedback systems</h2>
 <div id="fig-unity-feedback" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-unity-feedback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/svg/steady-state-error-block-diagrams2.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-unity-feedback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.3: A unity feedback system
+Figure&nbsp;10.3: A unity feedback system
 </figcaption>
 </figure>
 </div>
-<p>Consider a unity feedback system as shown in <a href="#fig-unity-feedback" class="quarto-xref">Figure&nbsp;<span>9.3</span></a>. The closed loop transfer function is given by <span class="math display">\[
+<p>Consider a unity feedback system as shown in <a href="#fig-unity-feedback" class="quarto-xref">Figure&nbsp;<span>10.3</span></a>. The closed loop transfer function is given by <span class="math display">\[
 T(s) = \frac{G(s)}{1 + G(s)} \]</span></p>
 <p>Thus, from the previous formula we get</p>
 <p><span class="math display">\[
@@ -991,8 +997,8 @@ T(s) = \frac{G(s)}{1 + G(s)} \]</span></p>
 = \lim_{s \to 0} \frac{s R(s)}{1 + G(s)}}
 \]</span> Note that this formula is valid only if <strong>the closed loop system <span class="math inline">\(G(s)/(1 + G(s))\)</span> is stable</strong>.</p>
 <p>Now, we specialize this expression for the three test signals described before.</p>
-<section id="step-input" class="level3" data-number="9.3.1">
-<h3 data-number="9.3.1" class="anchored" data-anchor-id="step-input"><span class="header-section-number">9.3.1</span> Step Input</h3>
+<section id="step-input" class="level3" data-number="10.3.1">
+<h3 data-number="10.3.1" class="anchored" data-anchor-id="step-input"><span class="header-section-number">10.3.1</span> Step Input</h3>
 <p>Consider the steady-state error to step input for which <span class="math inline">\(R(s) = 1/s\)</span>. Thus, <span class="math display">\[
 e_{\rm step}(∞) = \lim_{s \to ∞} \frac{s R(s)}{1 + G(s)}
 = \frac{1}{1 + \lim_{s \to 0} G(s)} = \frac{1}{1 + K_p}.
@@ -1025,8 +1031,8 @@ e_{\rm step}(∞) = \lim_{s \to ∞} \frac{s R(s)}{1 + G(s)}
 </tbody>
 </table>
 </section>
-<section id="ramp-input" class="level3" data-number="9.3.2">
-<h3 data-number="9.3.2" class="anchored" data-anchor-id="ramp-input"><span class="header-section-number">9.3.2</span> Ramp input</h3>
+<section id="ramp-input" class="level3" data-number="10.3.2">
+<h3 data-number="10.3.2" class="anchored" data-anchor-id="ramp-input"><span class="header-section-number">10.3.2</span> Ramp input</h3>
 <p>Now consider the steady-state error to ramp input for which <span class="math inline">\(R(s) = 1/s^2\)</span>. Thus, <span class="math display">\[
 e_{\rm ramp}(∞) = \lim_{s \to 0} \frac{s R(s)}{1 + G(s)}
 = \frac{1}{\lim_{s \to 0} s G(s)} = \frac{1}{K_v}.
@@ -1059,8 +1065,8 @@ e_{\rm ramp}(∞) = \lim_{s \to 0} \frac{s R(s)}{1 + G(s)}
 </tbody>
 </table>
 </section>
-<section id="parabola-input" class="level3" data-number="9.3.3">
-<h3 data-number="9.3.3" class="anchored" data-anchor-id="parabola-input"><span class="header-section-number">9.3.3</span> Parabola input</h3>
+<section id="parabola-input" class="level3" data-number="10.3.3">
+<h3 data-number="10.3.3" class="anchored" data-anchor-id="parabola-input"><span class="header-section-number">10.3.3</span> Parabola input</h3>
 <p>Now consider the steady-state error to parabola input for which <span class="math inline">\(R(s) = 1/s^3\)</span>. Thus, <span class="math display">\[
 e_{\rm para}(∞) = \lim_{s \to 0} \frac{s R(s)}{1 + G(s)}
 = \frac{1}{\lim_{s \to 0} s^2 G(s)} = \frac{1}{K_a}.
@@ -1093,20 +1099,20 @@ e_{\rm para}(∞) = \lim_{s \to 0} \frac{s R(s)}{1 + G(s)}
 </tbody>
 </table>
 </section>
-<section id="note-about-stability" class="level3" data-number="9.3.4">
-<h3 data-number="9.3.4" class="anchored" data-anchor-id="note-about-stability"><span class="header-section-number">9.3.4</span> Note about stability</h3>
+<section id="note-about-stability" class="level3" data-number="10.3.4">
+<h3 data-number="10.3.4" class="anchored" data-anchor-id="note-about-stability"><span class="header-section-number">10.3.4</span> Note about stability</h3>
 <p>Recall that in order to apply the final value theorem, the error signal must satisfy the conditions of the theorem: <span class="math inline">\(E(s)\)</span> should have no poles in the ORHP.</p>
 <p>The error signal is <span class="math display">\[
   E(s) = s R(s)[ 1 - T(s)] = \frac{s R(s)}{1 + G(s)}
 \]</span> Thus, to ensure that the steady state error is finite, we must have that the denominator of <span class="math inline">\(E(s)\)</span> (or equivalently, the denominator of the closed loop transfer function <span class="math inline">\(T(s)\)</span>) should have no poles in the ORHP.</p>
 </section>
-<section id="summary" class="level3" data-number="9.3.5">
-<h3 data-number="9.3.5" class="anchored" data-anchor-id="summary"><span class="header-section-number">9.3.5</span> Summary</h3>
-<p>In summary, the steady-state error of different types of system for different types of inputs is shown in <a href="#tbl-summary" class="quarto-xref">Table&nbsp;<span>9.1</span></a></p>
+<section id="summary" class="level3" data-number="10.3.5">
+<h3 data-number="10.3.5" class="anchored" data-anchor-id="summary"><span class="header-section-number">10.3.5</span> Summary</h3>
+<p>In summary, the steady-state error of different types of system for different types of inputs is shown in <a href="#tbl-summary" class="quarto-xref">Table&nbsp;<span>10.1</span></a></p>
 <div id="tbl-summary" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;9.1: Steady-state error of different types of systems for different inputs
+Table&nbsp;10.1: Steady-state error of different types of systems for different inputs
 </figcaption>
 <div aria-describedby="tbl-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -1143,7 +1149,7 @@ Table&nbsp;9.1: Steady-state error of different types of systems for different i
 </figure>
 </div>
 <div id="exm-unity-feedback-1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 9.2</strong></span> Consider a unity feedback system with open-loop transfer function <span class="math display">\[
+<p><span class="theorem-title"><strong>Example 10.2</strong></span> Consider a unity feedback system with open-loop transfer function <span class="math display">\[
 G(s) = \dfrac{100(s+3)}{(s+1)(s+6)}
 \]</span> Find the steady state errors to step, ramp, and parabola inputs.</p>
 </div>
@@ -1185,7 +1191,7 @@ e_{\rm para}(∞) = \frac{1}{K_a} = ∞.
 </div>
 </div>
 <div id="exm-unity-feedback-2" class="theorem example">
-<p><span class="theorem-title"><strong>Example 9.3</strong></span> Consider a unity feedback system with open-loop transfer function <span class="math display">\[
+<p><span class="theorem-title"><strong>Example 10.3</strong></span> Consider a unity feedback system with open-loop transfer function <span class="math display">\[
 G(s) = \dfrac{100(s+3)}{s(s+1)(s+6)}
 \]</span> Find the steady state errors to step, ramp, and parabola inputs.</p>
 </div>
@@ -1228,7 +1234,7 @@ e_{\rm para}(∞) = \frac{1}{K_a} = ∞.
 </div>
 <p>Steady-state errors are often part of the system specification. Depending on the system type, a constraint on the steady state error can be translated to a constraint on the appropriate error constant, which in turn can be used as a constraint on the tuneable parameters of the controller.</p>
 <div id="exm-unity-feedback-specification" class="theorem example">
-<p><span class="theorem-title"><strong>Example 9.4</strong></span> Consider the system</p>
+<p><span class="theorem-title"><strong>Example 10.4</strong></span> Consider the system</p>
 <p><img src="figures/svg/steady-state-error-block-diagrams3.svg" class="img-fluid"></p>
 <p>Find the value of <span class="math inline">\(K\)</span> such that the steady state error to a ramp signal is less than <span class="math inline">\(10\%\)</span>.</p>
 </div>
@@ -1419,8 +1425,8 @@ E(s) = \frac{R(s)}{1 + G(s)} = R(s) \frac{K(s+5)}{s^3 + 12 s^2 + (20 + K)s + 5K}
 </div>
 </section>
 </section>
-<section id="steady-state-errors-for-non-unity-feedback-systems" class="level2" data-number="9.4">
-<h2 data-number="9.4" class="anchored" data-anchor-id="steady-state-errors-for-non-unity-feedback-systems"><span class="header-section-number">9.4</span> Steady-state errors for non-unity feedback systems</h2>
+<section id="steady-state-errors-for-non-unity-feedback-systems" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="steady-state-errors-for-non-unity-feedback-systems"><span class="header-section-number">10.4</span> Steady-state errors for non-unity feedback systems</h2>
 <p>Consider a system with non-unity feedback as shown above. We can compute the steady-state error using the generic formula <span class="math display">\[
 e(∞) = \lim_{s \to 0} s R(s)(1 - T(s))
 = \lim_{s \to 0) s R(s) \biggl[ \frac{1 + G(s)H(s) - G(s)}{1 + G(s)H(s)} \biggr].
@@ -1466,16 +1472,16 @@ e(∞) = \lim_{s \to 0} s R(s)(1 - T(s))
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-non-unity-feedback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.4: Unity feedback system equivalent to a non-unity feedback system
+Figure&nbsp;10.4: Unity feedback system equivalent to a non-unity feedback system
 </figcaption>
 </figure>
 </div>
-<p>First we observe that (a) and (b) in <a href="#fig-non-unity-feedback" class="quarto-xref">Figure&nbsp;<span>9.4</span></a> are equivalent. Then observe that (b) is equivalent to (c), which in turn is equivalent to (d) with <span class="math display">\[
+<p>First we observe that (a) and (b) in <a href="#fig-non-unity-feedback" class="quarto-xref">Figure&nbsp;<span>10.4</span></a> are equivalent. Then observe that (b) is equivalent to (c), which in turn is equivalent to (d) with <span class="math display">\[
 \bbox[5pt,border: 1px solid]
 {G_e(s) = \frac{G(s)}{1 + G(s)H(s) - G(s)}}
 \]</span></p>
 <div id="exm-non-unity-feedback" class="theorem example">
-<p><span class="theorem-title"><strong>Example 9.5</strong></span> Consider the system</p>
+<p><span class="theorem-title"><strong>Example 10.5</strong></span> Consider the system</p>
 <p><img src="figures/svg/steady-state-error-block-diagrams8.svg" class="img-fluid"></p>
 <p>Find the steady state errors to step, ramp, and parabola inputs.</p>
 </div>
@@ -1522,8 +1528,8 @@ e_{\rm para}(∞) = \frac{1}{K_a} = ∞.
 </div>
 </div>
 </section>
-<section id="steady-state-error-for-systems-in-ssm" class="level2" data-number="9.5">
-<h2 data-number="9.5" class="anchored" data-anchor-id="steady-state-error-for-systems-in-ssm"><span class="header-section-number">9.5</span> Steady-state error for systems in SSM</h2>
+<section id="steady-state-error-for-systems-in-ssm" class="level2" data-number="10.5">
+<h2 data-number="10.5" class="anchored" data-anchor-id="steady-state-error-for-systems-in-ssm"><span class="header-section-number">10.5</span> Steady-state error for systems in SSM</h2>
 <p>As discussed before, we can use the final value theorem to find the steady state error for SSM. In particular, when we use a state feedback controller with feedback gain <span class="math inline">\(K\)</span>, the transfer function is given by <span class="math display">\[
   T(s) = C(sI - (A-BK))^{-1} B.
 \]</span> Therefore, we have <span class="math display">\[
@@ -1532,20 +1538,20 @@ e_{\rm para}(∞) = \frac{1}{K_a} = ∞.
 \]</span></p>
 <p>One way to make the steady state error of a SSM to be zero is use integral control. <strong>To be written</strong></p>
 </section>
-<section id="steady-state-errors-for-disturbances" class="level2" data-number="9.6">
-<h2 data-number="9.6" class="anchored" data-anchor-id="steady-state-errors-for-disturbances"><span class="header-section-number">9.6</span> Steady-state errors for disturbances</h2>
-<p>In a real system, there are often errors in actuation, which can be modeled as a disturbance between the controller and the plant as shown in <a href="#fig-disturbance" class="quarto-xref">Figure&nbsp;<span>9.5</span></a>.</p>
+<section id="steady-state-errors-for-disturbances" class="level2" data-number="10.6">
+<h2 data-number="10.6" class="anchored" data-anchor-id="steady-state-errors-for-disturbances"><span class="header-section-number">10.6</span> Steady-state errors for disturbances</h2>
+<p>In a real system, there are often errors in actuation, which can be modeled as a disturbance between the controller and the plant as shown in <a href="#fig-disturbance" class="quarto-xref">Figure&nbsp;<span>10.5</span></a>.</p>
 <div id="fig-disturbance" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-disturbance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/svg/steady-state-error-block-diagrams9.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-disturbance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.5: System with disturbance
+Figure&nbsp;10.5: System with disturbance
 </figcaption>
 </figure>
 </div>
-<p>We first start with an overview of how to analyze such <strong>multi-input single-output</strong> systems. Since the system is an LTI system, we may assume that it is a superposition of two systems as shown in <a href="#fig-superposition" class="quarto-xref">Figure&nbsp;<span>9.6</span></a>.</p>
+<p>We first start with an overview of how to analyze such <strong>multi-input single-output</strong> systems. Since the system is an LTI system, we may assume that it is a superposition of two systems as shown in <a href="#fig-superposition" class="quarto-xref">Figure&nbsp;<span>10.6</span></a>.</p>
 <div id="fig-superposition" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-superposition-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1569,7 +1575,7 @@ Figure&nbsp;9.5: System with disturbance
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-superposition-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.6: System viewed as superposition of two systems
+Figure&nbsp;10.6: System viewed as superposition of two systems
 </figcaption>
 </figure>
 </div>
@@ -1601,14 +1607,14 @@ e(∞) &amp;= \lim_{s \to 0} s E(s)
 = \dfrac{1}{\dfrac{1}{K_{2,p}} + K_{1,p}},
 \]</span> where <span class="math inline">\(K_{1,p}\)</span> and <span class="math inline">\(K_{2,p}\)</span> are the position constants of <span class="math inline">\(G_1(s)\)</span> and <span class="math inline">\(G_2(s)\)</span>, respectively. Thus, the steady state error can reduced by increasing the position constant of the controller and decreasing the position constant of the plant.</p>
 <div id="exm-disturbance" class="theorem example">
-<p><span class="theorem-title"><strong>Example 9.6</strong></span> Find the steady-state error for the system shown in <a href="#fig-disturbance-example" class="quarto-xref">Figure&nbsp;<span>9.7</span></a> when <span class="math inline">\(R(s) = 1/s\)</span> and <span class="math inline">\(D(s) = 1/s\)</span>.</p>
+<p><span class="theorem-title"><strong>Example 10.6</strong></span> Find the steady-state error for the system shown in <a href="#fig-disturbance-example" class="quarto-xref">Figure&nbsp;<span>10.7</span></a> when <span class="math inline">\(R(s) = 1/s\)</span> and <span class="math inline">\(D(s) = 1/s\)</span>.</p>
 <div id="fig-disturbance-example" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-disturbance-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/svg/steady-state-error-block-diagrams12.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-disturbance-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.7: System for <a href="#exm-disturbance" class="quarto-xref">Example&nbsp;<span>9.6</span></a>
+Figure&nbsp;10.7: System for <a href="#exm-disturbance" class="quarto-xref">Example&nbsp;<span>10.6</span></a>
 </figcaption>
 </figure>
 </div>
@@ -1650,16 +1656,16 @@ e_{D}(∞) = \dfrac{1}{\dfrac{1}{K_{2,p}} + K_{1,p}} = \dfrac{1}{100}.
 </div>
 </div>
 </section>
-<section id="disturbance-rejection-for-non-unity-feedback-systems" class="level2" data-number="9.7">
-<h2 data-number="9.7" class="anchored" data-anchor-id="disturbance-rejection-for-non-unity-feedback-systems"><span class="header-section-number">9.7</span> Disturbance rejection for non-unity feedback systems</h2>
-<p>Now consider a system with disturbance and non-unity feedback, as shown in <a href="#fig-disturbance-non-unity" class="quarto-xref">Figure&nbsp;<span>9.8</span></a>.</p>
+<section id="disturbance-rejection-for-non-unity-feedback-systems" class="level2" data-number="10.7">
+<h2 data-number="10.7" class="anchored" data-anchor-id="disturbance-rejection-for-non-unity-feedback-systems"><span class="header-section-number">10.7</span> Disturbance rejection for non-unity feedback systems</h2>
+<p>Now consider a system with disturbance and non-unity feedback, as shown in <a href="#fig-disturbance-non-unity" class="quarto-xref">Figure&nbsp;<span>10.8</span></a>.</p>
 <div id="fig-disturbance-non-unity" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-disturbance-non-unity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/svg/steady-state-error-block-diagrams13.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-disturbance-non-unity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.8: System with disturbance and non-unity feedback
+Figure&nbsp;10.8: System with disturbance and non-unity feedback
 </figcaption>
 </figure>
 </div>
@@ -2105,12 +2111,12 @@ window._ojs.runtime.interpretFromScriptTags();
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./block-diagrams.html" class="pagination-link" aria-label="Block diagrams">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Block diagrams</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Block diagrams</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./bode-and-nyquist.html" class="pagination-link" aria-label="Bode and Nyquist plots">
-        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Bode and Nyquist plots</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Bode and Nyquist plots</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

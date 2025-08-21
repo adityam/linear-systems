@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.33">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Aditya Mahajan">
+<meta name="dcterms.date" content="2025-08-21">
+<meta name="description" content="Course Notes for ECSE 307 (McGill University)">
+
+<title>1&nbsp; Introduction – Linear Systems and Control</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./freq-modeling.html" rel="next">
+<link href="./index.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-bc185b5c5bdbcb35c2eb49d8a876ef70.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-8545327574da039649cbdd200ac864eb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-07b0747d72fcd748d306d7e0a9991ca0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-8545327574da039649cbdd200ac864eb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/nutshell-1.0.6/nutshell.js"></script>
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script>
+// https://github.com/mathjax/MathJax/issues/2744#issuecomment-1658624747
+// To fix the bug that uppercase unicode letters are shown in italic
+window.MathJax = {
+  startup: {
+    ready() {
+      const {RANGES} = MathJax._.core.MmlTree.OperatorDictionary;
+      const {TEXCLASS} = MathJax._.core.MmlTree.MmlNode;
+      RANGES.splice(4, 1,
+        [0x0370, 0x0385, TEXCLASS.ORD, 'mi'],
+        [0x0386, 0x3AB, TEXCLASS.ORD, 'mi', 'normal'],
+        [0x03AC, 0x1A20, TEXCLASS.ORD, 'mi']
+      );
+      MathJax.startup.defaultReady();
+    }
+  },
+  tex: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+    processEscapes: true,
+    tags: "ams",
+    macros: {
+      PR: "\\mathbb{P}",
+      EXP: "\\mathbb{E}",
+      IND: "\\mathbb{1}",
+      ONES: "\\mathbb{1}",
+      reals: "\\mathbb{R}",
+      integers: "\\mathbb{Z}",
+      BLANK: "\\mathfrak{E}",
+      TRANS: "\\intercal",
+      VEC: "\\operatorname{vec}",
+      diag: "\\operatorname{diag}",
+      ROWS: "\\operatorname{vec}",
+      TR: "\\operatorname{Tr}",   
+      SPAN: "\\operatorname{span}",   
+      ALPHABET: ["\\mathcal{#1}", 1],
+      MATRIX: ["\\begin{bmatrix} #1 \\end{bmatrix}", 1],
+      DET: ["\\begin{vmatrix} #1 \\end{vmatrix}", 1],
+      NORM: ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1],
+      ABS: ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1],
+      GRAD: "\\nabla",
+      IP: ["\\left\\langle #1, #2 \\right\\rangle", 2],
+      iddots: "\\mathinner{ \\kern1mu\\raise1pt{.} \\kern2mu\\raise4pt{.} \\kern2mu\\raise7pt{\\Rule{0pt}{7pt}{0pt}.} \\kern1mu}",
+    },
+  },
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  },
+};
+</script>
+<script async="" data-id="101261731" src="//static.getclicky.com/js"></script>
+<script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
+<span class="menu-text">Linear Control Systems</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools tools-wide">
+    <a href="https://github.com/adityam/linear-systems" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./introduction.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Course Outline</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./freq-modeling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./state-space-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">State space models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./step-response.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Step Response</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./matrix-exponential.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Time response of state space models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./state-feedback.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Pole placement via state feedback</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./output-feedback.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">State observers and output feedback</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./routh-hurwitz.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Routh-Hurwitz Stability Criterion</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./block-diagrams.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Block diagrams</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./steady-state-errors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Steady-state errors</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bode-and-nyquist.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Bode and Nyquist plots</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nyquist-stability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Nyquist Stability Criterion</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./safety-margins.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Gain and Phase margins</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lag-lead-compensators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lag-lead compensators</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#closed-loop-control-may-stabilize-an-unstable-system" id="toc-closed-loop-control-may-stabilize-an-unstable-system" class="nav-link active" data-scroll-target="#closed-loop-control-may-stabilize-an-unstable-system"><span class="header-section-number">1.1</span> Closed-loop control may stabilize an unstable system</a></li>
+  <li><a href="#closed-loop-control-provides-robustness-against-disturbances-and-model-uncertainty" id="toc-closed-loop-control-provides-robustness-against-disturbances-and-model-uncertainty" class="nav-link" data-scroll-target="#closed-loop-control-provides-robustness-against-disturbances-and-model-uncertainty"><span class="header-section-number">1.2</span> Closed-loop control provides robustness against disturbances and model uncertainty</a>
+  <ul class="collapse">
+  <li><a href="#open-loop-control" id="toc-open-loop-control" class="nav-link" data-scroll-target="#open-loop-control">Open loop control</a></li>
+  <li><a href="#closed-loop-control" id="toc-closed-loop-control" class="nav-link" data-scroll-target="#closed-loop-control">Closed-loop control</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/introduction.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></h1>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://adityam.github.io">Aditya Mahajan</a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="http://www.mcgill.ca/ece">
+            McGill University
+            </a>
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Updated</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 21, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<ul>
+<li><p>Recall from Signals and Systems, we know that a <strong>system</strong> is a process or a device that takes one or more signals as inputs and generates one or more signals as outputs.</p></li>
+<li><p>The simplest systems are those with one input and one output, often called <strong>single input single output (SISO) systems</strong>. For example, a microphone may be viewed as a SISO system which has a single input (the acoustic pressure) which causes the diaphragm to vibrate and produce a single output (electrical voltage).</p></li>
+<li><p>A system can have <strong>multiple inputs and multiple outputs (MIMO)</strong>. For example, the stereo microphone has two inputs (typically, a left microphone and a right microphone) and generates two voltage signals as outputs.</p></li>
+<li><p>Some fundamental properties of systems that you studied in signals and systems are: <strong>linearity</strong>, <strong>time-invariance</strong>, and <strong>causality</strong>. Please review your notes from signals and systems to ensure that you understand these properties.</p></li>
+<li><p>In this course, we will almost exclusively study causal SISO systems that are linear and time-invariant (LTI for short). Such systems arise in all branches of engineering, e.g., electrical circuits, spring-mass systems, gear systems, and thermodynamics. See Chapter 2 of Nise for detailed modeling examples.</p></li>
+<li><p>However, keep in mind that LTI systems are a mathematical modeling idealization. Real systems are never LTI. A resistor will burn if you apply too high voltage across it. A spring will break if you apply too high force. However, there are regimes under which some systems behave like LTI systems.</p></li>
+<li><p>The objective of <strong>control systems</strong> is to choose the input of the system so that the output has desired properties. Such a control input can be chosen in <strong>open loop</strong> (i.e., determine a control signal as a function of time) or in <strong>closed loop</strong> (i.e., determine the control at each time as a function of the output of the system).</p></li>
+<li><p>As we illustrate via examples below, such <strong>closed-loop feedback control</strong> provides several benefits, including stabilizing unstable systems and robustness against disturbances, and model uncertainty.</p></li>
+<li><p>The idea of feedback control has a long history: from the ancient water clocks of Ktesibios (3rd century BC) that used float regulators, to James Watt’s centrifugal governor (18th century) that automatically controlled the speed of steam engines, and to modern applications such as robotics, aerospace, automobiles, control of HVAC systems, power control in communication systems, load frequency control in power systems, industrial process control, and increasing control of learning algorithms. <strong>Automatic control</strong> is often regarded as <a href="https://doi.org/10.1007/978-1-4471-0853-5_1">the hidden technology</a> that makes modern engineering systems work. See <a href="https://doi.org/10.1016/j.automatica.2013.10.012">Control: A prespective</a> for a rich history of the field.</p></li>
+</ul>
+<section id="closed-loop-control-may-stabilize-an-unstable-system" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="closed-loop-control-may-stabilize-an-unstable-system"><span class="header-section-number">1.1</span> Closed-loop control may stabilize an unstable system</h2>
+<p>In this section, we present a simple example of designing a closed-loop controller for a <a href="https://en.wikipedia.org/wiki/Segway">:Segway</a> to show that <strong>feedback control can stabilize an unstable system</strong>.</p>
+<p>We model the Segway as an <strong>inverted pendulum</strong> with mass <span class="math inline">\(m\)</span> located at the end of a rigid rod of length <span class="math inline">\(L\)</span>, pivoting at the wheel axis. Let <span class="math inline">\(θ(t)\)</span> denote the tilt angle (measured from the upright position) and <span class="math inline">\(u(t)\)</span> denote the torque applied by the rotor. Three torques act on the mass:</p>
+<ul>
+<li>internal torque <span class="math inline">\(m L^2 \ddot \theta(t)\)</span></li>
+<li>gravitational torque <span class="math inline">\(mg L \sin θ(t)\)</span></li>
+<li>external torque <span class="math inline">\(u(t)\)</span>.</li>
+</ul>
+<p>From Newton’s second law, we have <span class="math display">\[
+  m L^2 \frac{d^2 θ(t)}{dt^2} = mgL \sin θ(t) + u(t)
+\]</span> which is a non-linear differential equation.</p>
+<p>One key idea in analyzing such systems is <strong>linearization</strong>. Assuming <span class="math inline">\(θ(t)\)</span> is small, we can approximate <span class="math inline">\(\sin θ(t) \approx θ(t)\)</span>, giving <span class="math display">\[
+  \frac{d^2 θ(t)}{dt^2} = \frac{g}{L} θ(t) + \frac{1}{mL^2} u(t),
+\]</span> which is a causal LTI system.</p>
+<p>The system is open loop unstable. If we don’t apply any torque and the system is not perfectly upright (i.e., <span class="math inline">\(θ(t) \neq 0\)</span>), then gravity will cause the tilt to increase until the Segway falls over.</p>
+<p>Let’s rewrite the dynamics as follows <span class="math display">\[
+  \frac{d^2 θ(t)}{dt^2} - a θ(t) = b u(t),
+\]</span> where <span class="math inline">\(a = g/L\)</span> and <span class="math inline">\(b = 1/mL^2\)</span>. As we shall see later, the transfer function of this system is given by <span class="math display">\[
+  G(s) = \frac{b}{s^2 - a} = \frac{b}{(s - \sqrt{a})(s + \sqrt{a})}$.
+\]</span> The transfer function has two roots, one in the open left hand plane (OLHP) and the other in the open right hand place (ORHP). Since there is a pole in ORHP, the system is unstable.</p>
+<p>Suppose we have a sensor that can measure the angle <span class="math inline">\(θ(t)\)</span>. Consider a <strong>proportional plus derivative controller,</strong> i.e., a controller given by <span class="math display">\[
+  u(t) = - K_p θ(t) - K_d \dot θ(t)
+\]</span> where <span class="math inline">\(K_p\)</span> provides the restoring torque and <span class="math inline">\(K_d\)</span> provides damping.</p>
+<p>Substituting into the linearized dynamics gives gives <span class="math display">\[
+  \frac{d^2 θ(t)}{dt^2} + b K_d  \frac{ d θ(t)}{dt} + (b K_p  - a) θ(t) = 0.
+\]</span> Using ideas that we will learn using <a href="./routh-hurwitz.html">Routh Hurwitz criterion</a>, we can see that this system is stable if all coefficients are positive, i.e.,</p>
+<ul>
+<li><span class="math inline">\(b K_p  - a &gt; 0\)</span></li>
+<li><span class="math inline">\(b K_d  &gt; 0\)</span></li>
+</ul>
+<p>To illustrate this, we solve the above differential equation for different values of <span class="math inline">\(K_p\)</span> with <span class="math inline">\(a = 2\)</span>, <span class="math inline">\(b = 1\)</span>, and <span class="math inline">\(K_d = 1\)</span>, assuming that the system starts with an initial angle of <span class="math inline">\(θ(0) = 0.2\)</span> rad and <span class="math inline">\(\dot θ(0) = 0\)</span>.</p>
+<div id="2" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<script type="ojs-define">{"contents":[{"name":"segway","value":[{"θn":0.2,"time":0.0,"Kp":1.0},{"θn":0.2021,"time":0.1515,"Kp":1.0},{"θn":0.2084,"time":0.303,"Kp":1.0},{"θn":0.2181,"time":0.4546,"Kp":1.0},{"θn":0.2312,"time":0.606,"Kp":1.0},{"θn":0.2473,"time":0.758,"Kp":1.0},{"θn":0.2666,"time":0.909,"Kp":1.0},{"θn":0.2886,"time":1.061,"Kp":1.0},{"θn":0.314,"time":1.212,"Kp":1.0},{"θn":0.3423,"time":1.363,"Kp":1.0},{"θn":0.374,"time":1.516,"Kp":1.0},{"θn":0.4092,"time":1.667,"Kp":1.0},{"θn":0.448,"time":1.818,"Kp":1.0},{"θn":0.4912,"time":1.97,"Kp":1.0},{"θn":0.5386,"time":2.121,"Kp":1.0},{"θn":0.591,"time":2.273,"Kp":1.0},{"θn":0.6484,"time":2.424,"Kp":1.0},{"θn":0.712,"time":2.576,"Kp":1.0},{"θn":0.7817,"time":2.727,"Kp":1.0},{"θn":0.858,"time":2.879,"Kp":1.0},{"θn":0.942,"time":3.031,"Kp":1.0},{"θn":1.034,"time":3.182,"Kp":1.0},{"θn":1.136,"time":3.334,"Kp":1.0},{"θn":1.247,"time":3.484,"Kp":1.0},{"θn":1.37,"time":3.637,"Kp":1.0},{"θn":1.504,"time":3.787,"Kp":1.0},{"θn":1.651,"time":3.94,"Kp":1.0},{"θn":1.813,"time":4.09,"Kp":1.0},{"θn":1.992,"time":4.242,"Kp":1.0},{"θn":2.188,"time":4.395,"Kp":1.0},{"θn":2.402,"time":4.547,"Kp":1.0},{"θn":2.639,"time":4.695,"Kp":1.0},{"θn":2.896,"time":4.848,"Kp":1.0},{"θn":3.182,"time":5.0,"Kp":1.0},{"θn":3.494,"time":5.152,"Kp":1.0},{"θn":3.836,"time":5.305,"Kp":1.0},{"θn":4.21,"time":5.453,"Kp":1.0},{"θn":4.625,"time":5.605,"Kp":1.0},{"θn":5.082,"time":5.758,"Kp":1.0},{"θn":5.58,"time":5.91,"Kp":1.0},{"θn":6.125,"time":6.062,"Kp":1.0},{"θn":6.727,"time":6.21,"Kp":1.0},{"θn":7.39,"time":6.363,"Kp":1.0},{"θn":8.12,"time":6.516,"Kp":1.0},{"θn":8.914,"time":6.668,"Kp":1.0},{"θn":9.79,"time":6.816,"Kp":1.0},{"θn":10.74,"time":6.97,"Kp":1.0},{"θn":11.8,"time":7.12,"Kp":1.0},{"θn":12.96,"time":7.273,"Kp":1.0},{"θn":14.234,"time":7.426,"Kp":1.0},{"θn":15.625,"time":7.574,"Kp":1.0},{"θn":17.16,"time":7.727,"Kp":1.0},{"θn":18.84,"time":7.88,"Kp":1.0},{"θn":20.7,"time":8.03,"Kp":1.0},{"θn":22.73,"time":8.18,"Kp":1.0},{"θn":24.95,"time":8.336,"Kp":1.0},{"θn":27.4,"time":8.484,"Kp":1.0},{"θn":30.1,"time":8.63,"Kp":1.0},{"θn":33.06,"time":8.79,"Kp":1.0},{"θn":36.3,"time":8.94,"Kp":1.0},{"θn":39.88,"time":9.09,"Kp":1.0},{"θn":43.78,"time":9.24,"Kp":1.0},{"θn":48.06,"time":9.39,"Kp":1.0},{"θn":52.78,"time":9.55,"Kp":1.0},{"θn":57.97,"time":9.695,"Kp":1.0},{"θn":63.66,"time":9.85,"Kp":1.0},{"θn":69.94,"time":10.0,"Kp":1.0},{"θn":76.75,"time":10.15,"Kp":1.0},{"θn":84.3,"time":10.305,"Kp":1.0},{"θn":92.6,"time":10.45,"Kp":1.0},{"θn":101.7,"time":10.61,"Kp":1.0},{"θn":111.7,"time":10.76,"Kp":1.0},{"θn":122.6,"time":10.91,"Kp":1.0},{"θn":134.6,"time":11.06,"Kp":1.0},{"θn":147.9,"time":11.21,"Kp":1.0},{"θn":162.4,"time":11.37,"Kp":1.0},{"θn":178.4,"time":11.516,"Kp":1.0},{"θn":195.9,"time":11.664,"Kp":1.0},{"θn":215.1,"time":11.82,"Kp":1.0},{"θn":236.2,"time":11.97,"Kp":1.0},{"θn":259.5,"time":12.125,"Kp":1.0},{"θn":284.8,"time":12.27,"Kp":1.0},{"θn":312.8,"time":12.42,"Kp":1.0},{"θn":343.5,"time":12.58,"Kp":1.0},{"θn":377.2,"time":12.73,"Kp":1.0},{"θn":414.2,"time":12.875,"Kp":1.0},{"θn":455.0,"time":13.03,"Kp":1.0},{"θn":499.5,"time":13.18,"Kp":1.0},{"θn":548.5,"time":13.336,"Kp":1.0},{"θn":602.5,"time":13.484,"Kp":1.0},{"θn":661.5,"time":13.63,"Kp":1.0},{"θn":726.5,"time":13.79,"Kp":1.0},{"θn":798.0,"time":13.94,"Kp":1.0},{"θn":876.0,"time":14.09,"Kp":1.0},{"θn":962.0,"time":14.24,"Kp":1.0},{"θn":1.056e3,"time":14.39,"Kp":1.0},{"θn":1.16e3,"time":14.55,"Kp":1.0},{"θn":1.274e3,"time":14.695,"Kp":1.0},{"θn":1.399e3,"time":14.85,"Kp":1.0},{"θn":1.537e3,"time":15.0,"Kp":1.0},{"θn":0.2,"time":0.0,"Kp":1.1},{"θn":0.202,"time":0.1515,"Kp":1.1},{"θn":0.2075,"time":0.303,"Kp":1.1},{"θn":0.2163,"time":0.4546,"Kp":1.1},{"θn":0.228,"time":0.606,"Kp":1.1},{"θn":0.2424,"time":0.758,"Kp":1.1},{"θn":0.2595,"time":0.909,"Kp":1.1},{"θn":0.279,"time":1.061,"Kp":1.1},{"θn":0.3013,"time":1.212,"Kp":1.1},{"θn":0.3262,"time":1.363,"Kp":1.1},{"θn":0.354,"time":1.516,"Kp":1.1},{"θn":0.3845,"time":1.667,"Kp":1.1},{"θn":0.4182,"time":1.818,"Kp":1.1},{"θn":0.455,"time":1.97,"Kp":1.1},{"θn":0.4956,"time":2.121,"Kp":1.1},{"θn":0.54,"time":2.273,"Kp":1.1},{"θn":0.5884,"time":2.424,"Kp":1.1},{"θn":0.6416,"time":2.576,"Kp":1.1},{"θn":0.699,"time":2.727,"Kp":1.1},{"θn":0.762,"time":2.879,"Kp":1.1},{"θn":0.831,"time":3.031,"Kp":1.1},{"θn":0.9062,"time":3.182,"Kp":1.1},{"θn":0.9883,"time":3.334,"Kp":1.1},{"θn":1.078,"time":3.484,"Kp":1.1},{"θn":1.176,"time":3.637,"Kp":1.1},{"θn":1.282,"time":3.787,"Kp":1.1},{"θn":1.398,"time":3.94,"Kp":1.1},{"θn":1.524,"time":4.09,"Kp":1.1},{"θn":1.663,"time":4.242,"Kp":1.1},{"θn":1.813,"time":4.395,"Kp":1.1},{"θn":1.978,"time":4.547,"Kp":1.1},{"θn":2.156,"time":4.695,"Kp":1.1},{"θn":2.352,"time":4.848,"Kp":1.1},{"θn":2.564,"time":5.0,"Kp":1.1},{"θn":2.797,"time":5.152,"Kp":1.1},{"θn":3.05,"time":5.305,"Kp":1.1},{"θn":3.328,"time":5.453,"Kp":1.1},{"θn":3.629,"time":5.605,"Kp":1.1},{"θn":3.957,"time":5.758,"Kp":1.1},{"θn":4.316,"time":5.91,"Kp":1.1},{"θn":4.707,"time":6.062,"Kp":1.1},{"θn":5.133,"time":6.21,"Kp":1.1},{"θn":5.598,"time":6.363,"Kp":1.1},{"θn":6.105,"time":6.516,"Kp":1.1},{"θn":6.66,"time":6.668,"Kp":1.1},{"θn":7.26,"time":6.816,"Kp":1.1},{"θn":7.92,"time":6.97,"Kp":1.1},{"θn":8.64,"time":7.12,"Kp":1.1},{"θn":9.42,"time":7.273,"Kp":1.1},{"θn":10.27,"time":7.426,"Kp":1.1},{"θn":11.2,"time":7.574,"Kp":1.1},{"θn":12.22,"time":7.727,"Kp":1.1},{"θn":13.33,"time":7.88,"Kp":1.1},{"θn":14.53,"time":8.03,"Kp":1.1},{"θn":15.85,"time":8.18,"Kp":1.1},{"θn":17.28,"time":8.336,"Kp":1.1},{"θn":18.86,"time":8.484,"Kp":1.1},{"θn":20.56,"time":8.63,"Kp":1.1},{"θn":22.42,"time":8.79,"Kp":1.1},{"θn":24.45,"time":8.94,"Kp":1.1},{"θn":26.67,"time":9.09,"Kp":1.1},{"θn":29.1,"time":9.24,"Kp":1.1},{"θn":31.72,"time":9.39,"Kp":1.1},{"θn":34.6,"time":9.55,"Kp":1.1},{"θn":37.72,"time":9.695,"Kp":1.1},{"θn":41.16,"time":9.85,"Kp":1.1},{"θn":44.88,"time":10.0,"Kp":1.1},{"θn":48.94,"time":10.15,"Kp":1.1},{"θn":53.38,"time":10.305,"Kp":1.1},{"θn":58.22,"time":10.45,"Kp":1.1},{"θn":63.47,"time":10.61,"Kp":1.1},{"θn":69.25,"time":10.76,"Kp":1.1},{"θn":75.5,"time":10.91,"Kp":1.1},{"θn":82.4,"time":11.06,"Kp":1.1},{"θn":89.8,"time":11.21,"Kp":1.1},{"θn":97.94,"time":11.37,"Kp":1.1},{"θn":106.8,"time":11.516,"Kp":1.1},{"θn":116.5,"time":11.664,"Kp":1.1},{"θn":127.06,"time":11.82,"Kp":1.1},{"θn":138.5,"time":11.97,"Kp":1.1},{"θn":151.1,"time":12.125,"Kp":1.1},{"θn":164.8,"time":12.27,"Kp":1.1},{"θn":179.8,"time":12.42,"Kp":1.1},{"θn":196.0,"time":12.58,"Kp":1.1},{"θn":213.8,"time":12.73,"Kp":1.1},{"θn":233.1,"time":12.875,"Kp":1.1},{"θn":254.2,"time":13.03,"Kp":1.1},{"θn":277.2,"time":13.18,"Kp":1.1},{"θn":302.2,"time":13.336,"Kp":1.1},{"θn":329.8,"time":13.484,"Kp":1.1},{"θn":359.8,"time":13.63,"Kp":1.1},{"θn":392.2,"time":13.79,"Kp":1.1},{"θn":427.8,"time":13.94,"Kp":1.1},{"θn":466.5,"time":14.09,"Kp":1.1},{"θn":508.8,"time":14.24,"Kp":1.1},{"θn":555.0,"time":14.39,"Kp":1.1},{"θn":605.0,"time":14.55,"Kp":1.1},{"θn":660.0,"time":14.695,"Kp":1.1},{"θn":720.0,"time":14.85,"Kp":1.1},{"θn":785.0,"time":15.0,"Kp":1.1},{"θn":0.2,"time":0.0,"Kp":1.2},{"θn":0.2018,"time":0.1515,"Kp":1.2},{"θn":0.2067,"time":0.303,"Kp":1.2},{"θn":0.2145,"time":0.4546,"Kp":1.2},{"θn":0.2249,"time":0.606,"Kp":1.2},{"θn":0.2375,"time":0.758,"Kp":1.2},{"θn":0.2524,"time":0.909,"Kp":1.2},{"θn":0.2698,"time":1.061,"Kp":1.2},{"θn":0.289,"time":1.212,"Kp":1.2},{"θn":0.3108,"time":1.363,"Kp":1.2},{"θn":0.3345,"time":1.516,"Kp":1.2},{"θn":0.3608,"time":1.667,"Kp":1.2},{"θn":0.3894,"time":1.818,"Kp":1.2},{"θn":0.421,"time":1.97,"Kp":1.2},{"θn":0.4548,"time":2.121,"Kp":1.2},{"θn":0.492,"time":2.273,"Kp":1.2},{"θn":0.532,"time":2.424,"Kp":1.2},{"θn":0.5757,"time":2.576,"Kp":1.2},{"θn":0.623,"time":2.727,"Kp":1.2},{"θn":0.6743,"time":2.879,"Kp":1.2},{"θn":0.73,"time":3.031,"Kp":1.2},{"θn":0.7905,"time":3.182,"Kp":1.2},{"θn":0.8555,"time":3.334,"Kp":1.2},{"θn":0.9263,"time":3.484,"Kp":1.2},{"θn":1.003,"time":3.637,"Kp":1.2},{"θn":1.086,"time":3.787,"Kp":1.2},{"θn":1.176,"time":3.94,"Kp":1.2},{"θn":1.273,"time":4.09,"Kp":1.2},{"θn":1.378,"time":4.242,"Kp":1.2},{"θn":1.492,"time":4.395,"Kp":1.2},{"θn":1.616,"time":4.547,"Kp":1.2},{"θn":1.749,"time":4.695,"Kp":1.2},{"θn":1.895,"time":4.848,"Kp":1.2},{"θn":2.05,"time":5.0,"Kp":1.2},{"θn":2.22,"time":5.152,"Kp":1.2},{"θn":2.404,"time":5.305,"Kp":1.2},{"θn":2.604,"time":5.453,"Kp":1.2},{"θn":2.818,"time":5.605,"Kp":1.2},{"θn":3.053,"time":5.758,"Kp":1.2},{"θn":3.305,"time":5.91,"Kp":1.2},{"θn":3.578,"time":6.062,"Kp":1.2},{"θn":3.873,"time":6.21,"Kp":1.2},{"θn":4.195,"time":6.363,"Kp":1.2},{"θn":4.543,"time":6.516,"Kp":1.2},{"θn":4.918,"time":6.668,"Kp":1.2},{"θn":5.324,"time":6.816,"Kp":1.2},{"θn":5.766,"time":6.97,"Kp":1.2},{"θn":6.242,"time":7.12,"Kp":1.2},{"θn":6.758,"time":7.273,"Kp":1.2},{"θn":7.316,"time":7.426,"Kp":1.2},{"θn":7.92,"time":7.574,"Kp":1.2},{"θn":8.58,"time":7.727,"Kp":1.2},{"θn":9.29,"time":7.88,"Kp":1.2},{"θn":10.055,"time":8.03,"Kp":1.2},{"θn":10.89,"time":8.18,"Kp":1.2},{"θn":11.79,"time":8.336,"Kp":1.2},{"θn":12.766,"time":8.484,"Kp":1.2},{"θn":13.82,"time":8.63,"Kp":1.2},{"θn":14.97,"time":8.79,"Kp":1.2},{"θn":16.2,"time":8.94,"Kp":1.2},{"θn":17.55,"time":9.09,"Kp":1.2},{"θn":19.0,"time":9.24,"Kp":1.2},{"θn":20.56,"time":9.39,"Kp":1.2},{"θn":22.27,"time":9.55,"Kp":1.2},{"θn":24.11,"time":9.695,"Kp":1.2},{"θn":26.11,"time":9.85,"Kp":1.2},{"θn":28.27,"time":10.0,"Kp":1.2},{"θn":30.61,"time":10.15,"Kp":1.2},{"θn":33.12,"time":10.305,"Kp":1.2},{"θn":35.88,"time":10.45,"Kp":1.2},{"θn":38.84,"time":10.61,"Kp":1.2},{"θn":42.06,"time":10.76,"Kp":1.2},{"θn":45.53,"time":10.91,"Kp":1.2},{"θn":49.3,"time":11.06,"Kp":1.2},{"θn":53.4,"time":11.21,"Kp":1.2},{"θn":57.8,"time":11.37,"Kp":1.2},{"θn":62.6,"time":11.516,"Kp":1.2},{"θn":67.75,"time":11.664,"Kp":1.2},{"θn":73.4,"time":11.82,"Kp":1.2},{"θn":79.44,"time":11.97,"Kp":1.2},{"θn":86.0,"time":12.125,"Kp":1.2},{"θn":93.1,"time":12.27,"Kp":1.2},{"θn":100.9,"time":12.42,"Kp":1.2},{"θn":109.2,"time":12.58,"Kp":1.2},{"θn":118.25,"time":12.73,"Kp":1.2},{"θn":128.0,"time":12.875,"Kp":1.2},{"θn":138.6,"time":13.03,"Kp":1.2},{"θn":150.1,"time":13.18,"Kp":1.2},{"θn":162.5,"time":13.336,"Kp":1.2},{"θn":176.0,"time":13.484,"Kp":1.2},{"θn":190.5,"time":13.63,"Kp":1.2},{"θn":206.2,"time":13.79,"Kp":1.2},{"θn":223.4,"time":13.94,"Kp":1.2},{"θn":241.8,"time":14.09,"Kp":1.2},{"θn":261.8,"time":14.24,"Kp":1.2},{"θn":283.5,"time":14.39,"Kp":1.2},{"θn":307.0,"time":14.55,"Kp":1.2},{"θn":332.2,"time":14.695,"Kp":1.2},{"θn":359.8,"time":14.85,"Kp":1.2},{"θn":389.5,"time":15.0,"Kp":1.2},{"θn":0.2,"time":0.0,"Kp":1.3},{"θn":0.2015,"time":0.1515,"Kp":1.3},{"θn":0.2058,"time":0.303,"Kp":1.3},{"θn":0.2126,"time":0.4546,"Kp":1.3},{"θn":0.2217,"time":0.606,"Kp":1.3},{"θn":0.2327,"time":0.758,"Kp":1.3},{"θn":0.2457,"time":0.909,"Kp":1.3},{"θn":0.2605,"time":1.061,"Kp":1.3},{"θn":0.277,"time":1.212,"Kp":1.3},{"θn":0.2957,"time":1.363,"Kp":1.3},{"θn":0.316,"time":1.516,"Kp":1.3},{"θn":0.338,"time":1.667,"Kp":1.3},{"θn":0.362,"time":1.818,"Kp":1.3},{"θn":0.388,"time":1.97,"Kp":1.3},{"θn":0.4163,"time":2.121,"Kp":1.3},{"θn":0.4468,"time":2.273,"Kp":1.3},{"θn":0.4795,"time":2.424,"Kp":1.3},{"θn":0.515,"time":2.576,"Kp":1.3},{"θn":0.553,"time":2.727,"Kp":1.3},{"θn":0.594,"time":2.879,"Kp":1.3},{"θn":0.638,"time":3.031,"Kp":1.3},{"θn":0.6855,"time":3.182,"Kp":1.3},{"θn":0.7363,"time":3.334,"Kp":1.3},{"θn":0.7915,"time":3.484,"Kp":1.3},{"θn":0.85,"time":3.637,"Kp":1.3},{"θn":0.9136,"time":3.787,"Kp":1.3},{"θn":0.982,"time":3.94,"Kp":1.3},{"θn":1.055,"time":4.09,"Kp":1.3},{"θn":1.134,"time":4.242,"Kp":1.3},{"θn":1.218,"time":4.395,"Kp":1.3},{"θn":1.309,"time":4.547,"Kp":1.3},{"θn":1.406,"time":4.695,"Kp":1.3},{"θn":1.512,"time":4.848,"Kp":1.3},{"θn":1.624,"time":5.0,"Kp":1.3},{"θn":1.745,"time":5.152,"Kp":1.3},{"θn":1.875,"time":5.305,"Kp":1.3},{"θn":2.016,"time":5.453,"Kp":1.3},{"θn":2.166,"time":5.605,"Kp":1.3},{"θn":2.326,"time":5.758,"Kp":1.3},{"θn":2.5,"time":5.91,"Kp":1.3},{"θn":2.688,"time":6.062,"Kp":1.3},{"θn":2.887,"time":6.21,"Kp":1.3},{"θn":3.102,"time":6.363,"Kp":1.3},{"θn":3.334,"time":6.516,"Kp":1.3},{"θn":3.582,"time":6.668,"Kp":1.3},{"θn":3.85,"time":6.816,"Kp":1.3},{"θn":4.137,"time":6.97,"Kp":1.3},{"θn":4.445,"time":7.12,"Kp":1.3},{"θn":4.777,"time":7.273,"Kp":1.3},{"θn":5.133,"time":7.426,"Kp":1.3},{"θn":5.516,"time":7.574,"Kp":1.3},{"θn":5.926,"time":7.727,"Kp":1.3},{"θn":6.367,"time":7.88,"Kp":1.3},{"θn":6.844,"time":8.03,"Kp":1.3},{"θn":7.355,"time":8.18,"Kp":1.3},{"θn":7.902,"time":8.336,"Kp":1.3},{"θn":8.49,"time":8.484,"Kp":1.3},{"θn":9.125,"time":8.63,"Kp":1.3},{"θn":9.805,"time":8.79,"Kp":1.3},{"θn":10.54,"time":8.94,"Kp":1.3},{"θn":11.32,"time":9.09,"Kp":1.3},{"θn":12.164,"time":9.24,"Kp":1.3},{"θn":13.07,"time":9.39,"Kp":1.3},{"θn":14.05,"time":9.55,"Kp":1.3},{"θn":15.09,"time":9.695,"Kp":1.3},{"θn":16.22,"time":9.85,"Kp":1.3},{"θn":17.44,"time":10.0,"Kp":1.3},{"θn":18.73,"time":10.15,"Kp":1.3},{"θn":20.12,"time":10.305,"Kp":1.3},{"θn":21.62,"time":10.45,"Kp":1.3},{"θn":23.23,"time":10.61,"Kp":1.3},{"θn":24.97,"time":10.76,"Kp":1.3},{"θn":26.84,"time":10.91,"Kp":1.3},{"θn":28.84,"time":11.06,"Kp":1.3},{"θn":30.98,"time":11.21,"Kp":1.3},{"θn":33.3,"time":11.37,"Kp":1.3},{"θn":35.78,"time":11.516,"Kp":1.3},{"θn":38.44,"time":11.664,"Kp":1.3},{"θn":41.3,"time":11.82,"Kp":1.3},{"θn":44.4,"time":11.97,"Kp":1.3},{"θn":47.72,"time":12.125,"Kp":1.3},{"θn":51.28,"time":12.27,"Kp":1.3},{"θn":55.1,"time":12.42,"Kp":1.3},{"θn":59.2,"time":12.58,"Kp":1.3},{"θn":63.62,"time":12.73,"Kp":1.3},{"θn":68.4,"time":12.875,"Kp":1.3},{"θn":73.44,"time":13.03,"Kp":1.3},{"θn":78.94,"time":13.18,"Kp":1.3},{"θn":84.8,"time":13.336,"Kp":1.3},{"θn":91.1,"time":13.484,"Kp":1.3},{"θn":97.94,"time":13.63,"Kp":1.3},{"θn":105.25,"time":13.79,"Kp":1.3},{"θn":113.06,"time":13.94,"Kp":1.3},{"θn":121.5,"time":14.09,"Kp":1.3},{"θn":130.6,"time":14.24,"Kp":1.3},{"θn":140.4,"time":14.39,"Kp":1.3},{"θn":150.8,"time":14.55,"Kp":1.3},{"θn":162.0,"time":14.695,"Kp":1.3},{"θn":174.1,"time":14.85,"Kp":1.3},{"θn":187.1,"time":15.0,"Kp":1.3},{"θn":0.2,"time":0.0,"Kp":1.4},{"θn":0.2013,"time":0.1515,"Kp":1.4},{"θn":0.205,"time":0.303,"Kp":1.4},{"θn":0.2108,"time":0.4546,"Kp":1.4},{"θn":0.2185,"time":0.606,"Kp":1.4},{"θn":0.2279,"time":0.758,"Kp":1.4},{"θn":0.2389,"time":0.909,"Kp":1.4},{"θn":0.2515,"time":1.061,"Kp":1.4},{"θn":0.2654,"time":1.212,"Kp":1.4},{"θn":0.2808,"time":1.363,"Kp":1.4},{"θn":0.2976,"time":1.516,"Kp":1.4},{"θn":0.316,"time":1.667,"Kp":1.4},{"θn":0.3357,"time":1.818,"Kp":1.4},{"θn":0.357,"time":1.97,"Kp":1.4},{"θn":0.3796,"time":2.121,"Kp":1.4},{"θn":0.4043,"time":2.273,"Kp":1.4},{"θn":0.4304,"time":2.424,"Kp":1.4},{"θn":0.4585,"time":2.576,"Kp":1.4},{"θn":0.4885,"time":2.727,"Kp":1.4},{"θn":0.5205,"time":2.879,"Kp":1.4},{"θn":0.5547,"time":3.031,"Kp":1.4},{"θn":0.591,"time":3.182,"Kp":1.4},{"θn":0.63,"time":3.334,"Kp":1.4},{"θn":0.6714,"time":3.484,"Kp":1.4},{"θn":0.716,"time":3.637,"Kp":1.4},{"θn":0.7627,"time":3.787,"Kp":1.4},{"θn":0.813,"time":3.94,"Kp":1.4},{"θn":0.8667,"time":4.09,"Kp":1.4},{"θn":0.924,"time":4.242,"Kp":1.4},{"θn":0.985,"time":4.395,"Kp":1.4},{"θn":1.05,"time":4.547,"Kp":1.4},{"θn":1.119,"time":4.695,"Kp":1.4},{"θn":1.193,"time":4.848,"Kp":1.4},{"θn":1.271,"time":5.0,"Kp":1.4},{"θn":1.355,"time":5.152,"Kp":1.4},{"θn":1.445,"time":5.305,"Kp":1.4},{"θn":1.541,"time":5.453,"Kp":1.4},{"θn":1.643,"time":5.605,"Kp":1.4},{"θn":1.751,"time":5.758,"Kp":1.4},{"θn":1.866,"time":5.91,"Kp":1.4},{"θn":1.989,"time":6.062,"Kp":1.4},{"θn":2.121,"time":6.21,"Kp":1.4},{"θn":2.262,"time":6.363,"Kp":1.4},{"θn":2.41,"time":6.516,"Kp":1.4},{"θn":2.57,"time":6.668,"Kp":1.4},{"θn":2.738,"time":6.816,"Kp":1.4},{"θn":2.92,"time":6.97,"Kp":1.4},{"θn":3.113,"time":7.12,"Kp":1.4},{"θn":3.318,"time":7.273,"Kp":1.4},{"θn":3.537,"time":7.426,"Kp":1.4},{"θn":3.771,"time":7.574,"Kp":1.4},{"θn":4.02,"time":7.727,"Kp":1.4},{"θn":4.285,"time":7.88,"Kp":1.4},{"θn":4.566,"time":8.03,"Kp":1.4},{"θn":4.87,"time":8.18,"Kp":1.4},{"θn":5.19,"time":8.336,"Kp":1.4},{"θn":5.535,"time":8.484,"Kp":1.4},{"θn":5.9,"time":8.63,"Kp":1.4},{"θn":6.29,"time":8.79,"Kp":1.4},{"θn":6.703,"time":8.94,"Kp":1.4},{"θn":7.15,"time":9.09,"Kp":1.4},{"θn":7.617,"time":9.24,"Kp":1.4},{"θn":8.125,"time":9.39,"Kp":1.4},{"θn":8.66,"time":9.55,"Kp":1.4},{"θn":9.23,"time":9.695,"Kp":1.4},{"θn":9.836,"time":9.85,"Kp":1.4},{"θn":10.484,"time":10.0,"Kp":1.4},{"θn":11.18,"time":10.15,"Kp":1.4},{"θn":11.92,"time":10.305,"Kp":1.4},{"θn":12.7,"time":10.45,"Kp":1.4},{"θn":13.55,"time":10.61,"Kp":1.4},{"θn":14.44,"time":10.76,"Kp":1.4},{"θn":15.39,"time":10.91,"Kp":1.4},{"θn":16.4,"time":11.06,"Kp":1.4},{"θn":17.48,"time":11.21,"Kp":1.4},{"θn":18.64,"time":11.37,"Kp":1.4},{"θn":19.88,"time":11.516,"Kp":1.4},{"θn":21.19,"time":11.664,"Kp":1.4},{"θn":22.6,"time":11.82,"Kp":1.4},{"θn":24.08,"time":11.97,"Kp":1.4},{"θn":25.67,"time":12.125,"Kp":1.4},{"θn":27.36,"time":12.27,"Kp":1.4},{"θn":29.17,"time":12.42,"Kp":1.4},{"θn":31.1,"time":12.58,"Kp":1.4},{"θn":33.16,"time":12.73,"Kp":1.4},{"θn":35.34,"time":12.875,"Kp":1.4},{"θn":37.66,"time":13.03,"Kp":1.4},{"θn":40.16,"time":13.18,"Kp":1.4},{"θn":42.8,"time":13.336,"Kp":1.4},{"θn":45.62,"time":13.484,"Kp":1.4},{"θn":48.66,"time":13.63,"Kp":1.4},{"θn":51.84,"time":13.79,"Kp":1.4},{"θn":55.28,"time":13.94,"Kp":1.4},{"θn":58.94,"time":14.09,"Kp":1.4},{"θn":62.8,"time":14.24,"Kp":1.4},{"θn":66.94,"time":14.39,"Kp":1.4},{"θn":71.4,"time":14.55,"Kp":1.4},{"θn":76.1,"time":14.695,"Kp":1.4},{"θn":81.1,"time":14.85,"Kp":1.4},{"θn":86.5,"time":15.0,"Kp":1.4},{"θn":0.2,"time":0.0,"Kp":1.5},{"θn":0.201,"time":0.1515,"Kp":1.5},{"θn":0.2042,"time":0.303,"Kp":1.5},{"θn":0.209,"time":0.4546,"Kp":1.5},{"θn":0.2153,"time":0.606,"Kp":1.5},{"θn":0.2231,"time":0.758,"Kp":1.5},{"θn":0.2322,"time":0.909,"Kp":1.5},{"θn":0.2424,"time":1.061,"Kp":1.5},{"θn":0.254,"time":1.212,"Kp":1.5},{"θn":0.2664,"time":1.363,"Kp":1.5},{"θn":0.28,"time":1.516,"Kp":1.5},{"θn":0.2947,"time":1.667,"Kp":1.5},{"θn":0.3103,"time":1.818,"Kp":1.5},{"θn":0.3271,"time":1.97,"Kp":1.5},{"θn":0.3452,"time":2.121,"Kp":1.5},{"θn":0.3643,"time":2.273,"Kp":1.5},{"θn":0.3845,"time":2.424,"Kp":1.5},{"θn":0.4062,"time":2.576,"Kp":1.5},{"θn":0.429,"time":2.727,"Kp":1.5},{"θn":0.4534,"time":2.879,"Kp":1.5},{"θn":0.479,"time":3.031,"Kp":1.5},{"θn":0.506,"time":3.182,"Kp":1.5},{"θn":0.5347,"time":3.334,"Kp":1.5},{"θn":0.565,"time":3.484,"Kp":1.5},{"θn":0.597,"time":3.637,"Kp":1.5},{"θn":0.6313,"time":3.787,"Kp":1.5},{"θn":0.667,"time":3.94,"Kp":1.5},{"θn":0.705,"time":4.09,"Kp":1.5},{"θn":0.7456,"time":4.242,"Kp":1.5},{"θn":0.788,"time":4.395,"Kp":1.5},{"θn":0.833,"time":4.547,"Kp":1.5},{"θn":0.8804,"time":4.695,"Kp":1.5},{"θn":0.9307,"time":4.848,"Kp":1.5},{"θn":0.9834,"time":5.0,"Kp":1.5},{"θn":1.039,"time":5.152,"Kp":1.5},{"θn":1.099,"time":5.305,"Kp":1.5},{"θn":1.161,"time":5.453,"Kp":1.5},{"θn":1.228,"time":5.605,"Kp":1.5},{"θn":1.298,"time":5.758,"Kp":1.5},{"θn":1.372,"time":5.91,"Kp":1.5},{"θn":1.45,"time":6.062,"Kp":1.5},{"θn":1.532,"time":6.21,"Kp":1.5},{"θn":1.62,"time":6.363,"Kp":1.5},{"θn":1.712,"time":6.516,"Kp":1.5},{"θn":1.81,"time":6.668,"Kp":1.5},{"θn":1.913,"time":6.816,"Kp":1.5},{"θn":2.021,"time":6.97,"Kp":1.5},{"θn":2.137,"time":7.12,"Kp":1.5},{"θn":2.26,"time":7.273,"Kp":1.5},{"θn":2.389,"time":7.426,"Kp":1.5},{"θn":2.525,"time":7.574,"Kp":1.5},{"θn":2.668,"time":7.727,"Kp":1.5},{"θn":2.82,"time":7.88,"Kp":1.5},{"θn":2.982,"time":8.03,"Kp":1.5},{"θn":3.152,"time":8.18,"Kp":1.5},{"θn":3.332,"time":8.336,"Kp":1.5},{"θn":3.521,"time":8.484,"Kp":1.5},{"θn":3.723,"time":8.63,"Kp":1.5},{"θn":3.934,"time":8.79,"Kp":1.5},{"θn":4.16,"time":8.94,"Kp":1.5},{"θn":4.395,"time":9.09,"Kp":1.5},{"θn":4.645,"time":9.24,"Kp":1.5},{"θn":4.91,"time":9.39,"Kp":1.5},{"θn":5.19,"time":9.55,"Kp":1.5},{"θn":5.49,"time":9.695,"Kp":1.5},{"θn":5.8,"time":9.85,"Kp":1.5},{"θn":6.133,"time":10.0,"Kp":1.5},{"θn":6.48,"time":10.15,"Kp":1.5},{"θn":6.85,"time":10.305,"Kp":1.5},{"θn":7.242,"time":10.45,"Kp":1.5},{"θn":7.652,"time":10.61,"Kp":1.5},{"θn":8.09,"time":10.76,"Kp":1.5},{"θn":8.555,"time":10.91,"Kp":1.5},{"θn":9.04,"time":11.06,"Kp":1.5},{"θn":9.555,"time":11.21,"Kp":1.5},{"θn":10.1,"time":11.37,"Kp":1.5},{"θn":10.67,"time":11.516,"Kp":1.5},{"θn":11.28,"time":11.664,"Kp":1.5},{"θn":11.93,"time":11.82,"Kp":1.5},{"θn":12.61,"time":11.97,"Kp":1.5},{"θn":13.33,"time":12.125,"Kp":1.5},{"θn":14.086,"time":12.27,"Kp":1.5},{"θn":14.89,"time":12.42,"Kp":1.5},{"θn":15.74,"time":12.58,"Kp":1.5},{"θn":16.64,"time":12.73,"Kp":1.5},{"θn":17.58,"time":12.875,"Kp":1.5},{"θn":18.6,"time":13.03,"Kp":1.5},{"θn":19.64,"time":13.18,"Kp":1.5},{"θn":20.77,"time":13.336,"Kp":1.5},{"θn":21.95,"time":13.484,"Kp":1.5},{"θn":23.2,"time":13.63,"Kp":1.5},{"θn":24.53,"time":13.79,"Kp":1.5},{"θn":25.92,"time":13.94,"Kp":1.5},{"θn":27.4,"time":14.09,"Kp":1.5},{"θn":28.97,"time":14.24,"Kp":1.5},{"θn":30.62,"time":14.39,"Kp":1.5},{"θn":32.38,"time":14.55,"Kp":1.5},{"θn":34.22,"time":14.695,"Kp":1.5},{"θn":36.16,"time":14.85,"Kp":1.5},{"θn":38.22,"time":15.0,"Kp":1.5},{"θn":0.2,"time":0.0,"Kp":1.6},{"θn":0.2009,"time":0.1515,"Kp":1.6},{"θn":0.2034,"time":0.303,"Kp":1.6},{"θn":0.2072,"time":0.4546,"Kp":1.6},{"θn":0.2123,"time":0.606,"Kp":1.6},{"θn":0.2184,"time":0.758,"Kp":1.6},{"θn":0.2256,"time":0.909,"Kp":1.6},{"θn":0.2336,"time":1.061,"Kp":1.6},{"θn":0.2427,"time":1.212,"Kp":1.6},{"θn":0.2524,"time":1.363,"Kp":1.6},{"θn":0.263,"time":1.516,"Kp":1.6},{"θn":0.2742,"time":1.667,"Kp":1.6},{"θn":0.2864,"time":1.818,"Kp":1.6},{"θn":0.299,"time":1.97,"Kp":1.6},{"θn":0.3125,"time":2.121,"Kp":1.6},{"θn":0.327,"time":2.273,"Kp":1.6},{"θn":0.342,"time":2.424,"Kp":1.6},{"θn":0.358,"time":2.576,"Kp":1.6},{"θn":0.3745,"time":2.727,"Kp":1.6},{"θn":0.392,"time":2.879,"Kp":1.6},{"θn":0.4104,"time":3.031,"Kp":1.6},{"θn":0.43,"time":3.182,"Kp":1.6},{"θn":0.4502,"time":3.334,"Kp":1.6},{"θn":0.4714,"time":3.484,"Kp":1.6},{"θn":0.4937,"time":3.637,"Kp":1.6},{"θn":0.517,"time":3.787,"Kp":1.6},{"θn":0.5415,"time":3.94,"Kp":1.6},{"θn":0.5674,"time":4.09,"Kp":1.6},{"θn":0.594,"time":4.242,"Kp":1.6},{"θn":0.622,"time":4.395,"Kp":1.6},{"θn":0.652,"time":4.547,"Kp":1.6},{"θn":0.6826,"time":4.695,"Kp":1.6},{"θn":0.7153,"time":4.848,"Kp":1.6},{"θn":0.749,"time":5.0,"Kp":1.6},{"θn":0.7847,"time":5.152,"Kp":1.6},{"θn":0.822,"time":5.305,"Kp":1.6},{"θn":0.861,"time":5.453,"Kp":1.6},{"θn":0.902,"time":5.605,"Kp":1.6},{"θn":0.945,"time":5.758,"Kp":1.6},{"θn":0.9897,"time":5.91,"Kp":1.6},{"θn":1.036,"time":6.062,"Kp":1.6},{"θn":1.086,"time":6.21,"Kp":1.6},{"θn":1.138,"time":6.363,"Kp":1.6},{"θn":1.191,"time":6.516,"Kp":1.6},{"θn":1.248,"time":6.668,"Kp":1.6},{"θn":1.308,"time":6.816,"Kp":1.6},{"θn":1.369,"time":6.97,"Kp":1.6},{"θn":1.435,"time":7.12,"Kp":1.6},{"θn":1.502,"time":7.273,"Kp":1.6},{"θn":1.573,"time":7.426,"Kp":1.6},{"θn":1.648,"time":7.574,"Kp":1.6},{"θn":1.727,"time":7.727,"Kp":1.6},{"θn":1.809,"time":7.88,"Kp":1.6},{"θn":1.895,"time":8.03,"Kp":1.6},{"θn":1.984,"time":8.18,"Kp":1.6},{"θn":2.078,"time":8.336,"Kp":1.6},{"θn":2.178,"time":8.484,"Kp":1.6},{"θn":2.281,"time":8.63,"Kp":1.6},{"θn":2.389,"time":8.79,"Kp":1.6},{"θn":2.502,"time":8.94,"Kp":1.6},{"θn":2.621,"time":9.09,"Kp":1.6},{"θn":2.746,"time":9.24,"Kp":1.6},{"θn":2.877,"time":9.39,"Kp":1.6},{"θn":3.014,"time":9.55,"Kp":1.6},{"θn":3.156,"time":9.695,"Kp":1.6},{"θn":3.307,"time":9.85,"Kp":1.6},{"θn":3.463,"time":10.0,"Kp":1.6},{"θn":3.627,"time":10.15,"Kp":1.6},{"θn":3.8,"time":10.305,"Kp":1.6},{"θn":3.98,"time":10.45,"Kp":1.6},{"θn":4.168,"time":10.61,"Kp":1.6},{"θn":4.367,"time":10.76,"Kp":1.6},{"θn":4.574,"time":10.91,"Kp":1.6},{"θn":4.793,"time":11.06,"Kp":1.6},{"θn":5.02,"time":11.21,"Kp":1.6},{"θn":5.258,"time":11.37,"Kp":1.6},{"θn":5.508,"time":11.516,"Kp":1.6},{"θn":5.77,"time":11.664,"Kp":1.6},{"θn":6.043,"time":11.82,"Kp":1.6},{"θn":6.332,"time":11.97,"Kp":1.6},{"θn":6.633,"time":12.125,"Kp":1.6},{"θn":6.945,"time":12.27,"Kp":1.6},{"θn":7.277,"time":12.42,"Kp":1.6},{"θn":7.62,"time":12.58,"Kp":1.6},{"θn":7.984,"time":12.73,"Kp":1.6},{"θn":8.36,"time":12.875,"Kp":1.6},{"θn":8.76,"time":13.03,"Kp":1.6},{"θn":9.17,"time":13.18,"Kp":1.6},{"θn":9.61,"time":13.336,"Kp":1.6},{"θn":10.07,"time":13.484,"Kp":1.6},{"θn":10.55,"time":13.63,"Kp":1.6},{"θn":11.05,"time":13.79,"Kp":1.6},{"θn":11.57,"time":13.94,"Kp":1.6},{"θn":12.12,"time":14.09,"Kp":1.6},{"θn":12.695,"time":14.24,"Kp":1.6},{"θn":13.3,"time":14.39,"Kp":1.6},{"θn":13.93,"time":14.55,"Kp":1.6},{"θn":14.59,"time":14.695,"Kp":1.6},{"θn":15.29,"time":14.85,"Kp":1.6},{"θn":16.02,"time":15.0,"Kp":1.6},{"θn":0.2,"time":0.0,"Kp":1.7},{"θn":0.2007,"time":0.1515,"Kp":1.7},{"θn":0.2025,"time":0.303,"Kp":1.7},{"θn":0.2054,"time":0.4546,"Kp":1.7},{"θn":0.2092,"time":0.606,"Kp":1.7},{"θn":0.2137,"time":0.758,"Kp":1.7},{"θn":0.2191,"time":0.909,"Kp":1.7},{"θn":0.2251,"time":1.061,"Kp":1.7},{"θn":0.2316,"time":1.212,"Kp":1.7},{"θn":0.2388,"time":1.363,"Kp":1.7},{"θn":0.2465,"time":1.516,"Kp":1.7},{"θn":0.2546,"time":1.667,"Kp":1.7},{"θn":0.2632,"time":1.818,"Kp":1.7},{"θn":0.2722,"time":1.97,"Kp":1.7},{"θn":0.2817,"time":2.121,"Kp":1.7},{"θn":0.2917,"time":2.273,"Kp":1.7},{"θn":0.3022,"time":2.424,"Kp":1.7},{"θn":0.3132,"time":2.576,"Kp":1.7},{"θn":0.3247,"time":2.727,"Kp":1.7},{"θn":0.3367,"time":2.879,"Kp":1.7},{"θn":0.3489,"time":3.031,"Kp":1.7},{"θn":0.3618,"time":3.182,"Kp":1.7},{"θn":0.3752,"time":3.334,"Kp":1.7},{"θn":0.389,"time":3.484,"Kp":1.7},{"θn":0.4033,"time":3.637,"Kp":1.7},{"θn":0.4185,"time":3.787,"Kp":1.7},{"θn":0.4338,"time":3.94,"Kp":1.7},{"θn":0.45,"time":4.09,"Kp":1.7},{"θn":0.4668,"time":4.242,"Kp":1.7},{"θn":0.4841,"time":4.395,"Kp":1.7},{"θn":0.5024,"time":4.547,"Kp":1.7},{"θn":0.521,"time":4.695,"Kp":1.7},{"θn":0.5405,"time":4.848,"Kp":1.7},{"θn":0.5605,"time":5.0,"Kp":1.7},{"θn":0.5815,"time":5.152,"Kp":1.7},{"θn":0.603,"time":5.305,"Kp":1.7},{"θn":0.6255,"time":5.453,"Kp":1.7},{"θn":0.649,"time":5.605,"Kp":1.7},{"θn":0.673,"time":5.758,"Kp":1.7},{"θn":0.698,"time":5.91,"Kp":1.7},{"θn":0.724,"time":6.062,"Kp":1.7},{"θn":0.751,"time":6.21,"Kp":1.7},{"θn":0.7793,"time":6.363,"Kp":1.7},{"θn":0.808,"time":6.516,"Kp":1.7},{"θn":0.8384,"time":6.668,"Kp":1.7},{"θn":0.8696,"time":6.816,"Kp":1.7},{"θn":0.902,"time":6.97,"Kp":1.7},{"θn":0.9355,"time":7.12,"Kp":1.7},{"θn":0.97,"time":7.273,"Kp":1.7},{"θn":1.007,"time":7.426,"Kp":1.7},{"θn":1.044,"time":7.574,"Kp":1.7},{"θn":1.083,"time":7.727,"Kp":1.7},{"θn":1.123,"time":7.88,"Kp":1.7},{"θn":1.165,"time":8.03,"Kp":1.7},{"θn":1.209,"time":8.18,"Kp":1.7},{"θn":1.254,"time":8.336,"Kp":1.7},{"θn":1.301,"time":8.484,"Kp":1.7},{"θn":1.35,"time":8.63,"Kp":1.7},{"θn":1.399,"time":8.79,"Kp":1.7},{"θn":1.451,"time":8.94,"Kp":1.7},{"θn":1.506,"time":9.09,"Kp":1.7},{"θn":1.562,"time":9.24,"Kp":1.7},{"θn":1.62,"time":9.39,"Kp":1.7},{"θn":1.681,"time":9.55,"Kp":1.7},{"θn":1.743,"time":9.695,"Kp":1.7},{"θn":1.809,"time":9.85,"Kp":1.7},{"θn":1.876,"time":10.0,"Kp":1.7},{"θn":1.945,"time":10.15,"Kp":1.7},{"θn":2.018,"time":10.305,"Kp":1.7},{"θn":2.094,"time":10.45,"Kp":1.7},{"θn":2.172,"time":10.61,"Kp":1.7},{"θn":2.252,"time":10.76,"Kp":1.7},{"θn":2.336,"time":10.91,"Kp":1.7},{"θn":2.424,"time":11.06,"Kp":1.7},{"θn":2.514,"time":11.21,"Kp":1.7},{"θn":2.607,"time":11.37,"Kp":1.7},{"θn":2.705,"time":11.516,"Kp":1.7},{"θn":2.807,"time":11.664,"Kp":1.7},{"θn":2.91,"time":11.82,"Kp":1.7},{"θn":3.02,"time":11.97,"Kp":1.7},{"θn":3.13,"time":12.125,"Kp":1.7},{"θn":3.248,"time":12.27,"Kp":1.7},{"θn":3.37,"time":12.42,"Kp":1.7},{"θn":3.494,"time":12.58,"Kp":1.7},{"θn":3.625,"time":12.73,"Kp":1.7},{"θn":3.76,"time":12.875,"Kp":1.7},{"θn":3.9,"time":13.03,"Kp":1.7},{"θn":4.047,"time":13.18,"Kp":1.7},{"θn":4.195,"time":13.336,"Kp":1.7},{"θn":4.35,"time":13.484,"Kp":1.7},{"θn":4.516,"time":13.63,"Kp":1.7},{"θn":4.684,"time":13.79,"Kp":1.7},{"θn":4.86,"time":13.94,"Kp":1.7},{"θn":5.04,"time":14.09,"Kp":1.7},{"θn":5.227,"time":14.24,"Kp":1.7},{"θn":5.42,"time":14.39,"Kp":1.7},{"θn":5.625,"time":14.55,"Kp":1.7},{"θn":5.836,"time":14.695,"Kp":1.7},{"θn":6.05,"time":14.85,"Kp":1.7},{"θn":6.277,"time":15.0,"Kp":1.7},{"θn":0.2,"time":0.0,"Kp":1.8},{"θn":0.2004,"time":0.1515,"Kp":1.8},{"θn":0.2017,"time":0.303,"Kp":1.8},{"θn":0.2036,"time":0.4546,"Kp":1.8},{"θn":0.206,"time":0.606,"Kp":1.8},{"θn":0.2091,"time":0.758,"Kp":1.8},{"θn":0.2126,"time":0.909,"Kp":1.8},{"θn":0.2166,"time":1.061,"Kp":1.8},{"θn":0.2208,"time":1.212,"Kp":1.8},{"θn":0.2255,"time":1.363,"Kp":1.8},{"θn":0.2305,"time":1.516,"Kp":1.8},{"θn":0.2356,"time":1.667,"Kp":1.8},{"θn":0.2411,"time":1.818,"Kp":1.8},{"θn":0.2468,"time":1.97,"Kp":1.8},{"θn":0.253,"time":2.121,"Kp":1.8},{"θn":0.259,"time":2.273,"Kp":1.8},{"θn":0.2656,"time":2.424,"Kp":1.8},{"θn":0.2722,"time":2.576,"Kp":1.8},{"θn":0.279,"time":2.727,"Kp":1.8},{"θn":0.2864,"time":2.879,"Kp":1.8},{"θn":0.2937,"time":3.031,"Kp":1.8},{"θn":0.3013,"time":3.182,"Kp":1.8},{"θn":0.3088,"time":3.334,"Kp":1.8},{"θn":0.317,"time":3.484,"Kp":1.8},{"θn":0.3252,"time":3.637,"Kp":1.8},{"θn":0.3337,"time":3.787,"Kp":1.8},{"θn":0.3423,"time":3.94,"Kp":1.8},{"θn":0.3513,"time":4.09,"Kp":1.8},{"θn":0.3604,"time":4.242,"Kp":1.8},{"θn":0.3699,"time":4.395,"Kp":1.8},{"θn":0.3796,"time":4.547,"Kp":1.8},{"θn":0.3894,"time":4.695,"Kp":1.8},{"θn":0.3997,"time":4.848,"Kp":1.8},{"θn":0.4102,"time":5.0,"Kp":1.8},{"θn":0.421,"time":5.152,"Kp":1.8},{"θn":0.432,"time":5.305,"Kp":1.8},{"θn":0.443,"time":5.453,"Kp":1.8},{"θn":0.4548,"time":5.605,"Kp":1.8},{"θn":0.4668,"time":5.758,"Kp":1.8},{"θn":0.479,"time":5.91,"Kp":1.8},{"θn":0.4915,"time":6.062,"Kp":1.8},{"θn":0.5044,"time":6.21,"Kp":1.8},{"θn":0.5176,"time":6.363,"Kp":1.8},{"θn":0.5312,"time":6.516,"Kp":1.8},{"θn":0.545,"time":6.668,"Kp":1.8},{"θn":0.5596,"time":6.816,"Kp":1.8},{"θn":0.574,"time":6.97,"Kp":1.8},{"θn":0.589,"time":7.12,"Kp":1.8},{"θn":0.6045,"time":7.273,"Kp":1.8},{"θn":0.6206,"time":7.426,"Kp":1.8},{"θn":0.6367,"time":7.574,"Kp":1.8},{"θn":0.6533,"time":7.727,"Kp":1.8},{"θn":0.6704,"time":7.88,"Kp":1.8},{"θn":0.688,"time":8.03,"Kp":1.8},{"θn":0.706,"time":8.18,"Kp":1.8},{"θn":0.7246,"time":8.336,"Kp":1.8},{"θn":0.7437,"time":8.484,"Kp":1.8},{"θn":0.763,"time":8.63,"Kp":1.8},{"θn":0.783,"time":8.79,"Kp":1.8},{"θn":0.8037,"time":8.94,"Kp":1.8},{"θn":0.8247,"time":9.09,"Kp":1.8},{"θn":0.846,"time":9.24,"Kp":1.8},{"θn":0.8687,"time":9.39,"Kp":1.8},{"θn":0.891,"time":9.55,"Kp":1.8},{"θn":0.9146,"time":9.695,"Kp":1.8},{"θn":0.9385,"time":9.85,"Kp":1.8},{"θn":0.9634,"time":10.0,"Kp":1.8},{"θn":0.989,"time":10.15,"Kp":1.8},{"θn":1.015,"time":10.305,"Kp":1.8},{"θn":1.041,"time":10.45,"Kp":1.8},{"θn":1.068,"time":10.61,"Kp":1.8},{"θn":1.097,"time":10.76,"Kp":1.8},{"θn":1.125,"time":10.91,"Kp":1.8},{"θn":1.154,"time":11.06,"Kp":1.8},{"θn":1.185,"time":11.21,"Kp":1.8},{"θn":1.216,"time":11.37,"Kp":1.8},{"θn":1.248,"time":11.516,"Kp":1.8},{"θn":1.28,"time":11.664,"Kp":1.8},{"θn":1.314,"time":11.82,"Kp":1.8},{"θn":1.349,"time":11.97,"Kp":1.8},{"θn":1.384,"time":12.125,"Kp":1.8},{"θn":1.42,"time":12.27,"Kp":1.8},{"θn":1.457,"time":12.42,"Kp":1.8},{"θn":1.496,"time":12.58,"Kp":1.8},{"θn":1.535,"time":12.73,"Kp":1.8},{"θn":1.575,"time":12.875,"Kp":1.8},{"θn":1.616,"time":13.03,"Kp":1.8},{"θn":1.659,"time":13.18,"Kp":1.8},{"θn":1.702,"time":13.336,"Kp":1.8},{"θn":1.747,"time":13.484,"Kp":1.8},{"θn":1.793,"time":13.63,"Kp":1.8},{"θn":1.84,"time":13.79,"Kp":1.8},{"θn":1.888,"time":13.94,"Kp":1.8},{"θn":1.9375,"time":14.09,"Kp":1.8},{"θn":1.988,"time":14.24,"Kp":1.8},{"θn":2.041,"time":14.39,"Kp":1.8},{"θn":2.094,"time":14.55,"Kp":1.8},{"θn":2.148,"time":14.695,"Kp":1.8},{"θn":2.205,"time":14.85,"Kp":1.8},{"θn":2.264,"time":15.0,"Kp":1.8},{"θn":0.2,"time":0.0,"Kp":1.9},{"θn":0.2002,"time":0.1515,"Kp":1.9},{"θn":0.2008,"time":0.303,"Kp":1.9},{"θn":0.2018,"time":0.4546,"Kp":1.9},{"θn":0.203,"time":0.606,"Kp":1.9},{"θn":0.2046,"time":0.758,"Kp":1.9},{"θn":0.2063,"time":0.909,"Kp":1.9},{"θn":0.2083,"time":1.061,"Kp":1.9},{"θn":0.2103,"time":1.212,"Kp":1.9},{"θn":0.2125,"time":1.363,"Kp":1.9},{"θn":0.215,"time":1.516,"Kp":1.9},{"θn":0.2174,"time":1.667,"Kp":1.9},{"θn":0.2201,"time":1.818,"Kp":1.9},{"θn":0.2228,"time":1.97,"Kp":1.9},{"θn":0.2256,"time":2.121,"Kp":1.9},{"θn":0.2285,"time":2.273,"Kp":1.9},{"θn":0.2314,"time":2.424,"Kp":1.9},{"θn":0.2345,"time":2.576,"Kp":1.9},{"θn":0.2377,"time":2.727,"Kp":1.9},{"θn":0.2408,"time":2.879,"Kp":1.9},{"θn":0.2441,"time":3.031,"Kp":1.9},{"θn":0.2474,"time":3.182,"Kp":1.9},{"θn":0.2507,"time":3.334,"Kp":1.9},{"θn":0.2542,"time":3.484,"Kp":1.9},{"θn":0.2578,"time":3.637,"Kp":1.9},{"θn":0.2612,"time":3.787,"Kp":1.9},{"θn":0.265,"time":3.94,"Kp":1.9},{"θn":0.2686,"time":4.09,"Kp":1.9},{"θn":0.2722,"time":4.242,"Kp":1.9},{"θn":0.2761,"time":4.395,"Kp":1.9},{"θn":0.28,"time":4.547,"Kp":1.9},{"θn":0.284,"time":4.695,"Kp":1.9},{"θn":0.2878,"time":4.848,"Kp":1.9},{"θn":0.2917,"time":5.0,"Kp":1.9},{"θn":0.296,"time":5.152,"Kp":1.9},{"θn":0.3,"time":5.305,"Kp":1.9},{"θn":0.3042,"time":5.453,"Kp":1.9},{"θn":0.3083,"time":5.605,"Kp":1.9},{"θn":0.3127,"time":5.758,"Kp":1.9},{"θn":0.3171,"time":5.91,"Kp":1.9},{"θn":0.3215,"time":6.062,"Kp":1.9},{"θn":0.326,"time":6.21,"Kp":1.9},{"θn":0.3306,"time":6.363,"Kp":1.9},{"θn":0.3352,"time":6.516,"Kp":1.9},{"θn":0.3398,"time":6.668,"Kp":1.9},{"θn":0.3445,"time":6.816,"Kp":1.9},{"θn":0.3494,"time":6.97,"Kp":1.9},{"θn":0.3542,"time":7.12,"Kp":1.9},{"θn":0.3591,"time":7.273,"Kp":1.9},{"θn":0.3643,"time":7.426,"Kp":1.9},{"θn":0.3694,"time":7.574,"Kp":1.9},{"θn":0.3745,"time":7.727,"Kp":1.9},{"θn":0.3796,"time":7.88,"Kp":1.9},{"θn":0.385,"time":8.03,"Kp":1.9},{"θn":0.3904,"time":8.18,"Kp":1.9},{"θn":0.396,"time":8.336,"Kp":1.9},{"θn":0.4014,"time":8.484,"Kp":1.9},{"θn":0.407,"time":8.63,"Kp":1.9},{"θn":0.4128,"time":8.79,"Kp":1.9},{"θn":0.4185,"time":8.94,"Kp":1.9},{"θn":0.4243,"time":9.09,"Kp":1.9},{"θn":0.4302,"time":9.24,"Kp":1.9},{"θn":0.4363,"time":9.39,"Kp":1.9},{"θn":0.4424,"time":9.55,"Kp":1.9},{"θn":0.4485,"time":9.695,"Kp":1.9},{"θn":0.4548,"time":9.85,"Kp":1.9},{"θn":0.4612,"time":10.0,"Kp":1.9},{"θn":0.4675,"time":10.15,"Kp":1.9},{"θn":0.474,"time":10.305,"Kp":1.9},{"θn":0.4807,"time":10.45,"Kp":1.9},{"θn":0.4875,"time":10.61,"Kp":1.9},{"θn":0.4944,"time":10.76,"Kp":1.9},{"θn":0.5015,"time":10.91,"Kp":1.9},{"θn":0.5083,"time":11.06,"Kp":1.9},{"θn":0.515,"time":11.21,"Kp":1.9},{"θn":0.5225,"time":11.37,"Kp":1.9},{"θn":0.53,"time":11.516,"Kp":1.9},{"θn":0.537,"time":11.664,"Kp":1.9},{"θn":0.545,"time":11.82,"Kp":1.9},{"θn":0.5522,"time":11.97,"Kp":1.9},{"θn":0.56,"time":12.125,"Kp":1.9},{"θn":0.568,"time":12.27,"Kp":1.9},{"θn":0.5757,"time":12.42,"Kp":1.9},{"θn":0.584,"time":12.58,"Kp":1.9},{"θn":0.5923,"time":12.73,"Kp":1.9},{"θn":0.6006,"time":12.875,"Kp":1.9},{"θn":0.609,"time":13.03,"Kp":1.9},{"θn":0.617,"time":13.18,"Kp":1.9},{"θn":0.626,"time":13.336,"Kp":1.9},{"θn":0.635,"time":13.484,"Kp":1.9},{"θn":0.6436,"time":13.63,"Kp":1.9},{"θn":0.6523,"time":13.79,"Kp":1.9},{"θn":0.6616,"time":13.94,"Kp":1.9},{"θn":0.671,"time":14.09,"Kp":1.9},{"θn":0.68,"time":14.24,"Kp":1.9},{"θn":0.69,"time":14.39,"Kp":1.9},{"θn":0.699,"time":14.55,"Kp":1.9},{"θn":0.709,"time":14.695,"Kp":1.9},{"θn":0.719,"time":14.85,"Kp":1.9},{"θn":0.729,"time":15.0,"Kp":1.9},{"θn":0.2,"time":0.0,"Kp":2.0},{"θn":0.2,"time":0.1515,"Kp":2.0},{"θn":0.2,"time":0.303,"Kp":2.0},{"θn":0.2,"time":0.4546,"Kp":2.0},{"θn":0.2,"time":0.606,"Kp":2.0},{"θn":0.2,"time":0.758,"Kp":2.0},{"θn":0.2,"time":0.909,"Kp":2.0},{"θn":0.2,"time":1.061,"Kp":2.0},{"θn":0.2,"time":1.212,"Kp":2.0},{"θn":0.2,"time":1.363,"Kp":2.0},{"θn":0.2,"time":1.516,"Kp":2.0},{"θn":0.2,"time":1.667,"Kp":2.0},{"θn":0.2,"time":1.818,"Kp":2.0},{"θn":0.2,"time":1.97,"Kp":2.0},{"θn":0.2,"time":2.121,"Kp":2.0},{"θn":0.2,"time":2.273,"Kp":2.0},{"θn":0.2,"time":2.424,"Kp":2.0},{"θn":0.2,"time":2.576,"Kp":2.0},{"θn":0.2,"time":2.727,"Kp":2.0},{"θn":0.2,"time":2.879,"Kp":2.0},{"θn":0.2,"time":3.031,"Kp":2.0},{"θn":0.2,"time":3.182,"Kp":2.0},{"θn":0.2,"time":3.334,"Kp":2.0},{"θn":0.2,"time":3.484,"Kp":2.0},{"θn":0.2,"time":3.637,"Kp":2.0},{"θn":0.2,"time":3.787,"Kp":2.0},{"θn":0.2,"time":3.94,"Kp":2.0},{"θn":0.2,"time":4.09,"Kp":2.0},{"θn":0.2,"time":4.242,"Kp":2.0},{"θn":0.2,"time":4.395,"Kp":2.0},{"θn":0.2,"time":4.547,"Kp":2.0},{"θn":0.2,"time":4.695,"Kp":2.0},{"θn":0.2,"time":4.848,"Kp":2.0},{"θn":0.2,"time":5.0,"Kp":2.0},{"θn":0.2,"time":5.152,"Kp":2.0},{"θn":0.2,"time":5.305,"Kp":2.0},{"θn":0.2,"time":5.453,"Kp":2.0},{"θn":0.2,"time":5.605,"Kp":2.0},{"θn":0.2,"time":5.758,"Kp":2.0},{"θn":0.2,"time":5.91,"Kp":2.0},{"θn":0.2,"time":6.062,"Kp":2.0},{"θn":0.2,"time":6.21,"Kp":2.0},{"θn":0.2,"time":6.363,"Kp":2.0},{"θn":0.2,"time":6.516,"Kp":2.0},{"θn":0.2,"time":6.668,"Kp":2.0},{"θn":0.2,"time":6.816,"Kp":2.0},{"θn":0.2,"time":6.97,"Kp":2.0},{"θn":0.2,"time":7.12,"Kp":2.0},{"θn":0.2,"time":7.273,"Kp":2.0},{"θn":0.2,"time":7.426,"Kp":2.0},{"θn":0.2,"time":7.574,"Kp":2.0},{"θn":0.2,"time":7.727,"Kp":2.0},{"θn":0.2,"time":7.88,"Kp":2.0},{"θn":0.2,"time":8.03,"Kp":2.0},{"θn":0.2,"time":8.18,"Kp":2.0},{"θn":0.2,"time":8.336,"Kp":2.0},{"θn":0.2,"time":8.484,"Kp":2.0},{"θn":0.2,"time":8.63,"Kp":2.0},{"θn":0.2,"time":8.79,"Kp":2.0},{"θn":0.2,"time":8.94,"Kp":2.0},{"θn":0.2,"time":9.09,"Kp":2.0},{"θn":0.2,"time":9.24,"Kp":2.0},{"θn":0.2,"time":9.39,"Kp":2.0},{"θn":0.2,"time":9.55,"Kp":2.0},{"θn":0.2,"time":9.695,"Kp":2.0},{"θn":0.2,"time":9.85,"Kp":2.0},{"θn":0.2,"time":10.0,"Kp":2.0},{"θn":0.2,"time":10.15,"Kp":2.0},{"θn":0.2,"time":10.305,"Kp":2.0},{"θn":0.2,"time":10.45,"Kp":2.0},{"θn":0.2,"time":10.61,"Kp":2.0},{"θn":0.2,"time":10.76,"Kp":2.0},{"θn":0.2,"time":10.91,"Kp":2.0},{"θn":0.2,"time":11.06,"Kp":2.0},{"θn":0.2,"time":11.21,"Kp":2.0},{"θn":0.2,"time":11.37,"Kp":2.0},{"θn":0.2,"time":11.516,"Kp":2.0},{"θn":0.2,"time":11.664,"Kp":2.0},{"θn":0.2,"time":11.82,"Kp":2.0},{"θn":0.2,"time":11.97,"Kp":2.0},{"θn":0.2,"time":12.125,"Kp":2.0},{"θn":0.2,"time":12.27,"Kp":2.0},{"θn":0.2,"time":12.42,"Kp":2.0},{"θn":0.2,"time":12.58,"Kp":2.0},{"θn":0.2,"time":12.73,"Kp":2.0},{"θn":0.2,"time":12.875,"Kp":2.0},{"θn":0.2,"time":13.03,"Kp":2.0},{"θn":0.2,"time":13.18,"Kp":2.0},{"θn":0.2,"time":13.336,"Kp":2.0},{"θn":0.2,"time":13.484,"Kp":2.0},{"θn":0.2,"time":13.63,"Kp":2.0},{"θn":0.2,"time":13.79,"Kp":2.0},{"θn":0.2,"time":13.94,"Kp":2.0},{"θn":0.2,"time":14.09,"Kp":2.0},{"θn":0.2,"time":14.24,"Kp":2.0},{"θn":0.2,"time":14.39,"Kp":2.0},{"θn":0.2,"time":14.55,"Kp":2.0},{"θn":0.2,"time":14.695,"Kp":2.0},{"θn":0.2,"time":14.85,"Kp":2.0},{"θn":0.2,"time":15.0,"Kp":2.0},{"θn":0.2,"time":0.0,"Kp":2.1},{"θn":0.1998,"time":0.1515,"Kp":2.1},{"θn":0.1992,"time":0.303,"Kp":2.1},{"θn":0.1982,"time":0.4546,"Kp":2.1},{"θn":0.197,"time":0.606,"Kp":2.1},{"θn":0.1954,"time":0.758,"Kp":2.1},{"θn":0.1938,"time":0.909,"Kp":2.1},{"θn":0.1919,"time":1.061,"Kp":2.1},{"θn":0.19,"time":1.212,"Kp":2.1},{"θn":0.1877,"time":1.363,"Kp":2.1},{"θn":0.1855,"time":1.516,"Kp":2.1},{"θn":0.1832,"time":1.667,"Kp":2.1},{"θn":0.1809,"time":1.818,"Kp":2.1},{"θn":0.1785,"time":1.97,"Kp":2.1},{"θn":0.1759,"time":2.121,"Kp":2.1},{"θn":0.1735,"time":2.273,"Kp":2.1},{"θn":0.1709,"time":2.424,"Kp":2.1},{"θn":0.1685,"time":2.576,"Kp":2.1},{"θn":0.1659,"time":2.727,"Kp":2.1},{"θn":0.1633,"time":2.879,"Kp":2.1},{"θn":0.1609,"time":3.031,"Kp":2.1},{"θn":0.1583,"time":3.182,"Kp":2.1},{"θn":0.1559,"time":3.334,"Kp":2.1},{"θn":0.1533,"time":3.484,"Kp":2.1},{"θn":0.1509,"time":3.637,"Kp":2.1},{"θn":0.1484,"time":3.787,"Kp":2.1},{"θn":0.1461,"time":3.94,"Kp":2.1},{"θn":0.1437,"time":4.09,"Kp":2.1},{"θn":0.1414,"time":4.242,"Kp":2.1},{"θn":0.139,"time":4.395,"Kp":2.1},{"θn":0.1367,"time":4.547,"Kp":2.1},{"θn":0.1345,"time":4.695,"Kp":2.1},{"θn":0.1322,"time":4.848,"Kp":2.1},{"θn":0.13,"time":5.0,"Kp":2.1},{"θn":0.1279,"time":5.152,"Kp":2.1},{"θn":0.1257,"time":5.305,"Kp":2.1},{"θn":0.12366,"time":5.453,"Kp":2.1},{"θn":0.1216,"time":5.605,"Kp":2.1},{"θn":0.11957,"time":5.758,"Kp":2.1},{"θn":0.11755,"time":5.91,"Kp":2.1},{"θn":0.1156,"time":6.062,"Kp":2.1},{"θn":0.11365,"time":6.21,"Kp":2.1},{"θn":0.11176,"time":6.363,"Kp":2.1},{"θn":0.10986,"time":6.516,"Kp":2.1},{"θn":0.108,"time":6.668,"Kp":2.1},{"θn":0.1062,"time":6.816,"Kp":2.1},{"θn":0.1044,"time":6.97,"Kp":2.1},{"θn":0.1026,"time":7.12,"Kp":2.1},{"θn":0.1009,"time":7.273,"Kp":2.1},{"θn":0.0992,"time":7.426,"Kp":2.1},{"θn":0.09753,"time":7.574,"Kp":2.1},{"θn":0.0959,"time":7.727,"Kp":2.1},{"θn":0.09424,"time":7.88,"Kp":2.1},{"θn":0.09265,"time":8.03,"Kp":2.1},{"θn":0.09106,"time":8.18,"Kp":2.1},{"θn":0.08954,"time":8.336,"Kp":2.1},{"θn":0.088,"time":8.484,"Kp":2.1},{"θn":0.08655,"time":8.63,"Kp":2.1},{"θn":0.0851,"time":8.79,"Kp":2.1},{"θn":0.0836,"time":8.94,"Kp":2.1},{"θn":0.0822,"time":9.09,"Kp":2.1},{"θn":0.0808,"time":9.24,"Kp":2.1},{"θn":0.07947,"time":9.39,"Kp":2.1},{"θn":0.0781,"time":9.55,"Kp":2.1},{"θn":0.0768,"time":9.695,"Kp":2.1},{"θn":0.0755,"time":9.85,"Kp":2.1},{"θn":0.0742,"time":10.0,"Kp":2.1},{"θn":0.073,"time":10.15,"Kp":2.1},{"θn":0.0717,"time":10.305,"Kp":2.1},{"θn":0.0705,"time":10.45,"Kp":2.1},{"θn":0.06934,"time":10.61,"Kp":2.1},{"θn":0.0682,"time":10.76,"Kp":2.1},{"θn":0.067,"time":10.91,"Kp":2.1},{"θn":0.06586,"time":11.06,"Kp":2.1},{"θn":0.06476,"time":11.21,"Kp":2.1},{"θn":0.06366,"time":11.37,"Kp":2.1},{"θn":0.06256,"time":11.516,"Kp":2.1},{"θn":0.06152,"time":11.664,"Kp":2.1},{"θn":0.0605,"time":11.82,"Kp":2.1},{"θn":0.05945,"time":11.97,"Kp":2.1},{"θn":0.05844,"time":12.125,"Kp":2.1},{"θn":0.05746,"time":12.27,"Kp":2.1},{"θn":0.0565,"time":12.42,"Kp":2.1},{"θn":0.0555,"time":12.58,"Kp":2.1},{"θn":0.0546,"time":12.73,"Kp":2.1},{"θn":0.05365,"time":12.875,"Kp":2.1},{"θn":0.05276,"time":13.03,"Kp":2.1},{"θn":0.05185,"time":13.18,"Kp":2.1},{"θn":0.051,"time":13.336,"Kp":2.1},{"θn":0.0501,"time":13.484,"Kp":2.1},{"θn":0.04926,"time":13.63,"Kp":2.1},{"θn":0.04843,"time":13.79,"Kp":2.1},{"θn":0.0476,"time":13.94,"Kp":2.1},{"θn":0.0468,"time":14.09,"Kp":2.1},{"θn":0.04602,"time":14.24,"Kp":2.1},{"θn":0.04523,"time":14.39,"Kp":2.1},{"θn":0.04446,"time":14.55,"Kp":2.1},{"θn":0.04373,"time":14.695,"Kp":2.1},{"θn":0.04297,"time":14.85,"Kp":2.1},{"θn":0.04224,"time":15.0,"Kp":2.1},{"θn":0.2,"time":0.0,"Kp":2.2},{"θn":0.1996,"time":0.1515,"Kp":2.2},{"θn":0.1984,"time":0.303,"Kp":2.2},{"θn":0.1964,"time":0.4546,"Kp":2.2},{"θn":0.194,"time":0.606,"Kp":2.2},{"θn":0.191,"time":0.758,"Kp":2.2},{"θn":0.1876,"time":0.909,"Kp":2.2},{"θn":0.184,"time":1.061,"Kp":2.2},{"θn":0.18,"time":1.212,"Kp":2.2},{"θn":0.1759,"time":1.363,"Kp":2.2},{"θn":0.1716,"time":1.516,"Kp":2.2},{"θn":0.1671,"time":1.667,"Kp":2.2},{"θn":0.1626,"time":1.818,"Kp":2.2},{"θn":0.1581,"time":1.97,"Kp":2.2},{"θn":0.1534,"time":2.121,"Kp":2.2},{"θn":0.1488,"time":2.273,"Kp":2.2},{"θn":0.1442,"time":2.424,"Kp":2.2},{"θn":0.1396,"time":2.576,"Kp":2.2},{"θn":0.1351,"time":2.727,"Kp":2.2},{"θn":0.1306,"time":2.879,"Kp":2.2},{"θn":0.1262,"time":3.031,"Kp":2.2},{"θn":0.12195,"time":3.182,"Kp":2.2},{"θn":0.11774,"time":3.334,"Kp":2.2},{"θn":0.1136,"time":3.484,"Kp":2.2},{"θn":0.10956,"time":3.637,"Kp":2.2},{"θn":0.1056,"time":3.787,"Kp":2.2},{"θn":0.1018,"time":3.94,"Kp":2.2},{"θn":0.0981,"time":4.09,"Kp":2.2},{"θn":0.0944,"time":4.242,"Kp":2.2},{"θn":0.09094,"time":4.395,"Kp":2.2},{"θn":0.0875,"time":4.547,"Kp":2.2},{"θn":0.0842,"time":4.695,"Kp":2.2},{"θn":0.08105,"time":4.848,"Kp":2.2},{"θn":0.07794,"time":5.0,"Kp":2.2},{"θn":0.07495,"time":5.152,"Kp":2.2},{"θn":0.0721,"time":5.305,"Kp":2.2},{"θn":0.0693,"time":5.453,"Kp":2.2},{"θn":0.0666,"time":5.605,"Kp":2.2},{"θn":0.06396,"time":5.758,"Kp":2.2},{"θn":0.0615,"time":5.91,"Kp":2.2},{"θn":0.05908,"time":6.062,"Kp":2.2},{"θn":0.05673,"time":6.21,"Kp":2.2},{"θn":0.0545,"time":6.363,"Kp":2.2},{"θn":0.05234,"time":6.516,"Kp":2.2},{"θn":0.05026,"time":6.668,"Kp":2.2},{"θn":0.04828,"time":6.816,"Kp":2.2},{"θn":0.04636,"time":6.97,"Kp":2.2},{"θn":0.0445,"time":7.12,"Kp":2.2},{"θn":0.04272,"time":7.273,"Kp":2.2},{"θn":0.04102,"time":7.426,"Kp":2.2},{"θn":0.03937,"time":7.574,"Kp":2.2},{"θn":0.03778,"time":7.727,"Kp":2.2},{"θn":0.03625,"time":7.88,"Kp":2.2},{"θn":0.0348,"time":8.03,"Kp":2.2},{"θn":0.0334,"time":8.18,"Kp":2.2},{"θn":0.03204,"time":8.336,"Kp":2.2},{"θn":0.03075,"time":8.484,"Kp":2.2},{"θn":0.0295,"time":8.63,"Kp":2.2},{"θn":0.0283,"time":8.79,"Kp":2.2},{"θn":0.02716,"time":8.94,"Kp":2.2},{"θn":0.02606,"time":9.09,"Kp":2.2},{"θn":0.025,"time":9.24,"Kp":2.2},{"θn":0.02399,"time":9.39,"Kp":2.2},{"θn":0.02301,"time":9.55,"Kp":2.2},{"θn":0.02208,"time":9.695,"Kp":2.2},{"θn":0.02118,"time":9.85,"Kp":2.2},{"θn":0.02031,"time":10.0,"Kp":2.2},{"θn":0.01949,"time":10.15,"Kp":2.2},{"θn":0.01869,"time":10.305,"Kp":2.2},{"θn":0.01793,"time":10.45,"Kp":2.2},{"θn":0.0172,"time":10.61,"Kp":2.2},{"θn":0.0165,"time":10.76,"Kp":2.2},{"θn":0.01582,"time":10.91,"Kp":2.2},{"θn":0.015175,"time":11.06,"Kp":2.2},{"θn":0.01456,"time":11.21,"Kp":2.2},{"θn":0.01396,"time":11.37,"Kp":2.2},{"θn":0.01339,"time":11.516,"Kp":2.2},{"θn":0.01284,"time":11.664,"Kp":2.2},{"θn":0.01232,"time":11.82,"Kp":2.2},{"θn":0.01182,"time":11.97,"Kp":2.2},{"θn":0.01133,"time":12.125,"Kp":2.2},{"θn":0.01087,"time":12.27,"Kp":2.2},{"θn":0.01042,"time":12.42,"Kp":2.2},{"θn":0.009995,"time":12.58,"Kp":2.2},{"θn":0.00959,"time":12.73,"Kp":2.2},{"θn":0.00919,"time":12.875,"Kp":2.2},{"θn":0.00882,"time":13.03,"Kp":2.2},{"θn":0.00846,"time":13.18,"Kp":2.2},{"θn":0.00811,"time":13.336,"Kp":2.2},{"θn":0.00778,"time":13.484,"Kp":2.2},{"θn":0.00746,"time":13.63,"Kp":2.2},{"θn":0.007156,"time":13.79,"Kp":2.2},{"θn":0.006863,"time":13.94,"Kp":2.2},{"θn":0.00658,"time":14.09,"Kp":2.2},{"θn":0.006313,"time":14.24,"Kp":2.2},{"θn":0.006054,"time":14.39,"Kp":2.2},{"θn":0.005806,"time":14.55,"Kp":2.2},{"θn":0.005566,"time":14.695,"Kp":2.2},{"θn":0.00534,"time":14.85,"Kp":2.2},{"θn":0.00512,"time":15.0,"Kp":2.2},{"θn":0.2,"time":0.0,"Kp":2.3},{"θn":0.1993,"time":0.1515,"Kp":2.3},{"θn":0.1975,"time":0.303,"Kp":2.3},{"θn":0.1947,"time":0.4546,"Kp":2.3},{"θn":0.191,"time":0.606,"Kp":2.3},{"θn":0.1866,"time":0.758,"Kp":2.3},{"θn":0.1816,"time":0.909,"Kp":2.3},{"θn":0.1763,"time":1.061,"Kp":2.3},{"θn":0.1704,"time":1.212,"Kp":2.3},{"θn":0.1644,"time":1.363,"Kp":2.3},{"θn":0.1581,"time":1.516,"Kp":2.3},{"θn":0.1517,"time":1.667,"Kp":2.3},{"θn":0.1453,"time":1.818,"Kp":2.3},{"θn":0.1388,"time":1.97,"Kp":2.3},{"θn":0.1323,"time":2.121,"Kp":2.3},{"θn":0.126,"time":2.273,"Kp":2.3},{"θn":0.1196,"time":2.424,"Kp":2.3},{"θn":0.11346,"time":2.576,"Kp":2.3},{"θn":0.1074,"time":2.727,"Kp":2.3},{"θn":0.10156,"time":2.879,"Kp":2.3},{"θn":0.0959,"time":3.031,"Kp":2.3},{"θn":0.09033,"time":3.182,"Kp":2.3},{"θn":0.085,"time":3.334,"Kp":2.3},{"θn":0.07996,"time":3.484,"Kp":2.3},{"θn":0.0751,"time":3.637,"Kp":2.3},{"θn":0.0704,"time":3.787,"Kp":2.3},{"θn":0.06586,"time":3.94,"Kp":2.3},{"θn":0.0616,"time":4.09,"Kp":2.3},{"θn":0.05756,"time":4.242,"Kp":2.3},{"θn":0.05368,"time":4.395,"Kp":2.3},{"θn":0.05002,"time":4.547,"Kp":2.3},{"θn":0.04657,"time":4.695,"Kp":2.3},{"θn":0.04327,"time":4.848,"Kp":2.3},{"θn":0.0402,"time":5.0,"Kp":2.3},{"θn":0.0373,"time":5.152,"Kp":2.3},{"θn":0.03455,"time":5.305,"Kp":2.3},{"θn":0.03195,"time":5.453,"Kp":2.3},{"θn":0.02954,"time":5.605,"Kp":2.3},{"θn":0.02728,"time":5.758,"Kp":2.3},{"θn":0.02515,"time":5.91,"Kp":2.3},{"θn":0.02316,"time":6.062,"Kp":2.3},{"θn":0.02132,"time":6.21,"Kp":2.3},{"θn":0.01958,"time":6.363,"Kp":2.3},{"θn":0.01797,"time":6.516,"Kp":2.3},{"θn":0.01648,"time":6.668,"Kp":2.3},{"θn":0.01508,"time":6.816,"Kp":2.3},{"θn":0.01379,"time":6.97,"Kp":2.3},{"θn":0.01259,"time":7.12,"Kp":2.3},{"θn":0.011475,"time":7.273,"Kp":2.3},{"θn":0.010445,"time":7.426,"Kp":2.3},{"θn":0.00949,"time":7.574,"Kp":2.3},{"θn":0.00861,"time":7.727,"Kp":2.3},{"θn":0.007805,"time":7.88,"Kp":2.3},{"θn":0.00706,"time":8.03,"Kp":2.3},{"θn":0.006374,"time":8.18,"Kp":2.3},{"θn":0.005745,"time":8.336,"Kp":2.3},{"θn":0.005165,"time":8.484,"Kp":2.3},{"θn":0.004635,"time":8.63,"Kp":2.3},{"θn":0.00415,"time":8.79,"Kp":2.3},{"θn":0.003708,"time":8.94,"Kp":2.3},{"θn":0.003304,"time":9.09,"Kp":2.3},{"θn":0.002934,"time":9.24,"Kp":2.3},{"θn":0.002598,"time":9.39,"Kp":2.3},{"θn":0.002293,"time":9.55,"Kp":2.3},{"θn":0.002016,"time":9.695,"Kp":2.3},{"θn":0.001765,"time":9.85,"Kp":2.3},{"θn":0.001538,"time":10.0,"Kp":2.3},{"θn":0.001334,"time":10.15,"Kp":2.3},{"θn":0.001149,"time":10.305,"Kp":2.3},{"θn":0.000983,"time":10.45,"Kp":2.3},{"θn":0.0008345,"time":10.61,"Kp":2.3},{"θn":0.0007014,"time":10.76,"Kp":2.3},{"θn":0.000582,"time":10.91,"Kp":2.3},{"θn":0.0004764,"time":11.06,"Kp":2.3},{"θn":0.0003822,"time":11.21,"Kp":2.3},{"θn":0.000299,"time":11.37,"Kp":2.3},{"θn":0.0002253,"time":11.516,"Kp":2.3},{"θn":0.0001607,"time":11.664,"Kp":2.3},{"θn":0.0001041,"time":11.82,"Kp":2.3},{"θn":5.484e-5,"time":11.97,"Kp":2.3},{"θn":1.21e-5,"time":12.125,"Kp":2.3},{"θn":-2.47e-5,"time":12.27,"Kp":2.3},{"θn":-5.615e-5,"time":12.42,"Kp":2.3},{"θn":-8.28e-5,"time":12.58,"Kp":2.3},{"θn":-0.00010514,"time":12.73,"Kp":2.3},{"θn":-0.0001236,"time":12.875,"Kp":2.3},{"θn":-0.0001388,"time":13.03,"Kp":2.3},{"θn":-0.0001509,"time":13.18,"Kp":2.3},{"θn":-0.0001605,"time":13.336,"Kp":2.3},{"θn":-0.0001676,"time":13.484,"Kp":2.3},{"θn":-0.0001726,"time":13.63,"Kp":2.3},{"θn":-0.000176,"time":13.79,"Kp":2.3},{"θn":-0.0001776,"time":13.94,"Kp":2.3},{"θn":-0.0001779,"time":14.09,"Kp":2.3},{"θn":-0.0001769,"time":14.24,"Kp":2.3},{"θn":-0.000175,"time":14.39,"Kp":2.3},{"θn":-0.0001723,"time":14.55,"Kp":2.3},{"θn":-0.0001688,"time":14.695,"Kp":2.3},{"θn":-0.0001647,"time":14.85,"Kp":2.3},{"θn":-0.0001602,"time":15.0,"Kp":2.3},{"θn":0.2,"time":0.0,"Kp":2.4},{"θn":0.1991,"time":0.1515,"Kp":2.4},{"θn":0.1967,"time":0.303,"Kp":2.4},{"θn":0.1929,"time":0.4546,"Kp":2.4},{"θn":0.188,"time":0.606,"Kp":2.4},{"θn":0.1823,"time":0.758,"Kp":2.4},{"θn":0.1757,"time":0.909,"Kp":2.4},{"θn":0.1686,"time":1.061,"Kp":2.4},{"θn":0.161,"time":1.212,"Kp":2.4},{"θn":0.1532,"time":1.363,"Kp":2.4},{"θn":0.1451,"time":1.516,"Kp":2.4},{"θn":0.137,"time":1.667,"Kp":2.4},{"θn":0.1288,"time":1.818,"Kp":2.4},{"θn":0.1206,"time":1.97,"Kp":2.4},{"θn":0.1126,"time":2.121,"Kp":2.4},{"θn":0.1048,"time":2.273,"Kp":2.4},{"θn":0.09717,"time":2.424,"Kp":2.4},{"θn":0.0898,"time":2.576,"Kp":2.4},{"θn":0.08264,"time":2.727,"Kp":2.4},{"θn":0.0758,"time":2.879,"Kp":2.4},{"θn":0.06934,"time":3.031,"Kp":2.4},{"θn":0.0632,"time":3.182,"Kp":2.4},{"θn":0.0573,"time":3.334,"Kp":2.4},{"θn":0.0518,"time":3.484,"Kp":2.4},{"θn":0.0466,"time":3.637,"Kp":2.4},{"θn":0.04175,"time":3.787,"Kp":2.4},{"θn":0.03723,"time":3.94,"Kp":2.4},{"θn":0.03305,"time":4.09,"Kp":2.4},{"θn":0.02914,"time":4.242,"Kp":2.4},{"θn":0.02554,"time":4.395,"Kp":2.4},{"θn":0.02225,"time":4.547,"Kp":2.4},{"θn":0.01921,"time":4.695,"Kp":2.4},{"θn":0.01643,"time":4.848,"Kp":2.4},{"θn":0.01392,"time":5.0,"Kp":2.4},{"θn":0.01164,"time":5.152,"Kp":2.4},{"θn":0.009575,"time":5.305,"Kp":2.4},{"θn":0.007725,"time":5.453,"Kp":2.4},{"θn":0.006065,"time":5.605,"Kp":2.4},{"θn":0.00459,"time":5.758,"Kp":2.4},{"θn":0.003279,"time":5.91,"Kp":2.4},{"θn":0.002127,"time":6.062,"Kp":2.4},{"θn":0.001119,"time":6.21,"Kp":2.4},{"θn":0.0002428,"time":6.363,"Kp":2.4},{"θn":-0.0005126,"time":6.516,"Kp":2.4},{"θn":-0.001158,"time":6.668,"Kp":2.4},{"θn":-0.001701,"time":6.816,"Kp":2.4},{"θn":-0.002155,"time":6.97,"Kp":2.4},{"θn":-0.002525,"time":7.12,"Kp":2.4},{"θn":-0.002823,"time":7.273,"Kp":2.4},{"θn":-0.003054,"time":7.426,"Kp":2.4},{"θn":-0.003227,"time":7.574,"Kp":2.4},{"θn":-0.00335,"time":7.727,"Kp":2.4},{"θn":-0.003424,"time":7.88,"Kp":2.4},{"θn":-0.00346,"time":8.03,"Kp":2.4},{"θn":-0.003462,"time":8.18,"Kp":2.4},{"θn":-0.003433,"time":8.336,"Kp":2.4},{"θn":-0.00338,"time":8.484,"Kp":2.4},{"θn":-0.003305,"time":8.63,"Kp":2.4},{"θn":-0.003212,"time":8.79,"Kp":2.4},{"θn":-0.003105,"time":8.94,"Kp":2.4},{"θn":-0.002987,"time":9.09,"Kp":2.4},{"θn":-0.002861,"time":9.24,"Kp":2.4},{"θn":-0.002728,"time":9.39,"Kp":2.4},{"θn":-0.002588,"time":9.55,"Kp":2.4},{"θn":-0.002449,"time":9.695,"Kp":2.4},{"θn":-0.002306,"time":9.85,"Kp":2.4},{"θn":-0.002165,"time":10.0,"Kp":2.4},{"θn":-0.002026,"time":10.15,"Kp":2.4},{"θn":-0.001887,"time":10.305,"Kp":2.4},{"θn":-0.001754,"time":10.45,"Kp":2.4},{"θn":-0.001623,"time":10.61,"Kp":2.4},{"θn":-0.001497,"time":10.76,"Kp":2.4},{"θn":-0.001376,"time":10.91,"Kp":2.4},{"θn":-0.001261,"time":11.06,"Kp":2.4},{"θn":-0.001151,"time":11.21,"Kp":2.4},{"θn":-0.001046,"time":11.37,"Kp":2.4},{"θn":-0.0009475,"time":11.516,"Kp":2.4},{"θn":-0.0008545,"time":11.664,"Kp":2.4},{"θn":-0.0007677,"time":11.82,"Kp":2.4},{"θn":-0.000686,"time":11.97,"Kp":2.4},{"θn":-0.000611,"time":12.125,"Kp":2.4},{"θn":-0.0005403,"time":12.27,"Kp":2.4},{"θn":-0.0004752,"time":12.42,"Kp":2.4},{"θn":-0.0004153,"time":12.58,"Kp":2.4},{"θn":-0.0003603,"time":12.73,"Kp":2.4},{"θn":-0.00031,"time":12.875,"Kp":2.4},{"θn":-0.000264,"time":13.03,"Kp":2.4},{"θn":-0.0002223,"time":13.18,"Kp":2.4},{"θn":-0.0001845,"time":13.336,"Kp":2.4},{"θn":-0.0001506,"time":13.484,"Kp":2.4},{"θn":-0.00012004,"time":13.63,"Kp":2.4},{"θn":-9.274e-5,"time":13.79,"Kp":2.4},{"θn":-6.85e-5,"time":13.94,"Kp":2.4},{"θn":-4.71e-5,"time":14.09,"Kp":2.4},{"θn":-2.83e-5,"time":14.24,"Kp":2.4},{"θn":-1.19e-5,"time":14.39,"Kp":2.4},{"θn":2.2e-6,"time":14.55,"Kp":2.4},{"θn":1.436e-5,"time":14.695,"Kp":2.4},{"θn":2.474e-5,"time":14.85,"Kp":2.4},{"θn":3.34e-5,"time":15.0,"Kp":2.4},{"θn":0.2,"time":0.0,"Kp":2.5},{"θn":0.1989,"time":0.1515,"Kp":2.5},{"θn":0.1958,"time":0.303,"Kp":2.5},{"θn":0.1912,"time":0.4546,"Kp":2.5},{"θn":0.185,"time":0.606,"Kp":2.5},{"θn":0.1779,"time":0.758,"Kp":2.5},{"θn":0.1698,"time":0.909,"Kp":2.5},{"θn":0.161,"time":1.061,"Kp":2.5},{"θn":0.1519,"time":1.212,"Kp":2.5},{"θn":0.1422,"time":1.363,"Kp":2.5},{"θn":0.1326,"time":1.516,"Kp":2.5},{"θn":0.1228,"time":1.667,"Kp":2.5},{"θn":0.1131,"time":1.818,"Kp":2.5},{"θn":0.1036,"time":1.97,"Kp":2.5},{"θn":0.09424,"time":2.121,"Kp":2.5},{"θn":0.08527,"time":2.273,"Kp":2.5},{"θn":0.0766,"time":2.424,"Kp":2.5},{"θn":0.06836,"time":2.576,"Kp":2.5},{"θn":0.06058,"time":2.727,"Kp":2.5},{"θn":0.05322,"time":2.879,"Kp":2.5},{"θn":0.04633,"time":3.031,"Kp":2.5},{"θn":0.03992,"time":3.182,"Kp":2.5},{"θn":0.034,"time":3.334,"Kp":2.5},{"θn":0.02852,"time":3.484,"Kp":2.5},{"θn":0.02353,"time":3.637,"Kp":2.5},{"θn":0.01898,"time":3.787,"Kp":2.5},{"θn":0.01487,"time":3.94,"Kp":2.5},{"θn":0.011185,"time":4.09,"Kp":2.5},{"θn":0.0079,"time":4.242,"Kp":2.5},{"θn":0.004986,"time":4.395,"Kp":2.5},{"θn":0.00243,"time":4.547,"Kp":2.5},{"θn":0.0002079,"time":4.695,"Kp":2.5},{"θn":-0.001703,"time":4.848,"Kp":2.5},{"θn":-0.003326,"time":5.0,"Kp":2.5},{"θn":-0.00469,"time":5.152,"Kp":2.5},{"θn":-0.005806,"time":5.305,"Kp":2.5},{"θn":-0.006706,"time":5.453,"Kp":2.5},{"θn":-0.007412,"time":5.605,"Kp":2.5},{"θn":-0.007935,"time":5.758,"Kp":2.5},{"θn":-0.0083,"time":5.91,"Kp":2.5},{"θn":-0.00853,"time":6.062,"Kp":2.5},{"θn":-0.00863,"time":6.21,"Kp":2.5},{"θn":-0.00863,"time":6.363,"Kp":2.5},{"θn":-0.00854,"time":6.516,"Kp":2.5},{"θn":-0.00836,"time":6.668,"Kp":2.5},{"θn":-0.008125,"time":6.816,"Kp":2.5},{"θn":-0.007835,"time":6.97,"Kp":2.5},{"θn":-0.007507,"time":7.12,"Kp":2.5},{"θn":-0.00714,"time":7.273,"Kp":2.5},{"θn":-0.006752,"time":7.426,"Kp":2.5},{"θn":-0.006344,"time":7.574,"Kp":2.5},{"θn":-0.005924,"time":7.727,"Kp":2.5},{"θn":-0.005505,"time":7.88,"Kp":2.5},{"θn":-0.00508,"time":8.03,"Kp":2.5},{"θn":-0.004665,"time":8.18,"Kp":2.5},{"θn":-0.00426,"time":8.336,"Kp":2.5},{"θn":-0.003864,"time":8.484,"Kp":2.5},{"θn":-0.003485,"time":8.63,"Kp":2.5},{"θn":-0.00312,"time":8.79,"Kp":2.5},{"θn":-0.002773,"time":8.94,"Kp":2.5},{"θn":-0.002447,"time":9.09,"Kp":2.5},{"θn":-0.00214,"time":9.24,"Kp":2.5},{"θn":-0.001853,"time":9.39,"Kp":2.5},{"θn":-0.001587,"time":9.55,"Kp":2.5},{"θn":-0.001341,"time":9.695,"Kp":2.5},{"θn":-0.001116,"time":9.85,"Kp":2.5},{"θn":-0.0009103,"time":10.0,"Kp":2.5},{"θn":-0.000724,"time":10.15,"Kp":2.5},{"θn":-0.000556,"time":10.305,"Kp":2.5},{"θn":-0.0004058,"time":10.45,"Kp":2.5},{"θn":-0.0002723,"time":10.61,"Kp":2.5},{"θn":-0.0001549,"time":10.76,"Kp":2.5},{"θn":-5.23e-5,"time":10.91,"Kp":2.5},{"θn":3.64e-5,"time":11.06,"Kp":2.5},{"θn":0.00011235,"time":11.21,"Kp":2.5},{"θn":0.0001764,"time":11.37,"Kp":2.5},{"θn":0.0002297,"time":11.516,"Kp":2.5},{"θn":0.000273,"time":11.664,"Kp":2.5},{"θn":0.000307,"time":11.82,"Kp":2.5},{"θn":0.0003333,"time":11.97,"Kp":2.5},{"θn":0.0003521,"time":12.125,"Kp":2.5},{"θn":0.0003648,"time":12.27,"Kp":2.5},{"θn":0.0003717,"time":12.42,"Kp":2.5},{"θn":0.0003736,"time":12.58,"Kp":2.5},{"θn":0.0003715,"time":12.73,"Kp":2.5},{"θn":0.0003655,"time":12.875,"Kp":2.5},{"θn":0.0003564,"time":13.03,"Kp":2.5},{"θn":0.000345,"time":13.18,"Kp":2.5},{"θn":0.0003314,"time":13.336,"Kp":2.5},{"θn":0.0003161,"time":13.484,"Kp":2.5},{"θn":0.0002997,"time":13.63,"Kp":2.5},{"θn":0.0002825,"time":13.79,"Kp":2.5},{"θn":0.0002646,"time":13.94,"Kp":2.5},{"θn":0.0002465,"time":14.09,"Kp":2.5},{"θn":0.0002283,"time":14.24,"Kp":2.5},{"θn":0.0002102,"time":14.39,"Kp":2.5},{"θn":0.0001924,"time":14.55,"Kp":2.5},{"θn":0.000175,"time":14.695,"Kp":2.5},{"θn":0.0001583,"time":14.85,"Kp":2.5},{"θn":0.0001422,"time":15.0,"Kp":2.5},{"θn":0.2,"time":0.0,"Kp":2.6},{"θn":0.1987,"time":0.1515,"Kp":2.6},{"θn":0.1951,"time":0.303,"Kp":2.6},{"θn":0.1895,"time":0.4546,"Kp":2.6},{"θn":0.1821,"time":0.606,"Kp":2.6},{"θn":0.1736,"time":0.758,"Kp":2.6},{"θn":0.164,"time":0.909,"Kp":2.6},{"θn":0.1537,"time":1.061,"Kp":2.6},{"θn":0.1428,"time":1.212,"Kp":2.6},{"θn":0.1317,"time":1.363,"Kp":2.6},{"θn":0.1204,"time":1.516,"Kp":2.6},{"θn":0.10925,"time":1.667,"Kp":2.6},{"θn":0.0982,"time":1.818,"Kp":2.6},{"θn":0.08746,"time":1.97,"Kp":2.6},{"θn":0.07715,"time":2.121,"Kp":2.6},{"θn":0.06726,"time":2.273,"Kp":2.6},{"θn":0.05792,"time":2.424,"Kp":2.6},{"θn":0.04916,"time":2.576,"Kp":2.6},{"θn":0.04102,"time":2.727,"Kp":2.6},{"θn":0.03348,"time":2.879,"Kp":2.6},{"θn":0.02657,"time":3.031,"Kp":2.6},{"θn":0.0203,"time":3.182,"Kp":2.6},{"θn":0.01464,"time":3.334,"Kp":2.6},{"θn":0.0096,"time":3.484,"Kp":2.6},{"θn":0.00514,"time":3.637,"Kp":2.6},{"θn":0.001243,"time":3.787,"Kp":2.6},{"θn":-0.002121,"time":3.94,"Kp":2.6},{"θn":-0.004986,"time":4.09,"Kp":2.6},{"θn":-0.00738,"time":4.242,"Kp":2.6},{"θn":-0.009346,"time":4.395,"Kp":2.6},{"θn":-0.01092,"time":4.547,"Kp":2.6},{"θn":-0.01213,"time":4.695,"Kp":2.6},{"θn":-0.013016,"time":4.848,"Kp":2.6},{"θn":-0.01361,"time":5.0,"Kp":2.6},{"θn":-0.01395,"time":5.152,"Kp":2.6},{"θn":-0.01406,"time":5.305,"Kp":2.6},{"θn":-0.01398,"time":5.453,"Kp":2.6},{"θn":-0.013725,"time":5.605,"Kp":2.6},{"θn":-0.013336,"time":5.758,"Kp":2.6},{"θn":-0.01283,"time":5.91,"Kp":2.6},{"θn":-0.01223,"time":6.062,"Kp":2.6},{"θn":-0.01156,"time":6.21,"Kp":2.6},{"θn":-0.01083,"time":6.363,"Kp":2.6},{"θn":-0.01008,"time":6.516,"Kp":2.6},{"θn":-0.00929,"time":6.668,"Kp":2.6},{"θn":-0.00851,"time":6.816,"Kp":2.6},{"θn":-0.007717,"time":6.97,"Kp":2.6},{"θn":-0.00694,"time":7.12,"Kp":2.6},{"θn":-0.006184,"time":7.273,"Kp":2.6},{"θn":-0.005455,"time":7.426,"Kp":2.6},{"θn":-0.00476,"time":7.574,"Kp":2.6},{"θn":-0.004105,"time":7.727,"Kp":2.6},{"θn":-0.003485,"time":7.88,"Kp":2.6},{"θn":-0.002909,"time":8.03,"Kp":2.6},{"θn":-0.002377,"time":8.18,"Kp":2.6},{"θn":-0.001889,"time":8.336,"Kp":2.6},{"θn":-0.001447,"time":8.484,"Kp":2.6},{"θn":-0.001047,"time":8.63,"Kp":2.6},{"θn":-0.000691,"time":8.79,"Kp":2.6},{"θn":-0.0003755,"time":8.94,"Kp":2.6},{"θn":-9.966e-5,"time":9.09,"Kp":2.6},{"θn":0.0001386,"time":9.24,"Kp":2.6},{"θn":0.0003417,"time":9.39,"Kp":2.6},{"θn":0.0005116,"time":9.55,"Kp":2.6},{"θn":0.000651,"time":9.695,"Kp":2.6},{"θn":0.000763,"time":9.85,"Kp":2.6},{"θn":0.0008492,"time":10.0,"Kp":2.6},{"θn":0.000912,"time":10.15,"Kp":2.6},{"θn":0.000955,"time":10.305,"Kp":2.6},{"θn":0.000979,"time":10.45,"Kp":2.6},{"θn":0.000988,"time":10.61,"Kp":2.6},{"θn":0.000983,"time":10.76,"Kp":2.6},{"θn":0.000966,"time":10.91,"Kp":2.6},{"θn":0.000939,"time":11.06,"Kp":2.6},{"θn":0.0009036,"time":11.21,"Kp":2.6},{"θn":0.000862,"time":11.37,"Kp":2.6},{"θn":0.000815,"time":11.516,"Kp":2.6},{"θn":0.0007644,"time":11.664,"Kp":2.6},{"θn":0.000711,"time":11.82,"Kp":2.6},{"θn":0.000656,"time":11.97,"Kp":2.6},{"θn":0.0006003,"time":12.125,"Kp":2.6},{"θn":0.000545,"time":12.27,"Kp":2.6},{"θn":0.0004907,"time":12.42,"Kp":2.6},{"θn":0.0004375,"time":12.58,"Kp":2.6},{"θn":0.000386,"time":12.73,"Kp":2.6},{"θn":0.0003371,"time":12.875,"Kp":2.6},{"θn":0.0002906,"time":13.03,"Kp":2.6},{"θn":0.000247,"time":13.18,"Kp":2.6},{"θn":0.0002065,"time":13.336,"Kp":2.6},{"θn":0.0001689,"time":13.484,"Kp":2.6},{"θn":0.0001345,"time":13.63,"Kp":2.6},{"θn":0.0001032,"time":13.79,"Kp":2.6},{"θn":7.5e-5,"time":13.94,"Kp":2.6},{"θn":4.977e-5,"time":14.09,"Kp":2.6},{"θn":2.75e-5,"time":14.24,"Kp":2.6},{"θn":7.9e-6,"time":14.39,"Kp":2.6},{"θn":-8.94e-6,"time":14.55,"Kp":2.6},{"θn":-2.337e-5,"time":14.695,"Kp":2.6},{"θn":-3.546e-5,"time":14.85,"Kp":2.6},{"θn":-4.536e-5,"time":15.0,"Kp":2.6},{"θn":0.2,"time":0.0,"Kp":2.7},{"θn":0.1985,"time":0.1515,"Kp":2.7},{"θn":0.1942,"time":0.303,"Kp":2.7},{"θn":0.1876,"time":0.4546,"Kp":2.7},{"θn":0.1792,"time":0.606,"Kp":2.7},{"θn":0.1693,"time":0.758,"Kp":2.7},{"θn":0.1582,"time":0.909,"Kp":2.7},{"θn":0.1464,"time":1.061,"Kp":2.7},{"θn":0.134,"time":1.212,"Kp":2.7},{"θn":0.1214,"time":1.363,"Kp":2.7},{"θn":0.10876,"time":1.516,"Kp":2.7},{"θn":0.09625,"time":1.667,"Kp":2.7},{"θn":0.0841,"time":1.818,"Kp":2.7},{"θn":0.0724,"time":1.97,"Kp":2.7},{"θn":0.06125,"time":2.121,"Kp":2.7},{"θn":0.05075,"time":2.273,"Kp":2.7},{"θn":0.041,"time":2.424,"Kp":2.7},{"θn":0.03198,"time":2.576,"Kp":2.7},{"θn":0.02377,"time":2.727,"Kp":2.7},{"θn":0.01636,"time":2.879,"Kp":2.7},{"θn":0.009735,"time":3.031,"Kp":2.7},{"θn":0.003904,"time":3.182,"Kp":2.7},{"θn":-0.001165,"time":3.334,"Kp":2.7},{"θn":-0.005505,"time":3.484,"Kp":2.7},{"θn":-0.009155,"time":3.637,"Kp":2.7},{"θn":-0.01215,"time":3.787,"Kp":2.7},{"θn":-0.01455,"time":3.94,"Kp":2.7},{"θn":-0.01639,"time":4.09,"Kp":2.7},{"θn":-0.01773,"time":4.242,"Kp":2.7},{"θn":-0.01862,"time":4.395,"Kp":2.7},{"θn":-0.0191,"time":4.547,"Kp":2.7},{"θn":-0.01923,"time":4.695,"Kp":2.7},{"θn":-0.01906,"time":4.848,"Kp":2.7},{"θn":-0.01863,"time":5.0,"Kp":2.7},{"θn":-0.01797,"time":5.152,"Kp":2.7},{"θn":-0.01715,"time":5.305,"Kp":2.7},{"θn":-0.01619,"time":5.453,"Kp":2.7},{"θn":-0.01512,"time":5.605,"Kp":2.7},{"θn":-0.01398,"time":5.758,"Kp":2.7},{"θn":-0.01278,"time":5.91,"Kp":2.7},{"θn":-0.011566,"time":6.062,"Kp":2.7},{"θn":-0.01035,"time":6.21,"Kp":2.7},{"θn":-0.009155,"time":6.363,"Kp":2.7},{"θn":-0.00799,"time":6.516,"Kp":2.7},{"θn":-0.006863,"time":6.668,"Kp":2.7},{"θn":-0.0058,"time":6.816,"Kp":2.7},{"θn":-0.004795,"time":6.97,"Kp":2.7},{"θn":-0.00386,"time":7.12,"Kp":2.7},{"θn":-0.003002,"time":7.273,"Kp":2.7},{"θn":-0.002218,"time":7.426,"Kp":2.7},{"θn":-0.001513,"time":7.574,"Kp":2.7},{"θn":-0.0008826,"time":7.727,"Kp":2.7},{"θn":-0.0003288,"time":7.88,"Kp":2.7},{"θn":0.0001522,"time":8.03,"Kp":2.7},{"θn":0.0005636,"time":8.18,"Kp":2.7},{"θn":0.000909,"time":8.336,"Kp":2.7},{"θn":0.001192,"time":8.484,"Kp":2.7},{"θn":0.001417,"time":8.63,"Kp":2.7},{"θn":0.00159,"time":8.79,"Kp":2.7},{"θn":0.001715,"time":8.94,"Kp":2.7},{"θn":0.001796,"time":9.09,"Kp":2.7},{"θn":0.00184,"time":9.24,"Kp":2.7},{"θn":0.001849,"time":9.39,"Kp":2.7},{"θn":0.00183,"time":9.55,"Kp":2.7},{"θn":0.001787,"time":9.695,"Kp":2.7},{"θn":0.001722,"time":9.85,"Kp":2.7},{"θn":0.001642,"time":10.0,"Kp":2.7},{"θn":0.001548,"time":10.15,"Kp":2.7},{"θn":0.001445,"time":10.305,"Kp":2.7},{"θn":0.001334,"time":10.45,"Kp":2.7},{"θn":0.001219,"time":10.61,"Kp":2.7},{"θn":0.001102,"time":10.76,"Kp":2.7},{"θn":0.000985,"time":10.91,"Kp":2.7},{"θn":0.00087,"time":11.06,"Kp":2.7},{"θn":0.000758,"time":11.21,"Kp":2.7},{"θn":0.000651,"time":11.37,"Kp":2.7},{"θn":0.000549,"time":11.516,"Kp":2.7},{"θn":0.0004528,"time":11.664,"Kp":2.7},{"θn":0.0003636,"time":11.82,"Kp":2.7},{"θn":0.0002816,"time":11.97,"Kp":2.7},{"θn":0.0002071,"time":12.125,"Kp":2.7},{"θn":0.0001398,"time":12.27,"Kp":2.7},{"θn":7.993e-5,"time":12.42,"Kp":2.7},{"θn":2.73e-5,"time":12.58,"Kp":2.7},{"θn":-1.836e-5,"time":12.73,"Kp":2.7},{"θn":-5.734e-5,"time":12.875,"Kp":2.7},{"θn":-9.0e-5,"time":13.03,"Kp":2.7},{"θn":-0.00011677,"time":13.18,"Kp":2.7},{"θn":-0.0001379,"time":13.336,"Kp":2.7},{"θn":-0.0001541,"time":13.484,"Kp":2.7},{"θn":-0.0001657,"time":13.63,"Kp":2.7},{"θn":-0.0001732,"time":13.79,"Kp":2.7},{"θn":-0.000177,"time":13.94,"Kp":2.7},{"θn":-0.0001777,"time":14.09,"Kp":2.7},{"θn":-0.0001758,"time":14.24,"Kp":2.7},{"θn":-0.0001714,"time":14.39,"Kp":2.7},{"θn":-0.0001651,"time":14.55,"Kp":2.7},{"θn":-0.0001572,"time":14.695,"Kp":2.7},{"θn":-0.000148,"time":14.85,"Kp":2.7},{"θn":-0.000138,"time":15.0,"Kp":2.7},{"θn":0.2,"time":0.0,"Kp":2.8},{"θn":0.1982,"time":0.1515,"Kp":2.8},{"θn":0.1934,"time":0.303,"Kp":2.8},{"θn":0.1859,"time":0.4546,"Kp":2.8},{"θn":0.1763,"time":0.606,"Kp":2.8},{"θn":0.165,"time":0.758,"Kp":2.8},{"θn":0.1526,"time":0.909,"Kp":2.8},{"θn":0.1393,"time":1.061,"Kp":2.8},{"θn":0.1255,"time":1.212,"Kp":2.8},{"θn":0.11145,"time":1.363,"Kp":2.8},{"θn":0.09753,"time":1.516,"Kp":2.8},{"θn":0.0839,"time":1.667,"Kp":2.8},{"θn":0.07074,"time":1.818,"Kp":2.8},{"θn":0.05826,"time":1.97,"Kp":2.8},{"θn":0.04654,"time":2.121,"Kp":2.8},{"θn":0.03564,"time":2.273,"Kp":2.8},{"θn":0.0257,"time":2.424,"Kp":2.8},{"θn":0.01671,"time":2.576,"Kp":2.8},{"θn":0.00869,"time":2.727,"Kp":2.8},{"θn":0.00166,"time":2.879,"Kp":2.8},{"θn":-0.004414,"time":3.031,"Kp":2.8},{"θn":-0.00955,"time":3.182,"Kp":2.8},{"θn":-0.01382,"time":3.334,"Kp":2.8},{"θn":-0.01724,"time":3.484,"Kp":2.8},{"θn":-0.01988,"time":3.637,"Kp":2.8},{"θn":-0.02182,"time":3.787,"Kp":2.8},{"θn":-0.02312,"time":3.94,"Kp":2.8},{"θn":-0.02383,"time":4.09,"Kp":2.8},{"θn":-0.02405,"time":4.242,"Kp":2.8},{"θn":-0.02382,"time":4.395,"Kp":2.8},{"θn":-0.02322,"time":4.547,"Kp":2.8},{"θn":-0.02231,"time":4.695,"Kp":2.8},{"θn":-0.02115,"time":4.848,"Kp":2.8},{"θn":-0.01979,"time":5.0,"Kp":2.8},{"θn":-0.0183,"time":5.152,"Kp":2.8},{"θn":-0.01668,"time":5.305,"Kp":2.8},{"θn":-0.01502,"time":5.453,"Kp":2.8},{"θn":-0.013336,"time":5.605,"Kp":2.8},{"θn":-0.011665,"time":5.758,"Kp":2.8},{"θn":-0.010025,"time":5.91,"Kp":2.8},{"θn":-0.008446,"time":6.062,"Kp":2.8},{"θn":-0.006947,"time":6.21,"Kp":2.8},{"θn":-0.00554,"time":6.363,"Kp":2.8},{"θn":-0.004234,"time":6.516,"Kp":2.8},{"θn":-0.003044,"time":6.668,"Kp":2.8},{"θn":-0.001966,"time":6.816,"Kp":2.8},{"θn":-0.001008,"time":6.97,"Kp":2.8},{"θn":-0.0001676,"time":7.12,"Kp":2.8},{"θn":0.000558,"time":7.273,"Kp":2.8},{"θn":0.001172,"time":7.426,"Kp":2.8},{"θn":0.001679,"time":7.574,"Kp":2.8},{"θn":0.002089,"time":7.727,"Kp":2.8},{"θn":0.002403,"time":7.88,"Kp":2.8},{"θn":0.002632,"time":8.03,"Kp":2.8},{"θn":0.002785,"time":8.18,"Kp":2.8},{"θn":0.002869,"time":8.336,"Kp":2.8},{"θn":0.002892,"time":8.484,"Kp":2.8},{"θn":0.002863,"time":8.63,"Kp":2.8},{"θn":0.00279,"time":8.79,"Kp":2.8},{"θn":0.002678,"time":8.94,"Kp":2.8},{"θn":0.002537,"time":9.09,"Kp":2.8},{"θn":0.002373,"time":9.24,"Kp":2.8},{"θn":0.002192,"time":9.39,"Kp":2.8},{"θn":0.001999,"time":9.55,"Kp":2.8},{"θn":0.001799,"time":9.695,"Kp":2.8},{"θn":0.0015955,"time":9.85,"Kp":2.8},{"θn":0.001394,"time":10.0,"Kp":2.8},{"θn":0.001198,"time":10.15,"Kp":2.8},{"θn":0.001008,"time":10.305,"Kp":2.8},{"θn":0.0008283,"time":10.45,"Kp":2.8},{"θn":0.00066,"time":10.61,"Kp":2.8},{"θn":0.0005035,"time":10.76,"Kp":2.8},{"θn":0.0003607,"time":10.91,"Kp":2.8},{"θn":0.0002317,"time":11.06,"Kp":2.8},{"θn":0.00011694,"time":11.21,"Kp":2.8},{"θn":1.645e-5,"time":11.37,"Kp":2.8},{"θn":-7.03e-5,"time":11.516,"Kp":2.8},{"θn":-0.0001435,"time":11.664,"Kp":2.8},{"θn":-0.0002041,"time":11.82,"Kp":2.8},{"θn":-0.0002527,"time":11.97,"Kp":2.8},{"θn":-0.0002902,"time":12.125,"Kp":2.8},{"θn":-0.0003176,"time":12.27,"Kp":2.8},{"θn":-0.0003355,"time":12.42,"Kp":2.8},{"θn":-0.0003452,"time":12.58,"Kp":2.8},{"θn":-0.0003479,"time":12.73,"Kp":2.8},{"θn":-0.000344,"time":12.875,"Kp":2.8},{"θn":-0.000335,"time":13.03,"Kp":2.8},{"θn":-0.0003214,"time":13.18,"Kp":2.8},{"θn":-0.0003045,"time":13.336,"Kp":2.8},{"θn":-0.0002847,"time":13.484,"Kp":2.8},{"θn":-0.0002627,"time":13.63,"Kp":2.8},{"θn":-0.0002394,"time":13.79,"Kp":2.8},{"θn":-0.0002153,"time":13.94,"Kp":2.8},{"θn":-0.000191,"time":14.09,"Kp":2.8},{"θn":-0.0001668,"time":14.24,"Kp":2.8},{"θn":-0.0001432,"time":14.39,"Kp":2.8},{"θn":-0.00012046,"time":14.55,"Kp":2.8},{"θn":-9.89e-5,"time":14.695,"Kp":2.8},{"θn":-7.86e-5,"time":14.85,"Kp":2.8},{"θn":-5.99e-5,"time":15.0,"Kp":2.8},{"θn":0.2,"time":0.0,"Kp":2.9},{"θn":0.198,"time":0.1515,"Kp":2.9},{"θn":0.1925,"time":0.303,"Kp":2.9},{"θn":0.1842,"time":0.4546,"Kp":2.9},{"θn":0.1735,"time":0.606,"Kp":2.9},{"θn":0.1609,"time":0.758,"Kp":2.9},{"θn":0.147,"time":0.909,"Kp":2.9},{"θn":0.1323,"time":1.061,"Kp":2.9},{"θn":0.1171,"time":1.212,"Kp":2.9},{"θn":0.1018,"time":1.363,"Kp":2.9},{"θn":0.08673,"time":1.516,"Kp":2.9},{"θn":0.0721,"time":1.667,"Kp":2.9},{"θn":0.05814,"time":1.818,"Kp":2.9},{"θn":0.04504,"time":1.97,"Kp":2.9},{"θn":0.0329,"time":2.121,"Kp":2.9},{"θn":0.02187,"time":2.273,"Kp":2.9},{"θn":0.01195,"time":2.424,"Kp":2.9},{"θn":0.003199,"time":2.576,"Kp":2.9},{"θn":-0.004383,"time":2.727,"Kp":2.9},{"θn":-0.01081,"time":2.879,"Kp":2.9},{"θn":-0.01613,"time":3.031,"Kp":2.9},{"θn":-0.0204,"time":3.182,"Kp":2.9},{"θn":-0.02367,"time":3.334,"Kp":2.9},{"θn":-0.02603,"time":3.484,"Kp":2.9},{"θn":-0.02756,"time":3.637,"Kp":2.9},{"θn":-0.02835,"time":3.787,"Kp":2.9},{"θn":-0.02847,"time":3.94,"Kp":2.9},{"θn":-0.02805,"time":4.09,"Kp":2.9},{"θn":-0.02715,"time":4.242,"Kp":2.9},{"θn":-0.02585,"time":4.395,"Kp":2.9},{"θn":-0.02423,"time":4.547,"Kp":2.9},{"θn":-0.02238,"time":4.695,"Kp":2.9},{"θn":-0.02037,"time":4.848,"Kp":2.9},{"θn":-0.01825,"time":5.0,"Kp":2.9},{"θn":-0.01607,"time":5.152,"Kp":2.9},{"θn":-0.0139,"time":5.305,"Kp":2.9},{"θn":-0.011765,"time":5.453,"Kp":2.9},{"θn":-0.009705,"time":5.605,"Kp":2.9},{"θn":-0.007744,"time":5.758,"Kp":2.9},{"θn":-0.005917,"time":5.91,"Kp":2.9},{"θn":-0.00423,"time":6.062,"Kp":2.9},{"θn":-0.0027,"time":6.21,"Kp":2.9},{"θn":-0.001335,"time":6.363,"Kp":2.9},{"θn":-0.0001348,"time":6.516,"Kp":2.9},{"θn":0.000899,"time":6.668,"Kp":2.9},{"θn":0.00177,"time":6.816,"Kp":2.9},{"θn":0.002483,"time":6.97,"Kp":2.9},{"θn":0.003052,"time":7.12,"Kp":2.9},{"θn":0.003479,"time":7.273,"Kp":2.9},{"θn":0.003782,"time":7.426,"Kp":2.9},{"θn":0.003967,"time":7.574,"Kp":2.9},{"θn":0.004055,"time":7.727,"Kp":2.9},{"θn":0.004047,"time":7.88,"Kp":2.9},{"θn":0.003967,"time":8.03,"Kp":2.9},{"θn":0.00382,"time":8.18,"Kp":2.9},{"θn":0.003622,"time":8.336,"Kp":2.9},{"θn":0.003384,"time":8.484,"Kp":2.9},{"θn":0.00311,"time":8.63,"Kp":2.9},{"θn":0.00282,"time":8.79,"Kp":2.9},{"θn":0.002514,"time":8.94,"Kp":2.9},{"θn":0.002203,"time":9.09,"Kp":2.9},{"θn":0.001895,"time":9.24,"Kp":2.9},{"θn":0.001593,"time":9.39,"Kp":2.9},{"θn":0.001303,"time":9.55,"Kp":2.9},{"θn":0.001029,"time":9.695,"Kp":2.9},{"θn":0.0007734,"time":9.85,"Kp":2.9},{"θn":0.00054,"time":10.0,"Kp":2.9},{"θn":0.000328,"time":10.15,"Kp":2.9},{"θn":0.00014,"time":10.305,"Kp":2.9},{"θn":-2.444e-5,"time":10.45,"Kp":2.9},{"θn":-0.0001651,"time":10.61,"Kp":2.9},{"θn":-0.000283,"time":10.76,"Kp":2.9},{"θn":-0.0003786,"time":10.91,"Kp":2.9},{"θn":-0.0004537,"time":11.06,"Kp":2.9},{"θn":-0.0005097,"time":11.21,"Kp":2.9},{"θn":-0.000548,"time":11.37,"Kp":2.9},{"θn":-0.0005703,"time":11.516,"Kp":2.9},{"θn":-0.0005784,"time":11.664,"Kp":2.9},{"θn":-0.0005746,"time":11.82,"Kp":2.9},{"θn":-0.0005603,"time":11.97,"Kp":2.9},{"θn":-0.0005374,"time":12.125,"Kp":2.9},{"θn":-0.000507,"time":12.27,"Kp":2.9},{"θn":-0.0004716,"time":12.42,"Kp":2.9},{"θn":-0.000432,"time":12.58,"Kp":2.9},{"θn":-0.0003898,"time":12.73,"Kp":2.9},{"θn":-0.000346,"time":12.875,"Kp":2.9},{"θn":-0.0003016,"time":13.03,"Kp":2.9},{"θn":-0.0002577,"time":13.18,"Kp":2.9},{"θn":-0.0002152,"time":13.336,"Kp":2.9},{"θn":-0.0001745,"time":13.484,"Kp":2.9},{"θn":-0.0001363,"time":13.63,"Kp":2.9},{"θn":-0.0001007,"time":13.79,"Kp":2.9},{"θn":-6.82e-5,"time":13.94,"Kp":2.9},{"θn":-3.89e-5,"time":14.09,"Kp":2.9},{"θn":-1.305e-5,"time":14.24,"Kp":2.9},{"θn":9.4e-6,"time":14.39,"Kp":2.9},{"θn":2.85e-5,"time":14.55,"Kp":2.9},{"θn":4.435e-5,"time":14.695,"Kp":2.9},{"θn":5.716e-5,"time":14.85,"Kp":2.9},{"θn":6.71e-5,"time":15.0,"Kp":2.9},{"θn":0.2,"time":0.0,"Kp":3.0},{"θn":0.1979,"time":0.1515,"Kp":3.0},{"θn":0.1918,"time":0.303,"Kp":3.0},{"θn":0.1825,"time":0.4546,"Kp":3.0},{"θn":0.1705,"time":0.606,"Kp":3.0},{"θn":0.1567,"time":0.758,"Kp":3.0},{"θn":0.1415,"time":0.909,"Kp":3.0},{"θn":0.1255,"time":1.061,"Kp":3.0},{"θn":0.10895,"time":1.212,"Kp":3.0},{"θn":0.09247,"time":1.363,"Kp":3.0},{"θn":0.0763,"time":1.516,"Kp":3.0},{"θn":0.06082,"time":1.667,"Kp":3.0},{"θn":0.0462,"time":1.818,"Kp":3.0},{"θn":0.03268,"time":1.97,"Kp":3.0},{"θn":0.02036,"time":2.121,"Kp":3.0},{"θn":0.00932,"time":2.273,"Kp":3.0},{"θn":-0.0003476,"time":2.424,"Kp":3.0},{"θn":-0.00865,"time":2.576,"Kp":3.0},{"θn":-0.01561,"time":2.727,"Kp":3.0},{"θn":-0.02126,"time":2.879,"Kp":3.0},{"θn":-0.02565,"time":3.031,"Kp":3.0},{"θn":-0.02888,"time":3.182,"Kp":3.0},{"θn":-0.03105,"time":3.334,"Kp":3.0},{"θn":-0.03226,"time":3.484,"Kp":3.0},{"θn":-0.0326,"time":3.637,"Kp":3.0},{"θn":-0.0322,"time":3.787,"Kp":3.0},{"θn":-0.03119,"time":3.94,"Kp":3.0},{"θn":-0.02965,"time":4.09,"Kp":3.0},{"θn":-0.02768,"time":4.242,"Kp":3.0},{"θn":-0.02542,"time":4.395,"Kp":3.0},{"θn":-0.02292,"time":4.547,"Kp":3.0},{"θn":-0.0203,"time":4.695,"Kp":3.0},{"θn":-0.01761,"time":4.848,"Kp":3.0},{"θn":-0.014915,"time":5.0,"Kp":3.0},{"θn":-0.01229,"time":5.152,"Kp":3.0},{"θn":-0.00977,"time":5.305,"Kp":3.0},{"θn":-0.0074,"time":5.453,"Kp":3.0},{"θn":-0.005207,"time":5.605,"Kp":3.0},{"θn":-0.00321,"time":5.758,"Kp":3.0},{"θn":-0.001425,"time":5.91,"Kp":3.0},{"θn":0.0001403,"time":6.062,"Kp":3.0},{"θn":0.001482,"time":6.21,"Kp":3.0},{"θn":0.002604,"time":6.363,"Kp":3.0},{"θn":0.003511,"time":6.516,"Kp":3.0},{"θn":0.004215,"time":6.668,"Kp":3.0},{"θn":0.004734,"time":6.816,"Kp":3.0},{"θn":0.005077,"time":6.97,"Kp":3.0},{"θn":0.005264,"time":7.12,"Kp":3.0},{"θn":0.005314,"time":7.273,"Kp":3.0},{"θn":0.005245,"time":7.426,"Kp":3.0},{"θn":0.00507,"time":7.574,"Kp":3.0},{"θn":0.004814,"time":7.727,"Kp":3.0},{"θn":0.004494,"time":7.88,"Kp":3.0},{"θn":0.00412,"time":8.03,"Kp":3.0},{"θn":0.003714,"time":8.18,"Kp":3.0},{"θn":0.003284,"time":8.336,"Kp":3.0},{"θn":0.002846,"time":8.484,"Kp":3.0},{"θn":0.002407,"time":8.63,"Kp":3.0},{"θn":0.00198,"time":8.79,"Kp":3.0},{"θn":0.001571,"time":8.94,"Kp":3.0},{"θn":0.001185,"time":9.09,"Kp":3.0},{"θn":0.0008297,"time":9.24,"Kp":3.0},{"θn":0.000506,"time":9.39,"Kp":3.0},{"θn":0.000217,"time":9.55,"Kp":3.0},{"θn":-3.6e-5,"time":9.695,"Kp":3.0},{"θn":-0.0002527,"time":9.85,"Kp":3.0},{"θn":-0.0004334,"time":10.0,"Kp":3.0},{"θn":-0.00058,"time":10.15,"Kp":3.0},{"θn":-0.000693,"time":10.305,"Kp":3.0},{"θn":-0.000776,"time":10.45,"Kp":3.0},{"θn":-0.00083,"time":10.61,"Kp":3.0},{"θn":-0.0008593,"time":10.76,"Kp":3.0},{"θn":-0.000866,"time":10.91,"Kp":3.0},{"θn":-0.0008535,"time":11.06,"Kp":3.0},{"θn":-0.000825,"time":11.21,"Kp":3.0},{"θn":-0.0007825,"time":11.37,"Kp":3.0},{"θn":-0.000729,"time":11.516,"Kp":3.0},{"θn":-0.000668,"time":11.664,"Kp":3.0},{"θn":-0.0006013,"time":11.82,"Kp":3.0},{"θn":-0.000531,"time":11.97,"Kp":3.0},{"θn":-0.00046,"time":12.125,"Kp":3.0},{"θn":-0.0003886,"time":12.27,"Kp":3.0},{"θn":-0.000319,"time":12.42,"Kp":3.0},{"θn":-0.0002525,"time":12.58,"Kp":3.0},{"θn":-0.0001899,"time":12.73,"Kp":3.0},{"θn":-0.0001322,"time":12.875,"Kp":3.0},{"θn":-7.98e-5,"time":13.03,"Kp":3.0},{"θn":-3.296e-5,"time":13.18,"Kp":3.0},{"θn":7.9e-6,"time":13.336,"Kp":3.0},{"θn":4.3e-5,"time":13.484,"Kp":3.0},{"θn":7.21e-5,"time":13.63,"Kp":3.0},{"θn":9.56e-5,"time":13.79,"Kp":3.0},{"θn":0.0001138,"time":13.94,"Kp":3.0},{"θn":0.000127,"time":14.09,"Kp":3.0},{"θn":0.0001355,"time":14.24,"Kp":3.0},{"θn":0.0001402,"time":14.39,"Kp":3.0},{"θn":0.000141,"time":14.55,"Kp":3.0},{"θn":0.0001389,"time":14.695,"Kp":3.0},{"θn":0.0001341,"time":14.85,"Kp":3.0},{"θn":0.0001271,"time":15.0,"Kp":3.0}]}]}</script>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb1" data-startfrom="126" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 125;"><span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>viewof Kp <span class="op">=</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">assign</span>(Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">1</span><span class="op">,</span> <span class="dv">3</span>]<span class="op">,</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Kp"</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.1</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="fl">2.5</span> })<span class="op">,</span> {<span class="dt">style</span><span class="op">:</span> <span class="st">'--label-width:20px'</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb2" data-startfrom="130" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 129;"><span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a>  <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> { <span class="dt">domain</span><span class="op">:</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>] }<span class="op">,</span></span>
+<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> { <span class="dt">domain</span><span class="op">:</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">15</span>] }<span class="op">,</span></span>
+<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Axes</span></span>
+<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleX</span>([<span class="dv">0</span>])<span class="op">,</span></span>
+<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="dv">0</span>])<span class="op">,</span></span>
+<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Data</span></span>
+<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Kp is still 64 bit float while the dataframe is 16 bit float. So we do a crude comparison for equality. </span></span>
+<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">line</span>(segway<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">abs</span>(d<span class="op">.</span><span class="at">Kp</span> <span class="op">-</span> Kp) <span class="op">&lt;=</span> <span class="fl">0.01</span>)<span class="op">,</span> </span>
+<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a>              {<span class="dt">x</span><span class="op">:</span><span class="st">"time"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span><span class="st">"θn"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"darkblue"</span> })<span class="op">,</span></span>
+<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>This example illustrates the biggest benefit of feedback: <strong>feedback can stabilize unstable systems.</strong></p>
+</section>
+<section id="closed-loop-control-provides-robustness-against-disturbances-and-model-uncertainty" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="closed-loop-control-provides-robustness-against-disturbances-and-model-uncertainty"><span class="header-section-number">1.2</span> Closed-loop control provides robustness against disturbances and model uncertainty</h2>
+<p>In this section, we present by a simple example of designing the cruise control of a car to illustrate that feedback control can provide robustness against model uncertainty. This example is adapted from Khalil (Chapter 1).</p>
+<p>Consider a car of mass <span class="math inline">\(m\)</span> moving at velocity <span class="math inline">\(v(t)\)</span>. Assume that when the accelerator is pressed at an angle <span class="math inline">\(u(t)\)</span>, the engine produces a thrust <span class="math inline">\(K_e u(t)\)</span>, where <span class="math inline">\(K_e\)</span> is the engine gain. The car experiences friction, which is assumed to be <span class="math inline">\(bv(t)\)</span>, where <span class="math inline">\(b\)</span> is the equivalent damping coefficient. In addition, there is air drag, rolling resistance, and other factors, all of which we model as <strong>disturbance</strong> <span class="math inline">\(w(t)\)</span>.</p>
+<p>Then, by Newton’s second law, the simplified model of the dynamics can be written as <span class="math display">\[
+  m \frac{dv(t)}{dt} = K_e u(t) - b v(t) + w(t)
+\]</span> Note that this is a causal LTI system with two inputs: the control input <span class="math inline">\(u(t)\)</span> and the disturbance <span class="math inline">\(w(t)\)</span>; and one output: the velocity <span class="math inline">\(v(t)\)</span>.</p>
+<p>The objective of the cruise control is as follows. Given a reference velocity <span class="math inline">\(v_{\mathrm{ref}}\)</span>, design a control input <span class="math inline">\(u(t)\)</span> to ensure that actual velocity equals <span class="math inline">\(v_{\mathrm{ref}}\)</span> in steady state.</p>
+<p>The system designer knows the engine gain <span class="math inline">\(K_e\)</span>, but the other parameters, mass <span class="math inline">\(m\)</span> and damping coefficient <span class="math inline">\(b\)</span>, depend on operating conditions.</p>
+<p>We will design a controller assuming some nominal values <span class="math inline">\(\hat m\)</span> and <span class="math inline">\(\hat b\)</span> for <span class="math inline">\(m\)</span> and <span class="math inline">\(b\)</span>, respectively and then check how the system performs when these parameters take their true value.</p>
+<section id="open-loop-control" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="open-loop-control">Open loop control</h3>
+<p>The simplest control strategy is open-loop control in which we apply a step input <span class="math inline">\(u(t) = N \IND(t)\)</span>, where the gain <span class="math inline">\(N\)</span> is chosen to ensure that the steady state output equals <span class="math inline">\(v_{\mathrm{ref}}\)</span>. Assuming <span class="math inline">\(w(t) = 0\)</span>, the nominal dynamics are given by <span class="math display">\[
+  \hat m \frac{dv(t)}{dt} = N K_e - b v(t).
+\]</span> At steady state, <span class="math inline">\(dv(t)/dt = 0\)</span>. Hence, to ensure that the steady-state value of <span class="math inline">\(v(t)\)</span> is <span class="math inline">\(v_{\mathrm{ref}}\)</span>, we must choose <span class="math inline">\(N\)</span> such that <span class="math display">\[
+  \frac{N K_e}{\hat b} = v_{\mathrm{ref}}
+  \implies
+   N = \frac{ v_{\mathrm{ref}} \hat b }{K_e}.
+\]</span></p>
+<p>When this control is applied to the actual system with the true parameters <span class="math inline">\(m\)</span> and <span class="math inline">\(b\)</span>, the system dynamics are given by <span class="math display">\[
+   m \frac{dv(t)}{dt} = \hat b v_{\mathrm{ref}}  - b v(t) + w(t).
+\]</span> As before, at steady state <span class="math inline">\(dv(t)/dt = 0\)</span>, so the steady state value of the velocity is given by <span class="math display">\[
+  v_{\mathrm{ss}} = \frac{v_{\mathrm{ref}} \hat b}{b} + \frac{1}{b} w(t)
+\]</span> which leads to a steady state error of <span class="math display">\[
+  v_{\mathrm{ref}} - v_{\mathrm{ss}} = v_{\mathrm{ref}} \left(\frac{b - \hat b}{b}\right)
+  - \frac{1}{b} w(t).
+\]</span></p>
+</section>
+<section id="closed-loop-control" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="closed-loop-control">Closed-loop control</h3>
+<p>In closed loop control, we assume that the speed is measured by a speedometer and the controller uses this measurement to determine the control input <span class="math inline">\(u\)</span>.</p>
+<p>The simplest closed-loop strategy is that of <em>proportional controller</em>, where we apply a control input <span class="math display">\[
+  u(t) = \frac{v_{\mathrm{ref}} \hat b}{b} + K (v_{\mathrm{ref}} - v(t) )
+\]</span> where <span class="math inline">\(K\)</span> is called the <strong>feedback gain</strong>. Under this control, the closed-loop system is given by (assuming <span class="math inline">\(w(t) = 0\)</span>) <span class="math display">\[
+  m \frac{d v(t)}{dt} = \hat b v_{\mathrm{ref}} + K K_e (v_{\mathrm{ref}} - v(t) ) - b v
+  = -(b + K K_e) v(t) + (\hat b + K K_e) v_{\mathrm{ref}} + w(t)
+\]</span> At steady state, <span class="math inline">\(dv(t)/dt = 0\)</span>, so we have <span class="math display">\[
+  v_{\mathrm{ss}} = v_{\mathrm{ref}} \left(\frac{\hat b + KK_e}{b + K K_e}\right)
+  + \left( \frac{1}{b + K K_e} \right) w(t)
+\]</span> Thus, the steady-state error is given by <span class="math display">\[
+  v_{\mathrm{ref}} - v_{\mathrm{ss}}
+  = \left( \frac{b - \hat b}{b + K K_e} \right) v_{\mathrm{ref}}
+  - \left( \frac{1}{b + K K_e} \right) w(t)
+\]</span></p>
+<p>Suppose <span class="math inline">\(w(t) = 0\)</span>. Comparing the steady-state error of open-loop and closed-loop control, we observe that the denominator <span class="math inline">\(b\)</span> in open-loop expression has been replaced by <span class="math inline">\(b + K K_e\)</span>. If the feedback gain <span class="math inline">\(K\)</span> is designed to be large, then the steady-state error of closed-loop control will be much smaller than the steady-state error of open-loop control. Thus, <strong>closed-loop control provides robustness against model uncertainty.</strong></p>
+<p>Now suppose <span class="math inline">\(w(t) \neq 0\)</span>. Comparing the impact of disturbance on steady-state error for open- and closed-loop control, we observe that as before the denominator <span class="math inline">\(b\)</span> in open-loop expression has been replaced by <span class="math inline">\(b + K K_e\)</span>. Thus, if the feedback gain <span class="math inline">\(K\)</span> is designed to be large, the impact of disturbances on closed-loop system is small. Thus, <strong>closed-loop control helps in disturbance rejection.</strong></p>
+<p>In a real-system, we need to understand the impact of disturbances, measurement noise, and time-delay between applying a control input (increasing the throttle) and the actuation (increased thrust generated by the engine). For the most part, in this course we will ignore these practical constraints and focus on understanding the analysis and synthesis of control system under idealized assumptions.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IiAgdmlld29mIEtwID0gT2JqZWN0LmFzc2lnbihJbnB1dHMucmFuZ2UoWzEsIDNdLCB7bGFiZWw6IFwiS3BcIiwgc3RlcDogMC4xLCB2YWx1ZTogMi41IH0pLCB7c3R5bGU6ICctLWxhYmVsLXdpZHRoOjIwcHgnfSlcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMiIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IlBsb3QucGxvdCh7XG4gIGdyaWQ6IHRydWUsXG4gIHk6IHsgZG9tYWluOiBbMCwgMV0gfSxcbiAgeDogeyBkb21haW46IFswLCAxNV0gfSxcbiAgbWFya3M6IFtcbiAgICAvLyBBeGVzXG4gICAgUGxvdC5ydWxlWChbMF0pLFxuICAgIFBsb3QucnVsZVkoWzBdKSxcbiAgICAvLyBEYXRhXG4gICAgLy8gS3AgaXMgc3RpbGwgNjQgYml0IGZsb2F0IHdoaWxlIHRoZSBkYXRhZnJhbWUgaXMgMTYgYml0IGZsb2F0LiBTbyB3ZSBkbyBhIGNydWRlIGNvbXBhcmlzb24gZm9yIGVxdWFsaXR5LiBcbiAgICBQbG90LmxpbmUoc2Vnd2F5LmZpbHRlcihkID0+IE1hdGguYWJzKGQuS3AgLSBLcCkgPD0gMC4wMSksIFxuICAgICAgICAgICAgICB7eDpcInRpbWVcIiwgeTpcIs64blwiLCBzdHJva2U6IFwiZGFya2JsdWVcIiB9KSxcbiAgXVxufSlcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgnS3AnKSJ9XX0=
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../..";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/adityam\.github\.io\/linear-systems\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link" aria-label="Course Outline">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Course Outline</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./freq-modeling.html" class="pagination-link" aria-label="Frequency domain modeling">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/introduction.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div></div></footer><script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

@@ -2,15 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.7.33">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2025-08-05">
+<meta name="dcterms.date" content="2025-08-21">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
-<title>5&nbsp; Pole placement via state feedback – Linear Systems and Control</title>
+<title>6&nbsp; Pole placement via state feedback – Linear Systems and Control</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -76,14 +76,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-bc185b5c5bdbcb35c2eb49d8a876ef70.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-7099be0d4a40a56ccb81779c78679504.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-6b92bf55388de74d0d491143cae84547.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-7099be0d4a40a56ccb81779c78679504.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-8545327574da039649cbdd200ac864eb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-07b0747d72fcd748d306d7e0a9991ca0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-8545327574da039649cbdd200ac864eb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/nutshell-1.0.6/nutshell.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -393,7 +393,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./state-feedback.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pole placement via state feedback</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./state-feedback.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Pole placement via state feedback</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -413,80 +413,86 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./freq-modeling.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./state-space-models.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">State space models</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">State space models</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./step-response.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Step Response</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Step Response</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./matrix-exponential.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Time response of state space models</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Time response of state space models</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./state-feedback.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pole placement via state feedback</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Pole placement via state feedback</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./output-feedback.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">State observers and output feedback</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">State observers and output feedback</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./routh-hurwitz.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Routh-Hurwitz Stability Criterion</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Routh-Hurwitz Stability Criterion</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./block-diagrams.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Block diagrams</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Block diagrams</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./steady-state-errors.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Steady-state errors</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Steady-state errors</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./bode-and-nyquist.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Bode and Nyquist plots</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Bode and Nyquist plots</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./nyquist-stability.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Nyquist Stability Criterion</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Nyquist Stability Criterion</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./safety-margins.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Gain and Phase margins</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Gain and Phase margins</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lag-lead-compensators.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lag-lead compensators</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lag-lead compensators</span></span></a>
   </div>
 </li>
     </ul>
@@ -499,22 +505,22 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#state-feedback-for-systems-in-ccf" id="toc-state-feedback-for-systems-in-ccf" class="nav-link active" data-scroll-target="#state-feedback-for-systems-in-ccf"><span class="header-section-number">5.1</span> State feedback for systems in CCF</a></li>
-  <li><a href="#state-feedback-for-systems-not-in-ccf" id="toc-state-feedback-for-systems-not-in-ccf" class="nav-link" data-scroll-target="#state-feedback-for-systems-not-in-ccf"><span class="header-section-number">5.2</span> State feedback for systems not in CCF</a>
+  <li><a href="#state-feedback-for-systems-in-ccf" id="toc-state-feedback-for-systems-in-ccf" class="nav-link active" data-scroll-target="#state-feedback-for-systems-in-ccf"><span class="header-section-number">6.1</span> State feedback for systems in CCF</a></li>
+  <li><a href="#state-feedback-for-systems-not-in-ccf" id="toc-state-feedback-for-systems-not-in-ccf" class="nav-link" data-scroll-target="#state-feedback-for-systems-not-in-ccf"><span class="header-section-number">6.2</span> State feedback for systems not in CCF</a>
   <ul class="collapse">
-  <li><a href="#controllability-matrix" id="toc-controllability-matrix" class="nav-link" data-scroll-target="#controllability-matrix"><span class="header-section-number">5.2.1</span> Controllability matrix</a></li>
-  <li><a href="#pole-placement" id="toc-pole-placement" class="nav-link" data-scroll-target="#pole-placement"><span class="header-section-number">5.2.2</span> Pole Placement</a></li>
+  <li><a href="#controllability-matrix" id="toc-controllability-matrix" class="nav-link" data-scroll-target="#controllability-matrix"><span class="header-section-number">6.2.1</span> Controllability matrix</a></li>
+  <li><a href="#pole-placement" id="toc-pole-placement" class="nav-link" data-scroll-target="#pole-placement"><span class="header-section-number">6.2.2</span> Pole Placement</a></li>
   </ul></li>
-  <li><a href="#state-feedback-for-reference-tracking" id="toc-state-feedback-for-reference-tracking" class="nav-link" data-scroll-target="#state-feedback-for-reference-tracking"><span class="header-section-number">5.3</span> State-feedback for reference tracking</a></li>
-  <li><a href="#understanding-lack-of-controllability" id="toc-understanding-lack-of-controllability" class="nav-link" data-scroll-target="#understanding-lack-of-controllability"><span class="header-section-number">5.4</span> Understanding lack of controllability</a>
+  <li><a href="#state-feedback-for-reference-tracking" id="toc-state-feedback-for-reference-tracking" class="nav-link" data-scroll-target="#state-feedback-for-reference-tracking"><span class="header-section-number">6.3</span> State-feedback for reference tracking</a></li>
+  <li><a href="#understanding-lack-of-controllability" id="toc-understanding-lack-of-controllability" class="nav-link" data-scroll-target="#understanding-lack-of-controllability"><span class="header-section-number">6.4</span> Understanding lack of controllability</a>
   <ul class="collapse">
-  <li><a href="#uncontrollable-modes-of-a-system" id="toc-uncontrollable-modes-of-a-system" class="nav-link" data-scroll-target="#uncontrollable-modes-of-a-system"><span class="header-section-number">5.4.1</span> Uncontrollable modes of a system</a></li>
-  <li><a href="#uncontrollability-and-pole-zero-cancellation" id="toc-uncontrollability-and-pole-zero-cancellation" class="nav-link" data-scroll-target="#uncontrollability-and-pole-zero-cancellation"><span class="header-section-number">5.4.2</span> Uncontrollability and pole-zero cancellation</a></li>
-  <li><a href="#properties-of-controllability" id="toc-properties-of-controllability" class="nav-link" data-scroll-target="#properties-of-controllability"><span class="header-section-number">5.4.3</span> Properties of controllability</a></li>
+  <li><a href="#uncontrollable-modes-of-a-system" id="toc-uncontrollable-modes-of-a-system" class="nav-link" data-scroll-target="#uncontrollable-modes-of-a-system"><span class="header-section-number">6.4.1</span> Uncontrollable modes of a system</a></li>
+  <li><a href="#uncontrollability-and-pole-zero-cancellation" id="toc-uncontrollability-and-pole-zero-cancellation" class="nav-link" data-scroll-target="#uncontrollability-and-pole-zero-cancellation"><span class="header-section-number">6.4.2</span> Uncontrollability and pole-zero cancellation</a></li>
+  <li><a href="#properties-of-controllability" id="toc-properties-of-controllability" class="nav-link" data-scroll-target="#properties-of-controllability"><span class="header-section-number">6.4.3</span> Properties of controllability</a></li>
   </ul></li>
-  <li><a href="#state-feedback-via-digital-controllers" id="toc-state-feedback-via-digital-controllers" class="nav-link" data-scroll-target="#state-feedback-via-digital-controllers"><span class="header-section-number">5.5</span> State-feedback via digital controllers</a>
+  <li><a href="#state-feedback-via-digital-controllers" id="toc-state-feedback-via-digital-controllers" class="nav-link" data-scroll-target="#state-feedback-via-digital-controllers"><span class="header-section-number">6.5</span> State-feedback via digital controllers</a>
   <ul class="collapse">
-  <li><a href="#pole-placement-for-digital-controllers" id="toc-pole-placement-for-digital-controllers" class="nav-link" data-scroll-target="#pole-placement-for-digital-controllers"><span class="header-section-number">5.5.1</span> Pole placement for digital controllers</a></li>
+  <li><a href="#pole-placement-for-digital-controllers" id="toc-pole-placement-for-digital-controllers" class="nav-link" data-scroll-target="#pole-placement-for-digital-controllers"><span class="header-section-number">6.5.1</span> Pole placement for digital controllers</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/state-feedback.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
@@ -525,7 +531,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pole placement via state feedback</span></h1>
+<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Pole placement via state feedback</span></h1>
 </div>
 
 
@@ -551,7 +557,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">August 5, 2025</p>
+      <p class="date">August 21, 2025</p>
     </div>
   </div>
   
@@ -574,11 +580,11 @@ y(t) &amp;= C x(t)
 <img src="figures/svg/SSM1.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-block-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5.1: Block diagram for state feedback
+Figure&nbsp;6.1: Block diagram for state feedback
 </figcaption>
 </figure>
 </div>
-<p>The basic idea of state feedback is shown in <a href="output-feedback.html#fig-block" class="quarto-xref">Figure&nbsp;<span>6.1</span></a>. The system has two tunable blocks: the <strong>feedback gain</strong> <span class="math inline">\(K\)</span> which is a <span class="math inline">\(1 \times n\)</span> matrix and the <strong>pre-compensator</strong> <span class="math inline">\(N\)</span>, which is a scalar. The equation for the input-output system may be written as: <span class="math display">\[\begin{align*}
+<p>The basic idea of state feedback is shown in <a href="output-feedback.html#fig-block" class="quarto-xref">Figure&nbsp;<span>7.1</span></a>. The system has two tunable blocks: the <strong>feedback gain</strong> <span class="math inline">\(K\)</span> which is a <span class="math inline">\(1 \times n\)</span> matrix and the <strong>pre-compensator</strong> <span class="math inline">\(N\)</span>, which is a scalar. The equation for the input-output system may be written as: <span class="math display">\[\begin{align*}
   \dot x(t) &amp;= A x(t) + B \bigl( N r(t) - K x(t) \bigr),  \\
   y(t) &amp;= C x(t),
 \end{align*}\]</span> or, equivalently, <span class="math display">\[\begin{align*}
@@ -589,8 +595,8 @@ K = \MATRIX{k_0 &amp; \cdots &amp; k_{n-1}}.
 \]</span></p>
 <p>We will first consider the system without any input (i.e., <span class="math inline">\(r(t) = 0\)</span>) and consider the zero input response. In this case, we only need to design <span class="math inline">\(K\)</span>, which has <span class="math inline">\(n\)</span> tunable gains <span class="math inline">\(k_0, \dots, k_{n-1}\)</span>. The hope is that we can find these gain to arbitrarily choose the eigenvalues of the closed loop system. This is called <strong>pole placement</strong>.</p>
 <p>We will start by looking at system in CCF and show that for such systems pole placement can be achieved by simply comparing coefficients of the characteristic polynomial of the open loop systems and the designed characteristic polynomial of the closed loop system. We will then look at systems that are not in CCF and show that if the system satisfies a condition known as <strong>controllability</strong>, we can find a transformation that converts the to CCF and use the results from state transformation to find <span class="math inline">\(K\)</span>.</p>
-<section id="state-feedback-for-systems-in-ccf" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="state-feedback-for-systems-in-ccf"><span class="header-section-number">5.1</span> State feedback for systems in CCF</h2>
+<section id="state-feedback-for-systems-in-ccf" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="state-feedback-for-systems-in-ccf"><span class="header-section-number">6.1</span> State feedback for systems in CCF</h2>
 <p>Consider a state space system in CCF with <span class="math display">\[
 A = \MATRIX{
 0 &amp; 1 &amp; 0 &amp; \cdots &amp; 0 \\
@@ -636,7 +642,7 @@ s^n + (a_{n-1} + k_{n-1}) s^{n-1} + \cdots + (a_1 + k_1) s + (a_0 + k_0).
 {K = \MATRIX{ α_0 - a_0 &amp; \cdots &amp; α_{n-1} - a_{n-1}}}
 \]</span> to place the poles of the closed loop system at any desired location.</p>
 <div id="exm-CCF" class="theorem example">
-<p><span class="theorem-title"><strong>Example 5.1</strong></span> Consider the system <span class="math display">\[
+<p><span class="theorem-title"><strong>Example 6.1</strong></span> Consider the system <span class="math display">\[
 A = \MATRIX{0 &amp; 1 \\ -1 &amp; -3},
 \quad
 B = \MATRIX{0 \\ 1}.
@@ -672,11 +678,11 @@ Solution
 </div>
 </div>
 </section>
-<section id="state-feedback-for-systems-not-in-ccf" class="level2 page-columns page-full" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="state-feedback-for-systems-not-in-ccf"><span class="header-section-number">5.2</span> State feedback for systems not in CCF</h2>
+<section id="state-feedback-for-systems-not-in-ccf" class="level2 page-columns page-full" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="state-feedback-for-systems-not-in-ccf"><span class="header-section-number">6.2</span> State feedback for systems not in CCF</h2>
 <p>When a system is not in CCF, we can still use the design idea for systems in CCF if there exists a transformation (or change of coordinates) <span class="math inline">\(x_c(t) = T^{-1} x(t)\)</span> such that the system matrices for the system <span class="math inline">\((A_c, B_c, C_c)\)</span> for <span class="math inline">\(x_c(t)\)</span> are in CCF. If such a transformation can be found, then we can find the gain matrix <span class="math inline">\(K_c\)</span> for the system in CCF using the method of the previous section and use<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> <span class="math display">\[ K = K_c T^{-1} \]</span> as the gain for the original system. So, the main question is: how do we find such a transformation?</p>
-<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;The state feedback in the new coordinate system is <span class="math display">\[u(t) = - K_c x_c(t).\]</span> Since <span class="math inline">\(x_c(t) = T^{-1} x(t)\)</span>, we have <span class="math display">\[ u(t) = - K_c T^{-1} x(t). \]</span> Therefore <span class="math inline">\(K = K_c T^{-1}\)</span>.</p></div></div><section id="controllability-matrix" class="level3" data-number="5.2.1">
-<h3 data-number="5.2.1" class="anchored" data-anchor-id="controllability-matrix"><span class="header-section-number">5.2.1</span> Controllability matrix</h3>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;The state feedback in the new coordinate system is <span class="math display">\[u(t) = - K_c x_c(t).\]</span> Since <span class="math inline">\(x_c(t) = T^{-1} x(t)\)</span>, we have <span class="math display">\[ u(t) = - K_c T^{-1} x(t). \]</span> Therefore <span class="math inline">\(K = K_c T^{-1}\)</span>.</p></div></div><section id="controllability-matrix" class="level3" data-number="6.2.1">
+<h3 data-number="6.2.1" class="anchored" data-anchor-id="controllability-matrix"><span class="header-section-number">6.2.1</span> Controllability matrix</h3>
 <p>The controllability matrix of a state space system <span class="math inline">\((A,B)\)</span> is defined as <span class="math display">\[\mathcal C_{(A,B)} = \MATRIX{B &amp; AB &amp; \cdots &amp; A^{n-1} B }.\]</span></p>
 <p>Now consider a change of coordinates <span class="math inline">\(x_c(t) = T^{-1} x(t)\)</span>. Recall that the state space representation in the new coordinate system is <span class="math display">\[
 A_c = T^{-1} A T \quad B_c = T^{-1} B.
@@ -705,7 +711,7 @@ T^{-1} = \mathcal C_{(A_c, B_c)} \mathcal C_{(A,B)}^{-1}
 \]</span> <em>provided <span class="math inline">\(\mathcal C_{(A,B)}\)</span> is invertible</em> (i.e., has full rank). When that is the case, we say that the system is <strong>controllable</strong>.</p>
 <p>There are different ways in which we can get uncontrollable models as is illustrated in the following example.</p>
 <div id="exm-controllability" class="theorem example">
-<p><span class="theorem-title"><strong>Example 5.2</strong></span> Check if the following systems are controllable.</p>
+<p><span class="theorem-title"><strong>Example 6.2</strong></span> Check if the following systems are controllable.</p>
 <ol type="a">
 <li><p><span class="math inline">\(A = \MATRIX{2 &amp; 0 \\ 0 &amp; 3}\)</span> and <span class="math inline">\(B = \MATRIX{0 \\ 1}\)</span>.</p></li>
 <li><p><span class="math inline">\(A = \MATRIX{-4 &amp; 5 \\ 0 &amp; 9}\)</span> and <span class="math inline">\(B = \MATRIX{-2 \\ 0}\)</span>.</p></li>
@@ -733,8 +739,8 @@ Solution
 </div>
 </div>
 </section>
-<section id="pole-placement" class="level3" data-number="5.2.2">
-<h3 data-number="5.2.2" class="anchored" data-anchor-id="pole-placement"><span class="header-section-number">5.2.2</span> Pole Placement</h3>
+<section id="pole-placement" class="level3" data-number="6.2.2">
+<h3 data-number="6.2.2" class="anchored" data-anchor-id="pole-placement"><span class="header-section-number">6.2.2</span> Pole Placement</h3>
 <p>We can use the above idea to design state feedback controller for systems not in CCF. In particular, the pole placement problem is as follows.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -788,7 +794,7 @@ T^{-1} = \bigl[ \mathcal C_{(A,B)} W \bigr]^{-1}
 </ol>
 <p>This method relies on the fact that for a system <span class="math inline">\((A_c,B_c)\)</span> in CCF, <span class="math inline">\(\mathcal C_{(A_c,B_c)} = W^{-1}\)</span>. For a proof, see Lemma 3.5 of William and Lawrence.</p>
 <div id="exm-pole-placement" class="theorem example">
-<p><span class="theorem-title"><strong>Example 5.3</strong></span> Consider the following SSM: <span class="math display">\[ A = \MATRIX{3 &amp; 1 \\ 1 &amp; 2}, B = \MATRIX{2 \\1} \text{ and } C = \MATRIX{ 3 &amp; 2}. \]</span> Design a state feedback controller (i.e., compute the feedback gain <span class="math inline">\(K\)</span>) such that the eigenvalues of the closed loop system are at <span class="math inline">\(-2 \pm 2j\)</span>.</p>
+<p><span class="theorem-title"><strong>Example 6.3</strong></span> Consider the following SSM: <span class="math display">\[ A = \MATRIX{3 &amp; 1 \\ 1 &amp; 2}, B = \MATRIX{2 \\1} \text{ and } C = \MATRIX{ 3 &amp; 2}. \]</span> Design a state feedback controller (i.e., compute the feedback gain <span class="math inline">\(K\)</span>) such that the eigenvalues of the closed loop system are at <span class="math inline">\(-2 \pm 2j\)</span>.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
@@ -850,16 +856,16 @@ T^{-1} &amp;= \mathcal C_{(A_c,B_c)} \mathcal C_{(A,B)}^{-1}
 </section>
 </section>
 </section>
-<section id="state-feedback-for-reference-tracking" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="state-feedback-for-reference-tracking"><span class="header-section-number">5.3</span> State-feedback for reference tracking</h2>
-<p>We now return to the architecture shown in <a href="output-feedback.html#fig-block" class="quarto-xref">Figure&nbsp;<span>6.1</span></a> and consider the design of the pre-compensator <span class="math inline">\(N\)</span>. The idea is to choose the pre-compensator <span class="math inline">\(N\)</span> to ensure that steady state error is zero. In particular, we know that the DC-gain of the system is <span class="math display">\[
+<section id="state-feedback-for-reference-tracking" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="state-feedback-for-reference-tracking"><span class="header-section-number">6.3</span> State-feedback for reference tracking</h2>
+<p>We now return to the architecture shown in <a href="output-feedback.html#fig-block" class="quarto-xref">Figure&nbsp;<span>7.1</span></a> and consider the design of the pre-compensator <span class="math inline">\(N\)</span>. The idea is to choose the pre-compensator <span class="math inline">\(N\)</span> to ensure that steady state error is zero. In particular, we know that the DC-gain of the system is <span class="math display">\[
 \text{DC-gain} = N G(0) = N C (sI - (A - BK) )^{-1} B \bigg|_{s = 0} = - N C (A-BK)^{-1} B.
 \]</span> To ensure that steady-state error when tracking a step input is zero, we pick the pre-compensator gain <span class="math inline">\(N\)</span> as follows: <span class="math display">\[
   N = - \frac{1}{ C(A-BK)^{-1} B }.
 \]</span></p>
 </section>
-<section id="understanding-lack-of-controllability" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="understanding-lack-of-controllability"><span class="header-section-number">5.4</span> Understanding lack of controllability</h2>
+<section id="understanding-lack-of-controllability" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="understanding-lack-of-controllability"><span class="header-section-number">6.4</span> Understanding lack of controllability</h2>
 <p>In this section, we provide some intuition to understand why controllability plays a critical role in state feedback. Consider the SSM</p>
 <p><span class="math display">\[\begin{align*}
 \dot x(t) &amp;= A x(t) + B u(t) \\
@@ -898,10 +904,10 @@ Controllability
 <p>The argument presented above shows that a system is controllable if and only if <span class="math inline">\(\text{rank}(\mathcal C_{(A,B)} = n\)</span>.</p>
 </div>
 </div>
-<section id="uncontrollable-modes-of-a-system" class="level3" data-number="5.4.1">
-<h3 data-number="5.4.1" class="anchored" data-anchor-id="uncontrollable-modes-of-a-system"><span class="header-section-number">5.4.1</span> Uncontrollable modes of a system</h3>
+<section id="uncontrollable-modes-of-a-system" class="level3" data-number="6.4.1">
+<h3 data-number="6.4.1" class="anchored" data-anchor-id="uncontrollable-modes-of-a-system"><span class="header-section-number">6.4.1</span> Uncontrollable modes of a system</h3>
 <div id="exm-uncontrollable" class="theorem example">
-<p><span class="theorem-title"><strong>Example 5.4</strong></span> Consider <span class="math display">\[
+<p><span class="theorem-title"><strong>Example 6.4</strong></span> Consider <span class="math display">\[
 A = \MATRIX{-2 &amp; 0 \\ 0 &amp; -1}
 \quad\text{and}\quad
 B = \MATRIX{2 \\ 0}.
@@ -914,7 +920,7 @@ B = \MATRIX{2 \\ 0}.
 \]</span></p>
 </div>
 <p>The above example shows that for systems where <span class="math inline">\(A\)</span> matrix is diagonal, it is easy to interpret controllability: a system <span class="math inline">\((A,B)\)</span> where <span class="math inline">\(A\)</span> is diagonal is uncontrollable if some element of <span class="math inline">\(B\)</span> is zero, which means that there is a <em>mode</em> (i.e., eigen-direction) such that the input cannot effect the evolution of the state in that eigen-direction.</p>
-<p>Let’s revisit the examples in <a href="#exm-controllability" class="quarto-xref">Example&nbsp;<span>5.2</span></a>. Let <span class="math inline">\((λ_1, v_1)\)</span> and <span class="math inline">\((λ_2, v_2)\)</span> be the eigenvalue-eigenvector pairs for each model. Take <span class="math inline">\(T = [v_1, v_2]\)</span> and consider the change of variables <span class="math inline">\(\tilde x = T^{-1} x\)</span>. In this new coordinate system <span class="math display">\[ \tilde A = T^{-1} A T, \quad \tilde B = T^{-1} B. \]</span> We have that</p>
+<p>Let’s revisit the examples in <a href="#exm-controllability" class="quarto-xref">Example&nbsp;<span>6.2</span></a>. Let <span class="math inline">\((λ_1, v_1)\)</span> and <span class="math inline">\((λ_2, v_2)\)</span> be the eigenvalue-eigenvector pairs for each model. Take <span class="math inline">\(T = [v_1, v_2]\)</span> and consider the change of variables <span class="math inline">\(\tilde x = T^{-1} x\)</span>. In this new coordinate system <span class="math display">\[ \tilde A = T^{-1} A T, \quad \tilde B = T^{-1} B. \]</span> We have that</p>
 <ol type="a">
 <li><p>We take <span class="math inline">\(T = \MATRIX{1 &amp; 0 \\ 0 &amp; 1}\)</span>. Thus, we have <span class="math display">\[\tilde A = \MATRIX{2 &amp; 0 \\ 0 &amp; 3}, \quad \tilde B = \MATRIX{0 \\ 1}.\]</span></p></li>
 <li><p>We take <span class="math inline">\(T = \MATRIX{1 &amp; 5 \\ 0 &amp; 13}\)</span>. Thus, we have <span class="math display">\[\tilde A = \MATRIX{-4 &amp; 0 \\ 0 &amp; 3}, \quad \tilde B = \MATRIX{-2 \\ 0}.\]</span></p></li>
@@ -928,11 +934,11 @@ B = \MATRIX{2 \\ 0}.
 <img src="figures/svg/circuits9.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rc-bridge-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5.2: A RC-bridge
+Figure&nbsp;6.2: A RC-bridge
 </figcaption>
 </figure>
 </div>
-<p>We will follow the approach presented in <a href="./state-space-models.html#ssm-for-circuits">previous section</a> to find a SSM for the circuit in <a href="#fig-rc-bridge" class="quarto-xref">Figure&nbsp;<span>5.2</span></a>. We take the voltage across the two capcitors (denoted by <span class="math inline">\(v_1\)</span> and <span class="math inline">\(v_2\)</span>) as the two components of the SSM. From KCL, we have <span class="math display">\[\begin{align*}
+<p>We will follow the approach presented in <a href="./state-space-models.html#ssm-for-circuits">previous section</a> to find a SSM for the circuit in <a href="#fig-rc-bridge" class="quarto-xref">Figure&nbsp;<span>6.2</span></a>. We take the voltage across the two capcitors (denoted by <span class="math inline">\(v_1\)</span> and <span class="math inline">\(v_2\)</span>) as the two components of the SSM. From KCL, we have <span class="math display">\[\begin{align*}
   C_1 \dot v_1(t) &amp;= \frac{u(t) - v_1(t)}{R_1} - \frac{v_1(t) - v_2(t)}{R_3} \\
   C_2 \dot v_2(t) &amp;= \frac{u(t) - v_2(t)}{R_2} + \frac{v_1(t) - v_2(t)}{R_3}
 \end{align*}\]</span> which can be re-written in state-space form as: <span class="math display">\[\def\1{\vphantom{\dfrac{1}{R_1C_1}}}
@@ -955,8 +961,8 @@ Figure&nbsp;5.2: A RC-bridge
 \dfrac{1}{RC} &amp; -\dfrac{1}{(RC)^2}}
 \]</span> which is not full rank.</p>
 </section>
-<section id="uncontrollability-and-pole-zero-cancellation" class="level3" data-number="5.4.2">
-<h3 data-number="5.4.2" class="anchored" data-anchor-id="uncontrollability-and-pole-zero-cancellation"><span class="header-section-number">5.4.2</span> Uncontrollability and pole-zero cancellation</h3>
+<section id="uncontrollability-and-pole-zero-cancellation" class="level3" data-number="6.4.2">
+<h3 data-number="6.4.2" class="anchored" data-anchor-id="uncontrollability-and-pole-zero-cancellation"><span class="header-section-number">6.4.2</span> Uncontrollability and pole-zero cancellation</h3>
 <p>Uncontrollability is often related to pole zero cancelling. Consider the following transfer function: <span class="math display">\[ G(s) = \frac{s - z}{s^2 + 3s + 2}. \]</span> Let’s compare the CCF and OCF representations of the system:</p>
 <ul>
 <li><p><strong>CCF representation</strong> <span class="math display">\[ A_c = \MATRIX{0 &amp; 1 \\ -2 &amp; -3 }, \quad
@@ -992,8 +998,8 @@ Internal stability
 </div>
 </div>
 </section>
-<section id="properties-of-controllability" class="level3" data-number="5.4.3">
-<h3 data-number="5.4.3" class="anchored" data-anchor-id="properties-of-controllability"><span class="header-section-number">5.4.3</span> Properties of controllability</h3>
+<section id="properties-of-controllability" class="level3" data-number="6.4.3">
+<h3 data-number="6.4.3" class="anchored" data-anchor-id="properties-of-controllability"><span class="header-section-number">6.4.3</span> Properties of controllability</h3>
 <p>We conclude the discussion with some properties of controllability.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1019,8 +1025,8 @@ Properties of controllability
 \]</span> For <span class="math inline">\(z = -1\)</span> or <span class="math inline">\(z = -2\)</span>, the change of coordinates is not full rank!</p>
 </section>
 </section>
-<section id="state-feedback-via-digital-controllers" class="level2" data-number="5.5">
-<h2 data-number="5.5" class="anchored" data-anchor-id="state-feedback-via-digital-controllers"><span class="header-section-number">5.5</span> State-feedback via digital controllers</h2>
+<section id="state-feedback-via-digital-controllers" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="state-feedback-via-digital-controllers"><span class="header-section-number">6.5</span> State-feedback via digital controllers</h2>
 <p>In the labs, we will conduct hardware experiments to control a DC motor via state and output feedback controllers written in MATLAB. To do so, we take the output of the DC motor, convert it to a discrete-time signal using an A/D (analog-to-digital) converter, manipulate the sampled signal in discrete-time (using code written in MATLAB) to generate a discrete-time control signal, which is then converted to continuous-time using a D/A (digital-to-analog) converter and is then used to actuate the DC motor. In this section, we provide details of such digital design.</p>
 <p>Consider a continuous-time LTI system <span class="math display">\[\begin{align*}
   \dot x(t) &amp;= A x(t) + B u(t) \\
@@ -1058,7 +1064,7 @@ Sd = c2d(Sc, Δt, 'zoh'); % where Δt is the sampling period</code></pre>
 </div>
 </div>
 <div id="exm-simplify-Bd" class="theorem example">
-<p><span class="theorem-title"><strong>Example 5.5</strong></span> Suppose that the system matrix <span class="math inline">\(A\)</span> is inverible. Show that <span class="math display">\[
+<p><span class="theorem-title"><strong>Example 6.5</strong></span> Suppose that the system matrix <span class="math inline">\(A\)</span> is inverible. Show that <span class="math display">\[
   B_d = A^{-1}(e^{A Δt} - I) B.
 \]</span></p>
 </div>
@@ -1083,8 +1089,8 @@ Solution
 </div>
 </div>
 </div>
-<section id="pole-placement-for-digital-controllers" class="level3" data-number="5.5.1">
-<h3 data-number="5.5.1" class="anchored" data-anchor-id="pole-placement-for-digital-controllers"><span class="header-section-number">5.5.1</span> Pole placement for digital controllers</h3>
+<section id="pole-placement-for-digital-controllers" class="level3" data-number="6.5.1">
+<h3 data-number="6.5.1" class="anchored" data-anchor-id="pole-placement-for-digital-controllers"><span class="header-section-number">6.5.1</span> Pole placement for digital controllers</h3>
 <p>We will not go into the mathematical details of pole placement for digital controllers but simply state the main steps:</p>
 <ol type="1">
 <li><p>Let <span class="math inline">\(\{p_1, \dots, p_n\}\)</span> be the desired eigenvalues for the closed-loop continuous-time system. Then, the desired eievenvalues of the discrete-time system are: <span class="math display">\[ \{ e^{p_1 Δt}, \dots, e^{p_n Δt} \}. \]</span></p></li>
@@ -1513,12 +1519,12 @@ Solution
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./matrix-exponential.html" class="pagination-link" aria-label="Time response of state space models">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Time response of state space models</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Time response of state space models</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./output-feedback.html" class="pagination-link" aria-label="State observers and output feedback">
-        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">State observers and output feedback</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">State observers and output feedback</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -2,15 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.7.33">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2025-08-05">
+<meta name="dcterms.date" content="2025-08-21">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
-<title>2&nbsp; State space models – Linear Systems and Control</title>
+<title>3&nbsp; State space models – Linear Systems and Control</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -41,14 +41,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-bc185b5c5bdbcb35c2eb49d8a876ef70.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-7099be0d4a40a56ccb81779c78679504.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-6b92bf55388de74d0d491143cae84547.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-7099be0d4a40a56ccb81779c78679504.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-8545327574da039649cbdd200ac864eb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-07b0747d72fcd748d306d7e0a9991ca0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-8545327574da039649cbdd200ac864eb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/nutshell-1.0.6/nutshell.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -358,7 +358,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./state-space-models.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">State space models</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./state-space-models.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">State space models</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -378,80 +378,86 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./freq-modeling.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./state-space-models.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">State space models</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">State space models</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./step-response.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Step Response</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Step Response</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./matrix-exponential.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Time response of state space models</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Time response of state space models</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./state-feedback.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pole placement via state feedback</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Pole placement via state feedback</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./output-feedback.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">State observers and output feedback</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">State observers and output feedback</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./routh-hurwitz.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Routh-Hurwitz Stability Criterion</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Routh-Hurwitz Stability Criterion</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./block-diagrams.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Block diagrams</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Block diagrams</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./steady-state-errors.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Steady-state errors</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Steady-state errors</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./bode-and-nyquist.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Bode and Nyquist plots</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Bode and Nyquist plots</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./nyquist-stability.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Nyquist Stability Criterion</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Nyquist Stability Criterion</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./safety-margins.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Gain and Phase margins</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Gain and Phase margins</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lag-lead-compensators.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lag-lead compensators</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lag-lead compensators</span></span></a>
   </div>
 </li>
     </ul>
@@ -464,32 +470,32 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-DE-SSM" id="toc-sec-DE-SSM" class="nav-link active" data-scroll-target="#sec-DE-SSM"><span class="header-section-number">2.1</span> Converting DE to SSM</a></li>
-  <li><a href="#illustrative-example" id="toc-illustrative-example" class="nav-link" data-scroll-target="#illustrative-example"><span class="header-section-number">2.2</span> Illustrative Example</a>
+  <li><a href="#sec-DE-SSM" id="toc-sec-DE-SSM" class="nav-link active" data-scroll-target="#sec-DE-SSM"><span class="header-section-number">3.1</span> Converting DE to SSM</a></li>
+  <li><a href="#illustrative-example" id="toc-illustrative-example" class="nav-link" data-scroll-target="#illustrative-example"><span class="header-section-number">3.2</span> Illustrative Example</a>
   <ul class="collapse">
-  <li><a href="#ccf-representation" id="toc-ccf-representation" class="nav-link" data-scroll-target="#ccf-representation"><span class="header-section-number">2.2.1</span> CCF representation</a></li>
-  <li><a href="#ocf-representation" id="toc-ocf-representation" class="nav-link" data-scroll-target="#ocf-representation"><span class="header-section-number">2.2.2</span> OCF representation</a></li>
+  <li><a href="#ccf-representation" id="toc-ccf-representation" class="nav-link" data-scroll-target="#ccf-representation"><span class="header-section-number">3.2.1</span> CCF representation</a></li>
+  <li><a href="#ocf-representation" id="toc-ocf-representation" class="nav-link" data-scroll-target="#ocf-representation"><span class="header-section-number">3.2.2</span> OCF representation</a></li>
   </ul></li>
-  <li><a href="#general-form" id="toc-general-form" class="nav-link" data-scroll-target="#general-form"><span class="header-section-number">2.3</span> General form</a>
+  <li><a href="#general-form" id="toc-general-form" class="nav-link" data-scroll-target="#general-form"><span class="header-section-number">3.3</span> General form</a>
   <ul class="collapse">
-  <li><a href="#ccf-representation-1" id="toc-ccf-representation-1" class="nav-link" data-scroll-target="#ccf-representation-1"><span class="header-section-number">2.3.1</span> CCF representation</a></li>
-  <li><a href="#ocf-representation-1" id="toc-ocf-representation-1" class="nav-link" data-scroll-target="#ocf-representation-1"><span class="header-section-number">2.3.2</span> OCF representation</a></li>
-  <li><a href="#dcf-representation" id="toc-dcf-representation" class="nav-link" data-scroll-target="#dcf-representation"><span class="header-section-number">2.3.3</span> DCF representation</a></li>
+  <li><a href="#ccf-representation-1" id="toc-ccf-representation-1" class="nav-link" data-scroll-target="#ccf-representation-1"><span class="header-section-number">3.3.1</span> CCF representation</a></li>
+  <li><a href="#ocf-representation-1" id="toc-ocf-representation-1" class="nav-link" data-scroll-target="#ocf-representation-1"><span class="header-section-number">3.3.2</span> OCF representation</a></li>
+  <li><a href="#dcf-representation" id="toc-dcf-representation" class="nav-link" data-scroll-target="#dcf-representation"><span class="header-section-number">3.3.3</span> DCF representation</a></li>
   </ul></li>
-  <li><a href="#ssm-for-circuits" id="toc-ssm-for-circuits" class="nav-link" data-scroll-target="#ssm-for-circuits"><span class="header-section-number">2.4</span> SSMs for circuits</a>
+  <li><a href="#ssm-for-circuits" id="toc-ssm-for-circuits" class="nav-link" data-scroll-target="#ssm-for-circuits"><span class="header-section-number">3.4</span> SSMs for circuits</a>
   <ul class="collapse">
-  <li><a href="#example-1" id="toc-example-1" class="nav-link" data-scroll-target="#example-1"><span class="header-section-number">2.4.1</span> Example 1</a></li>
-  <li><a href="#example-2" id="toc-example-2" class="nav-link" data-scroll-target="#example-2"><span class="header-section-number">2.4.2</span> Example 2</a></li>
+  <li><a href="#example-1" id="toc-example-1" class="nav-link" data-scroll-target="#example-1"><span class="header-section-number">3.4.1</span> Example 1</a></li>
+  <li><a href="#example-2" id="toc-example-2" class="nav-link" data-scroll-target="#example-2"><span class="header-section-number">3.4.2</span> Example 2</a></li>
   </ul></li>
-  <li><a href="#from-state-space-models-to-transfer-functions" id="toc-from-state-space-models-to-transfer-functions" class="nav-link" data-scroll-target="#from-state-space-models-to-transfer-functions"><span class="header-section-number">2.5</span> From state space models to transfer functions</a></li>
-  <li><a href="#change-of-coordinates" id="toc-change-of-coordinates" class="nav-link" data-scroll-target="#change-of-coordinates"><span class="header-section-number">2.6</span> Change of coordinates</a></li>
-  <li><a href="#review-of-eigenvalues-and-eigenvectors" id="toc-review-of-eigenvalues-and-eigenvectors" class="nav-link" data-scroll-target="#review-of-eigenvalues-and-eigenvectors"><span class="header-section-number">2.7</span> Review of eigenvalues and eigenvectors</a>
+  <li><a href="#from-state-space-models-to-transfer-functions" id="toc-from-state-space-models-to-transfer-functions" class="nav-link" data-scroll-target="#from-state-space-models-to-transfer-functions"><span class="header-section-number">3.5</span> From state space models to transfer functions</a></li>
+  <li><a href="#change-of-coordinates" id="toc-change-of-coordinates" class="nav-link" data-scroll-target="#change-of-coordinates"><span class="header-section-number">3.6</span> Change of coordinates</a></li>
+  <li><a href="#review-of-eigenvalues-and-eigenvectors" id="toc-review-of-eigenvalues-and-eigenvectors" class="nav-link" data-scroll-target="#review-of-eigenvalues-and-eigenvectors"><span class="header-section-number">3.7</span> Review of eigenvalues and eigenvectors</a>
   <ul class="collapse">
-  <li><a href="#how-to-compute-eigenvalues-and-eigenvectors" id="toc-how-to-compute-eigenvalues-and-eigenvectors" class="nav-link" data-scroll-target="#how-to-compute-eigenvalues-and-eigenvectors"><span class="header-section-number">2.7.1</span> How to compute eigenvalues and eigenvectors</a></li>
-  <li><a href="#why-are-eigenvalues-useful" id="toc-why-are-eigenvalues-useful" class="nav-link" data-scroll-target="#why-are-eigenvalues-useful"><span class="header-section-number">2.7.2</span> Why are eigenvalues useful?</a></li>
-  <li><a href="#where-have-you-seen-this-before" id="toc-where-have-you-seen-this-before" class="nav-link" data-scroll-target="#where-have-you-seen-this-before"><span class="header-section-number">2.7.3</span> Where have you seen this before?</a></li>
+  <li><a href="#how-to-compute-eigenvalues-and-eigenvectors" id="toc-how-to-compute-eigenvalues-and-eigenvectors" class="nav-link" data-scroll-target="#how-to-compute-eigenvalues-and-eigenvectors"><span class="header-section-number">3.7.1</span> How to compute eigenvalues and eigenvectors</a></li>
+  <li><a href="#why-are-eigenvalues-useful" id="toc-why-are-eigenvalues-useful" class="nav-link" data-scroll-target="#why-are-eigenvalues-useful"><span class="header-section-number">3.7.2</span> Why are eigenvalues useful?</a></li>
+  <li><a href="#where-have-you-seen-this-before" id="toc-where-have-you-seen-this-before" class="nav-link" data-scroll-target="#where-have-you-seen-this-before"><span class="header-section-number">3.7.3</span> Where have you seen this before?</a></li>
   </ul></li>
-  <li><a href="#change-of-coordinates-in-ssms" id="toc-change-of-coordinates-in-ssms" class="nav-link" data-scroll-target="#change-of-coordinates-in-ssms"><span class="header-section-number">2.8</span> Change of coordinates in SSMs</a></li>
+  <li><a href="#change-of-coordinates-in-ssms" id="toc-change-of-coordinates-in-ssms" class="nav-link" data-scroll-target="#change-of-coordinates-in-ssms"><span class="header-section-number">3.8</span> Change of coordinates in SSMs</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/state-space-models.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -499,7 +505,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">State space models</span></h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">State space models</span></h1>
 </div>
 
 
@@ -525,7 +531,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">August 5, 2025</p>
+      <p class="date">August 21, 2025</p>
     </div>
   </div>
   
@@ -565,8 +571,8 @@ y(t) &amp;= C x(t)
 y(t) &amp;= C x(t)
 \end{align*}\]</span> where <span class="math inline">\(x(t) \in \reals^n\)</span>, <span class="math inline">\(A \in \reals^{n × n}\)</span>, <span class="math inline">\(B \in \reals^{n \times 1}\)</span> and <span class="math inline">\(C \in \reals^{1 \times n}\)</span>.</p>
 <p>In the next lecture, we will study how to solve such differential equations for a particular choice of input.</p>
-<section id="sec-DE-SSM" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="sec-DE-SSM"><span class="header-section-number">2.1</span> Converting DE to SSM</h2>
+<section id="sec-DE-SSM" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="sec-DE-SSM"><span class="header-section-number">3.1</span> Converting DE to SSM</h2>
 <p>In this section, we show how to construct SSM from DE. The key point to realize is that the SSM is not unique, so we will consider different representations. Each representation is useful for a specific purpose, as we will see later in the course.</p>
 <p>We assume that we are either given a <em>normalized</em> DE (i.e., the leading coefficient is 1): <span class="math display">\[
 \frac{d^n y(t)}{dt^n} + a_{n-1} \frac{d^{n-1}y(t)}{dt}
@@ -581,10 +587,10 @@ b_m \frac{d^m u(t)}{dt^m} + \cdots + b_0 u(t)
 <li>Diagonal Canonical Form (DCF)</li>
 </ol>
 </section>
-<section id="illustrative-example" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="illustrative-example"><span class="header-section-number">2.2</span> Illustrative Example</h2>
-<section id="ccf-representation" class="level3" data-number="2.2.1">
-<h3 data-number="2.2.1" class="anchored" data-anchor-id="ccf-representation"><span class="header-section-number">2.2.1</span> CCF representation</h3>
+<section id="illustrative-example" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="illustrative-example"><span class="header-section-number">3.2</span> Illustrative Example</h2>
+<section id="ccf-representation" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="ccf-representation"><span class="header-section-number">3.2.1</span> CCF representation</h3>
 <p>Consider the homogeneous second order DE considered above: <span class="math display">\[\begin{equation}\label{eq:2nd-DE}
 \frac{d^2y(t)}{dt^2} + a_1 \frac{dy(t)}{dt} + a_0 y(t) = 0.
 \end{equation}\]</span></p>
@@ -600,8 +606,8 @@ x(t) = \MATRIX{x_1(t) \\ x_2(t)} = \MATRIX{y(t) \\ \dot y(t)}. \]</span> Then, w
 y(t) &amp;= \MATRIX{\phantom{-a_0}\llap{1} &amp; \phantom{-a_1}\llap{0} } \MATRIX{x_1(t) \\ x_2(t)}.
 \end{align*}\]</span> This is called <strong>controllable cannonical form (CCF)</strong> realization of <span class="math inline">\(\eqref{eq:2nd-DE}\)</span>. The meaning of the terminology will become clear later.</p>
 </section>
-<section id="ocf-representation" class="level3" data-number="2.2.2">
-<h3 data-number="2.2.2" class="anchored" data-anchor-id="ocf-representation"><span class="header-section-number">2.2.2</span> OCF representation</h3>
+<section id="ocf-representation" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="ocf-representation"><span class="header-section-number">3.2.2</span> OCF representation</h3>
 <p>The second method to obtain a SSM from the LDE is as follows. Write the LDE <span class="math inline">\(\eqref{eq:2nd-DE}\)</span> as an integro-differential equation: <span class="math display">\[\begin{align*}
 \ddot y(t) &amp;= - a_1 \dot y(t) + a_0 y(t)
 \\
@@ -636,22 +642,22 @@ Non-uniqueness of the SSM realization
 </div>
 </section>
 </section>
-<section id="general-form" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="general-form"><span class="header-section-number">2.3</span> General form</h2>
+<section id="general-form" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="general-form"><span class="header-section-number">3.3</span> General form</h2>
 <p>We now consider a general second order TF: <span class="math display">\[ G(s) = \frac{b_1 s+b_0}{s^2 + a_1 s + a_0} \]</span></p>
 <p>As an illustration, we will also use the following numerical example:</p>
 <div id="exm-SSM-CC" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2.1</strong></span> <span class="math display">\[ G(s) = \frac{s+5}{s^2 + 3s + 2} \]</span></p>
+<p><span class="theorem-title"><strong>Example 3.1</strong></span> <span class="math display">\[ G(s) = \frac{s+5}{s^2 + 3s + 2} \]</span></p>
 </div>
-<section id="ccf-representation-1" class="level3" data-number="2.3.1">
-<h3 data-number="2.3.1" class="anchored" data-anchor-id="ccf-representation-1"><span class="header-section-number">2.3.1</span> CCF representation</h3>
+<section id="ccf-representation-1" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="ccf-representation-1"><span class="header-section-number">3.3.1</span> CCF representation</h3>
 <p>For the generic second order system, the CCF form is <span class="math display">\[
 A = \MATRIX{ 0 &amp; 1 \\ \textcolor{red}{-a_0} &amp; \textcolor{red}{-a_1} },
 \quad
 B = \MATRIX{ 0 \\ 1},
 \quad
 C = \MATRIX{\textcolor{red}{b_0} &amp; \textcolor{red}{b_1} }
-\]</span> This is the general structure of the matrix, where only the red elements have to be filled based on the TF. For example, for the TF in <a href="#exm-SSM-CC" class="quarto-xref">Example&nbsp;<span>2.1</span></a>, we have <span class="math display">\[
+\]</span> This is the general structure of the matrix, where only the red elements have to be filled based on the TF. For example, for the TF in <a href="#exm-SSM-CC" class="quarto-xref">Example&nbsp;<span>3.1</span></a>, we have <span class="math display">\[
 A = \MATRIX{ 0 &amp; 1 \\ -2 &amp; -3 }
 \quad
 B = \MATRIX{ 0 \\ 1},
@@ -665,20 +671,20 @@ C = \MATRIX{5 &amp; 1}
 <img src="figures/svg/canonical-forms1.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-CCF-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.1: Structure of CCF representation
+Figure&nbsp;3.1: Structure of CCF representation
 </figcaption>
 </figure>
 </div>
 </section>
-<section id="ocf-representation-1" class="level3" data-number="2.3.2">
-<h3 data-number="2.3.2" class="anchored" data-anchor-id="ocf-representation-1"><span class="header-section-number">2.3.2</span> OCF representation</h3>
+<section id="ocf-representation-1" class="level3" data-number="3.3.2">
+<h3 data-number="3.3.2" class="anchored" data-anchor-id="ocf-representation-1"><span class="header-section-number">3.3.2</span> OCF representation</h3>
 <p>For the generic second order system, the OCF form is <span class="math display">\[
 A = \MATRIX{ 0 &amp; \textcolor{red}{-a_0} \\ 1 &amp; \textcolor{red}{-a_1} },
 \quad
 B = \MATRIX{\textcolor{red}{b_0} \\ \textcolor{red}{b_1} },
 \quad
 C = \MATRIX{ 0 &amp; 1}
-\]</span> This is the general structure of the matrix, where only the red elements have to be filled based on the TF. For example, for the TF in <a href="#exm-SSM-CC" class="quarto-xref">Example&nbsp;<span>2.1</span></a>, we have <span class="math display">\[
+\]</span> This is the general structure of the matrix, where only the red elements have to be filled based on the TF. For example, for the TF in <a href="#exm-SSM-CC" class="quarto-xref">Example&nbsp;<span>3.1</span></a>, we have <span class="math display">\[
 A = \MATRIX{ 0 &amp; -2 \\ 1 &amp; -3 }
 \quad
 B = \MATRIX{5 \\ 1},
@@ -692,13 +698,13 @@ C = \MATRIX{ 0 &amp; 1},
 <img src="figures/svg/canonical-forms2.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-OCF-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.2: Structure of OCF representation
+Figure&nbsp;3.2: Structure of OCF representation
 </figcaption>
 </figure>
 </div>
 </section>
-<section id="dcf-representation" class="level3" data-number="2.3.3">
-<h3 data-number="2.3.3" class="anchored" data-anchor-id="dcf-representation"><span class="header-section-number">2.3.3</span> DCF representation</h3>
+<section id="dcf-representation" class="level3" data-number="3.3.3">
+<h3 data-number="3.3.3" class="anchored" data-anchor-id="dcf-representation"><span class="header-section-number">3.3.3</span> DCF representation</h3>
 <p>This representation is special and only applicable when the system has distinct real roots. Then, using the partial fraction expansion, the TF may be written as <span class="math display">\[
 G(s) = \frac{c_1}{s+p_1} + \frac{c_2}{s + p_2} + \dots + \frac{c_n}{s+p_n}
 \]</span> In DCF, the system matrices are given by</p>
@@ -708,11 +714,11 @@ G(s) = \frac{c_1}{s+p_1} + \frac{c_2}{s + p_2} + \dots + \frac{c_n}{s+p_n}
 <img src="figures/svg/canonical-forms3.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-DCF-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.3: Structure of DCF representation
+Figure&nbsp;3.3: Structure of DCF representation
 </figcaption>
 </figure>
 </div>
-<p>In particular, for the TF in <a href="#exm-SSM-CC" class="quarto-xref">Example&nbsp;<span>2.1</span></a>, we have <span class="math display">\[
+<p>In particular, for the TF in <a href="#exm-SSM-CC" class="quarto-xref">Example&nbsp;<span>3.1</span></a>, we have <span class="math display">\[
 G(s) = \frac{s+5}{s^2 + 3s + 2} = \frac{4}{s+1} - \frac{3}{s+2}. \]</span></p>
 <p>Thus, <span class="math display">\[
 A = \MATRIX{-1 &amp; 0 \\ 0 &amp; -2},
@@ -724,8 +730,8 @@ C = \MATRIX{4 &amp; -3}.
 <p>In general, the poles will be complex and have multiplicity. In this setting, a generalization of DCF known as Jordan canconical form (JCF) is used. We will not consider JCF in this course.</p>
 </section>
 </section>
-<section id="ssm-for-circuits" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="ssm-for-circuits"><span class="header-section-number">2.4</span> SSMs for circuits</h2>
+<section id="ssm-for-circuits" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="ssm-for-circuits"><span class="header-section-number">3.4</span> SSMs for circuits</h2>
 <p>We will use the following notation in this section: <span class="math inline">\(v(t)\)</span> denotes voltage, <span class="math inline">\(i(t)\)</span> denotes current, and <span class="math inline">\(q(t)\)</span> denotes charge.</p>
 <p>For the three main circuit elements, we have the following relationship:</p>
 <table class="caption-top table">
@@ -771,16 +777,16 @@ C = \MATRIX{4 &amp; -3}.
 </tbody>
 </table>
 <p>Each energy storage element (i.e., capacitor and inductor) gives rise to a state variable. We want to avoid integral equations, so for capacitor we choose voltage as state and for inductor we choose current as state.</p>
-<section id="example-1" class="level3" data-number="2.4.1">
-<h3 data-number="2.4.1" class="anchored" data-anchor-id="example-1"><span class="header-section-number">2.4.1</span> Example 1</h3>
-<p>As an example, let’s start with a simple example to understand how state space modeling works. Let’s consider an RCL circuit shown in <a href="#fig-rcl" class="quarto-xref">Figure&nbsp;<span>2.4</span></a>.</p>
+<section id="example-1" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="example-1"><span class="header-section-number">3.4.1</span> Example 1</h3>
+<p>As an example, let’s start with a simple example to understand how state space modeling works. Let’s consider an RCL circuit shown in <a href="#fig-rcl" class="quarto-xref">Figure&nbsp;<span>3.4</span></a>.</p>
 <div id="fig-rcl" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rcl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/svg/circuits4.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rcl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.4: A simple circuit
+Figure&nbsp;3.4: A simple circuit
 </figcaption>
 </figure>
 </div>
@@ -832,16 +838,16 @@ C = \MATRIX{1 &amp; 0 }
 \]</span></p>
 </section>
 </section>
-<section id="example-2" class="level3" data-number="2.4.2">
-<h3 data-number="2.4.2" class="anchored" data-anchor-id="example-2"><span class="header-section-number">2.4.2</span> Example 2</h3>
-<p>Now consider the example shown in <a href="#fig-rcl2" class="quarto-xref">Figure&nbsp;<span>2.5</span></a></p>
+<section id="example-2" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="example-2"><span class="header-section-number">3.4.2</span> Example 2</h3>
+<p>Now consider the example shown in <a href="#fig-rcl2" class="quarto-xref">Figure&nbsp;<span>3.5</span></a></p>
 <div id="fig-rcl2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rcl2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/svg/circuits5.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rcl2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.5: An RCL circuit
+Figure&nbsp;3.5: An RCL circuit
 </figcaption>
 </figure>
 </div>
@@ -901,14 +907,14 @@ B =
 C = \MATRIX{1 &amp; 0 }
 \]</span></p>
 <div id="exm-circuit" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2.2</strong></span> Find the state space model of the circuit shown in <a href="#fig-circuit-exm" class="quarto-xref">Figure&nbsp;<span>2.6</span></a></p>
+<p><span class="theorem-title"><strong>Example 3.2</strong></span> Find the state space model of the circuit shown in <a href="#fig-circuit-exm" class="quarto-xref">Figure&nbsp;<span>3.6</span></a></p>
 <div id="fig-circuit-exm" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-circuit-exm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/svg/circuits10.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-circuit-exm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.6: A complicated circuit
+Figure&nbsp;3.6: A complicated circuit
 </figcaption>
 </figure>
 </div>
@@ -916,8 +922,8 @@ Figure&nbsp;2.6: A complicated circuit
 </section>
 </section>
 </section>
-<section id="from-state-space-models-to-transfer-functions" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="from-state-space-models-to-transfer-functions"><span class="header-section-number">2.5</span> From state space models to transfer functions</h2>
+<section id="from-state-space-models-to-transfer-functions" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="from-state-space-models-to-transfer-functions"><span class="header-section-number">3.5</span> From state space models to transfer functions</h2>
 <p>So far, we have seen how to write different SSM representations from a TF. It is also possible to go in the other direction.</p>
 <p>Suppose we have a SSM: <span class="math display">\[\begin{align*}
 \dot x(t) &amp;= A x(t) + B u(t) \\
@@ -957,13 +963,13 @@ Y(s) &amp;= C(sI - A)^{-1} B U(s)
 <img src="figures/svg/circuits6.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-block-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.7: Block diagram of SSM
+Figure&nbsp;3.7: Block diagram of SSM
 </figcaption>
 </figure>
 </div>
 <p>The TF can be “read backwards” from the block diagram.</p>
 <div id="exm-SS-to-TF-1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2.3</strong></span> Let <span class="math inline">\(A = \MATRIX{-1 &amp; 2 \\ 3 &amp; -1}\)</span>, <span class="math inline">\(B = \MATRIX{1 \\ 0}\)</span>, and <span class="math inline">\(C = \MATRIX{2 &amp; 1}\)</span>. Find the TF?</p>
+<p><span class="theorem-title"><strong>Example 3.3</strong></span> Let <span class="math inline">\(A = \MATRIX{-1 &amp; 2 \\ 3 &amp; -1}\)</span>, <span class="math inline">\(B = \MATRIX{1 \\ 0}\)</span>, and <span class="math inline">\(C = \MATRIX{2 &amp; 1}\)</span>. Find the TF?</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
@@ -991,8 +997,8 @@ Solution
 {\text{Poles of $G(s)$} = \text{evals of $A$}}\]</span> This means that we can control the poles of the TF by controlling the eigenvalues of <span class="math inline">\(A\)</span>.</p>
 <p><strong>Changing the eigenvalues of the <span class="math inline">\(A\)</span> matrix will be one of the most simple and the most important design methods that we will learn in this course.</strong></p>
 </section>
-<section id="change-of-coordinates" class="level2" data-number="2.6">
-<h2 data-number="2.6" class="anchored" data-anchor-id="change-of-coordinates"><span class="header-section-number">2.6</span> Change of coordinates</h2>
+<section id="change-of-coordinates" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="change-of-coordinates"><span class="header-section-number">3.6</span> Change of coordinates</h2>
 <p>A key idea for controller design using state space methods is change of coordinates. To fix ideas, we first review the change of coordinates for vectors and then we will come back to SSMs.</p>
 <p>Consider a vector space <span class="math inline">\(\reals^2\)</span>. The standard basis for <span class="math inline">\(\reals^2\)</span> is <span class="math display">\[
 e_1 = \MATRIX{1 \\ 0}
@@ -1004,7 +1010,7 @@ e_2 = \MATRIX{0 \\ 1}.
 \]</span> then we can say that the vector is equal to <span class="math inline">\(\MATRIX{\tilde x_1 \\ \tilde x_2}\)</span> in the coordinate system <span class="math inline">\((v_1, v_2)\)</span>. Note that the vector hasn’t changed, only the coodinate system has.</p>
 <p>We use the following example to illustrate how to move from one coordinate system to another</p>
 <div id="exm-change-of-coordinates" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2.4</strong></span> Let <span class="math inline">\(x = \MATRIX{2 \\ 3}\)</span>. Find its representation in the coordinate system <span class="math display">\[v_1 = \MATRIX{1 \\ 0}
+<p><span class="theorem-title"><strong>Example 3.4</strong></span> Let <span class="math inline">\(x = \MATRIX{2 \\ 3}\)</span>. Find its representation in the coordinate system <span class="math display">\[v_1 = \MATRIX{1 \\ 0}
 \quad\text{and}\quad
 v_2 = \MATRIX{1 \\ 1}.
 \]</span></p>
@@ -1056,7 +1062,7 @@ Solution
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-change-of-coordinates-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.8: Vector <span class="math inline">\(x\)</span> in different coordinate systems
+Figure&nbsp;3.8: Vector <span class="math inline">\(x\)</span> in different coordinate systems
 </figcaption>
 </figure>
 </div>
@@ -1064,8 +1070,8 @@ Figure&nbsp;2.8: Vector <span class="math inline">\(x\)</span> in different coor
 </div>
 </div>
 </section>
-<section id="review-of-eigenvalues-and-eigenvectors" class="level2" data-number="2.7">
-<h2 data-number="2.7" class="anchored" data-anchor-id="review-of-eigenvalues-and-eigenvectors"><span class="header-section-number">2.7</span> Review of eigenvalues and eigenvectors</h2>
+<section id="review-of-eigenvalues-and-eigenvectors" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="review-of-eigenvalues-and-eigenvectors"><span class="header-section-number">3.7</span> Review of eigenvalues and eigenvectors</h2>
 <p>For the last several years, eigenvalues and eigenvectors are not covered in CEGEP. Therefore, students who come from CEGEP and don’t take the linear algebra course at McGill haven’t seen this material before. Eigenvalues and eigenvectors are perhaps the most fundamental idea in linear algebra. We present a quick review of this material here, but if you haven’t seen this material before, I strongly study it in detail. Some resources:</p>
 <ul>
 <li><a href="https://understandinglinearalgebra.org/chap4.html">Understanding linear algebra</a></li>
@@ -1079,7 +1085,7 @@ f(α_1 x_1 + α_2 x_2) = α_1 f(x_1) + α_2 f(x_2).
 <p>Suppose we were free to choose the coordinate system in which we evaluate <span class="math inline">\(f\)</span>. Which coordinate system should we choose? This is where eigenvalues and eigenvectors come in.</p>
 <p>An <strong>eigenvector</strong> is a special vector <span class="math inline">\(x\)</span> such that <span class="math inline">\(f(x)\)</span> is a scaled (and possibly flipped) version of <span class="math inline">\(x\)</span> (i.e., <span class="math inline">\(f(x)\)</span> lies in the linear subspace spanned by <span class="math inline">\(x\)</span>). Mathematically, there exists a scalar <span class="math inline">\(λ\)</span> such that <span class="math display">\[ A x = λ x \]</span></p>
 <div id="exm-permutation" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2.5</strong></span> Consider <span class="math inline">\(A = \MATRIX{0 &amp; 1 \\ 1 &amp; 0}\)</span>. This is a permultation matrix. <span class="math display">\[
+<p><span class="theorem-title"><strong>Example 3.5</strong></span> Consider <span class="math inline">\(A = \MATRIX{0 &amp; 1 \\ 1 &amp; 0}\)</span>. This is a permultation matrix. <span class="math display">\[
 A \MATRIX{x_1 \\ x_2} = \MATRIX{x_2 \\ x_1}.
 \]</span></p>
 <ul>
@@ -1094,8 +1100,8 @@ A \MATRIX{x_1 \\ x_2} = \MATRIX{x_2 \\ x_1}.
 </ul>
 <p>Note that <span class="math inline">\(A\)</span> has two eigenvalues <span class="math inline">\(λ \in \{-1, 1\}\)</span>. From the definition of the eigenvectors it is clear that the eigenvectors corresponding to distinct eigenvalues must be linearly independent.</p>
 </div>
-<section id="how-to-compute-eigenvalues-and-eigenvectors" class="level3" data-number="2.7.1">
-<h3 data-number="2.7.1" class="anchored" data-anchor-id="how-to-compute-eigenvalues-and-eigenvectors"><span class="header-section-number">2.7.1</span> How to compute eigenvalues and eigenvectors</h3>
+<section id="how-to-compute-eigenvalues-and-eigenvectors" class="level3" data-number="3.7.1">
+<h3 data-number="3.7.1" class="anchored" data-anchor-id="how-to-compute-eigenvalues-and-eigenvectors"><span class="header-section-number">3.7.1</span> How to compute eigenvalues and eigenvectors</h3>
 <p>The previous example shows how to find eigenvectors if we know the eigenvalues. But how do we find the eigenvalues? Let’s consider the equation <span class="math display">\[ A x = λ x \]</span> which can also be written as <span class="math display">\[ Ax = λ I x \implies (λ I - A) x = 0.\]</span></p>
 <p>If there is a <span class="math inline">\((λ, x)\)</span> with <span class="math inline">\(x \neq 0\)</span> that satisfies the above equation, then it must be case that <span class="math inline">\(λI - A\)</span> is singular, i.e., <span class="math display">\[
 \bbox[5pt,border: 1px solid]
@@ -1122,7 +1128,7 @@ Some special cases
 </div>
 </div>
 <div id="exm-eigenvalues" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2.6</strong></span> Find the eigenvalues and eigenvectors of <span class="math inline">\(A = \MATRIX{3 &amp; 1 \\ 1 &amp; 3 }\)</span>.</p>
+<p><span class="theorem-title"><strong>Example 3.6</strong></span> Find the eigenvalues and eigenvectors of <span class="math inline">\(A = \MATRIX{3 &amp; 1 \\ 1 &amp; 3 }\)</span>.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="true" aria-label="Toggle callout">
@@ -1172,12 +1178,12 @@ Which eigenvector to pick?
 </div>
 <div class="callout-body-container callout-body">
 <p>For any eigenvalue <span class="math inline">\(λ\)</span>, the matrix <span class="math inline">\(λ I - A\)</span> is singular. Therefore, the equation <span class="math inline">\((λI - A) x = 0\)</span> will have multiple solutions. Which solution to pick?</p>
-<p>The standard convention (especially when you are using a mathematical programming language to compute eigenvectors) is to pick the <strong>unit vector</strong>. For example, in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>2.6</span></a>, one would pick:</p>
+<p>The standard convention (especially when you are using a mathematical programming language to compute eigenvectors) is to pick the <strong>unit vector</strong>. For example, in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>3.6</span></a>, one would pick:</p>
 <ul>
 <li>For <span class="math inline">\(λ = 4\)</span>, the eigenvector is <span class="math inline">\(\MATRIX{ \frac{1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}}}\)</span>.</li>
 <li>For <span class="math inline">\(λ = 2\)</span>, the eigenvector is <span class="math inline">\(\MATRIX{ \frac{-1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}}}\)</span>.</li>
 </ul>
-<p>However, when doing analysis by hand, it is often more convenient to pick eigenvectors which are easier to represent. For example, in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>2.6</span></a>, one would pick</p>
+<p>However, when doing analysis by hand, it is often more convenient to pick eigenvectors which are easier to represent. For example, in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>3.6</span></a>, one would pick</p>
 <ul>
 <li>For <span class="math inline">\(λ = 4\)</span>, the eigenvector is <span class="math inline">\(\MATRIX{1 \\ 1}\)</span>.</li>
 <li>For <span class="math inline">\(λ = 2\)</span>, the eigenvector is <span class="math inline">\(\MATRIX{-1 \\ 1}\)</span>.</li>
@@ -1195,12 +1201,12 @@ Some remarks
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li><p>Note that in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>2.6</span></a>, the matrix <span class="math inline">\(A\)</span> is symmetric. Symmetric matrices have real eigenvalues.</p></li>
+<li><p>Note that in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>3.6</span></a>, the matrix <span class="math inline">\(A\)</span> is symmetric. Symmetric matrices have real eigenvalues.</p></li>
 <li><p>We can show that <span class="math display">\[
   λ_1 + λ_2 + \cdots + λ_n = \text{Trace}(A)
 \]</span> (where <span class="math inline">\(\text{Trace}(A)\)</span> means the sum of diagonal elements of <span class="math inline">\(A\)</span> and <span class="math display">\[
   λ_1 λ_2 \cdots λ_n = \det(A).
-\]</span> You can verify these properties for <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>2.6</span></a>.</p></li>
+\]</span> You can verify these properties for <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>3.6</span></a>.</p></li>
 <li><p>In general for any <span class="math inline">\(2 × 2\)</span> matrix, <span class="math display">\[
   \det(λI - A) = λ^2 - \text{Trace}(A) λ + \det(A).
 \]</span></p></li>
@@ -1209,7 +1215,7 @@ Some remarks
 </div>
 <p>If the matrix is not symmetric, then the eigenvalues may be complex.</p>
 <div id="exm-imaginary-eigenvalues" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2.7 (Complex eigenvalues)</strong></span> Find the eigenvalues of the rotation matrix <span class="math inline">\(A = \MATRIX{0 &amp; -1 \\ 1 &amp; 0}\)</span>.</p>
+<p><span class="theorem-title"><strong>Example 3.7 (Complex eigenvalues)</strong></span> Find the eigenvalues of the rotation matrix <span class="math inline">\(A = \MATRIX{0 &amp; -1 \\ 1 &amp; 0}\)</span>.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
@@ -1230,9 +1236,9 @@ Solution
 </div>
 </div>
 </section>
-<section id="why-are-eigenvalues-useful" class="level3" data-number="2.7.2">
-<h3 data-number="2.7.2" class="anchored" data-anchor-id="why-are-eigenvalues-useful"><span class="header-section-number">2.7.2</span> Why are eigenvalues useful?</h3>
-<p>Let’s consider an example. Suppose <span class="math inline">\(A = \MATRIX{3 &amp; 1 \\ 1 &amp; 3}\)</span>. We have seen in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>2.6</span></a> that the eigenvalues are <span class="math inline">\(λ_1 = 4\)</span> and <span class="math inline">\(λ_2 = 2\)</span> and the corresponding eigenvectors are <span class="math display">\[
+<section id="why-are-eigenvalues-useful" class="level3" data-number="3.7.2">
+<h3 data-number="3.7.2" class="anchored" data-anchor-id="why-are-eigenvalues-useful"><span class="header-section-number">3.7.2</span> Why are eigenvalues useful?</h3>
+<p>Let’s consider an example. Suppose <span class="math inline">\(A = \MATRIX{3 &amp; 1 \\ 1 &amp; 3}\)</span>. We have seen in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>3.6</span></a> that the eigenvalues are <span class="math inline">\(λ_1 = 4\)</span> and <span class="math inline">\(λ_2 = 2\)</span> and the corresponding eigenvectors are <span class="math display">\[
 v_1 = \MATRIX{1 \\ 1}, \quad
 v_2 = \MATRIX{-1 \\ 1}.
 \]</span></p>
@@ -1267,31 +1273,31 @@ A^3 = T Λ^3 T^{-1}
 A^{100} = T Λ^{100} T^{-1}.
 \]</span> We can read this equation from right-to-left. To compute <span class="math inline">\(A^{100}\)</span> we first change to the “eigen-coordinate system” (by multiplying by <span class="math inline">\(T^{-1}\)</span>), we do the computation “take the 100-th power” in the eigen-coordinate system (by computing <span class="math inline">\(Λ^{100}\)</span>) and then we translate the result back to the original coordinate system (by multiplying by <span class="math inline">\(T\)</span>).</p>
 </section>
-<section id="where-have-you-seen-this-before" class="level3" data-number="2.7.3">
-<h3 data-number="2.7.3" class="anchored" data-anchor-id="where-have-you-seen-this-before"><span class="header-section-number">2.7.3</span> Where have you seen this before?</h3>
+<section id="where-have-you-seen-this-before" class="level3" data-number="3.7.3">
+<h3 data-number="3.7.3" class="anchored" data-anchor-id="where-have-you-seen-this-before"><span class="header-section-number">3.7.3</span> Where have you seen this before?</h3>
 <p>The basic idea that we should <strong>always work in the eigen-coordinate system</strong> is at the heart of all we do in linear algebra, signals and systems, and differential equations (and as we shall see in this course, in control systems).</p>
-<p>How are eigenvalues and eigenvectors related to Signals and Systems? Consider an LTI system shown in <a href="#fig-LTI" class="quarto-xref">Figure&nbsp;<span>2.9</span></a></p>
+<p>How are eigenvalues and eigenvectors related to Signals and Systems? Consider an LTI system shown in <a href="#fig-LTI" class="quarto-xref">Figure&nbsp;<span>3.9</span></a></p>
 <div id="fig-LTI" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-LTI-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/svg/eigenfunctions1.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-LTI-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.9: An LTI system with input <span class="math inline">\(x(t)\)</span>, impulse response <span class="math inline">\(g(t)\)</span> and output <span class="math inline">\(y(t)\)</span>.
+Figure&nbsp;3.9: An LTI system with input <span class="math inline">\(x(t)\)</span>, impulse response <span class="math inline">\(g(t)\)</span> and output <span class="math inline">\(y(t)\)</span>.
 </figcaption>
 </figure>
 </div>
 <p>We know that <span class="math display">\[
 y(t) = x(t) * g(t) = \int_{-∞}^{∞} g(τ) x(t-τ) d τ.
 \]</span> Note that an LTI system is also a “linear transform”. So it has eigenvalues and eigenvectors. What are they?</p>
-<p><strong>Claim.</strong> Complex exponentials (i.e., <span class="math inline">\(e^{st}\)</span>) are <strong>eigenfunctions</strong> of LTI systems (see <a href="#fig-LTI-laplace" class="quarto-xref">Figure&nbsp;<span>2.10</span></a>)</p>
+<p><strong>Claim.</strong> Complex exponentials (i.e., <span class="math inline">\(e^{st}\)</span>) are <strong>eigenfunctions</strong> of LTI systems (see <a href="#fig-LTI-laplace" class="quarto-xref">Figure&nbsp;<span>3.10</span></a>)</p>
 <div id="fig-LTI-laplace" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-LTI-laplace-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/svg/eigenfunctions2.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-LTI-laplace-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.10: <span class="math inline">\(G(s)\)</span> is the eigenvalue corresponding to <span class="math inline">\(e^{st}\)</span>
+Figure&nbsp;3.10: <span class="math inline">\(G(s)\)</span> is the eigenvalue corresponding to <span class="math inline">\(e^{st}\)</span>
 </figcaption>
 </figure>
 </div>
@@ -1317,8 +1323,8 @@ y(t) &amp;= \int_{-∞}^{∞} g(τ) e^{s(t-τ)} d τ \\
 </ol>
 </section>
 </section>
-<section id="change-of-coordinates-in-ssms" class="level2" data-number="2.8">
-<h2 data-number="2.8" class="anchored" data-anchor-id="change-of-coordinates-in-ssms"><span class="header-section-number">2.8</span> Change of coordinates in SSMs</h2>
+<section id="change-of-coordinates-in-ssms" class="level2" data-number="3.8">
+<h2 data-number="3.8" class="anchored" data-anchor-id="change-of-coordinates-in-ssms"><span class="header-section-number">3.8</span> Change of coordinates in SSMs</h2>
 <p>Consider a SSM: <span class="math display">\[\begin{align*}
 \dot x(t) &amp;= A x(t) + B u(t) \\
 y(t) &amp;= C x(t)
@@ -1787,12 +1793,12 @@ y(t) &amp;= \tilde C \tilde x(t)
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./freq-modeling.html" class="pagination-link" aria-label="Frequency domain modeling">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./step-response.html" class="pagination-link" aria-label="Step Response">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Step Response</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Step Response</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

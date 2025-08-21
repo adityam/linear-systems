@@ -2,15 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.7.33">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2025-08-05">
+<meta name="dcterms.date" content="2025-08-21">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
-<title>12&nbsp; Gain and Phase margins – Linear Systems and Control</title>
+<title>13&nbsp; Gain and Phase margins – Linear Systems and Control</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -76,14 +76,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-bc185b5c5bdbcb35c2eb49d8a876ef70.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-7099be0d4a40a56ccb81779c78679504.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-6b92bf55388de74d0d491143cae84547.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-7099be0d4a40a56ccb81779c78679504.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-8545327574da039649cbdd200ac864eb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-07b0747d72fcd748d306d7e0a9991ca0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-8545327574da039649cbdd200ac864eb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/nutshell-1.0.6/nutshell.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -398,7 +398,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./safety-margins.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Gain and Phase margins</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./safety-margins.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Gain and Phase margins</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -418,80 +418,86 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./freq-modeling.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Frequency domain modeling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./state-space-models.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">State space models</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">State space models</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./step-response.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Step Response</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Step Response</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./matrix-exponential.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Time response of state space models</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Time response of state space models</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./state-feedback.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pole placement via state feedback</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Pole placement via state feedback</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./output-feedback.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">State observers and output feedback</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">State observers and output feedback</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./routh-hurwitz.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Routh-Hurwitz Stability Criterion</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Routh-Hurwitz Stability Criterion</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./block-diagrams.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Block diagrams</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Block diagrams</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./steady-state-errors.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Steady-state errors</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Steady-state errors</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./bode-and-nyquist.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Bode and Nyquist plots</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Bode and Nyquist plots</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./nyquist-stability.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Nyquist Stability Criterion</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Nyquist Stability Criterion</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./safety-margins.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Gain and Phase margins</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Gain and Phase margins</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lag-lead-compensators.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lag-lead compensators</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lag-lead compensators</span></span></a>
   </div>
 </li>
     </ul>
@@ -504,9 +510,9 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#the-gain-and-phase-margins" id="toc-the-gain-and-phase-margins" class="nav-link active" data-scroll-target="#the-gain-and-phase-margins"><span class="header-section-number">12.1</span> The gain and phase margins</a></li>
-  <li><a href="#some-examples" id="toc-some-examples" class="nav-link" data-scroll-target="#some-examples"><span class="header-section-number">12.2</span> Some examples</a></li>
-  <li><a href="#relationship-between-phase-margin-and-damping-ratio" id="toc-relationship-between-phase-margin-and-damping-ratio" class="nav-link" data-scroll-target="#relationship-between-phase-margin-and-damping-ratio"><span class="header-section-number">12.3</span> Relationship between phase margin and damping ratio</a></li>
+  <li><a href="#the-gain-and-phase-margins" id="toc-the-gain-and-phase-margins" class="nav-link active" data-scroll-target="#the-gain-and-phase-margins"><span class="header-section-number">13.1</span> The gain and phase margins</a></li>
+  <li><a href="#some-examples" id="toc-some-examples" class="nav-link" data-scroll-target="#some-examples"><span class="header-section-number">13.2</span> Some examples</a></li>
+  <li><a href="#relationship-between-phase-margin-and-damping-ratio" id="toc-relationship-between-phase-margin-and-damping-ratio" class="nav-link" data-scroll-target="#relationship-between-phase-margin-and-damping-ratio"><span class="header-section-number">13.3</span> Relationship between phase margin and damping ratio</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/safety-margins.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -516,7 +522,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Gain and Phase margins</span></h1>
+<h1 class="title"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Gain and Phase margins</span></h1>
 </div>
 
 
@@ -542,7 +548,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">August 5, 2025</p>
+      <p class="date">August 21, 2025</p>
     </div>
   </div>
   
@@ -555,7 +561,7 @@ window.Quarto = {
 
 
 <p>In practice, we never know the transfer function perfectly. So, it is important to understand the effect of model uncertainty on system stability. This is called the <strong>robustness</strong> of the stability of the system.</p>
-<p>For instance, consider the system of <a href="nyquist-stability.html#exm-nyquist-1" class="quarto-xref">Example&nbsp;<span>11.2</span></a> with <span class="math inline">\(K=100\)</span>: <span class="math display">\[
+<p>For instance, consider the system of <a href="nyquist-stability.html#exm-nyquist-1" class="quarto-xref">Example&nbsp;<span>12.2</span></a> with <span class="math inline">\(K=100\)</span>: <span class="math display">\[
   G(s) = \frac{100}{(s-2)(s+6)(s+8)}.
 \]</span> As we can see for the Nyquist plot that the plot encircle <span class="math inline">\((-1 + j0)\)</span> once in the clockwise direction. Hence, we can infer from the Nyquist plot that the system is stable.</p>
 <div id="4" class="cell" data-execution_count="1">
@@ -677,7 +683,7 @@ window.Quarto = {
 </svg>
 </div>
 </div>
-<p>Now suppose that there some uncertainty about the location of the unstable pole: we don’t know its exact value but know that it lies in the interval <span class="math inline">\([1.9, 2.1]\)</span>. Can we still infer that the system is stable? <a href="#fig-nyquist-robust" class="quarto-xref">Figure&nbsp;<span>12.1</span></a> shows the impact of parameter uncertainty on the Nyquist plot. We notice that for some values of parameters in this range, the system is unstable!</p>
+<p>Now suppose that there some uncertainty about the location of the unstable pole: we don’t know its exact value but know that it lies in the interval <span class="math inline">\([1.9, 2.1]\)</span>. Can we still infer that the system is stable? <a href="#fig-nyquist-robust" class="quarto-xref">Figure&nbsp;<span>13.1</span></a> shows the impact of parameter uncertainty on the Nyquist plot. We notice that for some values of parameters in this range, the system is unstable!</p>
 <div id="cell-fig-nyquist-robust" class="cell" data-execution_count="1">
 <div id="fig-nyquist-robust" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="1">
 <figure class="quarto-float quarto-float-fig figure">
@@ -803,7 +809,7 @@ window.Quarto = {
 </svg>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nyquist-robust-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.1: Nyquist plot with parameter uncertainty. The blue plot is the nominal Nyquist plot and the red curves show the envelop of uncertainty.
+Figure&nbsp;13.1: Nyquist plot with parameter uncertainty. The blue plot is the nominal Nyquist plot and the red curves show the envelop of uncertainty.
 </figcaption>
 </figure>
 </div>
@@ -811,8 +817,8 @@ Figure&nbsp;12.1: Nyquist plot with parameter uncertainty. The blue plot is the 
 <p>Using Nyquist plots, we can define two qualitative measures of how “close” the system is from unstability. The usual practice is to measure this closeness in terms of <strong>gain margin (GM)</strong> and <strong>phase margin (PM)</strong>.</p>
 <p>In this section, we will restrict to minimal phase systems, that is systems that don’t have any poles or zeros in the ORHP. The general idea is that for a minimal phase system, the closer the Nyquist plot is to the <span class="math inline">\(-1 + j0\)</span> point, the closer the system is to unstability. So, we can use the closeness of <span class="math inline">\(G(jω)\)</span> to the <span class="math inline">\(-1 + j0\)</span> point as a measure of stability of the system.</p>
 <p>The GM and PM are easier to compute proxies for the distance of <span class="math inline">\(G(jω)\)</span> from the <span class="math inline">\(-1 + j0\)</span> point. The reason that GM and PM are used as a proxy is that a minimal phase system is stable if and only if <strong>both GM and PM are positive</strong> (this can be inferred from Nyquist stability criterion). However, GM and PM are a crude proxy for robustness, but we will not study more nuanced techniques in this course.</p>
-<section id="the-gain-and-phase-margins" class="level2" data-number="12.1">
-<h2 data-number="12.1" class="anchored" data-anchor-id="the-gain-and-phase-margins"><span class="header-section-number">12.1</span> The gain and phase margins</h2>
+<section id="the-gain-and-phase-margins" class="level2" data-number="13.1">
+<h2 data-number="13.1" class="anchored" data-anchor-id="the-gain-and-phase-margins"><span class="header-section-number">13.1</span> The gain and phase margins</h2>
 <div class="callout callout-style-simple callout-tip">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -842,11 +848,11 @@ Figure&nbsp;12.1: Nyquist plot with parameter uncertainty. The blue plot is the 
    \text{PM} = 180^∘ + \angle G(jω_{\rm gc})
 \]</span> For non-minimal phase systems, there may be multiple frequencies at which <span class="math inline">\(|G(jω)|=1\)</span> or <span class="math inline">\(\angle G(jω) = 180^∘\)</span>. In such systems, we need to look at the highest and the lowest crossover frequencies. However, we will not study such systems in this course.</p>
 </section>
-<section id="some-examples" class="level2" data-number="12.2">
-<h2 data-number="12.2" class="anchored" data-anchor-id="some-examples"><span class="header-section-number">12.2</span> Some examples</h2>
+<section id="some-examples" class="level2" data-number="13.2">
+<h2 data-number="13.2" class="anchored" data-anchor-id="some-examples"><span class="header-section-number">13.2</span> Some examples</h2>
 <p>Although GM and PM are defined based on Nyquist stability criterion, we will use Bode plots to determine them. We present some examples to show how to “read” GM and PM from the Bode plot.</p>
 <div id="exm-margins-1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 12.1</strong></span> Find the crossover frequencies and GM and PM of the following system: <span class="math display">\[
+<p><span class="theorem-title"><strong>Example 13.1</strong></span> Find the crossover frequencies and GM and PM of the following system: <span class="math display">\[
   G(s) = \dfrac{100}{s(s+1)(s+100)}
 \]</span> using the straight-line approximation Bode plots.</p>
 </div>
@@ -1538,7 +1544,7 @@ Solution
 </div>
 </div>
 <div id="exm-margins-2" class="theorem example">
-<p><span class="theorem-title"><strong>Example 12.2</strong></span> Find the crossover frequencies and GM and PM of the following system: <span class="math display">\[
+<p><span class="theorem-title"><strong>Example 13.2</strong></span> Find the crossover frequencies and GM and PM of the following system: <span class="math display">\[
   G(s) = \dfrac{10}{(s+1)(s+100)}
 \]</span> using the straight-line approximation Bode plots.</p>
 </div>
@@ -2119,7 +2125,7 @@ Solution
 </div>
 </div>
 <div id="exm-margins-3" class="theorem example">
-<p><span class="theorem-title"><strong>Example 12.3</strong></span> Find the crossover frequencies and GM and PM of the following system: <span class="math display">\[
+<p><span class="theorem-title"><strong>Example 13.3</strong></span> Find the crossover frequencies and GM and PM of the following system: <span class="math display">\[
   G(s) = \dfrac{100}{(s+10)}
 \]</span> using the straight-line approximation Bode plots.</p>
 </div>
@@ -2495,8 +2501,8 @@ Solution
 </div>
 </div>
 </section>
-<section id="relationship-between-phase-margin-and-damping-ratio" class="level2" data-number="12.3">
-<h2 data-number="12.3" class="anchored" data-anchor-id="relationship-between-phase-margin-and-damping-ratio"><span class="header-section-number">12.3</span> Relationship between phase margin and damping ratio</h2>
+<section id="relationship-between-phase-margin-and-damping-ratio" class="level2" data-number="13.3">
+<h2 data-number="13.3" class="anchored" data-anchor-id="relationship-between-phase-margin-and-damping-ratio"><span class="header-section-number">13.3</span> Relationship between phase margin and damping ratio</h2>
 <p>We can relate the PM of an open loop system with the damping ratio of the unity feedback closed loop system. This enables us to evaluate the percentage overshoot of the closed loop system the PM of the open loop system.</p>
 <p>Consider a unity feedback system with open-loop transfer function <span class="math display">\[
 G(s) = \frac{ω_n^2}{s(s+2 ζ ω_n)}.
@@ -2519,7 +2525,7 @@ T(s) = \frac{G(s)}{(1 + G(s))} = \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2}.
 &amp;= \tan^{-1} \frac{2 ζ}{ \sqrt{ -2 ζ^2 + \sqrt{1 + 4 ζ^4} } }.
 \end{align*}}
 \]</span></p>
-<p>This is a complicated looking formula, but we can simply plot it and read the values from the plot, shown in <a href="#fig-pm-from-damping" class="quarto-xref">Figure&nbsp;<span>12.2</span></a>.</p>
+<p>This is a complicated looking formula, but we can simply plot it and read the values from the plot, shown in <a href="#fig-pm-from-damping" class="quarto-xref">Figure&nbsp;<span>13.2</span></a>.</p>
 <div id="20" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
 <script type="ojs-define">{"contents":[{"name":"PM_values","value":[{"zeta":0.0,"PM":0.0},{"zeta":0.015151515151515152,"PM":1.7361028537503411},{"zeta":0.030303030303030304,"PM":3.4714077151621234},{"zeta":0.045454545454545456,"PM":5.205113310451729},{"zeta":0.06060606060606061,"PM":6.936411841108287},{"zeta":0.07575757575757576,"PM":8.664485817771864},{"zeta":0.09090909090909091,"PM":10.388505011906181},{"zeta":0.10606060606060606,"PM":12.107623568271705},{"zeta":0.12121212121212122,"PM":13.820977324207279},{"zeta":0.13636363636363635,"PM":15.52768138521513},{"zeta":0.15151515151515152,"PM":17.22682801012182},{"zeta":0.16666666666666666,"PM":18.91748486291084},{"zeta":0.18181818181818182,"PM":20.5986936918899},{"zeta":0.19696969696969696,"PM":22.26946949980606},{"zeta":0.21212121212121213,"PM":23.92880027043864},{"zeta":0.22727272727272727,"PM":25.575647317613715},{"zeta":0.24242424242424243,"PM":27.20894632099055},{"zeta":0.25757575757575757,"PM":28.82760910884835},{"zeta":0.2727272727272727,"PM":30.43052624094534},{"zeta":0.2878787878787879,"PM":32.01657043388495},{"zeta":0.30303030303030304,"PM":33.58460085696432},{"zeta":0.3181818181818182,"PM":35.133468308026224},{"zeta":0.3333333333333333,"PM":36.66202125643763},{"zeta":0.3484848484848485,"PM":38.16911271431509},{"zeta":0.36363636363636365,"PM":39.65360786817353},{"zeta":0.3787878787878788,"PM":41.11439237231333},{"zeta":0.3939393939393939,"PM":42.55038117384982},{"zeta":0.4090909090909091,"PM":43.96052770900733},{"zeta":0.42424242424242425,"PM":45.343833283039636},{"zeta":0.4393939393939394,"PM":46.69935642388597},{"zeta":0.45454545454545453,"PM":48.02622198433478},{"zeta":0.4696969696969697,"PM":49.32362976069729},{"zeta":0.48484848484848486,"PM":50.590862398990176},{"zeta":0.5,"PM":51.827292372987756},{"zeta":0.5151515151515151,"PM":53.03238784210239},{"zeta":0.5303030303030303,"PM":54.205717229993745},{"zeta":0.5454545454545454,"PM":55.346952405474525},{"zeta":0.5606060606060606,"PM":56.45587039343938},{"zeta":0.5757575757575758,"PM":57.532353592544894},{"zeta":0.5909090909090909,"PM":58.5763885253755},{"zeta":0.6060606060606061,"PM":59.58806319307652},{"zeta":0.6212121212121212,"PM":60.567563147463254},{"zeta":0.6363636363636364,"PM":61.51516642747023},{"zeta":0.6515151515151515,"PM":62.431237532167025},{"zeta":0.6666666666666666,"PM":63.316220618803435},{"zeta":0.6818181818181818,"PM":64.17063212149698},{"zeta":0.696969696969697,"PM":64.99505298486261},{"zeta":0.7121212121212122,"PM":65.79012069819666},{"zeta":0.7272727272727273,"PM":66.55652130115801},{"zeta":0.7424242424242424,"PM":67.29498151279279},{"zeta":0.7575757575757576,"PM":68.006261113789},{"zeta":0.7727272727272727,"PM":68.69114568849152},{"zeta":0.7878787878787878,"PM":69.35043980973742},{"zeta":0.803030303030303,"PM":69.98496072703226},{"zeta":0.8181818181818182,"PM":70.59553259777324},{"zeta":0.8333333333333334,"PM":71.18298128267496},{"zeta":0.8484848484848485,"PM":71.74812971057999},{"zeta":0.8636363636363636,"PM":72.29179380455624},{"zeta":0.8787878787878788,"PM":72.8147789505591},{"zeta":0.8939393939393939,"PM":73.317876981813},{"zeta":0.9090909090909091,"PM":73.80186364621258},{"zeta":0.9242424242424242,"PM":74.26749652017926},{"zeta":0.9393939393939394,"PM":74.71551333023723},{"zeta":0.9545454545454546,"PM":75.14663064279566},{"zeta":0.9696969696969697,"PM":75.56154288295991},{"zeta":0.9848484848484849,"PM":75.96092164438726},{"zeta":1.0,"PM":76.3454152540245},{"zeta":1.0151515151515151,"PM":76.71564855782376},{"zeta":1.0303030303030303,"PM":77.07222289606472},{"zeta":1.0454545454545454,"PM":77.41571623958819},{"zeta":1.0606060606060606,"PM":77.74668346096165},{"zeta":1.0757575757575757,"PM":78.0656567172746},{"zeta":1.0909090909090908,"PM":78.3731459238431},{"zeta":1.106060606060606,"PM":78.66963930054388},{"zeta":1.121212121212121,"PM":78.95560397477988},{"zeta":1.1363636363636365,"PM":79.2314866271768},{"zeta":1.1515151515151516,"PM":79.49771416802653},{"zeta":1.1666666666666667,"PM":79.75469443422152},{"zeta":1.1818181818181819,"PM":80.00281689797396},{"zeta":1.196969696969697,"PM":80.24245337999105},{"zeta":1.2121212121212122,"PM":80.47395876099442},{"zeta":1.2272727272727273,"PM":80.69767168653958},{"zeta":1.2424242424242424,"PM":80.91391526102248},{"zeta":1.2575757575757576,"PM":81.12299772756904},{"zeta":1.2727272727272727,"PM":81.3252131311994},{"zeta":1.2878787878787878,"PM":81.52084196325714},{"zeta":1.303030303030303,"PM":81.71015178560287},{"zeta":1.3181818181818181,"PM":81.89339783350415},{"zeta":1.3333333333333333,"PM":82.070823596517},{"zeta":1.3484848484848484,"PM":82.24266137695946},{"zeta":1.3636363636363635,"PM":82.40913282582962},{"zeta":1.378787878787879,"PM":82.57044945622941},{"zeta":1.393939393939394,"PM":82.72681313452415},{"zeta":1.4090909090909092,"PM":82.87841654960506},{"zeta":1.4242424242424243,"PM":83.02544366072894},{"zeta":1.4393939393939394,"PM":83.16807012449532},{"zeta":1.4545454545454546,"PM":83.30646370158276},{"zeta":1.4696969696969697,"PM":83.44078464391492},{"zeta":1.4848484848484849,"PM":83.57118606295758},{"zeta":1.5,"PM":83.69781427986959}]}]}</script>
@@ -2544,14 +2550,14 @@ T(s) = \frac{G(s)}{(1 + G(s))} = \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2}.
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pm-from-damping-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.2: Phase margin as a function of damping ratio
+Figure&nbsp;13.2: Phase margin as a function of damping ratio
 </figcaption>
 </figure>
 </div>
 </div>
-<p><a href="#fig-pm-from-damping" class="quarto-xref">Figure&nbsp;<span>12.2</span></a> shows that PM increases with damping ratio. Thus, increasing the PM makes the response less oscillatory.</p>
+<p><a href="#fig-pm-from-damping" class="quarto-xref">Figure&nbsp;<span>13.2</span></a> shows that PM increases with damping ratio. Thus, increasing the PM makes the response less oscillatory.</p>
 <div id="exm-PM-from-daming" class="theorem example">
-<p><span class="theorem-title"><strong>Example 12.4</strong></span> Find the PM needed to ensure that the percentage overshoot is less than 10%.</p>
+<p><span class="theorem-title"><strong>Example 13.4</strong></span> Find the PM needed to ensure that the percentage overshoot is less than 10%.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
@@ -2571,7 +2577,7 @@ Solution
 <div>$$ζ = \frac{- \ln(\%{\rm OS}/100)}{\sqrt{π^2 + \ln^2(\%{\rm OS}/100)}} = 0.5912$$</div>
 </div>
 </div>
-<p>Looking at <a href="#fig-pm-from-damping" class="quarto-xref">Figure&nbsp;<span>12.2</span></a>, we see that <span class="math inline">\(ζ \ge 0.59\)</span> corresponds to <span class="math inline">\(\text{PM} \ge 60^∘\)</span>. Thus, we need a PM of at least <span class="math inline">\(60^∘\)</span>.</p>
+<p>Looking at <a href="#fig-pm-from-damping" class="quarto-xref">Figure&nbsp;<span>13.2</span></a>, we see that <span class="math inline">\(ζ \ge 0.59\)</span> corresponds to <span class="math inline">\(\text{PM} \ge 60^∘\)</span>. Thus, we need a PM of at least <span class="math inline">\(60^∘\)</span>.</p>
 </div>
 </div>
 </div>
@@ -3006,12 +3012,12 @@ window._ojs.runtime.interpretFromScriptTags();
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./nyquist-stability.html" class="pagination-link" aria-label="Nyquist Stability Criterion">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Nyquist Stability Criterion</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Nyquist Stability Criterion</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./lag-lead-compensators.html" class="pagination-link" aria-label="Lag-lead compensators">
-        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lag-lead compensators</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lag-lead compensators</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
