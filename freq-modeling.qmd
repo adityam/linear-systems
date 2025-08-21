@@ -65,7 +65,21 @@ The inverse Laplace transform is given by
 $$f(t) = \frac{1}{2\pi j} \int_{\sigma - j \infty}^{\sigma + j \infty} F(s) e^{st} ds$$
 where $\sigma$ is chosen such that $(\sigma,0)$ is in the ROC. 
 
-In this course, we will **never** explicitly use these formulas to compute LTs. We will **always** use LT tables. You do not need to memorize the LT table; one will be provided during the examples. What you do need is the understanding of how to use the LT tables to compute LTs of complicated expressions and to compute inverse LTs using partial fraction expansion.
+In this course, we will **never** explicitly use these formulas to compute LTs. We will **always** use LT tables. LT table for most commonly used functions is shown in @tbl-laplace. You do not need to memorize the LT table; one will be provided during the examples. What you do need is the understanding of how to use the LT tables to compute LTs of complicated expressions and to compute inverse LTs using partial fraction expansion.
+
+| **Signal $f(t)$** | **Laplace Transform $F(s)$** |
+|:-------------:|:------------------------:|
+| $δ(t)$ | $1$ |
+| $\IND(t)$ | $\dfrac 1s$ |
+| $t\IND(t)$ | $\dfrac 1{s^2}$ |
+| $t^n\IND(t)$ | $\dfrac {n!}{s^{n+1}}$ |
+| $e^{-at}\IND(t)$ | $\dfrac 1{s+a}$ |
+| $\sin ωt \IND(t)$ | $\dfrac{ω}{s^2 + ω^2}$ |
+| $\cos ωt \IND(t)$ | $\dfrac{s}{s^2 + ω^2}$ |
+| $A e^{-at} \cos ωt \IND(t)$ | $\dfrac{ A(s+a) }{ (s+a)^2 + ω^2 }$ |
+| $B e^{-at} \sin ωt \IND(t)$ | $\dfrac{ B ω }{ (s+a)^2 + ω^2 }$ |
+
+: Laplace Transform Table {#tbl-laplace}
 
 I will not review this material in class. Please go back to your SS notes or review Sec 2.1--2.2 of the textbook. It is important to understand the following three cases:
 
