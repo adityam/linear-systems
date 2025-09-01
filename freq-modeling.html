@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.7.34">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2025-08-29">
+<meta name="dcterms.date" content="2025-09-01">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>2&nbsp; Frequency domain modeling – Linear Systems and Control</title>
@@ -76,9 +76,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-bc185b5c5bdbcb35c2eb49d8a876ef70.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-4b8438c031ca75c987240aa8bee2986a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
@@ -517,7 +517,8 @@ window.Quarto = {
   <li><a href="#bibo-stability" id="toc-bibo-stability" class="nav-link" data-scroll-target="#bibo-stability"><span class="header-section-number">2.5</span> BIBO Stability</a></li>
   <li><a href="#step-response" id="toc-step-response" class="nav-link" data-scroll-target="#step-response"><span class="header-section-number">2.6</span> Step Response</a></li>
   <li><a href="#interconnection-of-lti-systems" id="toc-interconnection-of-lti-systems" class="nav-link" data-scroll-target="#interconnection-of-lti-systems"><span class="header-section-number">2.7</span> Interconnection of LTI Systems</a></li>
-  <li><a href="#time-delay-systems" id="toc-time-delay-systems" class="nav-link" data-scroll-target="#time-delay-systems"><span class="header-section-number">2.8</span> Time-delay systems</a></li>
+  <li><a href="#the-big-picture" id="toc-the-big-picture" class="nav-link" data-scroll-target="#the-big-picture"><span class="header-section-number">2.8</span> The Big Picture</a></li>
+  <li><a href="#time-delay-systems" id="toc-time-delay-systems" class="nav-link" data-scroll-target="#time-delay-systems"><span class="header-section-number">2.9</span> Time-delay systems</a></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/freq-modeling.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
@@ -554,7 +555,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">August 29, 2025</p>
+      <p class="date">September 1, 2025</p>
     </div>
   </div>
   
@@ -1102,8 +1103,58 @@ Figure&nbsp;2.6: Feedback Connection equivalent to <span class="math inline">\(\
 </figure>
 </div>
 </section>
-<section id="time-delay-systems" class="level2" data-number="2.8">
-<h2 data-number="2.8" class="anchored" data-anchor-id="time-delay-systems"><span class="header-section-number">2.8</span> Time-delay systems</h2>
+<section id="the-big-picture" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="the-big-picture"><span class="header-section-number">2.8</span> The Big Picture</h2>
+<p>Given a plant or system with transfer function <span class="math inline">\(G(s)\)</span>, the objective of control system design is to choose a controller <span class="math inline">\(C(s)\)</span> to ensure that the closed loop system is stable and the output tracks the reference signal. As we saw in the <a href="./introduction.html#closed-loop">introductory lecture</a>, we can stabilize such a system using closed loop control.</p>
+<p>However, in general, there are (often unmodeled) disturbances between the actuator and the plant, and also between the output and the feedback sensor, as shown in <a href="#fig-full-feedback" class="quarto-xref">Figure&nbsp;<span>2.7</span></a>.</p>
+<div id="fig-full-feedback" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-full-feedback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/interconnect6.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-full-feedback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.7: A more complete model of feedback control system
+</figcaption>
+</figure>
+</div>
+<p>In the above figure, we have</p>
+<ul>
+<li><p><span class="math inline">\(G(s)\)</span>: Plant transfer function</p></li>
+<li><p><span class="math inline">\(G_c(s)\)</span>: Controller transfer function</p></li>
+<li><p><span class="math inline">\(R(s)\)</span>: Reference input</p></li>
+<li><p><span class="math inline">\(Y(s)\)</span>: System Output</p></li>
+<li><p><span class="math inline">\(D_1(s)\)</span>, <span class="math inline">\(D_2(s)\)</span>: Disturbances</p></li>
+<li><p><span class="math inline">\(E(s)\)</span>: Tracking error</p></li>
+</ul>
+<p>These variables are related as follows: <span class="math display">\[\begin{align*}
+  Y(s) &amp;= D_2(s) + G(s)( E(s) G_c(s) + D_1(s)), \\
+  E(s) &amp;= R(s) - Y(s).
+\end{align*}\]</span> Simplifying the above equations, we get <span class="math display">\[
+  Y(s) = D_2(s) + R(s) G_c(s)G(s) - Y(s) G_c(s) G(s) + G(s)D_1(s).
+\]</span> Therefore, <span class="math display">\[
+\bbox[5pt,border: 1px solid]
+{
+    Y(s) = \frac{G_c(s)G(s)}{1 + G_c(s)G(s)} R(s)
+    + \frac{G(s)}{1 + G_c(s)G(s)} D_1(s)
+    + \frac{1}{1 + G_c(s)G(s)} D_1(s)
+  }
+\]</span></p>
+<p>Observe the following:</p>
+<ul>
+<li><p>If all poles of <span class="math inline">\(1 + G_c(s)G(s)\)</span> are in the OLHP, then all closed loop systems (i.e., from <span class="math inline">\(R\)</span> to <span class="math inline">\(Y\)</span>; from <span class="math inline">\(D_1\)</span> to <span class="math inline">\(Y\)</span>; and from <span class="math inline">\(D_2\)</span> to <span class="math inline">\(Y\)</span>) are stable.</p></li>
+<li><p>In addition, suppose <span class="math inline">\(G_c(s)\)</span> is a constant that is very large. Then <span class="math display">\[\begin{align*}
+  \lim_{G_c(s) \to \infty} \frac{G_c(s)G(s)}{1 + G_c(s)G(s)} R(s) &amp;= R(s), \\
+  \lim_{G_c(s) \to \infty} \frac{G(s)}{1 + G_c(s)G(s)} D_1(s) &amp;= 0, \\
+  \lim_{G_c(s) \to \infty} \frac{1}{1 + G_c(s)G(s)} D_1(s) &amp;= 0.
+\end{align*}\]</span> Thus, <span class="math display">\[
+  \bbox[5pt,border: 1px solid]
+  {\text{In the limit $G_c(s) \to ∞$, $Y(s) = R(s)$}}
+\]</span></p></li>
+</ul>
+<p>Thus, we can achieve the desirable asymptotic properties (stability and zero tracking error) simply by choosing a large gain. However, as we will see in the subsequent lectures, there is a trade-off associated with choosing large control gains and in a practical system design we need to make trade-offs.</p>
+</section>
+<section id="time-delay-systems" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="time-delay-systems"><span class="header-section-number">2.9</span> Time-delay systems</h2>
 <p>In a real system, there is often a delay between input and output, which is often modeled by a delay block whose output <span class="math inline">\(y(t)\)</span> is a delayed version of the input <span class="math inline">\(u(t)\)</span>, by a delay time <span class="math inline">\(τ\)</span>, that is <span class="math display">\[
   y(t) = u(t-τ).
 \]</span> Taking the Laplace transform of both sides, we get <span class="math display">\[

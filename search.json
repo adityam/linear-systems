@@ -121,8 +121,8 @@
     ]
   },
   {
-    "objectID": "introduction.html#closed-loop-control-may-stabilize-an-unstable-system",
-    "href": "introduction.html#closed-loop-control-may-stabilize-an-unstable-system",
+    "objectID": "introduction.html#closed-loop",
+    "href": "introduction.html#closed-loop",
     "title": "1  Introduction",
     "section": "",
     "text": "internal torque \\(m L^2 \\ddot \\theta(t)\\)\ngravitational torque \\(mg L \\sin θ(t)\\)\nexternal torque \\(u(t)\\).\n\n\n\n\n\n\n\n\n\\(b K_p  - a &gt; 0\\)\n\\(b K_d  &gt; 0\\)",
@@ -231,11 +231,22 @@
     ]
   },
   {
+    "objectID": "freq-modeling.html#the-big-picture",
+    "href": "freq-modeling.html#the-big-picture",
+    "title": "2  Frequency domain modeling",
+    "section": "2.8 The Big Picture",
+    "text": "2.8 The Big Picture\nGiven a plant or system with transfer function \\(G(s)\\), the objective of control system design is to choose a controller \\(C(s)\\) to ensure that the closed loop system is stable and the output tracks the reference signal. As we saw in the introductory lecture, we can stabilize such a system using closed loop control.\nHowever, in general, there are (often unmodeled) disturbances between the actuator and the plant, and also between the output and the feedback sensor, as shown in Figure 2.7.\n\n\n\n\n\n\nFigure 2.7: A more complete model of feedback control system\n\n\n\nIn the above figure, we have\n\n\\(G(s)\\): Plant transfer function\n\\(G_c(s)\\): Controller transfer function\n\\(R(s)\\): Reference input\n\\(Y(s)\\): System Output\n\\(D_1(s)\\), \\(D_2(s)\\): Disturbances\n\\(E(s)\\): Tracking error\n\nThese variables are related as follows: \\[\\begin{align*}\n  Y(s) &= D_2(s) + G(s)( E(s) G_c(s) + D_1(s)), \\\\\n  E(s) &= R(s) - Y(s).\n\\end{align*}\\] Simplifying the above equations, we get \\[\n  Y(s) = D_2(s) + R(s) G_c(s)G(s) - Y(s) G_c(s) G(s) + G(s)D_1(s).\n\\] Therefore, \\[\n\\bbox[5pt,border: 1px solid]\n{\n    Y(s) = \\frac{G_c(s)G(s)}{1 + G_c(s)G(s)} R(s)\n    + \\frac{G(s)}{1 + G_c(s)G(s)} D_1(s)\n    + \\frac{1}{1 + G_c(s)G(s)} D_1(s)\n  }\n\\]\nObserve the following:\n\nIf all poles of \\(1 + G_c(s)G(s)\\) are in the OLHP, then all closed loop systems (i.e., from \\(R\\) to \\(Y\\); from \\(D_1\\) to \\(Y\\); and from \\(D_2\\) to \\(Y\\)) are stable.\nIn addition, suppose \\(G_c(s)\\) is a constant that is very large. Then \\[\\begin{align*}\n  \\lim_{G_c(s) \\to \\infty} \\frac{G_c(s)G(s)}{1 + G_c(s)G(s)} R(s) &= R(s), \\\\\n  \\lim_{G_c(s) \\to \\infty} \\frac{G(s)}{1 + G_c(s)G(s)} D_1(s) &= 0, \\\\\n  \\lim_{G_c(s) \\to \\infty} \\frac{1}{1 + G_c(s)G(s)} D_1(s) &= 0.\n\\end{align*}\\] Thus, \\[\n  \\bbox[5pt,border: 1px solid]\n  {\\text{In the limit $G_c(s) \\to ∞$, $Y(s) = R(s)$}}\n\\]\n\nThus, we can achieve the desirable asymptotic properties (stability and zero tracking error) simply by choosing a large gain. However, as we will see in the subsequent lectures, there is a trade-off associated with choosing large control gains and in a practical system design we need to make trade-offs.",
+    "crumbs": [
+      "Linear Control Systems",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Frequency domain modeling</span>"
+    ]
+  },
+  {
     "objectID": "freq-modeling.html#time-delay-systems",
     "href": "freq-modeling.html#time-delay-systems",
     "title": "2  Frequency domain modeling",
-    "section": "2.8 Time-delay systems",
-    "text": "2.8 Time-delay systems\nIn a real system, there is often a delay between input and output, which is often modeled by a delay block whose output \\(y(t)\\) is a delayed version of the input \\(u(t)\\), by a delay time \\(τ\\), that is \\[\n  y(t) = u(t-τ).\n\\] Taking the Laplace transform of both sides, we get \\[\nY(s) = e^{-τs}U(s).\n\\] Therefore, the TF of time-delay unit is \\(e^{-τs}\\), which is different from the TFs studied so far as it is not a rational polynomial of \\(s\\). It is possible to approximate \\(e^{-τs}\\) using a rational polynomial using what is called Padé approximation:\n\nFirst-order Padé approximation: \\[ e^{-τs} \\approx \\dfrac{1 - τs/2}{1 + τs/2}. \\]\nSecond-order Padé approximation: \\[ e^{-τs} \\approx \\dfrac{1 - τs/2 + (τs)^2/12}{1 + τs/2 + (τs)^2/12}. \\]\n\nWe will not study time-delay systems in the course.",
+    "section": "2.9 Time-delay systems",
+    "text": "2.9 Time-delay systems\nIn a real system, there is often a delay between input and output, which is often modeled by a delay block whose output \\(y(t)\\) is a delayed version of the input \\(u(t)\\), by a delay time \\(τ\\), that is \\[\n  y(t) = u(t-τ).\n\\] Taking the Laplace transform of both sides, we get \\[\nY(s) = e^{-τs}U(s).\n\\] Therefore, the TF of time-delay unit is \\(e^{-τs}\\), which is different from the TFs studied so far as it is not a rational polynomial of \\(s\\). It is possible to approximate \\(e^{-τs}\\) using a rational polynomial using what is called Padé approximation:\n\nFirst-order Padé approximation: \\[ e^{-τs} \\approx \\dfrac{1 - τs/2}{1 + τs/2}. \\]\nSecond-order Padé approximation: \\[ e^{-τs} \\approx \\dfrac{1 - τs/2 + (τs)^2/12}{1 + τs/2 + (τs)^2/12}. \\]\n\nWe will not study time-delay systems in the course.",
     "crumbs": [
       "Linear Control Systems",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Frequency domain modeling</span>"

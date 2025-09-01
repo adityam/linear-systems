@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.7.34">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2025-08-29">
+<meta name="dcterms.date" content="2025-09-01">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>1&nbsp; Introduction – Linear Systems and Control</title>
@@ -76,9 +76,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-bc185b5c5bdbcb35c2eb49d8a876ef70.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-4b8438c031ca75c987240aa8bee2986a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
@@ -510,7 +510,7 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#closed-loop-control-may-stabilize-an-unstable-system" id="toc-closed-loop-control-may-stabilize-an-unstable-system" class="nav-link active" data-scroll-target="#closed-loop-control-may-stabilize-an-unstable-system"><span class="header-section-number">1.1</span> Closed-loop control may stabilize an unstable system</a></li>
+  <li><a href="#closed-loop" id="toc-closed-loop" class="nav-link active" data-scroll-target="#closed-loop"><span class="header-section-number">1.1</span> Closed-loop control may stabilize an unstable system</a></li>
   <li><a href="#closed-loop-control-provides-robustness-against-disturbances-and-model-uncertainty" id="toc-closed-loop-control-provides-robustness-against-disturbances-and-model-uncertainty" class="nav-link" data-scroll-target="#closed-loop-control-provides-robustness-against-disturbances-and-model-uncertainty"><span class="header-section-number">1.2</span> Closed-loop control provides robustness against disturbances and model uncertainty</a>
   <ul class="collapse">
   <li><a href="#open-loop-control" id="toc-open-loop-control" class="nav-link" data-scroll-target="#open-loop-control">Open loop control</a></li>
@@ -551,7 +551,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">August 29, 2025</p>
+      <p class="date">September 1, 2025</p>
     </div>
   </div>
   
@@ -574,8 +574,8 @@ window.Quarto = {
 <li><p>As we illustrate via examples below, such <strong>closed-loop feedback control</strong> provides several benefits, including stabilizing unstable systems and robustness against disturbances, and model uncertainty.</p></li>
 <li><p>The idea of feedback control has a long history: from <a href="https://doi.org/10.1109/13.123411">the ancient water clocks of Ktesibios</a> (3rd century BC) that used float regulators (see this <a href="https://youtu.be/G9t3ddvBkYU">video</a> for an illustration), to <a href="https://assets.press.princeton.edu/chapters/s8701.pdf">James Watt’s centrifugal governor</a> (18th century) that automatically controlled the speed of steam engines, and to modern applications such as robotics, aerospace, automobiles, control of HVAC systems, power control in communication systems, load frequency control in power systems, industrial process control, and increasing control of learning algorithms. <strong>Automatic control</strong> is often regarded as <a href="https://doi.org/10.1007/978-1-4471-0853-5_1">the hidden technology</a> that makes modern engineering systems work. See <a href="https://doi.org/10.1016/j.automatica.2013.10.012">Control: A prespective</a> for a rich history of the field.</p></li>
 </ul>
-<section id="closed-loop-control-may-stabilize-an-unstable-system" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="closed-loop-control-may-stabilize-an-unstable-system"><span class="header-section-number">1.1</span> Closed-loop control may stabilize an unstable system</h2>
+<section id="closed-loop" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="closed-loop"><span class="header-section-number">1.1</span> Closed-loop control may stabilize an unstable system</h2>
 <p>In this section, we present a simple example of designing a closed-loop controller for a <a href="https://en.wikipedia.org/wiki/Segway">:Segway</a> to show that <strong>feedback control can stabilize an unstable system</strong>.</p>
 <p>We model the Segway as an <strong>inverted pendulum</strong> with mass <span class="math inline">\(m\)</span> located at the end of a rigid rod of length <span class="math inline">\(L\)</span>, pivoting at the wheel axis. Let <span class="math inline">\(θ(t)\)</span> denote the tilt angle (measured from the upright position) and <span class="math inline">\(u(t)\)</span> denote the torque applied by the rotor. Three torques act on the mass:</p>
 <ul>
