@@ -349,6 +349,63 @@ There are three common ways to inter connect LTI systems shown below.
 
 ![Feedback Connection equivalent to $\displaystyle \frac{G(s)}{1 + G(s)H(s)}$.](figures/svg/interconnect5.svg){#fig-feedback}
 
+## The Big Picture
+
+Given a plant or system with transfer function $G(s)$, the objective of control system design is to choose a controller $C(s)$ to ensure that the closed loop system is stable and the output tracks the reference signal. As we saw in the [introductory lecture](introduction.qmd#closed-loop), we can stabilize such a system using closed loop control. 
+
+However, in general, there are (often unmodeled) disturbances between the actuator and the plant, and also between the output and the feedback sensor, as shown in @fig-full-feedback. 
+
+![A more complete model of feedback control system](figures/svg/interconnect6.svg){#fig-full-feedback}
+
+In the above figure, we have
+
+- $G(s)$: Plant transfer function
+- $G_c(s)$: Controller transfer function
+
+- $R(s)$: Reference input
+- $Y(s)$: System Output
+
+- $D_1(s)$, $D_2(s)$: Disturbances
+- $E(s)$: Tracking error
+
+These variables are related as follows:
+\begin{align*}
+  Y(s) &= D_2(s) + G(s)( E(s) G_c(s) + D_1(s)), \\
+  E(s) &= R(s) - Y(s).
+\end{align*}
+Simplifying the above equations, we get
+$$
+  Y(s) = D_2(s) + R(s) G_c(s)G(s) - Y(s) G_c(s) G(s) + G(s)D_1(s).
+$$
+Therefore,
+$$
+\bbox[5pt,border: 1px solid]
+ {
+    Y(s) = \frac{G_c(s)G(s)}{1 + G_c(s)G(s)} R(s)
+    + \frac{G(s)}{1 + G_c(s)G(s)} D_1(s)
+    + \frac{1}{1 + G_c(s)G(s)} D_1(s)
+  }
+$$
+
+Observe the following:
+
+- If all poles of $1 + G_c(s)G(s)$ are in the OLHP, then all closed loop systems (i.e., from $R$ to $Y$; from $D_1$ to $Y$; and from $D_2$ to $Y$) are stable.
+
+- In addition, suppose $G_c(s)$ is a constant that is very large. Then
+  \begin{align*}
+    \lim_{G_c(s) \to \infty} \frac{G_c(s)G(s)}{1 + G_c(s)G(s)} R(s) &= R(s), \\
+    \lim_{G_c(s) \to \infty} \frac{G(s)}{1 + G_c(s)G(s)} D_1(s) &= 0, \\
+    \lim_{G_c(s) \to \infty} \frac{1}{1 + G_c(s)G(s)} D_1(s) &= 0.
+  \end{align*}
+  Thus, 
+  $$
+    \bbox[5pt,border: 1px solid]
+    {\text{In the limit $G_c(s) \to ∞$, $Y(s) = R(s)$}}
+  $$
+
+Thus, we can achieve the desirable asymptotic properties (stability and zero tracking error) simply by choosing a large gain. However, as we will see in the subsequent lectures, there is a trade-off associated with choosing large control gains and in a practical system design we need to make trade-offs. 
+     
+
 ## Time-delay systems
 
 In a real system, there is often a delay between input and output, which is often modeled by a delay block whose output $y(t)$ is a delayed version of the input $u(t)$, by a delay time $τ$, that is

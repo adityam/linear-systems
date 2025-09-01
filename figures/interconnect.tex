@@ -65,8 +65,8 @@ enddef ;
 \starttext
 \startMPpage[offset=1dk] %{{{ LTI System
   begingroup;
-  ux := 1cm;
-  uy := 1cm;
+  sx := 1cm;
+  sy := 1cm;
 
   boxit.LTI("LTI System");
   LTI.c = origin;
@@ -78,8 +78,8 @@ enddef ;
 
   pair Input, Output;
 
-  Input  := LTI.w - (ux,0);
-  Output := LTI.e + (ux,0);
+  Input  := LTI.w - (sx,0);
+  Output := LTI.e + (sx,0);
 
   for i = 1 upto 5 :
     sketch_amount := 1.3bp;
@@ -101,8 +101,8 @@ enddef ;
 \startMPpage[offset=1dk] %{{{ LTI System
   begingroup;
   sketchypaths; 
-  ux := 1cm;
-  uy := 1cm;
+  sx := 1cm;
+  sy := 1cm;
 
   boxit.LTI("$G(s)$");
   LTI.c = origin;
@@ -114,8 +114,8 @@ enddef ;
 
   pair Input, Output;
 
-  Input  := LTI.w - (ux,0);
-  Output := LTI.e + (ux,0);
+  Input  := LTI.w - (sx,0);
+  Output := LTI.e + (sx,0);
 
   for i = 1 upto 5 :
     sketch_amount := 1.3bp;
@@ -138,13 +138,13 @@ enddef ;
   begingroup;
   sketchypaths;
 
-  ux := 1cm;
-  uy := 1cm;
+  sx := 1cm;
+  sy := 1cm;
 
   boxit.LTI_one("$G_1(s)$");
   boxit.LTI_two("$G_2(s)$");
 
-  LTI_two.w - LTI_one.e = (2ux,0);
+  LTI_two.w - LTI_one.e = (2sx,0);
 
   boxes_fixsize(LTI_one,LTI_two);
   boxes_fixpos (LTI_one,LTI_two);
@@ -153,8 +153,8 @@ enddef ;
 
   pair Input, Output;
 
-  Input  := LTI_one.w - (ux,0);
-  Output := LTI_two.e + (ux,0);
+  Input  := LTI_one.w - (sx,0);
+  Output := LTI_two.e + (sx,0);
 
   for i = 1 upto 5 :
     sketch_amount := 1.3bp;
@@ -179,19 +179,19 @@ enddef ;
   begingroup;
   sketchypaths;
 
-  ux := 1cm;
-  uy := 1cm;
+  sx := 1cm;
+  sy := 1cm;
 
   pair split_one;
-  boxit.LTI_one("$G(s)$");
-  boxit.LTI_two("$G(s)$");
+  boxit.LTI_one("$G_1(s)$");
+  boxit.LTI_two("$G_2(s)$");
   circleit.sum_one("\tfc $+$");
 
   split_one = origin;
 
-  LTI_one.s - LTI_two.n = (0,1.5uy);
-  xpart LTI_one.w - xpart split_one = 1.5ux;
-  sum_one.w - 0.5[ LTI_one.se, LTI_two.ne ] = (1.5ux,0);
+  LTI_one.s - LTI_two.n = (0,1.5sy);
+  xpart LTI_one.w - xpart split_one = 1.5sx;
+  sum_one.w - 0.5[ LTI_one.se, LTI_two.ne ] = (1.5sx,0);
 
   boxes_fixsize(sum_one,LTI_one,LTI_two);
   boxes_fixpos (sum_one,LTI_one,LTI_two);
@@ -200,8 +200,8 @@ enddef ;
 
   pair Input, Output;
 
-  Input  := split_one - (ux,0);
-  Output := sum_one.e + (ux,0);
+  Input  := split_one - (sx,0);
+  Output := sum_one.e + (sx,0);
 
   for i = 1 upto 5 :
     sketch_amount := 1.3bp;
@@ -233,8 +233,8 @@ enddef ;
   begingroup;
   sketchypaths;
 
-  ux := 1cm;
-  uy := 1cm;
+  sx := 1cm;
+  sy := 1cm;
 
   pair split_one, split_two;
   boxit.LTI_one("$G(s)$");
@@ -243,8 +243,8 @@ enddef ;
 
   split_one = origin;
 
-  LTI_one.w - sum_one.e = (1.5ux,0);
-  LTI_one.s - LTI_two.n = (0, uy);
+  LTI_one.w - sum_one.e = (1.5sx,0);
+  LTI_one.s - LTI_two.n = (0, sy);
 
   boxes_fixsize(sum_one,LTI_one,LTI_two);
   boxes_fixpos (sum_one,LTI_one,LTI_two);
@@ -253,9 +253,9 @@ enddef ;
 
   pair Input, Output;
 
-  Input  := split_one - (1.5ux,0);
-  split_two := LTI_one.e + (ux,0);
-  Output := split_two + (ux,0);
+  Input  := split_one - (1.5sx,0);
+  split_two := LTI_one.e + (sx,0);
+  Output := split_two + (sx,0);
 
   for i = 1 upto 5 :
     sketch_amount := 1.3bp;
@@ -275,6 +275,85 @@ enddef ;
   label.lrt("\tfx $-$", sum_one.s + (2bp,0) ); 
   label.lft("$U(s)$", Input);
   label.rt("$Y(s)$", Output);
+
+  currentpicture := currentpicture scaled 1.5;
+
+  endgroup;
+\stopMPpage % }}}
+
+\startMPpage[offset=1dk] % {{{ Full Feedback
+  begingroup;
+  sketchypaths;
+
+  sx := 1cm;
+  sy := 1cm;
+
+  pair split_one, split_two;
+  boxit.LTI_one("$G(s)$");
+  boxit.LTI_two("$G_c(s)$");
+  circleit.sum_one("\tfc $+$");
+  circleit.sum_two("\tfc $+$");
+  circleit.sum_three("\tfc $+$");
+
+  sum_one.c = origin;
+
+  LTI_one.w - sum_one.e = (sx,0);
+  sum_two.w - LTI_one.e = (sx,0);
+  LTI_two.w - sum_two.e = (sx,0);
+  sum_three.w - LTI_two.e = (sx,0);
+
+  boxes_fixsize(sum_one,LTI_one,LTI_two,sum_two, sum_three);
+  boxes_fixpos (sum_one,LTI_one,LTI_two,sum_two, sum_three);
+
+  drawunboxed(sum_one,LTI_one,LTI_two, sum_two, sum_three);
+
+  pair Input, Output;
+  pair D_one, D_two;
+
+  Input  := sum_one.w - (sx,0);
+  split_two := sum_three.e + (sx,0);
+  Output := split_two + (sx,0);
+
+  split_one := LTI_two.s - (0, sy);
+
+  D_one := sum_two.n + (0, sy);
+  D_two := sum_three.n + (0, sy);
+
+  for i = 1 upto 5 :
+    sketch_amount := 1.3bp;
+    draw bpath LTI_one cornered 10bp;
+    draw bpath LTI_two cornered 10bp;
+    draw bpath sum_one;
+    draw bpath sum_two;
+    draw bpath sum_three;
+    
+    sketch_amount := 0.6bp;
+    drawarrow Input -- sum_one.w;
+    drawarrow sum_one.e -- lft LTI_one.w;
+    drawarrow LTI_one.e -- lft sum_two.w;
+    drawarrow sum_two.e -- lft LTI_two.w;
+    drawarrow LTI_two.e -- lft sum_three.w;
+    drawarrow sum_three.e -- Output;
+
+    drawarrow split_two +- split_one -+ sum_one.s;
+    drawarrow D_one -- top sum_two.n ;
+    drawarrow D_two -- top sum_three.n ;
+  endfor;
+
+  label.ulft("\tfx $+$", sum_one.w + (2bp,2bp)); 
+  label.lrt("\tfx $-$", sum_one.s + (2bp,0) ); 
+
+  label.ulft("\tfx $+$", sum_two.w + (2bp,2bp)); 
+  label.urt("\tfx $+$", sum_two.n + (2bp,0) ); 
+
+  label.ulft("\tfx $+$", sum_three.w + (2bp,2bp)); 
+  label.urt("\tfx $+$", sum_three.n + (2bp,0) ); 
+
+  label.lft("$R(s)$", Input);
+  label.rt("$Y(s)$", Output);
+
+  label.top("$D_1(s)$", D_one);
+  label.top("$D_2(s)$", D_two);
 
   currentpicture := currentpicture scaled 1.5;
 

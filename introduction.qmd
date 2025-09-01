@@ -28,7 +28,7 @@ execute:
 - The idea of feedback control has a long history: from [the ancient water clocks of Ktesibios](https://doi.org/10.1109/13.123411) (3rd century BC) that used float regulators (see this [video](https://youtu.be/G9t3ddvBkYU) for an illustration), to [James Watt’s centrifugal governor](https://assets.press.princeton.edu/chapters/s8701.pdf) (18th century) that automatically controlled the speed of steam engines, and to modern applications such as robotics, aerospace, automobiles, control of HVAC systems, power control in communication systems, load frequency control in power systems, industrial process control, and increasing control of learning algorithms. **Automatic control** is often regarded as [the hidden technology](https://doi.org/10.1007/978-1-4471-0853-5_1) that makes modern engineering systems work. See [Control: A prespective](https://doi.org/10.1016/j.automatica.2013.10.012) for a rich history of the field. 
 
 
-## Closed-loop control may stabilize an unstable system
+## Closed-loop control may stabilize an unstable system {#closed-loop}
 
 In this section, we present a simple example of designing a closed-loop controller for a [:Segway](https://en.wikipedia.org/wiki/Segway) to show that **feedback control can stabilize an unstable system**. 
 
