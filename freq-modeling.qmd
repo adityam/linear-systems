@@ -302,43 +302,6 @@ If there are poles on the $j ω$ axis and the poles have multiplicity 1, then th
 
 In the next lecture, we will see how to use the poles to identify the step response of the system.
 
-## Step Response
-
-One of the configurations that we will really focus on in the course is the output of a _stable_ system when the **input is a step function.** This is often the case when we specify a reference input such as the desired temperature of a room or the desired speed in cruise control of a car, and are interested in seeing if we get a "good" output. Note that this question is only of interest for stable systems. If the system is unstable, then the output will go to infinity. 
-
-As an example, consider the system of @exm-LDE-TF. What is the output when the input is a step function (assuming that the system starts from a zero initial state)?
-
-To compute this, recall
-$$
-\IND(t) \xleftrightarrow{\quad \mathcal L\quad} \frac 1s.
-$$
-
-Thus, $U(s) = 1/s$. We had already identified that $G(s) = 1/(s+2)$. Thus,
-\begin{align*}
-Y(s) &= G(s) U(s) \\
-     &= \frac{1}{s(s+2)} \\
-     &= \frac{ \frac 12 }{s} - \frac{ \frac 12 }{ s + 2 }
-     \quad \text{[By partial fraction expansion]}.
-\end{align*}
-Thus,
-$$
-  y(t) = \left[ \frac 12 - \frac 12 e^{-2t} \right] \IND(t).
-$$
-
-We can verify this by simulation.[^code]
-
-```{julia}
-#| echo: true
-using ControlSystems, Plots
-
-G = zpk([], [-2], 1)
-T = 4
-
-plot(step(G, T), label=L"G(s)", size=(500,250))
-```
-
-[^code]: In the lab, we will use Matlab for simulating LTI systems. However, in the course notes, I use Julia which makes it easier to directly include the output in a webpage. 
-
 ## Interconnection of LTI Systems
 
 There are three common ways to inter connect LTI systems shown below.
@@ -405,6 +368,44 @@ Observe the following:
 
 Thus, we can achieve the desirable asymptotic properties (stability and zero tracking error) simply by choosing a large gain. However, as we will see in the subsequent lectures, there is a trade-off associated with choosing large control gains and in a practical system design we need to make trade-offs. 
      
+
+
+## Step Response
+
+One of the configurations that we will really focus on in the course is the output of a _stable_ system when the **input is a step function.** This is often the case when we specify a reference input such as the desired temperature of a room or the desired speed in cruise control of a car, and are interested in seeing if we get a "good" output. Note that this question is only of interest for stable systems. If the system is unstable, then the output will go to infinity. 
+
+As an example, consider the system of @exm-LDE-TF. What is the output when the input is a step function (assuming that the system starts from a zero initial state)?
+
+To compute this, recall
+$$
+\IND(t) \xleftrightarrow{\quad \mathcal L\quad} \frac 1s.
+$$
+
+Thus, $U(s) = 1/s$. We had already identified that $G(s) = 1/(s+2)$. Thus,
+\begin{align*}
+Y(s) &= G(s) U(s) \\
+     &= \frac{1}{s(s+2)} \\
+     &= \frac{ \frac 12 }{s} - \frac{ \frac 12 }{ s + 2 }
+     \quad \text{[By partial fraction expansion]}.
+\end{align*}
+Thus,
+$$
+  y(t) = \left[ \frac 12 - \frac 12 e^{-2t} \right] \IND(t).
+$$
+
+We can verify this by simulation.[^code]
+
+```{julia}
+#| echo: true
+using ControlSystems, Plots
+
+G = zpk([], [-2], 1)
+T = 4
+
+plot(step(G, T), label=L"G(s)", size=(500,250))
+```
+
+[^code]: In the lab, we will use Matlab for simulating LTI systems. However, in the course notes, I use Julia which makes it easier to directly include the output in a webpage. 
 
 ## Time-delay systems
 
