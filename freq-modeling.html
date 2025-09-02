@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2025-09-01">
+<meta name="dcterms.date" content="2025-09-02">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>2&nbsp; Frequency domain modeling – Linear Systems and Control</title>
@@ -515,9 +515,9 @@ window.Quarto = {
   <li><a href="#the-transfer-function" id="toc-the-transfer-function" class="nav-link" data-scroll-target="#the-transfer-function"><span class="header-section-number">2.3</span> The Transfer Function</a></li>
   <li><a href="#poles-and-zeros-of-a-transfer-function" id="toc-poles-and-zeros-of-a-transfer-function" class="nav-link" data-scroll-target="#poles-and-zeros-of-a-transfer-function"><span class="header-section-number">2.4</span> Poles and Zeros of a Transfer Function</a></li>
   <li><a href="#bibo-stability" id="toc-bibo-stability" class="nav-link" data-scroll-target="#bibo-stability"><span class="header-section-number">2.5</span> BIBO Stability</a></li>
-  <li><a href="#step-response" id="toc-step-response" class="nav-link" data-scroll-target="#step-response"><span class="header-section-number">2.6</span> Step Response</a></li>
-  <li><a href="#interconnection-of-lti-systems" id="toc-interconnection-of-lti-systems" class="nav-link" data-scroll-target="#interconnection-of-lti-systems"><span class="header-section-number">2.7</span> Interconnection of LTI Systems</a></li>
-  <li><a href="#the-big-picture" id="toc-the-big-picture" class="nav-link" data-scroll-target="#the-big-picture"><span class="header-section-number">2.8</span> The Big Picture</a></li>
+  <li><a href="#interconnection-of-lti-systems" id="toc-interconnection-of-lti-systems" class="nav-link" data-scroll-target="#interconnection-of-lti-systems"><span class="header-section-number">2.6</span> Interconnection of LTI Systems</a></li>
+  <li><a href="#the-big-picture" id="toc-the-big-picture" class="nav-link" data-scroll-target="#the-big-picture"><span class="header-section-number">2.7</span> The Big Picture</a></li>
+  <li><a href="#step-response" id="toc-step-response" class="nav-link" data-scroll-target="#step-response"><span class="header-section-number">2.8</span> Step Response</a></li>
   <li><a href="#time-delay-systems" id="toc-time-delay-systems" class="nav-link" data-scroll-target="#time-delay-systems"><span class="header-section-number">2.9</span> Time-delay systems</a></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
   </ul>
@@ -555,7 +555,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 1, 2025</p>
+      <p class="date">September 2, 2025</p>
     </div>
   </div>
   
@@ -924,8 +924,92 @@ Figure&nbsp;2.3: Illustration of stable and unstable systems
 <p>If there are poles on the <span class="math inline">\(j ω\)</span> axis and the poles have multiplicity 1, then the system is <strong>marginally stable</strong>; if poles have multiplicity greater than 1, then the system is unstable.</p>
 <p>In the next lecture, we will see how to use the poles to identify the step response of the system.</p>
 </section>
-<section id="step-response" class="level2 page-columns page-full" data-number="2.6">
-<h2 data-number="2.6" class="anchored" data-anchor-id="step-response"><span class="header-section-number">2.6</span> Step Response</h2>
+<section id="interconnection-of-lti-systems" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="interconnection-of-lti-systems"><span class="header-section-number">2.6</span> Interconnection of LTI Systems</h2>
+<p>There are three common ways to inter connect LTI systems shown below.</p>
+<div id="fig-cascade" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cascade-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/interconnect3.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cascade-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.4: Cascade Connection equivalent to <span class="math inline">\(G_1(s)G_2(s)\)</span>.
+</figcaption>
+</figure>
+</div>
+<div id="fig-parallel" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-parallel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/interconnect4.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-parallel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.5: Parallel Connection equivalent to <span class="math inline">\(G_1(s) + G_2(s)\)</span>.
+</figcaption>
+</figure>
+</div>
+<div id="fig-feedback" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-feedback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/interconnect5.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-feedback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.6: Feedback Connection equivalent to <span class="math inline">\(\displaystyle \frac{G(s)}{1 + G(s)H(s)}\)</span>.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="the-big-picture" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="the-big-picture"><span class="header-section-number">2.7</span> The Big Picture</h2>
+<p>Given a plant or system with transfer function <span class="math inline">\(G(s)\)</span>, the objective of control system design is to choose a controller <span class="math inline">\(C(s)\)</span> to ensure that the closed loop system is stable and the output tracks the reference signal. As we saw in the <a href="./introduction.html#closed-loop">introductory lecture</a>, we can stabilize such a system using closed loop control.</p>
+<p>However, in general, there are (often unmodeled) disturbances between the actuator and the plant, and also between the output and the feedback sensor, as shown in <a href="#fig-full-feedback" class="quarto-xref">Figure&nbsp;<span>2.7</span></a>.</p>
+<div id="fig-full-feedback" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-full-feedback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/interconnect6.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-full-feedback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.7: A more complete model of feedback control system
+</figcaption>
+</figure>
+</div>
+<p>In the above figure, we have</p>
+<ul>
+<li><p><span class="math inline">\(G(s)\)</span>: Plant transfer function</p></li>
+<li><p><span class="math inline">\(G_c(s)\)</span>: Controller transfer function</p></li>
+<li><p><span class="math inline">\(R(s)\)</span>: Reference input</p></li>
+<li><p><span class="math inline">\(Y(s)\)</span>: System Output</p></li>
+<li><p><span class="math inline">\(D_1(s)\)</span>, <span class="math inline">\(D_2(s)\)</span>: Disturbances</p></li>
+<li><p><span class="math inline">\(E(s)\)</span>: Tracking error</p></li>
+</ul>
+<p>These variables are related as follows: <span class="math display">\[\begin{align*}
+  Y(s) &amp;= D_2(s) + G(s)( E(s) G_c(s) + D_1(s)), \\
+  E(s) &amp;= R(s) - Y(s).
+\end{align*}\]</span> Simplifying the above equations, we get <span class="math display">\[
+  Y(s) = D_2(s) + R(s) G_c(s)G(s) - Y(s) G_c(s) G(s) + G(s)D_1(s).
+\]</span> Therefore, <span class="math display">\[
+\bbox[5pt,border: 1px solid]
+{
+    Y(s) = \frac{G_c(s)G(s)}{1 + G_c(s)G(s)} R(s)
+    + \frac{G(s)}{1 + G_c(s)G(s)} D_1(s)
+    + \frac{1}{1 + G_c(s)G(s)} D_1(s)
+  }
+\]</span></p>
+<p>Observe the following:</p>
+<ul>
+<li><p>If all poles of <span class="math inline">\(1 + G_c(s)G(s)\)</span> are in the OLHP, then all closed loop systems (i.e., from <span class="math inline">\(R\)</span> to <span class="math inline">\(Y\)</span>; from <span class="math inline">\(D_1\)</span> to <span class="math inline">\(Y\)</span>; and from <span class="math inline">\(D_2\)</span> to <span class="math inline">\(Y\)</span>) are stable.</p></li>
+<li><p>In addition, suppose <span class="math inline">\(G_c(s)\)</span> is a constant that is very large. Then <span class="math display">\[\begin{align*}
+  \lim_{G_c(s) \to \infty} \frac{G_c(s)G(s)}{1 + G_c(s)G(s)} R(s) &amp;= R(s), \\
+  \lim_{G_c(s) \to \infty} \frac{G(s)}{1 + G_c(s)G(s)} D_1(s) &amp;= 0, \\
+  \lim_{G_c(s) \to \infty} \frac{1}{1 + G_c(s)G(s)} D_1(s) &amp;= 0.
+\end{align*}\]</span> Thus, <span class="math display">\[
+  \bbox[5pt,border: 1px solid]
+  {\text{In the limit $G_c(s) \to ∞$, $Y(s) = R(s)$}}
+\]</span></p></li>
+</ul>
+<p>Thus, we can achieve the desirable asymptotic properties (stability and zero tracking error) simply by choosing a large gain. However, as we will see in the subsequent lectures, there is a trade-off associated with choosing large control gains and in a practical system design we need to make trade-offs.</p>
+</section>
+<section id="step-response" class="level2 page-columns page-full" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="step-response"><span class="header-section-number">2.8</span> Step Response</h2>
 <p>One of the configurations that we will really focus on in the course is the output of a <em>stable</em> system when the <strong>input is a step function.</strong> This is often the case when we specify a reference input such as the desired temperature of a room or the desired speed in cruise control of a car, and are interested in seeing if we get a “good” output. Note that this question is only of interest for stable systems. If the system is unstable, then the output will go to infinity.</p>
 <p>As an example, consider the system of <a href="#exm-LDE-TF" class="quarto-xref">Example&nbsp;<span>2.2</span></a>. What is the output when the input is a step function (assuming that the system starts from a zero initial state)?</p>
 <p>To compute this, recall <span class="math display">\[
@@ -1068,90 +1152,6 @@ Y(s) &amp;= G(s) U(s) \\
 <path clip-path="url(#clip200)" d="M1812.07 749.663 L1809.05 761.889 Q1808.84 762.662 1808.7 762.756 Q1808.58 762.85 1808.21 762.85 Q1807.48 762.85 1807.48 762.358 Q1807.48 762.311 1807.55 761.702 Q1807.62 761.069 1807.62 759.922 Q1807.62 755.682 1805.56 753.176 Q1803.52 750.67 1799.89 750.67 Q1796.5 750.67 1793.24 752.45 Q1789.98 754.23 1787.9 756.853 Q1786.14 759.008 1784.93 761.632 Q1783.73 764.255 1783.24 766.55 Q1782.75 768.822 1782.56 770.204 Q1782.4 771.586 1782.4 772.476 Q1782.4 775.099 1783.24 777.137 Q1784.08 779.152 1785.49 780.299 Q1786.92 781.447 1788.56 782.009 Q1790.22 782.571 1792.02 782.571 Q1792.7 782.571 1793.52 782.478 Q1794.34 782.384 1795.61 782.033 Q1796.89 781.681 1797.95 781.096 Q1799.03 780.51 1799.96 779.386 Q1800.92 778.261 1801.3 776.762 Q1802.3 772.945 1802.3 772.382 Q1802.3 771.914 1802.02 771.75 Q1801.74 771.586 1800.81 771.469 L1798.28 771.375 Q1798.23 771.375 1798.16 771.375 Q1797.71 771.375 1797.53 771.375 Q1797.34 771.352 1797.13 771.305 Q1796.94 771.258 1796.87 771.164 Q1796.82 771.047 1796.82 770.86 Q1796.82 770.415 1797.01 770.204 Q1797.2 769.97 1797.36 769.947 Q1797.53 769.9 1797.83 769.9 L1804.55 770.04 Q1805.09 770.04 1807.06 769.97 Q1809.03 769.9 1809.59 769.9 Q1810.22 769.9 1810.22 770.415 Q1810.22 771.375 1809.45 771.375 Q1808.68 771.399 1808.28 771.422 Q1807.88 771.422 1807.48 771.539 Q1807.11 771.656 1806.97 771.75 Q1806.83 771.82 1806.64 772.172 Q1806.45 772.5 1806.38 772.781 Q1806.31 773.038 1806.15 773.694 Q1806.05 774.116 1805.82 774.912 Q1805.61 775.708 1805.51 776.13 L1804.6 779.831 Q1803.97 782.571 1803.78 782.759 Q1803.69 782.946 1803.45 782.946 Q1803.1 782.946 1802.35 781.915 Q1801.63 780.885 1801.3 779.971 Q1800.71 780.604 1800.34 780.978 Q1799.96 781.33 1799.1 781.892 Q1798.25 782.454 1797.13 782.899 Q1794.39 784.047 1791.13 784.047 Q1785.32 784.047 1781.67 780.37 Q1778.02 776.669 1778.02 770.907 Q1778.02 766.831 1779.89 762.826 Q1781.76 758.821 1784.74 755.846 Q1787.71 752.872 1791.65 751.021 Q1795.58 749.171 1799.52 749.171 Q1801.02 749.171 1802.35 749.569 Q1803.69 749.967 1804.48 750.459 Q1805.3 750.951 1806.03 751.677 Q1806.75 752.38 1806.99 752.708 Q1807.25 753.036 1807.48 753.434 L1810.83 749.756 Q1811.42 749.171 1811.56 749.171 Q1811.84 749.171 1811.95 749.335 Q1812.07 749.499 1812.07 749.663 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip200)" d="M1817.84 771.001 Q1817.84 762.896 1820.86 756.362 Q1822.15 753.621 1823.95 751.326 Q1825.76 749.03 1826.95 748.023 Q1828.15 747.016 1828.47 747.016 Q1828.94 747.016 1828.97 747.484 Q1828.97 747.719 1828.33 748.304 Q1820.6 756.174 1820.63 771.001 Q1820.63 785.874 1828.15 793.439 Q1828.97 794.259 1828.97 794.517 Q1828.97 794.985 1828.47 794.985 Q1828.15 794.985 1827 794.025 Q1825.85 793.064 1824.07 790.863 Q1822.29 788.661 1821 785.967 Q1817.84 779.433 1817.84 771.001 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip200)" d="M1851.23 765.918 Q1851.23 767.23 1850.58 767.932 Q1849.92 768.611 1849.03 768.611 Q1848.31 768.611 1847.91 768.19 Q1847.53 767.768 1847.53 767.206 Q1847.53 766.386 1848.19 765.73 Q1848.87 765.075 1849.85 765.051 Q1849.52 764.185 1848.66 763.669 Q1847.79 763.131 1847.02 762.99 Q1846.27 762.85 1845.52 762.85 Q1844.04 762.85 1842.92 763.318 Q1841.79 763.786 1841.23 764.513 Q1840.67 765.215 1840.41 765.894 Q1840.15 766.574 1840.15 767.159 Q1840.15 767.675 1840.27 768.096 Q1840.41 768.494 1840.74 768.799 Q1841.07 769.08 1841.3 769.267 Q1841.56 769.455 1842.12 769.619 Q1842.68 769.783 1842.92 769.853 Q1843.15 769.9 1843.81 770.04 Q1845.17 770.321 1845.78 770.485 Q1846.38 770.626 1847.18 771.024 Q1848 771.422 1848.61 772.055 Q1850.09 773.53 1850.09 775.568 Q1850.09 776.317 1849.83 777.231 Q1849.59 778.144 1848.91 779.292 Q1848.23 780.44 1847.2 781.353 Q1846.17 782.267 1844.39 782.899 Q1842.64 783.532 1840.44 783.532 Q1837.37 783.532 1835.47 782.243 Q1833.57 780.932 1833.57 778.87 Q1833.57 777.371 1834.39 776.552 Q1835.21 775.708 1836.27 775.708 Q1837.06 775.708 1837.55 776.153 Q1838.05 776.575 1838.05 777.371 Q1838.05 778.449 1837.18 779.269 Q1836.31 780.088 1835.02 779.924 Q1836.13 782.454 1840.48 782.454 Q1842.12 782.454 1843.39 782.033 Q1844.67 781.587 1845.38 780.978 Q1846.1 780.346 1846.57 779.573 Q1847.04 778.8 1847.18 778.215 Q1847.34 777.629 1847.34 777.184 Q1847.34 776.411 1847.04 775.826 Q1846.74 775.24 1846.31 774.912 Q1845.92 774.561 1845.14 774.28 Q1844.39 773.975 1843.85 773.858 Q1843.32 773.741 1842.36 773.554 Q1841.91 773.46 1841.63 773.413 Q1841.35 773.343 1840.76 773.155 Q1840.2 772.945 1839.8 772.734 Q1839.43 772.523 1838.94 772.148 Q1838.44 771.773 1838.14 771.328 Q1837.84 770.883 1837.62 770.228 Q1837.41 769.572 1837.41 768.799 Q1837.41 768.096 1837.62 767.253 Q1837.86 766.41 1838.44 765.426 Q1839.05 764.442 1839.92 763.646 Q1840.79 762.85 1842.24 762.334 Q1843.71 761.796 1845.52 761.796 Q1848.14 761.796 1849.69 763.013 Q1851.23 764.208 1851.23 765.918 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path><path clip-path="url(#clip200)" d="M1856.61 794.517 Q1856.61 794.282 1857.22 793.697 Q1864.95 785.827 1864.95 771.001 Q1864.95 756.127 1857.53 748.609 Q1856.61 747.742 1856.61 747.484 Q1856.61 747.016 1857.08 747.016 Q1857.41 747.016 1858.56 747.976 Q1859.73 748.937 1861.48 751.138 Q1863.26 753.34 1864.58 756.034 Q1867.74 762.568 1867.74 771.001 Q1867.74 779.105 1864.72 785.64 Q1863.43 788.38 1861.62 790.675 Q1859.82 792.971 1858.63 793.978 Q1857.43 794.985 1857.08 794.985 Q1856.61 794.985 1856.61 794.517 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1"></path></svg>
 </div>
 </div>
-</section>
-<section id="interconnection-of-lti-systems" class="level2" data-number="2.7">
-<h2 data-number="2.7" class="anchored" data-anchor-id="interconnection-of-lti-systems"><span class="header-section-number">2.7</span> Interconnection of LTI Systems</h2>
-<p>There are three common ways to inter connect LTI systems shown below.</p>
-<div id="fig-cascade" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-cascade-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figures/svg/interconnect3.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cascade-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.4: Cascade Connection equivalent to <span class="math inline">\(G_1(s)G_2(s)\)</span>.
-</figcaption>
-</figure>
-</div>
-<div id="fig-parallel" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-parallel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figures/svg/interconnect4.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-parallel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.5: Parallel Connection equivalent to <span class="math inline">\(G_1(s) + G_2(s)\)</span>.
-</figcaption>
-</figure>
-</div>
-<div id="fig-feedback" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-feedback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figures/svg/interconnect5.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-feedback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.6: Feedback Connection equivalent to <span class="math inline">\(\displaystyle \frac{G(s)}{1 + G(s)H(s)}\)</span>.
-</figcaption>
-</figure>
-</div>
-</section>
-<section id="the-big-picture" class="level2" data-number="2.8">
-<h2 data-number="2.8" class="anchored" data-anchor-id="the-big-picture"><span class="header-section-number">2.8</span> The Big Picture</h2>
-<p>Given a plant or system with transfer function <span class="math inline">\(G(s)\)</span>, the objective of control system design is to choose a controller <span class="math inline">\(C(s)\)</span> to ensure that the closed loop system is stable and the output tracks the reference signal. As we saw in the <a href="./introduction.html#closed-loop">introductory lecture</a>, we can stabilize such a system using closed loop control.</p>
-<p>However, in general, there are (often unmodeled) disturbances between the actuator and the plant, and also between the output and the feedback sensor, as shown in <a href="#fig-full-feedback" class="quarto-xref">Figure&nbsp;<span>2.7</span></a>.</p>
-<div id="fig-full-feedback" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-full-feedback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figures/svg/interconnect6.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-full-feedback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.7: A more complete model of feedback control system
-</figcaption>
-</figure>
-</div>
-<p>In the above figure, we have</p>
-<ul>
-<li><p><span class="math inline">\(G(s)\)</span>: Plant transfer function</p></li>
-<li><p><span class="math inline">\(G_c(s)\)</span>: Controller transfer function</p></li>
-<li><p><span class="math inline">\(R(s)\)</span>: Reference input</p></li>
-<li><p><span class="math inline">\(Y(s)\)</span>: System Output</p></li>
-<li><p><span class="math inline">\(D_1(s)\)</span>, <span class="math inline">\(D_2(s)\)</span>: Disturbances</p></li>
-<li><p><span class="math inline">\(E(s)\)</span>: Tracking error</p></li>
-</ul>
-<p>These variables are related as follows: <span class="math display">\[\begin{align*}
-  Y(s) &amp;= D_2(s) + G(s)( E(s) G_c(s) + D_1(s)), \\
-  E(s) &amp;= R(s) - Y(s).
-\end{align*}\]</span> Simplifying the above equations, we get <span class="math display">\[
-  Y(s) = D_2(s) + R(s) G_c(s)G(s) - Y(s) G_c(s) G(s) + G(s)D_1(s).
-\]</span> Therefore, <span class="math display">\[
-\bbox[5pt,border: 1px solid]
-{
-    Y(s) = \frac{G_c(s)G(s)}{1 + G_c(s)G(s)} R(s)
-    + \frac{G(s)}{1 + G_c(s)G(s)} D_1(s)
-    + \frac{1}{1 + G_c(s)G(s)} D_1(s)
-  }
-\]</span></p>
-<p>Observe the following:</p>
-<ul>
-<li><p>If all poles of <span class="math inline">\(1 + G_c(s)G(s)\)</span> are in the OLHP, then all closed loop systems (i.e., from <span class="math inline">\(R\)</span> to <span class="math inline">\(Y\)</span>; from <span class="math inline">\(D_1\)</span> to <span class="math inline">\(Y\)</span>; and from <span class="math inline">\(D_2\)</span> to <span class="math inline">\(Y\)</span>) are stable.</p></li>
-<li><p>In addition, suppose <span class="math inline">\(G_c(s)\)</span> is a constant that is very large. Then <span class="math display">\[\begin{align*}
-  \lim_{G_c(s) \to \infty} \frac{G_c(s)G(s)}{1 + G_c(s)G(s)} R(s) &amp;= R(s), \\
-  \lim_{G_c(s) \to \infty} \frac{G(s)}{1 + G_c(s)G(s)} D_1(s) &amp;= 0, \\
-  \lim_{G_c(s) \to \infty} \frac{1}{1 + G_c(s)G(s)} D_1(s) &amp;= 0.
-\end{align*}\]</span> Thus, <span class="math display">\[
-  \bbox[5pt,border: 1px solid]
-  {\text{In the limit $G_c(s) \to ∞$, $Y(s) = R(s)$}}
-\]</span></p></li>
-</ul>
-<p>Thus, we can achieve the desirable asymptotic properties (stability and zero tracking error) simply by choosing a large gain. However, as we will see in the subsequent lectures, there is a trade-off associated with choosing large control gains and in a practical system design we need to make trade-offs.</p>
 </section>
 <section id="time-delay-systems" class="level2" data-number="2.9">
 <h2 data-number="2.9" class="anchored" data-anchor-id="time-delay-systems"><span class="header-section-number">2.9</span> Time-delay systems</h2>
