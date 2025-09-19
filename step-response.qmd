@@ -807,7 +807,7 @@ The response of an underdamped second order system has the following features:
    and consider the value of $T_s$ such that $\bar y(T_s) = 0.98K$.
    This is equivalent to
    $$
-   \frac{e^{-σ T_s}{\sqrt{1 - ζ^2}} = 0.02.
+   \frac{e^{-σ T_s}}{\sqrt{1 - ζ^2}} = 0.02.
    $$
    Thus,
    $$T_s = \frac{- \ln(0.02 \sqrt{1 - ζ^2})}{σ}.$$
