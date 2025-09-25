@@ -547,7 +547,7 @@ $$
 Thus, $\det \mathcal C_{(A_o, B_o)} = z^2 + 3z + 2 = (z+1)(z+2).$$
 Thus, the OCF representation is not controllable when $z = -1$ or $z = -2$!
 
-Consider z = -1$. For this value of $z$, the TF is given by
+Consider $z = -1$. For this value of $z$, the TF is given by
 $$
   G(s) = \frac{s + 1}{(s+1)(s+2)} = \frac{1}{s+2}.
 $$
@@ -597,7 +597,7 @@ Consider a continuous-time LTI system
   y(t) &= C x(t)
 \end{align*}
 
-Suppose we drive the continuous-time system with a discrete-time ontrol sequence_ $u_d(⋅) = \{u_d(k)\}_{k=0}^{∞}$. Applying this sequence to a (zero-order hold) D/A converter with a sampling period of $Δt$ produces a _piecewise-constant_ continuous-time signal given by
+Suppose we drive the continuous-time system with a _discrete-time control sequence_ $u_d(⋅) = \{u_d(k)\}_{k=0}^{∞}$. Applying this sequence to a (zero-order hold) D/A converter with a sampling period of $Δt$ produces a _piecewise-constant_ continuous-time signal given by
 $$
   u(t) = u_d(k), \quad t \in (kΔt, (k+1)Δt).
 $$
