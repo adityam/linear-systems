@@ -293,6 +293,66 @@ $$ A = \MATRIX{3 & 1 \\ 1 & 2}, B = \MATRIX{2 \\1} \text{ and } C = \MATRIX{ 3 &
 Design a Luenberger observer (i.e., compute the observer gain $L$) such that the eigenvalues of $A - LC$ are at $-10 \pm 5j$. 
 :::
 
+:::{.callout-note collapse="true"} 
+### Solution
+We will show the solution via both method 1 and method 2. For method 1, we have the following.
+
+1. We have
+   $$ C A = \MATRIX{3 & 2} \MATRIX{3 & 1\\ 1 & 2} = \MATRIX{11 & 7}. $$
+   Therefore,
+   $$ \mathcal O_{(A,C)} = \MATRIX{ 3 & 2\\ 11 & 7}. $$
+
+2. $\det \mathcal O_{(A,C)} = 21 - 22 = -1 \neq 0$. Thus, $(A,C)$ is observable and we can design a state Luenberger observer. 
+
+3. The characteristic polynomial is given by
+   $$s I - A = \MATRIX{s & 0 \\ 0 & s} - \MATRIX{3 & 1 \\ 1 & 2} = \MATRIX{ s-3 & -1 \\ -1 & s - 2}.$$
+   Therefore,
+   $$
+   \det(sI-A) = \DET{ s-3 & -1 \\ -1 & s - 2} = (s-3)(s-1) - 1 = s^2 - 5s + 5.
+   $$
+
+4. The SSM in OCF is
+    $$ A_o = \MATRIX{0 & -5 \\ 1 & 5}, \quad C_o = \MATRIX{0 & 1}.$$
+
+5. We have
+   $$ C_o A_o = \MATRIX{0 & 1} \MATRIX{0 & -5 \\ 1 & 5} = \MATRIX{0 & 1 // 1 & 5}. $$
+   Therefore,
+   $$ \mathcal O_{(A_o, C_o)} = \MATRIX{0 & 1 \\ 1 & 5}. $$
+
+6. Thus, we have
+   \begin{align*}
+    T &= \mathcal O_{(A,C)}^{-1} \mathcal O_{(A_o, C_o)}
+    \\
+    &= \MATRIX{3 & 2 \\ 11 & 7}^{-1} \MATRIX{0 & 1 \\ 1 & 5} 
+    \\
+    &= \MATRIX{7 & -2 \\ -11 & 3} \MATRIX{0 & 1 \\ 1 & 5}
+    \\
+    &= \MATRIX{2 & 3 \\ -3 & -4}.
+   \end{align*}
+
+7. The desired characteristic polynomial is
+   $$ (s+10-5j)(s+10+5j) = (s+10)^2 + 5^2 = s^2 + 20s + 125. $$
+   Thus,
+   $$ L_o = \MATRIX{125 - 5 \\ 20 - (-5)} = \MATRIX{120 // 25}.$$
+
+8. Thus, 
+   $$ L = T L_o = \MATRIX{2 & 3 \\ -3 & -4} \MATRIX{120 // 25} = \MATRIX{315 // -460}. $$
+
+Finally, we can redo the calculations using Method 2. In particular, instead of steps 4–6, we have
+
+4. Define
+   $$ W = \MATRIX{ a_1 & 1 \\ 1 & 0 } = \MATRIX{ -5 & 1 \\ 1 & 0 }. $$
+
+5. Therefore, 
+   \begin{align*}
+  T &= \bigl[ \mathcal W O_{(A,C)} \bigr]^{-1} \\
+  &= \left( \MATRIX{ -5 & 1 \\ 1 & 0 } \MATRIX{ 3 & 2\\ 11 & 7} \right)^{-1} \\
+  &= \MATRIX{2 & 3 \\ -3 & -4},
+  \end{align*}
+
+Thus, we get the same $T$ as using Method 1. The remaining steps 7 and 8 are the same as before. 
+:::
+
 :::{.callout-tip }
 #### Duality
 
