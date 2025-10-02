@@ -125,7 +125,7 @@ and assume that the system starts from zero-initial state and take the LT of bot
 $$
 a_n s^n Y(s) + a_{n-1} s^{n-1} Y(s) + \cdots + a_0 Y(s)
 =
-b_m s^m U(s) + b_{m-1} s^{m-1} U(s) + \cdots + b_m U(s).
+b_m s^m U(s) + b_{m-1} s^{m-1} U(s) + \cdots + b_0 U(s).
 $$
 Rearranging terms, we get
 $$
@@ -136,7 +136,7 @@ $$
 Therefore,
 $$
 G(s) = \frac{Y(s)}{U(s)}
-= \frac{b_m s^m + b_{m-1} s^{m-1} + \cdots + b_m}
+= \frac{b_m s^m + b_{m-1} s^{m-1} + \cdots + b_0}
 {a_n s^n + a_{n-1} s^{n-1} + \cdots + a_0}.
 $$
 Thus, we can easily go back and forth between the DE and the transfer function.
@@ -180,7 +180,7 @@ A final remark. In all the systems that we consider in this course, we will assu
 The TF of an LTI system is always of the form:
 $$
 G(s) 
-= \frac{b_m s^m + b_{m-1} s^{m-1} + \cdots + b_m}
+= \frac{b_m s^m + b_{m-1} s^{m-1} + \cdots + b_0}
 {a_n s^n + a_{n-1} s^{n-1} + \cdots + a_0}.
 $$
 
