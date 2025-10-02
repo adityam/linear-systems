@@ -688,7 +688,7 @@ G(s) = \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2}
 \frac{σ^2 + ω_d^2}{(s+σ)^2 + ω_d^2}
 $$
 where $σ = ζ ω_n$ and $ω_d = \sqrt{1 - ζ^2} ω_n$. Note that we have
-$$ σ^2 + ω_d^2 = ω_n.$$ 
+$$ \sigma^2 + \omega_d^2 = \omega_n^2 $$
 The parameter $ω_n$ is called the **natural frequency**. It is the frequency at which the system will oscillate when there is no damping. The parameter $ω_d$ is called the **damped frequency**. As we will show below, it is the frequency at which the damped system oscillates. 
 
 
