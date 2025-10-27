@@ -344,16 +344,16 @@ If there is zero in the first column but the entire row is not zero,
 we proceed as follows
 
 - Replace the zero in the first column by an $ε$ and continue to construct the Routh array as a function of $ε$. 
-- Count the number of sign changes as $ε \to 0^{+}$ ($ε$ goes to zero from above). Let this number be $k_{+}$. 
-- Count the number of sign changes as $ε \to 0^{-}$ ($ε$ goes to zero from below). Let this number be $k_{-}$. 
+- **Either** count the number of sign changes as $ε \to 0^{+}$ ($ε$ goes to zero from above). Let this number be $k_{+}$. 
+- **Or** count the number of sign changes as $ε \to 0^{-}$ ($ε$ goes to zero from below). Let this number be $k_{-}$. 
 
-In all cases, we will have $k_{+} = k_{-}$. Therefore, we have
+In all cases (see below for clarity), $k_{+} = k_{-}$. Therefore, we have
 
 - No. of roots in the ORHP = $k_{+} = k_{-}$
-- No. of roots on the $j ω$-axis = 0$. 
+- No. of roots on the $j ω$-axis = 0. 
 - No. of roots in the OLHP = $\text{degree of polynomial} - k_{+}$ = $\text{degree of polynomial} - k_{-}$. 
 
-**Therefore, in practice, we may only consider the limit $ε \to 0^{+}$.** See below for why some textbooks recommend taking both limits.
+Since both $ε \to 0^{+}$ and $ε \to 0^{-}$ behave identically, **in practice, we only consider the limit $ε \to 0^{+}$.** See below for why some textbooks recommend taking both limits.
 
 :::{#exm-Routh-Hurwitz-zero-1}
 Find the location of the poles of a TF with with denominator given by
@@ -448,7 +448,7 @@ $$
 $$
 Thus, there is indeed one root in the OLHP and two roots on the $j ω$ axis.
 
-#### So, why don't I follow this procedure?
+#### So, why don't I follow this procedure? {-}
 
 In the above example, we have roots on the $j ω$ axis. So, when we perturb the coefficients slightly, the roots may go either to the OLHP or the ORHP, depending on the sign of the perturbation.
 
@@ -489,8 +489,27 @@ Since we have a row of zeros, we split our analysis into two cases. The remainde
 : {.striped}
 
 
+### Another corner case {-}
 
+There is another corner case that we must be aware of. **A row of zero in the last row!** Consider
+$$
+  D(s) = s^4 + 2s^3 + 3s^2 + 4s
+$$
 
+```{julia}
+#| html-table-processing: none
+c = [1,2,3,4,0]
+(html, RA) = RouthArray(c) 
+html
+```
+
+However, this only happens when $s$ divides $D(s)$, which is trivial to check. So, if we are dealing with a polynomial $D(s)$ shown above, we factorize it as
+$$
+  D(s) = s(s^3 + 2s^2 + 3s + 4).
+$$
+Therefore, we know that there is one root on the $j ω$-axis. For the remaining roots we  use Routh-Hurwitz to analyze $(s^3 + 2s^2 + 3s + 4)$. 
+
+Thus, we always assume that $s=0$ is not a divisor of $D(s)$. 
 :::
 
 ### Reciprocal polynomial
@@ -601,7 +620,7 @@ $$
 
 The rows that we have encountered until the row of all zeros corresponds to the remainder polynomial. We interpret is the same way we did the normal case. 
 
-Observe that the divisor polynomial is an **even** polynomial.  A key feature of an even polynomial is that it has an equal number of roots in the OLHP and the ORHP. The number of sign changes is equal to the number of roots in the ORHP. So, the number of roots in OLHP are the same. The remaining roots must be on the $j ω$-axis. 
+Observe that the divisor polynomial is an **even** polynomial.  A key feature of an even polynomial is that it has **an equal number of roots in the OLHP and the ORHP**. The number of sign changes is equal to the number of roots in the ORHP. So, the number of roots in OLHP are the same. The remaining roots must be on the $j ω$-axis. 
 
 :::{.callout-tip}
 ### Roots of even polynomial
@@ -704,6 +723,40 @@ Since we have a row of zeros, we split our analysis into two cases. The remainde
 | $D(s)$     | 3 |   | 0 | 1 | 2 |
 
 : {.striped}
+
+:::
+
+:::{.callout-tip}
+## Summary of the Routh-Hurwitz criterion
+
+1. Check with $s^p$ (for some $p \ge 1$) is a root of $D(s)$. If so, use Routh-Hurwitz on the polynomial $D(s)/s^p$
+
+2. Construct the Routh array.
+
+3. **Normal case.** There is no zero in the first column of the Routh array. Then,
+   
+   - No. of poles in ORHP = no. of sign changes
+   - No. of poles in OLHP = degree - (no. of sign changes)
+   - No. of poles on the $j ω$-axis = 0.
+
+4. **Zero in the first column** (but the whole row is not zero).
+
+   - Since $s$ does not divide $D(s)$, row $s^0$ cannot be all zero.
+   - If row $s^1$ is all zeros, we treat it as a row of all zeros and not as a row with $\epsilon$ in the first column.
+
+   In other cases, replace $0$ with $ε$ and continue filling the Routh array as usual. Count the number of sign changes as $ε \to 0^{+}$. Then,
+   
+   - No. of poles in ORHP = no. of sign changes
+   - No. of poles in OLHP = degree - (no. of sign changes)
+   - No. of poles on the $j ω$-axis = 0.
+
+5. **Whole row of zero.** Since $s$ does not divide $D(s)$, we get a row of zeros only at some odd row $s^{2k-1}$. This means that the polynomial $P_{2k}$ corresponding to the parent row $s^{2k}$ divides $D(s)$. We will use $R(s)$ to denote the remainder polynomial.
+
+   Replace row $P_{2k-1}(s)$ by $P'_{2k}(s)$ and continue filling the Routh array as usual. 
+
+   - Treat the part upto row $s^{2k}$ as usual. That is we count the number of sign changes and the number of sign changes in the colum from row $s^n$ to $s^{2k}$ correspond to the number of roots of $R(s)$ to be in the ORHP.
+
+   - The part from row $s^{2k-1}$ to $s^0$ is treated differently. The number of roots in the ORHP is still equal to the number of sign changes. However, the number of roots in OLHP is equal to the number of roots in ORHP. The remaining roots ($n - 2k$) lie on the $j ω$-axis.
 
 :::
 
