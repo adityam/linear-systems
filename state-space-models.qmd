@@ -420,7 +420,7 @@ $$ G(s) = \frac{Y(s)}{U(s)} = C(sI - A)^{-1} B.$$
 
 We can think of this in terms of the following block diagram. 
 
-![Block diagram of SSM](figures/svg/circuits6.svg){#fig-block}
+![Block diagram of SSM. In this diagram, the single lines denote signals that are scalar (like $u(t)$ and double lines denote signals that are vectors (like $x(t)$). The adder captures the equation $\dot x(t) = A x(t) + B u(t)$.](figures/svg/circuits6.svg){#fig-block}
 
 The TF can be "read backwards" from the block diagram.
 
