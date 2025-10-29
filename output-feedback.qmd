@@ -388,7 +388,7 @@ $$
 K = \MATRIX{k_0 & \cdots & k_{n-1}}.
 $$
 
-As before, we will first consider the system without any reference signal, i.e., $r(t) = 0$. In tihs case, there are
+As before, we will first consider the system without any reference signal, i.e., $r(t) = 0$. In this case, there are
 $2n$ tunable gains $k_0, \dots, k_{n-1}$ and $\ell_0, \dots, \ell_{n-1}$ and the hope is that we can find these gain to arbitrarily choose the eigenvalues of the closed loop system. 
 
 Writing the above equations in state space form, we get
