@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2025-10-28">
+<meta name="dcterms.date" content="2025-11-06">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>6&nbsp; Pole placement via state feedback – Linear Systems and Control</title>
@@ -566,7 +566,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 28, 2025</p>
+      <p class="date">November 6, 2025</p>
     </div>
   </div>
   
@@ -872,6 +872,7 @@ T^{-1} &amp;= \mathcal C_{(A_c,B_c)} \mathcal C_{(A,B)}^{-1}
 \]</span> To ensure that steady-state error when tracking a step input is zero, we pick the pre-compensator gain <span class="math inline">\(N\)</span> as follows: <span class="math display">\[
   N = - \frac{1}{ C(A-BK)^{-1} B }.
 \]</span></p>
+<p>Note that this approach requires exact knowledge of the system parameters and may not be robust to model uncertainty. An alternative approach is to use <a href="./steady-state-errors.html#integral-control-for-ssm">integral control</a>, which automatically ensures zero steady-state error without requiring exact parameter knowledge.</p>
 </section>
 <section id="understanding-lack-of-controllability" class="level2" data-number="6.4">
 <h2 data-number="6.4" class="anchored" data-anchor-id="understanding-lack-of-controllability"><span class="header-section-number">6.4</span> Understanding lack of controllability</h2>
@@ -947,7 +948,7 @@ Figure&nbsp;6.2: A RC-bridge
 </figcaption>
 </figure>
 </div>
-<p>We will follow the approach presented in <a href="./state-space-models.html#ssm-for-circuits">previous section</a> to find a SSM for the circuit in <a href="#fig-rc-bridge" class="quarto-xref">Figure&nbsp;<span>6.2</span></a>. We take the voltage across the two capcitors (denoted by <span class="math inline">\(v_1\)</span> and <span class="math inline">\(v_2\)</span>) as the two components of the SSM. From KCL, we have <span class="math display">\[\begin{align*}
+<p>We will follow the approach presented in <a href="./state-space-models.html#ssm-for-circuits">previous section</a> to find a SSM for the circuit in <a href="#fig-rc-bridge" class="quarto-xref">Figure&nbsp;<span>6.2</span></a>. We take the voltage across the two capacitors (denoted by <span class="math inline">\(v_1\)</span> and <span class="math inline">\(v_2\)</span>) as the two components of the SSM. From KCL, we have <span class="math display">\[\begin{align*}
   C_1 \dot v_1(t) &amp;= \frac{u(t) - v_1(t)}{R_1} - \frac{v_1(t) - v_2(t)}{R_3} \\
   C_2 \dot v_2(t) &amp;= \frac{u(t) - v_2(t)}{R_2} + \frac{v_1(t) - v_2(t)}{R_3}
 \end{align*}\]</span> which can be re-written in state-space form as: <span class="math display">\[\def\1{\vphantom{\dfrac{1}{R_1C_1}}}
@@ -988,7 +989,7 @@ Figure&nbsp;6.2: A RC-bridge
 \]</span> On the other hand, in the OCF representation the matrix <span class="math inline">\(B_o\)</span> depends on the location <span class="math inline">\(z\)</span> of the zero. Therefore, so does the controllability matrix, which is given by <span class="math display">\[
   \mathcal C_{(A_o, B_o)} = \MATRIX{ -z &amp; -2 \\ 1 &amp; -3 - z}.
 \]</span> Thus, <span class="math inline">\(\det \mathcal C_{(A_o, B_o)} = z^2 + 3z + 2 = (z+1)(z+2).\)</span>$ Thus, the OCF representation is not controllable when <span class="math inline">\(z = -1\)</span> or <span class="math inline">\(z = -2\)</span>!</p>
-<p>Consider z = -1$. For this value of <span class="math inline">\(z\)</span>, the TF is given by <span class="math display">\[
+<p>Consider <span class="math inline">\(z = -1\)</span>. For this value of <span class="math inline">\(z\)</span>, the TF is given by <span class="math display">\[
   G(s) = \frac{s + 1}{(s+1)(s+2)} = \frac{1}{s+2}.
 \]</span> Thus, we have a pole-zero cancellation and the OCF representation is not controllable because of that!</p>
 <p>This also suggests that we need to refine the relationship between characteristic polynomial of <span class="math inline">\(A\)</span> and the poles of the TF. The two are equal <strong>when there is no pole-zero cancellation.</strong> This also leads to the following definition.</p>
@@ -1041,7 +1042,7 @@ Figure&nbsp;6.2: A RC-bridge
   \dot x(t) &amp;= A x(t) + B u(t) \\
   y(t) &amp;= C x(t)
 \end{align*}\]</span></p>
-<p>Suppose we drive the continuous-time system with a discrete-time ontrol sequence_ <span class="math inline">\(u_d(⋅) = \{u_d(k)\}_{k=0}^{∞}\)</span>. Applying this sequence to a (zero-order hold) D/A converter with a sampling period of <span class="math inline">\(Δt\)</span> produces a <em>piecewise-constant</em> continuous-time signal given by <span class="math display">\[
+<p>Suppose we drive the continuous-time system with a <em>discrete-time control sequence</em> <span class="math inline">\(u_d(⋅) = \{u_d(k)\}_{k=0}^{∞}\)</span>. Applying this sequence to a (zero-order hold) D/A converter with a sampling period of <span class="math inline">\(Δt\)</span> produces a <em>piecewise-constant</em> continuous-time signal given by <span class="math display">\[
   u(t) = u_d(k), \quad t \in (kΔt, (k+1)Δt).
 \]</span> Applying this (continuous-time) signal <span class="math inline">\(u(⋅)\)</span> as the control input the continuous-time LTI system will provide a continuous-time output <span class="math inline">\(y(t)\)</span>. Let <span class="math inline">\(y_d(⋅) = \{ y_d(k) \}_{k=0}^{∞}\)</span> denote the discrete-time <em>output sequence</em> obtained by sampling <span class="math inline">\(y(⋅)\)</span> using a A/D converter. We are interested in obtaining a state-space representation for the discrete-time system with input <span class="math inline">\(u_d\)</span> and output <span class="math inline">\(y_d\)</span>.</p>
 <p>Since the continuous-time system is driven by a piecewise-constant signal <span class="math inline">\(u_d(k)\)</span> for <span class="math inline">\(t \in (kΔt, (k+1)Δt)\)</span>, we have <span class="math display">\[\begin{align*}

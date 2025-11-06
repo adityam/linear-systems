@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2025-10-28">
+<meta name="dcterms.date" content="2025-11-06">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>1&nbsp; Introduction – Linear Systems and Control</title>
@@ -560,7 +560,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 28, 2025</p>
+      <p class="date">November 6, 2025</p>
     </div>
   </div>
   
@@ -603,7 +603,7 @@ window.Quarto = {
   \frac{d^2 θ(t)}{dt^2} - a θ(t) = b u(t),
 \]</span> where <span class="math inline">\(a = g/L\)</span> and <span class="math inline">\(b = 1/mL^2\)</span>. As we shall see later, the transfer function of this system is given by <span class="math display">\[
   G(s) = \frac{b}{s^2 - a} = \frac{b}{(s - \sqrt{a})(s + \sqrt{a})}$.
-\]</span> The transfer function has two roots, one in the open left hand plane (OLHP) and the other in the open right hand place (ORHP). Since there is a pole in ORHP, the system is unstable.</p>
+\]</span> The transfer function has two roots, one in the open left hand plane (OLHP) and the other in the open right hand plane (ORHP). Since there is a pole in ORHP, the system is unstable.</p>
 <p>Suppose we have a sensor that can measure the angle <span class="math inline">\(θ(t)\)</span>. Consider a <strong>proportional plus derivative controller,</strong> i.e., a controller given by <span class="math display">\[
   u(t) = - K_p θ(t) - K_d \dot θ(t)
 \]</span> where <span class="math inline">\(K_p\)</span> provides the restoring torque and <span class="math inline">\(K_d\)</span> provides damping.</p>

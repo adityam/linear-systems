@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2025-10-28">
+<meta name="dcterms.date" content="2025-11-06">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>3&nbsp; State space models – Linear Systems and Control</title>
@@ -540,7 +540,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 28, 2025</p>
+      <p class="date">November 6, 2025</p>
     </div>
   </div>
   
@@ -567,7 +567,7 @@ window.Quarto = {
 +
 a_1 \bigl[s Y(s) - y(0) \bigr]
 +
-a_2 Y_0(s) = 0
+a_0 Y(s) = 0
 \end{equation*}\]</span> Hence, <span class="math display">\[
 Y(s) = \frac{y(0) s + (a_1 y(0) + \dot y(0))}{s^2 + a_1 s + a_0}.
 \]</span> We can now simplify the above using partial fractions expansion to compute <span class="math inline">\(y(t)\)</span>.</p>
@@ -613,7 +613,7 @@ x(t) = \MATRIX{x_1(t) \\ x_2(t)} = \MATRIX{y(t) \\ \dot y(t)}. \]</span> Then, w
 \MATRIX{0 &amp; 1 \\ -a_0 &amp; -a_1} \MATRIX{x_1(t) \\ x_2(t) },
 \\
 y(t) &amp;= \MATRIX{\phantom{-a_0}\llap{1} &amp; \phantom{-a_1}\llap{0} } \MATRIX{x_1(t) \\ x_2(t)}.
-\end{align*}\]</span> This is called <strong>controllable cannonical form (CCF)</strong> realization of <span class="math inline">\(\eqref{eq:2nd-DE}\)</span>. The meaning of the terminology will become clear later.</p>
+\end{align*}\]</span> This is called <strong>controllable canonical form (CCF)</strong> realization of <span class="math inline">\(\eqref{eq:2nd-DE}\)</span>. The meaning of the terminology will become clear later.</p>
 </section>
 <section id="ocf-representation" class="level3" data-number="3.2.2">
 <h3 data-number="3.2.2" class="anchored" data-anchor-id="ocf-representation"><span class="header-section-number">3.2.2</span> OCF representation</h3>
@@ -635,7 +635,7 @@ x_2(t) &amp;= y(t)
 \MATRIX{0 &amp; -a_0 \\ 1 &amp; -a_1} \MATRIX{x_1(t) \\ x_2(t) },
 \\
 y(t) &amp;= \MATRIX{0 &amp; \phantom{-a_1}\llap{1} } \MATRIX{x_1(t) \\ x_2(t)}.
-\end{align*}\]</span> This is called <strong>observable canoncial form (OCF)</strong> realization of <span class="math inline">\(\eqref{eq:2nd-DE}\)</span>. Again, the reason for the terminolgy will become clear later.</p>
+\end{align*}\]</span> This is called <strong>observable canonical form (OCF)</strong> realization of <span class="math inline">\(\eqref{eq:2nd-DE}\)</span>. Again, the reason for the terminology will become clear later.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -736,7 +736,7 @@ B = \MATRIX{ 1 \\ 1 },
 \quad
 C = \MATRIX{4 &amp; -3}.
 \]</span></p>
-<p>In general, the poles will be complex and have multiplicity. In this setting, a generalization of DCF known as Jordan canconical form (JCF) is used. We will not consider JCF in this course.</p>
+<p>In general, the poles will be complex and have multiplicity. In this setting, a generalization of DCF known as Jordan canonical form (JCF) is used. We will not consider JCF in this course.</p>
 </section>
 </section>
 <section id="ssm-for-circuits" class="level2" data-number="3.4">
@@ -754,7 +754,7 @@ C = \MATRIX{4 &amp; -3}.
 <tr class="header">
 <th style="text-align: center;">Relationship</th>
 <th style="text-align: center;">Resistor</th>
-<th style="text-align: center;">Capcitor</th>
+<th style="text-align: center;">Capacitor</th>
 <th style="text-align: center;">Inductor</th>
 </tr>
 </thead>
@@ -1016,7 +1016,7 @@ e_2 = \MATRIX{0 \\ 1}.
 \]</span> When we write <span class="math inline">\(x = \MATRIX{x_1 \\ x_2} \in \reals^2\)</span>, what we really mean is <span class="math display">\[x = x_1 e_1 + x_2 e_2.\]</span></p>
 <p>What happens if we choose a different basis, say <span class="math inline">\(v_1\)</span> and <span class="math inline">\(v_2\)</span>. If the vector <span class="math display">\[
   x = \tilde x_1 v_1 + \tilde x_2 v_2
-\]</span> then we can say that the vector is equal to <span class="math inline">\(\MATRIX{\tilde x_1 \\ \tilde x_2}\)</span> in the coordinate system <span class="math inline">\((v_1, v_2)\)</span>. Note that the vector hasn’t changed, only the coodinate system has.</p>
+\]</span> then we can say that the vector is equal to <span class="math inline">\(\MATRIX{\tilde x_1 \\ \tilde x_2}\)</span> in the coordinate system <span class="math inline">\((v_1, v_2)\)</span>. Note that the vector hasn’t changed, only the coordinate system has.</p>
 <p>We use the following example to illustrate how to move from one coordinate system to another</p>
 <div id="exm-change-of-coordinates" class="theorem example">
 <p><span class="theorem-title"><strong>Example 3.4</strong></span> Let <span class="math inline">\(x = \MATRIX{2 \\ 3}\)</span>. Find its representation in the coordinate system <span class="math display">\[v_1 = \MATRIX{1 \\ 0}
@@ -1115,7 +1115,7 @@ A \MATRIX{x_1 \\ x_2} = \MATRIX{x_2 \\ x_1}.
 <p>If there is a <span class="math inline">\((λ, x)\)</span> with <span class="math inline">\(x \neq 0\)</span> that satisfies the above equation, then it must be case that <span class="math inline">\(λI - A\)</span> is singular, i.e., <span class="math display">\[
 \bbox[5pt,border: 1px solid]
 {\det(λI - A) = 0}
-\]</span> The above equation is called the <strong>characteristic equation of <span class="math inline">\(A\)</span></strong> and the eigenvalues of <span class="math inline">\(A\)</span> are the roots of the characterisitc equation!</p>
+\]</span> The above equation is called the <strong>characteristic equation of <span class="math inline">\(A\)</span></strong> and the eigenvalues of <span class="math inline">\(A\)</span> are the roots of the characteristic equation!</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1151,7 +1151,7 @@ A \MATRIX{x_1 \\ x_2} = \MATRIX{x_2 \\ x_1}.
 </div>
 <div id="callout-6" class="callout-6-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
-<p>The characterisitc equation of <span class="math inline">\(A\)</span> is <span class="math display">\[
+<p>The characteristic equation of <span class="math inline">\(A\)</span> is <span class="math display">\[
 \det(λI - A) = \DET{ λ - 3 &amp; -1 \\ -1 &amp; λ - 3 }
 = (λ-3)^2 - 1 = (λ-2)(λ-4).
 \]</span> Thus, the eigenvalues are <span class="math inline">\(\{2, 4\}\)</span>.</p>
@@ -1381,7 +1381,7 @@ y(t) &amp;= \tilde C \tilde x(t)
 \end{align*}\]</span></p></li>
 </ol>
 <p>These properties hold because the change of coordinates (or similarity transformation) does not physically change the state; it only changes the coordinate system that we are using to represent the state.</p>
-<p>Change of coordinates (or similarity transformation) is a very useful tool for control system syntehsis. As we will see later, it is easy to design controllers for systems in CCF. So, when we have to design controllers for systems not in CCF, we first find a similarity transformation that converts the system to CCF; then we design a controller for the system in CCF; and finally we convert the controller back to the original coordinate system. Don’t worry if this doesn’t make sense notw. We will discuss this in detail in the next few lectures.</p>
+<p>Change of coordinates (or similarity transformation) is a very useful tool for control system synthesis. As we will see later, it is easy to design controllers for systems in CCF. So, when we have to design controllers for systems not in CCF, we first find a similarity transformation that converts the system to CCF; then we design a controller for the system in CCF; and finally we convert the controller back to the original coordinate system. Don’t worry if this doesn’t make sense now. We will discuss this in detail in the next few lectures.</p>
 
 
 </section>
