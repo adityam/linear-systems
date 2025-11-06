@@ -8,7 +8,7 @@ execute:
   cache: true
 ---
 
-In the [previous lecture](freq-modeling.qmd), we saw that we can use the pole zero plot to determine if a system is BIBO stability. We also saw that we can compute the step reponse using inverse LTs. In this lecture, we will develop a heuristic method to approximate the step response from a pole-zero plot. 
+In the [previous lecture](freq-modeling.qmd), we saw that we can use the pole zero plot to determine if a system is BIBO stable. We also saw that we can compute the step response using inverse LTs. In this lecture, we will develop a heuristic method to approximate the step response from a pole-zero plot. 
 
 ```{julia}
 #| output: false
@@ -37,7 +37,7 @@ default(linewidth=2)
 
 ## Step response from pole-zero plot
 
-To understand how to infer the step response from the pole-zero plot, let's revisit [the example from a a previous lecture]:
+To understand how to infer the step response from the pole-zero plot, let's revisit [the example from a previous lecture]:
 
 ![Block diagram for a simple LTI system](figures/svg/step-response-block-diagrams1.svg){#fig-ex-motivating}
 
@@ -237,7 +237,7 @@ $$
   \stackrel{?}{\approx}
   \tilde G_2(s) = \frac{1}{((s+4)^2 + 8^2)}
 $$
-The dominant pole approximation heuristic says that the first approximation _should_ a good approximation while the second _may_ not be. We plot the two step responses to evalaute:
+The dominant pole approximation heuristic says that the first approximation _should be_ a good approximation while the second _may_ not be. We plot the two step responses to evaluate:
 
 ```{julia}
 #| label: fig-approximation-comparison
@@ -442,7 +442,7 @@ The response of a first order system has the following features:
 
 #### Settling time $T_s$
 
-- The (2%) setting time is the time required for the step response to reach 2% of its final value. 
+- The (2%) settling time is the time required for the step response to reach 2% of its final value. 
 
 - To find $T_s$, we solve
   $$
@@ -622,7 +622,7 @@ Plot.plot({
 ```
 
 :::{#exm-2nd-order}
-Indentify the category of the following second order systems:
+Identify the category of the following second order systems:
 
 a. $\dfrac{12}{s^2 + 8s + 12}.$
 b. $\dfrac{16}{s^2 + 8s + 16}$.
@@ -634,7 +634,7 @@ c. $\dfrac{20}{s^2 + 8s + 20}$.
 #### Solution
 a. $ζ = \dfrac{8}{2\sqrt{12}} \approx 1.1547$. Thus, the system is overdamped.
 b. $ζ = \dfrac{8}{2\sqrt{16}} = 1$. Thus, the system is critically damped.
-b. $ζ = \dfrac{8}{2\sqrt{20}} \approx 0.8944$. Thus, the system is underdamped.
+c. $ζ = \dfrac{8}{2\sqrt{20}} \approx 0.8944$. Thus, the system is underdamped.
 :::
 
 ## Step response of undamped second order system
@@ -796,7 +796,7 @@ The response of an underdamped second order system has the following features:
     &= e^{-σ T_p} = e^{-π σ / ω_d }
     \end{align*}
 
-3. For the derivation of the setting time, we use the other form of $y(t)$:
+3. For the derivation of the settling time, we use the other form of $y(t)$:
    $$
    y(t) = K \biggl[ 1 - \frac{1}{\sqrt{1 - ζ^2}} e^{-σ t} \cos(ω_dt - \phi) \biggr] \IND(t)
    $$
@@ -1126,7 +1126,7 @@ Note that all underdamped higher order systems share these characteristics, so i
 For a second order system, we need to identify three parameters: $K$, $ω_n$ and $ζ$. 
 
 - The gain $K$ is equal to the final value of the step response. 
-- To find $ω_n$ and $ζ$, we need to find two out the three features: peak time, percentage overshoot, and setting time. Using these features, we can identify $ω_n$ and $ζ$. 
+- To find $ω_n$ and $ζ$, we need to find two out the three features: peak time, percentage overshoot, and settling time. Using these features, we can identify $ω_n$ and $ζ$. 
 
 Then, the TF is given by
 $$ G(s) = K \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2}. $$
@@ -1151,7 +1151,7 @@ plot!(plt, step(G, T))
 :::{.callout-note collapse="true"} 
 ### Solution
 
-From the step response, we can infer that this is the step response of an underdapmper second order system, which in general is of the form:
+From the step response, we can infer that this is the step response of an underdamped second order system, which in general is of the form:
 $$
   G(s) = K \frac{ω_n^2}{s^2 + 2 ζ ω_n s + ω_n^2}.
 $$
@@ -1249,7 +1249,7 @@ viewof zero = Object.assign(Inputs.range([1,6], {label: "z", step: 1, value: 1 }
 ```{ojs}
 //| layout-ncol: 2
 //| label: fig-second-order-with-min-zero
-//| fig-cap: Step response of a seocnd order system for different values zero. The orange curve shows the step response of a system without zero and the blue curve shows the step response of the system with zeros.
+//| fig-cap: Step response of a second order system for different values zero. The orange curve shows the step response of a system without zero and the blue curve shows the step response of the system with zeros.
 
 PZplot(
        [ {σ: -zero, jω: 0} ], 
@@ -1342,7 +1342,7 @@ viewof zero_non_min = Object.assign(Inputs.range([1,6], {label: "z", step: 1, va
 ```{ojs}
 //| layout-ncol: 2
 //| label: fig-second-order-with-non-min-zero
-//| fig-cap: Step response of a seocnd order system for different values zero. The orange curve shows the step response of a system without zero and the blue curve shows the step response of the system with zeros.
+//| fig-cap: Step response of a second order system for different values zero. The orange curve shows the step response of a system without zero and the blue curve shows the step response of the system with zeros.
 
 PZplot(
        [ {σ: zero_non_min, jω: 0} ], 
@@ -1387,7 +1387,7 @@ $$ y(t) = [ 1 - e^{-ω_n t}(1 + ω_n t) ] \IND(t). $$
 Critically damped systems have the fastest settling time among all second order system. The response can be visually differentiated from that of a second order system by noticing that the initial slope (at $t=0$) is zero.
 
 ```{ojs}
-//| fig-cap: Step response of critically system for $ζ = 1.0$.
+//| fig-cap: Step response of critically damped system for $ζ = 1.0$.
 Plot.plot({
   grid: true,
   y: { domain: [0, 1.3] },

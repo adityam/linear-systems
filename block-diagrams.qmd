@@ -8,7 +8,7 @@ execute:
   cache: true
 ---
 
-## Simple inteconnection of blocks
+## Simple interconnection of blocks
 
 We have already seen three basic forms of block diagrams:
 

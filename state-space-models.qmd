@@ -34,7 +34,7 @@ So, if we take the LT of the DE, we get
 + 
 a_1 \bigl[s Y(s) - y(0) \bigr]
 +
-a_2 Y_0(s) = 0
+a_0 Y(s) = 0
 \end{equation*}
 Hence,
 $$
@@ -103,7 +103,7 @@ This equation can be written in vector form as follows:
 \\
 y(t) &= \MATRIX{\phantom{-a_0}\llap{1} & \phantom{-a_1}\llap{0} } \MATRIX{x_1(t) \\ x_2(t)}.
 \end{align*}
-This is called **controllable cannonical form (CCF)** realization of \eqref{eq:2nd-DE}. The meaning of the terminology will become clear later.
+This is called **controllable canonical form (CCF)** realization of \eqref{eq:2nd-DE}. The meaning of the terminology will become clear later.
 
 ### OCF representation
 
@@ -133,7 +133,7 @@ This equation can be written in vector form as follows:
 \\
 y(t) &= \MATRIX{0 & \phantom{-a_1}\llap{1} } \MATRIX{x_1(t) \\ x_2(t)}.
 \end{align*}
-This is called **observable canoncial form (OCF)** realization of \eqref{eq:2nd-DE}. Again, the reason for the terminolgy will become clear later. 
+This is called **observable canonical form (OCF)** realization of \eqref{eq:2nd-DE}. Again, the reason for the terminology will become clear later. 
 
 :::{.callout-warning}
 #### Non-uniqueness of the SSM realization
@@ -222,7 +222,7 @@ B = \MATRIX{ 1 \\ 1 },
 C = \MATRIX{4 & -3}.
 $$
 
-In general, the poles will be complex and have multiplicity. In this setting, a generalization of DCF known as Jordan canconical form (JCF) is used. We will not consider JCF in this course.
+In general, the poles will be complex and have multiplicity. In this setting, a generalization of DCF known as Jordan canonical form (JCF) is used. We will not consider JCF in this course.
 
 
 ## SSMs for circuits {#ssm-for-circuits}
@@ -231,7 +231,7 @@ We will use the following notation in this section: $v(t)$ denotes voltage, $i(t
 
 For the three main circuit elements, we have the following relationship:
 
-| Relationship | Resistor | Capcitor | Inductor |
+| Relationship | Resistor | Capacitor | Inductor |
 |:------------:|:--------:|:--------:|:--------:|
 |    | ![](figures/svg/circuits1.svg) | ![](figures/svg/circuits2.svg) | ![](figures/svg/circuits3.svg) | 
 | voltage-current | $v(t) = R i(t)$ | $\displaystyle v(t) = \frac{1}{C} \int_{0}^t i(τ) d τ$ | $\displaystyle \bbox[5pt, background-color:lightgray]{v(t) = L \frac{di(t)}{dt}}$ |
@@ -471,7 +471,7 @@ What happens if we choose a different basis, say $v_1$ and $v_2$. If the vector
 $$
   x = \tilde x_1 v_1 + \tilde x_2 v_2
 $$
-then we can say that the vector is equal to $\MATRIX{\tilde x_1 \\ \tilde x_2}$ in the coordinate system $(v_1, v_2)$. Note that the vector hasn't changed, only the coodinate system has.
+then we can say that the vector is equal to $\MATRIX{\tilde x_1 \\ \tilde x_2}$ in the coordinate system $(v_1, v_2)$. Note that the vector hasn't changed, only the coordinate system has.
 
 We use the following example to illustrate how to move from one coordinate system to another
 
@@ -579,7 +579,7 @@ $$
 \bbox[5pt,border: 1px solid]
 {\det(λI - A) = 0}
 $$
-The above equation is called the **characteristic equation of $A$** and the eigenvalues of $A$ are the roots of the characterisitc equation!
+The above equation is called the **characteristic equation of $A$** and the eigenvalues of $A$ are the roots of the characteristic equation!
 
 :::{.callout-tip}
 ### Some special cases
@@ -602,7 +602,7 @@ Find the eigenvalues and eigenvectors of $A = \MATRIX{3 & 1 \\ 1 & 3 }$.
 :::{.callout-note collapse="false"} 
 #### Solution
 
-The characterisitc equation of $A$ is 
+The characteristic equation of $A$ is 
 $$
 \det(λI - A) = \DET{ λ - 3 & -1 \\ -1 & λ - 3 }
 = (λ-3)^2 - 1 = (λ-2)(λ-4).
@@ -881,4 +881,4 @@ The coordinate transformation has the following properties:
    
 These properties hold because the change of coordinates (or similarity transformation) does not physically change the state; it only changes the coordinate system that we are using to represent the state. 
 
-Change of coordinates (or similarity transformation) is a very useful tool for control system syntehsis. As we will see later, it is easy to design controllers for systems in CCF. So, when we have to design controllers for systems not in CCF, we first find a similarity transformation that converts the system to CCF; then we design a controller for the system in CCF; and finally we convert the controller back to the original coordinate system. Don't worry if this doesn't make sense notw. We will discuss this in detail in the next few lectures.
+Change of coordinates (or similarity transformation) is a very useful tool for control system synthesis. As we will see later, it is easy to design controllers for systems in CCF. So, when we have to design controllers for systems not in CCF, we first find a similarity transformation that converts the system to CCF; then we design a controller for the system in CCF; and finally we convert the controller back to the original coordinate system. Don't worry if this doesn't make sense now. We will discuss this in detail in the next few lectures.

@@ -61,7 +61,7 @@ where $a = g/L$ and $b = 1/mL^2$. As we shall see later, the transfer function o
 $$
   G(s) = \frac{b}{s^2 - a} = \frac{b}{(s - \sqrt{a})(s + \sqrt{a})}$.
 $$
-The transfer function has two roots, one in the open left hand plane (OLHP) and the other in the open right hand place (ORHP). Since there is a pole in ORHP, the system is unstable. 
+The transfer function has two roots, one in the open left hand plane (OLHP) and the other in the open right hand plane (ORHP). Since there is a pole in ORHP, the system is unstable. 
 
 Suppose we have a sensor that can measure the angle $θ(t)$. Consider a **proportional plus derivative controller,** i.e., a controller given by
 $$
@@ -69,7 +69,7 @@ $$
 $$
 where $K_p$ provides the restoring torque and $K_d$ provides damping. 
 
-Substituting into the linearized dynamics gives gives
+Substituting into the linearized dynamics gives
 $$
   \frac{d^2 θ(t)}{dt^2} + b K_d  \frac{ d θ(t)}{dt} + (b K_p  - a) θ(t) = 0.
 $$
@@ -148,7 +148,7 @@ This example illustrates the biggest benefit of feedback: **feedback can stabili
 
 ## Closed-loop control provides robustness against disturbances and model uncertainty
 
-In this section, we present by a simple example of designing the cruise control of a car to illustrate that feedback control can provide robustness against model uncertainty. This example is adapted from Khalil (Chapter 1).
+In this section, we present a simple example of designing the cruise control of a car to illustrate that feedback control can provide robustness against model uncertainty. This example is adapted from Khalil (Chapter 1).
 
 Consider a car of mass $m$ moving at velocity $v(t)$. Assume that when the accelerator is pressed at an angle $u(t)$, the engine produces a thrust $K_e u(t)$, where $K_e$ is the engine gain. The car experiences friction, which is assumed to be $bv(t)$, where $b$ is the equivalent damping coefficient. In addition, there is air drag, rolling resistance, and other factors, all of which we model as **disturbance** $w(t)$. 
 

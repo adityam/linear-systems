@@ -482,7 +482,7 @@ Finally, we consider the following circuit to see why a physical system may be u
 
 ![A RC-bridge](figures/svg/circuits9.svg){#fig-rc-bridge}
 
-We will follow the approach presented in [previous section](state-space-models.qmd#ssm-for-circuits) to find a SSM for the circuit in @fig-rc-bridge. We take the voltage across the two capcitors (denoted by $v_1$ and $v_2$) as the two components of the SSM. From KCL, we have
+We will follow the approach presented in [previous section](state-space-models.qmd#ssm-for-circuits) to find a SSM for the circuit in @fig-rc-bridge. We take the voltage across the two capacitors (denoted by $v_1$ and $v_2$) as the two components of the SSM. From KCL, we have
 \begin{align*}
   C_1 \dot v_1(t) &= \frac{u(t) - v_1(t)}{R_1} - \frac{v_1(t) - v_2(t)}{R_3} \\
   C_2 \dot v_2(t) &= \frac{u(t) - v_2(t)}{R_2} + \frac{v_1(t) - v_2(t)}{R_3}
