@@ -54,7 +54,6 @@
       \node [tightblock, below=8mm of integrator] (A) {$A$};
       \node [tightblock, right=16mm of integrator] (C) {$C$};
       \node [output, right=16mm of C] (output) {$y(t)$};
-      \node [coordinate] (midCO) at ($(C)!0.5!(output)$) {};
 
       % State feedback gain
       \node [tightblock, below=8mm of A, draw=darkred, fill=lightred] (Kx) {$K_x$};
@@ -67,7 +66,7 @@
       \draw [->] (sum0) -- (B);
       \draw [vecArrow] (B) -- (sum1.west) node[left=5pt, above] {$+$};
       \draw [vecArrow] (sum1) -- (integrator);
-      \draw [->] (C) -- (output);
+      \draw [->] (C) -- node[midway, coordinate, name=midCO] {} (output);
       \draw [vecArrow] (A) -| (sum1.south) node[below=5pt, left] {$+$};
       \draw [vecArrow] (integrator) -- node[midway, coordinate, name=bend, label={[font=\SMALL]above:$x(t)$}] {} (C);
       \draw [vecArrow] (bend) |- (A);

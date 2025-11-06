@@ -387,6 +387,8 @@ $$
   N = - \frac{1}{ C(A-BK)^{-1} B }.
 $$
 
+Note that this approach requires exact knowledge of the system parameters and may not be robust to model uncertainty. An alternative approach is to use [integral control](steady-state-errors.qmd#integral-control-for-ssm), which automatically ensures zero steady-state error without requiring exact parameter knowledge.
+
 ## Understanding lack of controllability
 
 In this section, we provide some intuition to understand why controllability plays a critical role in state feedback. Consider the SSM
