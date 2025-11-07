@@ -321,7 +321,7 @@ Find the steady state errors to step, ramp, and parabola inputs.
 
 We first use Routh-Hurwitz to verify that the closed loop system has no poles in the ORHP. Observe that
 $$
-  E(s) = \frac{R(s)}{1 + G(s)} = R(s) \frac{100(s+3)}{s^2 + 107 s + 306}.
+  E(s) = \frac{R(s)}{1 + G(s)} = R(s) \frac{(s+1)(s+6)}{s^2 + 107 s + 306}.
 $$
 We use the Routh Hurwitz criterion to check the location of poles of the denominator
 ```{julia}
@@ -361,7 +361,7 @@ Find the steady state errors to step, ramp, and parabola inputs.
 
 We first use Routh-Hurwitz to verify that the closed loop system has no poles in the ORHP. Observe that
 $$
-  E(s) = \frac{R(s)}{1 + G(s)} = R(s) \frac{100(s+3)}{s^3 + 7s^2 + 106 s + 300}.
+  E(s) = \frac{R(s)}{1 + G(s)} = R(s) \frac{s(s+1)(s+6)}{s^3 + 7s^2 + 106 s + 300}.
 $$
 We use the Routh Hurwitz criterion to check the location of poles of the denominator
 ```{julia}
@@ -374,7 +374,7 @@ Note that $G(s)$ is a type 1 system. Therefore,
 $$
 K_p =  ∞,
 \quad
-K_v = \lim_{s \to ∞} s G(s) = \frac{100 \cdot 3 }{1 \cdot 6 } = 50,
+K_v = \lim_{s \to 0} s G(s) = \frac{100 \cdot 3 }{1 \cdot 6 } = 50,
 \quad
 K_a = 0.
 $$

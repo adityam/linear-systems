@@ -41,11 +41,11 @@
       \node [sum, right=of input] (sumE) {\tfc $+$};
       
       % Integral action: K_I/s
-      \node [tightblock, right=of sumE, draw=darkred, fill=lightred] (Ki) {$K_I$};
-      \node [tightblock, right=of Ki] (intE) {$\dfrac{1}{s}$};
+      \node [tightblock, right=of sumE] (intE) {$\dfrac{1}{s}$};
+      \node [tightblock, right=of intE, draw=darkred, fill=lightred] (Ki) {$K_I$};
       
       % Second summing junction: combines integral action and state feedback
-      \node [sum, right=of intE] (sum0) {\tfc $+$};
+      \node [sum, right=of Ki] (sum0) {\tfc $+$};
       
       % SSM model: B -> sum -> 1/s -> C -> y
       \node [tightblock, right=of sum0] (B) {$B$};
@@ -58,11 +58,11 @@
       % State feedback gain
       \node [tightblock, below=8mm of A, draw=darkred, fill=lightred] (Kx) {$K_x$};
 
-      % Forward path: r -> sumE -> Ki -> intE -> sum0 -> B -> sum1 -> integrator -> C -> y
+      % Forward path: r -> sumE -> intE -> Ki -> sum0 -> B -> sum1 -> integrator -> C -> y
       \draw [->] (input) -- (sumE.west) node[left=5pt, above] {$+$};
-      \draw [->] (sumE) -- (Ki);
-      \draw [->] (Ki) -- (intE);
-      \draw [->] (intE) -- (sum0.west) node[left=5pt, above] {$+$};
+      \draw [->] (sumE) -- (intE);
+      \draw [->] (intE) -- node[midway, coordinate, name=midZI, label={[font=\SMALL]above:$z(t)$}] {} (Ki);
+      \draw [->] (Ki) -- (sum0.west) node[left=5pt, above] {$+$};
       \draw [->] (sum0) -- (B);
       \draw [vecArrow] (B) -- (sum1.west) node[left=5pt, above] {$+$};
       \draw [vecArrow] (sum1) -- (integrator);
