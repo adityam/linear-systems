@@ -10,7 +10,7 @@ execute:
 
 ## Frequency response
 
-The frequency response refers to the Fourier transform of the impulse response; or equivalently, the trasfer function evaluated at $jω$, which we will denote by $G(jω)$. We can think of it as a function that maps the frequency $ω$ to a complex number $G(jω)$. 
+The frequency response refers to the Fourier transform of the impulse response; or equivalently, the transfer function evaluated at $jω$, which we will denote by $G(jω)$. We can think of it as a function that maps the frequency $ω$ to a complex number $G(jω)$. 
 
 Frequency response can be determined experimentally. Recall that complex exponentials are eigenfunctions of LTI systems. Thus, when the input to a LTI system is $e^{jω}$, the output is $G(jω)e^{jω}$. Therefore, when the input is $A\cos ωt = A(e^{jω} + e^{-jω})/2$, the output is 
 \begin{align*}
@@ -108,11 +108,11 @@ There are two features of these plots:
   $$
   and
   $$
-    \angle |G(jω)| = \angle |G_1(jω)| + \angle |G_2(jω)|.
+    \angle G(jω) = \angle G_1(jω) + \angle G_2(jω).
   $$
   Thus, the Bode plot of $G(s)$ is simply the sum of the Bode plots of $G_1(s)$ and $G_2(s)$. 
 
-  For historical reasosn, we plot the magnitude square (which corresponds to power at a particular frequency) on the [:decibel](https://en.wikipedia.org/wiki/Decibel) scale, i.e., we plot
+  For historical reason, we plot the magnitude square (which corresponds to power at a particular frequency) on the [:decibel](https://en.wikipedia.org/wiki/Decibel) scale, i.e., we plot
   $20 \log |G(jω)|$ vs $ω$. 
 
 - The key insight of Bode was that if we plot the frequency plot on the logarithmic scale on the $ω$-axis, then both the magnitude and phase plot can be easily approximated. This allows us to easily plot the Bode plot of any transfer function and understand the impact of adding a controller on the Bode plot.
@@ -154,7 +154,7 @@ display(plt)
 
 :::{.callout-tip appearance="simple"}
 - For a constant term, the magnitude plot is a straight line.
-- The phase plot is also a striaght line, either at $0 ^∘$ (when the gain is positive) or at $\pm 180 ^∘$ (when the gain is negative).
+- The phase plot is also a straight line, either at $0 ^∘$ (when the gain is positive) or at $\pm 180 ^∘$ (when the gain is negative).
 :::
 
 ### Bode plot of first order term
@@ -180,7 +180,7 @@ Observe the following:
   Thus, the magnitude is $0$ dB and the phase is $0^∘$.
 
 - For $ω/a \gg 1$, (i.e., $ω \gg a$)
-  $$20 \log |G(jω)| \approx 10 \log \frac{1}{\dfrac{ω}{a}} = -20 \log ω + 20 \log ω
+  $$20 \log |G(jω)| \approx 10 \log \frac{1}{\dfrac{ω^2}{a^2}} = -20 \log ω + 20 \log a
   \quad\text{and}\quad
   \angle G(jω) \approx -\tan^{-1} ∞ = -90^∘$$
 
@@ -633,14 +633,14 @@ plot!(mag_plt, [1e3, 1e3], [0, -30], linewidth=1, color="gray")
 
 #### Acceleration constant of type 2 system
 
-The TF of a type 1 system is:
+The TF of a type 2 system is:
 $$
 \def\1#1{\Bigl(1 + \dfrac{s}{#1}\Bigr)}
 G(s) = \dfrac{K_a}{s^2} \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
       {\1{p_1}\1{p_2}\cdots\1{p_n}}
 $$
 
-Thus, $\lim_{s \to 0} s^2 G(s) = K_a$. This means that at low frequency (i.e., $s \to 0$), the magnitude Bode plot is straight line with -40 dB/decade slope. One can identify the acceleration constant $K_v$ by extending the initial -40 dB line until it hits 0 dB. The frequency at which it happens is $ω = \sqrt{K_a}$ (because at that frequency |K_a/(j ω)^2| = 1). So, we can find the acceleration constant by inspection.
+Thus, $\lim_{s \to 0} s^2 G(s) = K_a$. This means that at low frequency (i.e., $s \to 0$), the magnitude Bode plot is straight line with -40 dB/decade slope. One can identify the acceleration constant $K_a$ by extending the initial -40 dB line until it hits 0 dB. The frequency at which it happens is $ω = \sqrt{K_a}$ (because at that frequency |K_a/(j ω)^2| = 1). So, we can find the acceleration constant by inspection.
 
 An illustration of the Bode plot of a type 2 system is shown in @fig-type-2.
 
@@ -739,7 +739,7 @@ $$
 
 ## Nyquist plots
 
-Nquist plot is a polar plot of the frequency response, that is, we plot $G(jω)$ as a complex number for different values of $ω$. Unlike the Bode plot, we plot the Nyquist plot for all $ω \in (-∞, ∞)$ and usually also draw an arrow indicating the direction. An example is shown in @fig-nyquist. 
+Nyquist plot is a polar plot of the frequency response, that is, we plot $G(jω)$ as a complex number for different values of $ω$. Unlike the Bode plot, we plot the Nyquist plot for all $ω \in (-∞, ∞)$ and usually also draw an arrow indicating the direction. An example is shown in @fig-nyquist. 
 
 We will not come up with general rules for plotting Nyquist plot but simply give a few example of Nyquist plots.
 
@@ -811,7 +811,7 @@ From the Bode plot, we can determine that
     \angle G(j ω) = -180^∘
   $$
 
-The Nyquist plot is as shown in @fig-nyquist-2nd. At $ω = 0$, the plot approaches $-∞$ asymptotic to the vertical line $\text{Re}(G(j ω)) = -K/a$ in the lower half of the plane (since $\angle G(j ω) = -90 ^∘$. As $ω$ increases, and approaches the origin, tangent to the real axis (since $\angle G(j ω) \to -180 ^∘$). Note that for $ω < 0$, the plot is the mirror image of the plot for $ω > 0$ (about the real-axis).
+The Nyquist plot is as shown in @fig-nyquist-2nd. At $ω = 0$, the plot approaches $-∞$ asymptotic to the vertical line $\text{Re}(G(j ω)) = -K/a$ in the lower half of the plane (since $\angle G(j ω) = -90 ^∘$). As $ω$ increases, the plot approaches the origin, tangent to the real axis (since $\angle G(j ω) \to -180 ^∘$). Note that for $ω < 0$, the plot is the mirror image of the plot for $ω > 0$ (about the real-axis).
 
 ```{julia}
 #| fig-cap: Nyquist plot of second order system $G(s) = 5 ⋅ 2/(s(s+2))$
