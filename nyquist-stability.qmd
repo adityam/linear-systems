@@ -65,9 +65,9 @@ Thus, $1 + GH$ and $GH$ have the same poles.
 Hence, $1 + GH$ and $GH$ have the same number of poles in the ORHP. 
 :::
 
-We now ask the following question: [If we know the number of poles of $1 + GH$ in ORHP (e.g., by knowing the number of poles of GH in ORHP), can we fine the number of zeros of $1 + GH$ in ORHP? If so, we can determine the stability of $T(s)$.]{.text-primary}
+We now ask the following question: [If we know the number of poles of $1 + GH$ in ORHP (e.g., by knowing the number of poles of GH in ORHP), can we find the number of zeros of $1 + GH$ in ORHP? If so, we can determine the stability of $T(s)$.]{.text-primary}
 
-It turns our that there is an answer to this question using what is called **Cauchy's Argument Principle**, which we explain below.
+It turns out that there is an answer to this question using what is called **Cauchy's Argument Principle**, which we explain below.
 
 ## Cauchy's Argument Principle
 
@@ -162,7 +162,7 @@ G(s) = (s+1)/(s+2)
 sGplane(sCurve, G, "figures/nyquist-example1.gif")
 ```
 
-A curve which starts and ends at the same point is called a **contour**. So if we take a contour in $s$-plane that doesn't pass through a pole of $G$, then $G$ will map that contour to a countor in the $G$-plane. As an instance, @fig-contour-1 shows how a contour in $s$-plane gets mapped to a countour in the $G$-plane for @exm-complex-mapping.
+A curve which starts and ends at the same point is called a **contour**. So if we take a contour in $s$-plane that doesn't pass through a pole of $G$, then $G$ will map that contour to a contour in the $G$-plane. As an instance, @fig-contour-1 shows how a contour in $s$-plane gets mapped to a contour in the $G$-plane for @exm-complex-mapping.
 
 ```{julia}
 #| label: fig-contour-1
@@ -311,7 +311,7 @@ $$
 \end{array}} 
 $$
 
-Thus, we have answered our original question. The only catch is that we need to draw the Nyquist plot of $1 + GH$ (rather than $GH$). But this can be remidied easily by the observation that **the Nyquist plot of $1 + GH$ is the Nyquist plot of $GH$ shifted by $1$**. Therefore,
+Thus, we have answered our original question. The only catch is that we need to draw the Nyquist plot of $1 + GH$ (rather than $GH$). But this can be remedied easily by the observation that **the Nyquist plot of $1 + GH$ is the Nyquist plot of $GH$ shifted by $1$**. Therefore,
 $$
 \bbox[5pt,border: 1px solid]
 {\begin{array}{@{}c@{}}
@@ -484,7 +484,7 @@ for different values of $K$.
 :::{.callout-note collapse="true"} 
 #### Condition for stability
 
-From observation we not that system $GH$ is unstable and $P = 2$. Thus, for stability (i.e., $Z = 0$), we want $N = -2$, i.e., the Nyquist plot should have **two** (counter-clockwise) encirclements of $-1$.
+From observation we note that system $GH$ is unstable and $P = 2$. Thus, for stability (i.e., $Z = 0$), we want $N = -2$, i.e., the Nyquist plot should have **two** (counter-clockwise) encirclements of $-1$.
 
 :::
 
@@ -565,7 +565,7 @@ sGplane(sCurve, GH, "figures/nyquist-NP-gain-1.gif", show_poles=false, show_crit
 :::{.callout-note collapse="true"} 
 #### Solution
 
-First observe that $P=0$. Therefore, for stability (i.e., for $Z=0$), we need $N=0$. The Nyquist plot intersets the $σ$-axis at $0$ and $0.5$. So, we have the following cases.
+First observe that $P=0$. Therefore, for stability (i.e., for $Z=0$), we need $N=0$. The Nyquist plot intersects the $σ$-axis at $0$ and $0.5$. So, we have the following cases.
 
 | Case | Range for $K$ | $N$ | Stable? |
 |:----:|:-------------:|:---:|:-------:|
@@ -582,7 +582,7 @@ $$
 GH(s) = \dfrac{6K}{(s+1)(s+2)(s+3)}.
 $$
 The Nyquist plot for $K=1$ is shown in @fig-nyquist-gain-2,
-which intersets the $σ$-axis at $-0.1$, $0$, $1$. 
+which intersects the $σ$-axis at $-0.1$, $0$, $1$. 
 
 ```{julia}
 #| label: fig-nyquist-gain-2
@@ -604,7 +604,7 @@ sGplane(sCurve, GH, "figures/nyquist-NP-gain-2.gif", show_poles=false, show_crit
 :::{.callout-note collapse="true"} 
 #### Solution
 
-First observe that $P=0$. Therefore, for stability (i.e., for $Z=0$), we need $N=0$. The Nyquist plot intersets the $σ$-axis at $-0.1$, $0$, $1$. So, we have the following cases.
+First observe that $P=0$. Therefore, for stability (i.e., for $Z=0$), we need $N=0$. The Nyquist plot intersects the $σ$-axis at $-0.1$, $0$, $1$. So, we have the following cases.
 
 | Case | Range for $K$ | $N$ | Stable? |
 |:----:|:-------------:|:---:|:-------:|
@@ -622,8 +622,8 @@ $$
 GH(s) = \dfrac{K(s-1)}{s^3 + s^2 - s + 2}
 = \dfrac{K(s-1)}{(s+2)(s^2-s+1)}
 $$
-The Nyquist plot for $K=1$ is shown in @fig-nyquist-gain-2,
-which intersets the $σ$-axis at $-2/3$, $-1/2$, $0$. 
+The Nyquist plot for $K=1$ is shown in @fig-nyquist-gain-3,
+which intersects the $σ$-axis at $-2/3$, $-1/2$, $0$. 
 
 ```{julia}
 #| label: fig-nyquist-gain-3
@@ -645,7 +645,7 @@ sGplane(sCurve, GH, "figures/nyquist-NP-gain-3.gif", show_poles=false, show_crit
 :::{.callout-note collapse="true"} 
 #### Solution
 
-First observe that $s^2 - s + 1$ has two ORHP. Thus, $P=0$ and for stability (i.e., for $Z=0$), we need $N=-2$. The Nyquist plot intersets the $σ$-axis at $-2/3$, $-1/2$, $0$. So, we have the following cases.
+First observe that $s^2 - s + 1$ has two poles in the ORHP (since the roots are $(1 \pm j\sqrt{3})/2$ with positive real part $1/2$). The denominator $(s+2)(s^2-s+1)$ has one pole at $s=-2$ (LHP) and two poles from $s^2-s+1$ (ORHP). The numerator $K(s-1)$ has a zero at $s=1$ (ORHP), but this does not cancel any pole since $s=1$ is not a root of $s^2-s+1$. Thus, $P=2$ and for stability (i.e., for $Z=0$), we need $N=-2$. The Nyquist plot intersects the $σ$-axis at $-2/3$, $-1/2$, $0$. So, we have the following cases.
 
 | Case | Range for $K$ | $N$ | Stable? |
 |:----:|:-------------:|:---:|:-------:|
@@ -679,7 +679,7 @@ GH(s) = 1/(s*(s+1))
 sGplane(sCurve, GH, "figures/nyquist-NP-8.gif", show_poles=false, show_critical=true, GLabel=L"$GH$-plane")
 ```
 
-In this case, the Nyquist plot is not a closed curve so we cannot count the number of encirclements of $-1$. We need to fix this manually. Consider the contour shown in @fig-pole-fix, which skips the pole at origin by travesing a small semi-circle $r e^{j θ}$, $θ \in [-π/2, π/2]$, and then take $r \to 0$
+In this case, the Nyquist plot is not a closed curve so we cannot count the number of encirclements of $-1$. We need to fix this manually. Consider the contour shown in @fig-pole-fix, which skips the pole at origin by traversing a small semi-circle $r e^{j θ}$, $θ \in [-π/2, π/2]$, and then take $r \to 0$
 
 ```{julia}
 #| label: fig-pole-fix
@@ -745,7 +745,7 @@ GH(s) = 1/(s*(s+1)*(2s+1))
 sGplane(sCurve, GH, "figures/nyquist-pole-1.gif", show_poles=false, show_critical=true, GLabel=L"$GH$-plane")
 ```
 
-Note that the Nyquist plot interests the $σ$-axis at two points: $s = 0$ and $s = -2/3$.
+Note that the Nyquist plot intersects the $σ$-axis at two points: $s = 0$ and $s = -2/3$.
 
 :::
 
@@ -767,7 +767,7 @@ Thus, we have the following
 |$45^∘$ | $\dfrac Kr$ | $-45^∘$ |
 |$90^∘$ | $\dfrac Kr$ | $-90^∘$ |
 
-The the two arms of the Nyquist plot in @fig-pole-1 are connected via a semi-circle in closewise direction, as shown in @fig-pole-1-fixed
+The two arms of the Nyquist plot in @fig-pole-1 are connected via a semi-circle in clockwise direction, as shown in @fig-pole-1-fixed
 
 ```{julia}
 #| label: fig-pole-1-fixed
@@ -832,13 +832,13 @@ Thus, we have the following
 
 |$θ$| $\lvert GH(re^{j θ}) \rvert$ | $\angle GH(r e^{j θ})$ |
 |:-:|:------------------:|:----------------------:|
-|$-90^∘$| $\dfrac K{2r^2}$ | $180^∘$  |
-|$-45^∘$| $\dfrac K{2r^2}$ | $90^∘$  |
-|$0^∘$  | $\dfrac K{2r^2}$ | $0^∘$   |
-|$45^∘$ | $\dfrac K{2r^2}$ | $-90^∘$ |
-|$90^∘$ | $\dfrac K{2r^2}$ | $-180^∘$ |
+|$-90^∘$| $\dfrac K{r^2}$ | $180^∘$  |
+|$-45^∘$| $\dfrac K{r^2}$ | $90^∘$  |
+|$0^∘$  | $\dfrac K{r^2}$ | $0^∘$   |
+|$45^∘$ | $\dfrac K{r^2}$ | $-90^∘$ |
+|$90^∘$ | $\dfrac K{r^2}$ | $-180^∘$ |
 
-The the two arms of the Nyquist plot in @fig-pole-2 are connected via a circle in closewise direction, as shown in @fig-pole-2-fixed.
+The two arms of the Nyquist plot in @fig-pole-2 are connected via a circle in clockwise direction, as shown in @fig-pole-2-fixed.
 
 
 ```{julia}
