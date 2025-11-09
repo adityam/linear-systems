@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2025-11-07">
+<meta name="dcterms.date" content="2025-11-09">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>11&nbsp; Bode and Nyquist plots – Linear Systems and Control</title>
@@ -535,7 +535,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 7, 2025</p>
+      <p class="date">November 9, 2025</p>
     </div>
   </div>
   
@@ -549,7 +549,7 @@ window.Quarto = {
 
 <section id="frequency-response" class="level2" data-number="11.1">
 <h2 data-number="11.1" class="anchored" data-anchor-id="frequency-response"><span class="header-section-number">11.1</span> Frequency response</h2>
-<p>The frequency response refers to the Fourier transform of the impulse response; or equivalently, the trasfer function evaluated at <span class="math inline">\(jω\)</span>, which we will denote by <span class="math inline">\(G(jω)\)</span>. We can think of it as a function that maps the frequency <span class="math inline">\(ω\)</span> to a complex number <span class="math inline">\(G(jω)\)</span>.</p>
+<p>The frequency response refers to the Fourier transform of the impulse response; or equivalently, the transfer function evaluated at <span class="math inline">\(jω\)</span>, which we will denote by <span class="math inline">\(G(jω)\)</span>. We can think of it as a function that maps the frequency <span class="math inline">\(ω\)</span> to a complex number <span class="math inline">\(G(jω)\)</span>.</p>
 <p>Frequency response can be determined experimentally. Recall that complex exponentials are eigenfunctions of LTI systems. Thus, when the input to a LTI system is <span class="math inline">\(e^{jω}\)</span>, the output is <span class="math inline">\(G(jω)e^{jω}\)</span>. Therefore, when the input is <span class="math inline">\(A\cos ωt = A(e^{jω} + e^{-jω})/2\)</span>, the output is <span class="math display">\[\begin{align*}
 \frac A2 G(jω)e^{jω} + \frac A2 G(-jω)e^{-jω} &amp;=
 \frac A2 |G(jω)|e^{jω + \angle G(jω)} + \frac A2 |G(jω)|e^{-jω - \angle G(jω)} \\
@@ -940,9 +940,9 @@ Figure&nbsp;11.2: Nyquist plot of <span class="math inline">\(G(s) = \dfrac{1}{s
 <li><p>In the magnitude plot, we plot <span class="math inline">\(\log |G(jω)|\)</span> vs <span class="math inline">\(ω\)</span> (rather than <span class="math inline">\(|G(jω)|\)</span> vs <span class="math inline">\(ω\)</span>. This is useful for the following reason. Consider a series interconnection: <span class="math inline">\(G(s) = G_1(s)G_2(s)\)</span>. Then, we have <span class="math display">\[
   \log |G(jω)| = \log |G_1(jω)| + \log |G_2(jω)|
 \]</span> and <span class="math display">\[
-  \angle |G(jω)| = \angle |G_1(jω)| + \angle |G_2(jω)|.
+  \angle G(jω) = \angle G_1(jω) + \angle G_2(jω).
 \]</span> Thus, the Bode plot of <span class="math inline">\(G(s)\)</span> is simply the sum of the Bode plots of <span class="math inline">\(G_1(s)\)</span> and <span class="math inline">\(G_2(s)\)</span>.</p>
-<p>For historical reasosn, we plot the magnitude square (which corresponds to power at a particular frequency) on the <a href="https://en.wikipedia.org/wiki/Decibel">:decibel</a> scale, i.e., we plot <span class="math inline">\(20 \log |G(jω)|\)</span> vs <span class="math inline">\(ω\)</span>.</p></li>
+<p>For historical reason, we plot the magnitude square (which corresponds to power at a particular frequency) on the <a href="https://en.wikipedia.org/wiki/Decibel">:decibel</a> scale, i.e., we plot <span class="math inline">\(20 \log |G(jω)|\)</span> vs <span class="math inline">\(ω\)</span>.</p></li>
 <li><p>The key insight of Bode was that if we plot the frequency plot on the logarithmic scale on the <span class="math inline">\(ω\)</span>-axis, then both the magnitude and phase plot can be easily approximated. This allows us to easily plot the Bode plot of any transfer function and understand the impact of adding a controller on the Bode plot.</p></li>
 </ul>
 <p>From properties of Fourier transforms, we know that if the impulse response <span class="math inline">\(g(t)\)</span> is real, then <span class="math inline">\(|G(jω)|\)</span> is even and <span class="math inline">\(\angle G(jω)\)</span> is an odd function of <span class="math inline">\(ω\)</span>.</p>
@@ -1260,7 +1260,7 @@ Figure&nbsp;11.2: Nyquist plot of <span class="math inline">\(G(s) = \dfrac{1}{s
 <div class="callout-body-container">
 <ul>
 <li>For a constant term, the magnitude plot is a straight line.</li>
-<li>The phase plot is also a striaght line, either at <span class="math inline">\(0 ^∘\)</span> (when the gain is positive) or at <span class="math inline">\(\pm 180 ^∘\)</span> (when the gain is negative).</li>
+<li>The phase plot is also a straight line, either at <span class="math inline">\(0 ^∘\)</span> (when the gain is positive) or at <span class="math inline">\(\pm 180 ^∘\)</span> (when the gain is negative).</li>
 </ul>
 </div>
 </div>
@@ -1280,7 +1280,7 @@ Figure&nbsp;11.2: Nyquist plot of <span class="math inline">\(G(s) = \dfrac{1}{s
 \quad\text{and}\quad
 \angle G(jω) \approx -\tan^{-1} 0 = 0^∘\]</span></p>
 <p>Thus, the magnitude is <span class="math inline">\(0\)</span> dB and the phase is <span class="math inline">\(0^∘\)</span>.</p></li>
-<li><p>For <span class="math inline">\(ω/a \gg 1\)</span>, (i.e., <span class="math inline">\(ω \gg a\)</span>) <span class="math display">\[20 \log |G(jω)| \approx 10 \log \frac{1}{\dfrac{ω}{a}} = -20 \log ω + 20 \log ω
+<li><p>For <span class="math inline">\(ω/a \gg 1\)</span>, (i.e., <span class="math inline">\(ω \gg a\)</span>) <span class="math display">\[20 \log |G(jω)| \approx 10 \log \frac{1}{\dfrac{ω^2}{a^2}} = -20 \log ω + 20 \log a
 \quad\text{and}\quad
 \angle G(jω) \approx -\tan^{-1} ∞ = -90^∘\]</span></p>
 <p>Thus, the magnitude is a straight line with a slope of <span class="math inline">\(-20\)</span> dB/decade and the phase is <span class="math inline">\(-90^∘\)</span>.</p></li>
@@ -5515,12 +5515,12 @@ Figure&nbsp;11.4: Bode plot of type 1 system. The initial slope of -20 dB/dec in
 </section>
 <section id="acceleration-constant-of-type-2-system" class="level4" data-number="11.2.7.3">
 <h4 data-number="11.2.7.3" class="anchored" data-anchor-id="acceleration-constant-of-type-2-system"><span class="header-section-number">11.2.7.3</span> Acceleration constant of type 2 system</h4>
-<p>The TF of a type 1 system is: <span class="math display">\[
+<p>The TF of a type 2 system is: <span class="math display">\[
 \def\1#1{\Bigl(1 + \dfrac{s}{#1}\Bigr)}
 G(s) = \dfrac{K_a}{s^2} \frac{\1{z_1}\1{z_2}\cdots\1{z_m}}
       {\1{p_1}\1{p_2}\cdots\1{p_n}}
 \]</span></p>
-<p>Thus, <span class="math inline">\(\lim_{s \to 0} s^2 G(s) = K_a\)</span>. This means that at low frequency (i.e., <span class="math inline">\(s \to 0\)</span>), the magnitude Bode plot is straight line with -40 dB/decade slope. One can identify the acceleration constant <span class="math inline">\(K_v\)</span> by extending the initial -40 dB line until it hits 0&nbsp;dB. The frequency at which it happens is <span class="math inline">\(ω = \sqrt{K_a}\)</span> (because at that frequency |K_a/(j ω)^2| = 1). So, we can find the acceleration constant by inspection.</p>
+<p>Thus, <span class="math inline">\(\lim_{s \to 0} s^2 G(s) = K_a\)</span>. This means that at low frequency (i.e., <span class="math inline">\(s \to 0\)</span>), the magnitude Bode plot is straight line with -40 dB/decade slope. One can identify the acceleration constant <span class="math inline">\(K_a\)</span> by extending the initial -40 dB line until it hits 0 dB. The frequency at which it happens is <span class="math inline">\(ω = \sqrt{K_a}\)</span> (because at that frequency |K_a/(j ω)^2| = 1). So, we can find the acceleration constant by inspection.</p>
 <p>An illustration of the Bode plot of a type 2 system is shown in <a href="#fig-type-2" class="quarto-xref">Figure&nbsp;<span>11.5</span></a>.</p>
 <div id="cell-fig-type-2" class="cell" data-execution_count="17">
 <div id="fig-type-2" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="17">
@@ -5662,8 +5662,8 @@ Figure&nbsp;11.5: Bode plot of type 2 system. The initial slope of -40 dB/dec in
 </figure>
 </div>
 </div>
-<div id="exr-system-type" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 11.1</strong></span> For each of the following systems, identify the system type and the corresponding error constant.</p>
+<div id="exm-system-type" class="theorem example">
+<p><span class="theorem-title"><strong>Example 11.1</strong></span> For each of the following systems, identify the system type and the corresponding error constant.</p>
 <div id="43d36bc6" class="cell" data-execution_count="18">
 <div class="cell-output cell-output-display" data-execution_count="18">
 <!--?xml version="1.0" encoding="utf-8"?-->
@@ -6149,8 +6149,8 @@ Figure&nbsp;11.5: Bode plot of type 2 system. The initial slope of -40 dB/dec in
 <section id="system-identification-via-bode-plots" class="level3" data-number="11.2.8">
 <h3 data-number="11.2.8" class="anchored" data-anchor-id="system-identification-via-bode-plots"><span class="header-section-number">11.2.8</span> System identification via Bode plots</h3>
 <p>Since there is a one-to-one correspondence between transfer functions and Bode plots, we can identify a system transfer function from its Bode plot. We illustrate this via an example.</p>
-<div id="exr-sys-id-bode" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 11.2</strong></span> Find the minimum phase transfer function which has a magnitude Bode plot as shown below.</p>
+<div id="exm-sys-id-bode" class="theorem example">
+<p><span class="theorem-title"><strong>Example 11.2</strong></span> Find the minimum phase transfer function which has a magnitude Bode plot as shown below.</p>
 <div id="df5c4001" class="cell" data-execution_count="19">
 <div class="cell-output cell-output-display" data-execution_count="19">
 <!--?xml version="1.0" encoding="utf-8"?-->
@@ -6321,7 +6321,7 @@ Figure&nbsp;11.5: Bode plot of type 2 system. The initial slope of -40 dB/dec in
 </section>
 <section id="nyquist-plots" class="level2" data-number="11.3">
 <h2 data-number="11.3" class="anchored" data-anchor-id="nyquist-plots"><span class="header-section-number">11.3</span> Nyquist plots</h2>
-<p>Nquist plot is a polar plot of the frequency response, that is, we plot <span class="math inline">\(G(jω)\)</span> as a complex number for different values of <span class="math inline">\(ω\)</span>. Unlike the Bode plot, we plot the Nyquist plot for all <span class="math inline">\(ω \in (-∞, ∞)\)</span> and usually also draw an arrow indicating the direction. An example is shown in <a href="nyquist-stability.html#fig-nyquist" class="quarto-xref">Figure&nbsp;<span>12.10</span></a>.</p>
+<p>Nyquist plot is a polar plot of the frequency response, that is, we plot <span class="math inline">\(G(jω)\)</span> as a complex number for different values of <span class="math inline">\(ω\)</span>. Unlike the Bode plot, we plot the Nyquist plot for all <span class="math inline">\(ω \in (-∞, ∞)\)</span> and usually also draw an arrow indicating the direction. An example is shown in <a href="nyquist-stability.html#fig-nyquist" class="quarto-xref">Figure&nbsp;<span>12.10</span></a>.</p>
 <p>We will not come up with general rules for plotting Nyquist plot but simply give a few example of Nyquist plots.</p>
 <section id="nyquist-plot-of-first-order-system" class="level3" data-number="11.3.1">
 <h3 data-number="11.3.1" class="anchored" data-anchor-id="nyquist-plot-of-first-order-system"><span class="header-section-number">11.3.1</span> Nyquist plot of first order system</h3>
