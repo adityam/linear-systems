@@ -863,7 +863,7 @@ end
 ```
 
 ```{julia}
-#| fig-cap: Nyquist plot of third order system $G(s) = 5 ⋅ 2 ⋅ 10/(s(s+2)(s+2.5))$
+#| fig-cap: Nyquist plot of third order system $G(s) = 5 ⋅ 2 ⋅ 10/((s+1)(s+2)(s+2.5))$
 #| label: fig-nyquist-3rd-2
 
  begin
