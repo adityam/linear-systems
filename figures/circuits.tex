@@ -197,4 +197,24 @@
 \stopcircuitikz}
 \stopTEXpage
 
+% Question from Fall 2025
+\startTEXpage[offset=1dk]
+\scale[scale=1500]{\startcircuitikz[american voltages,thick]
+  % Input voltage source
+  \draw (0,0) to[V=$v_i(t)$,invert] (0,3);
+  
+  % First loop: RL (resistor and inductor in series)
+  \draw (0,3) to[R=$R_L$] (3,3)
+            to[L=$L$] (3,0)
+            to (0,0);
+  
+  % Second loop: RC (resistor and capacitor in series)
+  \draw (3,3) 
+            to[R=$R_C$] (6,3)
+            node[label={[font=\SMALL]right:$v_o(t)$}] {}
+            to[C=$C$,*-] (6,0)
+            to (3,0);
+\stopcircuitikz}
+\stopTEXpage
+
 \stoptext

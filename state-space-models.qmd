@@ -385,6 +385,13 @@ Find the state space model of the circuit shown in @fig-circuit-exm
 
 :::
 
+:::{#exm-circuit-fall2025}
+Find the state space model of the circuit shown in @fig-circuit-fall2025
+
+![Question from Fall 2025](figures/svg/circuits11.svg){#fig-circuit-fall2025}
+:::
+
+
 ## From state space models to transfer functions
 
 So far, we have seen how to write different SSM representations from a TF. It is also possible to go in the other direction. 
