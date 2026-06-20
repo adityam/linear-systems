@@ -409,6 +409,39 @@ PZplot(
 
 If there are poles on the $j ω$ axis and the poles have multiplicity 1, then the system is **marginally stable**; if poles have multiplicity greater than 1, then the system is unstable.
 
+:::{#exm-bibo-1}
+Consider the transfer function
+$$
+G(s) = \frac{2}{(s-1)(s+5)}.
+$$
+:::
+
+```{julia}
+yesnoq(false, label="Is this system BIBO stable?")
+```
+
+:::{#exm-bibo-2}
+Consider the transfer function
+$$
+G(s) = \frac{1}{(s+2)(s^2 + 2s + 5)}.
+$$
+:::
+
+```{julia}
+yesnoq(true, label="Is this system BIBO stable?")
+```
+
+:::{#exm-bibo-3}
+Consider the transfer function
+$$
+G(s) = \frac{1}{(s+1)(s^2 + 4)}.
+$$
+:::
+
+```{julia}
+yesnoq(false, label="Is this system BIBO stable?")
+```
+
 ### Step Response
 
 One of the configurations that we will really focus on in the course is the output of a _stable_ system when the **input is a step function.** This is often the case when we specify a reference input such as the desired temperature of a room or the desired speed in cruise control of a car, and are interested in seeing if we get a "good" output. Note that this question is only of interest for stable systems. If the system is unstable, then the output will go to infinity. 
