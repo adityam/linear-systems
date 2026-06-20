@@ -44,7 +44,7 @@ In Signals and Systems, we used $u(t)$ to denote the step function. In this cour
 :::
 
 
-## Unilateral Laplace Transforms
+## Review: Unilateral Laplace Transforms
 
 Recall that there are two types of Laplace transforms (LTs): bi-lateral or two-sided LTs and unilateral or one-sided LTs. In this course, we will work exclusively with unilateral LTs.
 
@@ -191,13 +191,98 @@ radioq([
 ], 2, label="Find the LDE that implements the above TF:")
 ```
 
-In this course, we will assume that the system is specified either as a LDE or as a TF. The textbook provides detailed examples of how to derive either the LDE or the TF from a physical system such as an electric circuit or a spring-mass system. 
-
-We present an alternative representation of the TF (pole-zero plot) in the next section. Later in the course we will also study other equivalent forms of representing the system such as state space equations and Bode plots.
+In this course, we will assume that the system is specified either as a LDE or as a TF. The textbook provides detailed examples of how to derive either the LDE or the TF from a physical system such as an electric circuit or a spring-mass system. Later in the course we will also study other equivalent forms of representing the system such as state space equations and Bode plots.
 
 A final remark. In all the systems that we consider in this course, we will assume that $m < n$. So, the denominator of the TF has a strictly higher degree than the numerator. Such transfer functions are called **proper**. It is possible to have causal systems where $m=n$ but we will not consider that in this course. As a consequence, when we consider state space representation in future lectures, we will get formulas which are simpler than more general formulas which you may find at other sources. 
 
-## Poles and Zeros of a Transfer Function
+::: {.callout-warning collapse="true"}
+#### Modeling real systems: Time delay systems
+
+In a real system, there is often a delay between input and output, which is often modeled by a delay block whose output $y(t)$ is a delayed version of the input $u(t)$, by a delay time $τ$, that is
+$$
+  y(t) = u(t-τ).
+$$
+Taking the Laplace transform of both sides, we get
+$$
+Y(s) = e^{-τs}U(s).
+$$
+Therefore, the TF of time-delay unit is $e^{-τs}$, which is different from the TFs studied so far as it is not a rational polynomial of $s$. It is possible to approximate $e^{-τs}$ using a rational polynomial using what is called [**Padé approximation**](https://en.wikipedia.org/wiki/Pad%C3%A9_approximant):
+
+- **First-order Padé approximation:**
+  $$ e^{-τs} \approx \dfrac{1 - τs/2}{1 + τs/2}. $$
+
+- **Second-order Padé approximation:**
+  $$ e^{-τs} \approx \dfrac{1 - τs/2 + (τs)^2/12}{1 + τs/2 + (τs)^2/12}. $$
+
+We will not study time-delay systems in the course.
+:::
+
+### Interconnection of LTI Systems
+
+There are three common ways to interconnect LTI systems shown below.
+
+![Cascade Connection equivalent to $G_1(s)G_2(s)$.](figures/svg/interconnect3.svg){#fig-cascade}
+
+![Parallel Connection equivalent to $G_1(s) + G_2(s)$.](figures/svg/interconnect4.svg){#fig-parallel}
+
+![Feedback Connection equivalent to $\displaystyle \frac{G(s)}{1 + G(s)H(s)}$.](figures/svg/interconnect5.svg){#fig-feedback}
+
+
+## The Big Picture {#sec-big-picture}
+
+Given a plant or system with transfer function $G(s)$, the objective of control system design is to choose a controller $G_c(s)$ to ensure that the closed loop system is stable and the output tracks the reference signal. As we saw in the [introductory lecture](introduction.qmd#closed-loop), we can stabilize such a system using closed loop control. The feedback interconnection formula from @fig-feedback is the starting point for the more general configuration below.
+
+However, in general, there are (often unmodeled) disturbances between the actuator and the plant, and also between the output and the feedback sensor, as shown in @fig-full-feedback. 
+
+![A more complete model of feedback control system](figures/svg/interconnect6.svg){#fig-full-feedback}
+
+In the above figure, we have
+
+- $G(s)$: Plant transfer function
+- $G_c(s)$: Controller transfer function
+
+- $R(s)$: Reference input
+- $Y(s)$: System Output
+
+- $D_1(s)$, $D_2(s)$: Disturbances
+- $E(s)$: Tracking error
+
+These variables are related as follows:
+\begin{align*}
+  Y(s) &= D_2(s) + G(s)( E(s) G_c(s) + D_1(s)), \\
+  E(s) &= R(s) - Y(s).
+\end{align*}
+Simplifying the above equations, we get
+$$
+  Y(s) = D_2(s) + R(s) G_c(s)G(s) - Y(s) G_c(s) G(s) + G(s)D_1(s).
+$$
+Therefore,
+$$
+\bbox[5pt,border: 1px solid]
+ {
+    Y(s) = \frac{G_c(s)G(s)}{1 + G_c(s)G(s)} R(s)
+    + \frac{G(s)}{1 + G_c(s)G(s)} D_1(s)
+    + \frac{1}{1 + G_c(s)G(s)} D_2(s)
+  }
+$$
+
+Observe that if $G_c(s)$ is a constant that is very large, then
+  \begin{align*}
+    \lim_{G_c(s) \to \infty} \frac{G_c(s)G(s)}{1 + G_c(s)G(s)} R(s) &= R(s), \\
+    \lim_{G_c(s) \to \infty} \frac{G(s)}{1 + G_c(s)G(s)} D_1(s) &= 0, \\
+    \lim_{G_c(s) \to \infty} \frac{1}{1 + G_c(s)G(s)} D_2(s) &= 0.
+  \end{align*}
+  Thus, 
+  $$
+    \bbox[5pt,border: 1px solid]
+    {\text{In the limit $G_c(s) \to ∞$, $Y(s) = R(s)$}}
+  $$
+
+Thus, high gain can in principle achieve good tracking and disturbance rejection. However, as we will see in the subsequent lectures, there is a trade-off associated with choosing large control gains. To analyze when the closed loop is stable, and more generally, how controller choice affects closed-loop behavior, we need a compact description of transfer functions in terms of their roots. We develop this language next.
+
+## Pole-Zero Plots
+
+In @sec-big-picture, we saw that closed-loop stability and tracking performance depend on the **poles** of transfer functions such as $G_c(s)G(s)/(1 + G_c(s)G(s))$. The objective of control design is often to choose $G_c(s)$ so that these closed-loop poles lie in desirable locations: for example, in the open left half plane for stability, or further left for faster response. To analyze such questions, we need a compact representation of where the poles and zeros of a transfer function lie in the complex plane.
 
 The TF of an LTI system is always of the form:
 $$
@@ -217,6 +302,8 @@ $$
 - The roots of the numerator are called **zeros** (because $G(z_i) = 0$). 
 - The roots of the denominator are called **poles** (because $G(p_i) = \infty$ and if we plot $G(s)$ it will have a peak going to $∞$ at $p_i$; this peak looks like a pole). 
 - The constant $K$ is called the **gain** (because, when none of the poles and zeros are at origin, the step response of $G(s)$ will have a steady state value of $K$). 
+
+Returning to @sec-big-picture, each closed-loop transfer function from $R$, $D_1$, or $D_2$ to $Y$ has the same denominator $1 + G_c(s)G(s)$. The **poles** of these closed-loop transfer functions are therefore the roots of $1 + G_c(s)G(s) = 0$. Control design often amounts to choosing $G_c(s)$ so that these closed-loop poles lie in desirable locations---for example, in the open left half plane for stability, or further left for faster response.
 
 We often represent the poles and zeros using a **pole-zero plot.**
 
@@ -241,7 +328,7 @@ PZplot = function(zeros, poles, xdomain, ydomain) {
 
 ::: {#exm-pole-zero}
 #### Pole-zero plot
-Consder
+Consider
 $$G(s) = \frac{s+2}{(s+1)^2 + 1^2}.$$
 The poles are $-1 \pm j$ and the zero is $-2$. The pole-zero plot is shown below, where the location of the pole is represented by a "cross" and the location of the zero is represented by a "circle". 
 
@@ -260,7 +347,7 @@ Since the polynomials in the numerator and denominator of $G(s)$ have real coeff
 Note that the pole-zero plot does not capture the gain of the TF. 
 
 
-## BIBO Stability
+### BIBO Stability
 
 Recall from Signals and Systems that an LTI system with impulse response $g(t)$ is BIBO stable if
 $$
@@ -287,7 +374,7 @@ Therefore, there can be no pole in the open right hand plane $\{ (σ + j ω) : �
 //| fig-subcap:
 //|     - Stable systems
 //|     - Unstable systems
-//|     - Marginally systems
+//|     - Marginally stable systems
 //|     - Unstable systems (double pole at origin)
 
 PZplot(
@@ -322,77 +409,7 @@ PZplot(
 
 If there are poles on the $j ω$ axis and the poles have multiplicity 1, then the system is **marginally stable**; if poles have multiplicity greater than 1, then the system is unstable.
 
-In the next lecture, we will see how to use the poles to identify the step response of the system.
-
-## Interconnection of LTI Systems
-
-There are three common ways to inter connect LTI systems shown below.
-
-![Cascade Connection equivalent to $G_1(s)G_2(s)$.](figures/svg/interconnect3.svg){#fig-cascade}
-
-![Parallel Connection equivalent to $G_1(s) + G_2(s)$.](figures/svg/interconnect4.svg){#fig-parallel}
-
-![Feedback Connection equivalent to $\displaystyle \frac{G(s)}{1 + G(s)H(s)}$.](figures/svg/interconnect5.svg){#fig-feedback}
-
-## The Big Picture
-
-Given a plant or system with transfer function $G(s)$, the objective of control system design is to choose a controller $C(s)$ to ensure that the closed loop system is stable and the output tracks the reference signal. As we saw in the [introductory lecture](introduction.qmd#closed-loop), we can stabilize such a system using closed loop control. 
-
-However, in general, there are (often unmodeled) disturbances between the actuator and the plant, and also between the output and the feedback sensor, as shown in @fig-full-feedback. 
-
-![A more complete model of feedback control system](figures/svg/interconnect6.svg){#fig-full-feedback}
-
-In the above figure, we have
-
-- $G(s)$: Plant transfer function
-- $G_c(s)$: Controller transfer function
-
-- $R(s)$: Reference input
-- $Y(s)$: System Output
-
-- $D_1(s)$, $D_2(s)$: Disturbances
-- $E(s)$: Tracking error
-
-These variables are related as follows:
-\begin{align*}
-  Y(s) &= D_2(s) + G(s)( E(s) G_c(s) + D_1(s)), \\
-  E(s) &= R(s) - Y(s).
-\end{align*}
-Simplifying the above equations, we get
-$$
-  Y(s) = D_2(s) + R(s) G_c(s)G(s) - Y(s) G_c(s) G(s) + G(s)D_1(s).
-$$
-Therefore,
-$$
-\bbox[5pt,border: 1px solid]
- {
-    Y(s) = \frac{G_c(s)G(s)}{1 + G_c(s)G(s)} R(s)
-    + \frac{G(s)}{1 + G_c(s)G(s)} D_1(s)
-    + \frac{1}{1 + G_c(s)G(s)} D_1(s)
-  }
-$$
-
-Observe the following:
-
-- If all poles of $1 + G_c(s)G(s)$ are in the OLHP, then all closed loop systems (i.e., from $R$ to $Y$; from $D_1$ to $Y$; and from $D_2$ to $Y$) are stable.
-
-- In addition, suppose $G_c(s)$ is a constant that is very large. Then
-  \begin{align*}
-    \lim_{G_c(s) \to \infty} \frac{G_c(s)G(s)}{1 + G_c(s)G(s)} R(s) &= R(s), \\
-    \lim_{G_c(s) \to \infty} \frac{G(s)}{1 + G_c(s)G(s)} D_1(s) &= 0, \\
-    \lim_{G_c(s) \to \infty} \frac{1}{1 + G_c(s)G(s)} D_1(s) &= 0.
-  \end{align*}
-  Thus, 
-  $$
-    \bbox[5pt,border: 1px solid]
-    {\text{In the limit $G_c(s) \to ∞$, $Y(s) = R(s)$}}
-  $$
-
-Thus, we can achieve the desirable asymptotic properties (stability and zero tracking error) simply by choosing a large gain. However, as we will see in the subsequent lectures, there is a trade-off associated with choosing large control gains and in a practical system design we need to make trade-offs. 
-     
-
-
-## Step Response
+### Step Response
 
 One of the configurations that we will really focus on in the course is the output of a _stable_ system when the **input is a step function.** This is often the case when we specify a reference input such as the desired temperature of a room or the desired speed in cruise control of a car, and are interested in seeing if we get a "good" output. Note that this question is only of interest for stable systems. If the system is unstable, then the output will go to infinity. 
 
@@ -429,25 +446,8 @@ plot(step(G, T), label=L"G(s)", size=(500,250))
 
 [^code]: In the lab, we will use Matlab for simulating LTI systems. However, in the course notes, I use Julia which makes it easier to directly include the output in a webpage. 
 
-## Time-delay systems
+In the next lecture, we will see how to use the poles to identify the step response of the system.
 
-In a real system, there is often a delay between input and output, which is often modeled by a delay block whose output $y(t)$ is a delayed version of the input $u(t)$, by a delay time $τ$, that is
-$$
-  y(t) = u(t-τ).
-$$
-Taking the Laplace transform of both sides, we get
-$$
-Y(s) = e^{-τs}U(s).
-$$
-Therefore, the TF of time-delay unit is $e^{-τs}$, which is different from the TFs studied so far as it is not a rational polynomial of $s$. It is possible to approximate $e^{-τs}$ using a rational polynomial using what is called [**Padé approximation**](https://en.wikipedia.org/wiki/Pad%C3%A9_approximant):
-
-- **First-order Padé approximation:**
-  $$ e^{-τs} \approx \dfrac{1 - τs/2}{1 + τs/2}. $$
-
-- **Second-order Padé approximation:**
-  $$ e^{-τs} \approx \dfrac{1 - τs/2 + (τs)^2/12}{1 + τs/2 + (τs)^2/12}. $$
-
-We will not study time-delay systems in the course. 
 
 ## Exercises {-}
 
