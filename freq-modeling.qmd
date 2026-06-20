@@ -29,6 +29,7 @@ In this lecture, we will review frequency domain modeling of LTI systems. You ha
 using Revise
 
 using ControlSystems, Plots, LaTeXStrings
+using QuizQuestions
 
 current_theme = :bright
 current_colors = theme_palette(current_theme)
@@ -141,33 +142,54 @@ G(s) = \frac{Y(s)}{U(s)}
 $$
 Thus, we can easily go back and forth between the DE and the transfer function.
 
-:::{#exm-LDE-TF}
-Find the transfer function corresponding to the following LDE
+:::{#exm-LDE-TF-1}
+Consider the LDE
 $$
-\frac{d}{dt}y(t) + 2 y(t) = u(t)
+\frac{dy(t)}{dt} + 2 y(t) = u(t)
 $$
 :::
 
-::: {.callout-note collapse="true"}
-#### Solution
-From inspection, we have
-$$G(s) = \frac{1}{s + 2}$$
+```{julia}
+radioq([
+  L"\dfrac{1}{2s + 1}",
+  L"\dfrac{1}{s+2}",
+  L"2s+1",
+  L"s+2"
+], 2, label="Find the transfer function:")
+```
+
+:::{#exm-LDE-TF-2}
+Consider the LDE
+$$
+\frac{d^2 y(t)}{dt^2} + 3\frac{dy(t)}{dt} + 2 y(t) = 2\frac{du(t)}{dt} + u(t)
+$$
 :::
 
-:::{#exm-LDE-TF}
-Find a LDE that implements the following TF
+```{julia}
+radioq([
+  L"\dfrac{1}{s^2 + 3s + 2}",
+  L"\dfrac{2s + 1}{s^2 + 3s + 2}",
+  L"\dfrac{2s + 1}{s^2 + 2s + 3}",
+  L"\dfrac{s + 2}{s^2 + 3s + 2}"
+], 2, label="Find the transfer function:")
+```
+
+
+:::{#exm-LDE-TF-3}
+Consider the transfer function
 $$
 G(s) = \frac{2s+1}{s^2 + 2s + 3}.
 $$
 :::
 
-::: {.callout-note collapse="true"}
-#### Solution
-From inspection, we have
-$$
-\frac{d^2y(t)}{dt} + 2\frac{d y(t)}{dt} + 3c(t) = 2\frac{d u(t)}{dt} + u(t).
-$$
-:::
+```{julia}
+radioq([
+  L"\dfrac{d^2 y(t)}{dt^2} + 2\dfrac{dy(t)}{dt} + 3 y(t) = u(t)",
+  L"\dfrac{d^2 y(t)}{dt^2} + 2\dfrac{dy(t)}{dt} + 3 y(t) = 2\dfrac{du(t)}{dt} + u(t)",
+  L"\dfrac{d^2 y(t)}{dt^2} + 3\dfrac{dy(t)}{dt} + 2 y(t) = 2\dfrac{du(t)}{dt} + u(t)",
+  L"\dfrac{d^2 y(t)}{dt^2} + 2\dfrac{dy(t)}{dt} + 3 y(t) = \dfrac{du(t)}{dt} + 2u(t)"
+], 2, label="Find the LDE that implements the above TF:")
+```
 
 In this course, we will assume that the system is specified either as a LDE or as a TF. The textbook provides detailed examples of how to derive either the LDE or the TF from a physical system such as an electric circuit or a spring-mass system. 
 
@@ -374,7 +396,7 @@ Thus, we can achieve the desirable asymptotic properties (stability and zero tra
 
 One of the configurations that we will really focus on in the course is the output of a _stable_ system when the **input is a step function.** This is often the case when we specify a reference input such as the desired temperature of a room or the desired speed in cruise control of a car, and are interested in seeing if we get a "good" output. Note that this question is only of interest for stable systems. If the system is unstable, then the output will go to infinity. 
 
-As an example, consider the system of @exm-LDE-TF. What is the output when the input is a step function (assuming that the system starts from a zero initial state)?
+As an example, consider the system of @exm-LDE-TF-1. What is the output when the input is a step function (assuming that the system starts from a zero initial state)?
 
 To compute this, recall
 $$

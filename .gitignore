@@ -7,3 +7,5 @@
 /docs/
 /_book/
 /.cache/
+
+**/*.quarto_ipynb
