@@ -9,7 +9,7 @@ execute:
 ---
 
 
-- Recall from Signals and Systems, we know that a **system** is a process or a device that takes one or more signals as inputs and generates one or more signals as outputs. 
+- This course is about **linear systems**. Recall from Signals and Systems, we know that a **system** is a process or a device that takes one or more signals as inputs and generates one or more signals as outputs. 
 
 - The simplest systems are those with one input and one output, often called **single input single output (SISO) systems**. For example, a microphone may be viewed as a SISO system which has a single input (the acoustic pressure) which causes the diaphragm to vibrate and produce a single output (electrical voltage). 
 
@@ -17,7 +17,7 @@ execute:
 
 - Some fundamental properties of systems that you studied in signals and systems are: **linearity**, **time-invariance**, and **causality**. Please review your notes from signals and systems to ensure that you understand these properties. 
 
-- In this course, we will almost exclusively study causal SISO systems that are linear and time-invariant (LTI for short). Such systems arise in all branches of engineering, e.g., electrical circuits, spring-mass systems, gear systems, and thermodynamics. See Chapter 2 of Nise for detailed modeling examples. 
+- In this course, we will almost exclusively study causal SISO systems that are **linear and time-invariant** (**LTI** for short). Such systems arise in all branches of engineering, e.g., electrical circuits, spring-mass systems, gear systems, and thermodynamics. See Chapter 2 of Nise for detailed modeling examples. 
 
 - However, keep in mind that LTI systems are a mathematical modeling idealization. Real systems are never LTI. A resistor will burn if you apply too high voltage across it. A spring will break if you apply too high force. However, there are regimes under which some systems behave like LTI systems.  
 
