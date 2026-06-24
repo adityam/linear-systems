@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2026-06-20">
+<meta name="dcterms.date" content="2026-06-24">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>2&nbsp; Frequency domain modeling – Linear Systems and Control</title>
@@ -517,7 +517,8 @@ window.Quarto = {
   <li><a href="#review-unilateral-laplace-transforms" id="toc-review-unilateral-laplace-transforms" class="nav-link" data-scroll-target="#review-unilateral-laplace-transforms"><span class="header-section-number">2.2</span> Review: Unilateral Laplace Transforms</a></li>
   <li><a href="#the-transfer-function" id="toc-the-transfer-function" class="nav-link" data-scroll-target="#the-transfer-function"><span class="header-section-number">2.3</span> The Transfer Function</a>
   <ul class="collapse">
-  <li><a href="#interconnection-of-lti-systems" id="toc-interconnection-of-lti-systems" class="nav-link" data-scroll-target="#interconnection-of-lti-systems"><span class="header-section-number">2.3.1</span> Interconnection of LTI Systems</a></li>
+  <li><a href="#identifying-trasnfer-function-from-linear-differential-equations" id="toc-identifying-trasnfer-function-from-linear-differential-equations" class="nav-link" data-scroll-target="#identifying-trasnfer-function-from-linear-differential-equations"><span class="header-section-number">2.3.1</span> Identifying trasnfer function from linear differential equations</a></li>
+  <li><a href="#interconnection-of-lti-systems" id="toc-interconnection-of-lti-systems" class="nav-link" data-scroll-target="#interconnection-of-lti-systems"><span class="header-section-number">2.3.2</span> Interconnection of LTI Systems</a></li>
   </ul></li>
   <li><a href="#sec-big-picture" id="toc-sec-big-picture" class="nav-link" data-scroll-target="#sec-big-picture"><span class="header-section-number">2.4</span> The Big Picture</a></li>
   <li><a href="#pole-zero-plots" id="toc-pole-zero-plots" class="nav-link" data-scroll-target="#pole-zero-plots"><span class="header-section-number">2.5</span> Pole-Zero Plots</a>
@@ -561,7 +562,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 20, 2026</p>
+      <p class="date">June 24, 2026</p>
     </div>
   </div>
   
@@ -662,49 +663,86 @@ Table&nbsp;2.1: Laplace Transform Table
 </section>
 <section id="the-transfer-function" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="the-transfer-function"><span class="header-section-number">2.3</span> The Transfer Function</h2>
-<p>Consider an LTI system with input <span class="math inline">\(u(t)\)</span> (also called the reference signal sometimes) and output <span class="math inline">\(y(t)\)</span>. We can also represent this as the following block diagram:</p>
+<p>Let’s start with an example. Consider a RLC circuit shown in <a href="#fig-rlc-0" class="quarto-xref">Figure&nbsp;<span>2.1</span></a> with input voltage <span class="math inline">\(u(t)\)</span> and output voltage <span class="math inline">\(v_C(t)\)</span>.</p>
+<div id="fig-rlc-0" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rlc-0-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/circuits4.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rlc-0-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.1: A simple RLC circuit
+</figcaption>
+</figure>
+</div>
+<p>In your circuit courses, you have learnt, how to identify a differential equation that describes the relationship between the input and the output (assuming zero initial conditions).</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Differential equation for a circuit
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Summing all the voltages across the loop, we get that <span class="math display">\[ v_R(t) + v_L(t) + v_C(t) = u(t)\]</span> Let <span class="math inline">\(i(t)\)</span> denote the loop current and <span class="math inline">\(q(t)\)</span> denote the charge across the capacitor. From basic circuit relationships, we know that <span class="math inline">\(i(t) = dq(t)/dt\)</span> and <span class="math display">\[
+  v_R(t) = R i(t) = R \frac{dq(t)}{dt},
+  \quad
+  v_L(t) = L \frac{di(t)}{dt} = L \frac{d^2q(t)}{dt^2},
+  \quad
+  v_C(t) = \frac{1}{C} q(t).
+\]</span> Thus, <span class="math display">\[
+  L \frac{d^2q(t)}{dt^2} + R \frac{dq(t)}{dt^2} + \frac{1}{C}q(t) = u(t).
+\]</span> Substituting <span class="math inline">\(q(t) = C v_C(t)\)</span>, we get <span class="math display">\[
+  LC \frac{d^2v_C(t)}{dt^2} + RC \frac{dv_C(t)}{dt^2} + v_C(t) = u(t).
+\]</span></p>
+</div>
+</div>
+</div>
+<p>As you know, circuits are an instance of an LTI system. In general, we will represent an LTI system with input <span class="math inline">\(u(t)\)</span> (also called the reference signal sometimes) and output <span class="math inline">\(y(t)\)</span> using the following block diagram:</p>
 <div id="fig-LTI" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-LTI-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/svg/interconnect1.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-LTI-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.1: An LTI System
+Figure&nbsp;2.2: An LTI System
 </figcaption>
 </figure>
 </div>
-<p>All such systems can be represented by constant coefficient linear differential equations (LDE) of the form <span class="math display">\[
-a_n \frac{d^n y(t)}{dt^n}  + a_{n-1} \frac{d^{n-1} y(t)}{dt^{n-1}} + \cdots  a_0 y(t)
-= b_m \frac{d^m u(t)}{dt^m} + b_{m-1} \frac{d^{m-1} u(t)}{dt^{m-1}} + \cdots + b_0 u(t).
-\]</span></p>
+<p>As we saw for the RLC example, the input output relationship of an LTI system can be represented via a differential equation (using the notation <span class="math inline">\(y(t) = v_C(t)\)</span>): <span class="math display">\[
+  LC \frac{d^2y(t)}{dt^2} + RC \frac{dy(t)}{dt^2} + y(t) = u(t).
+\]</span> Such a differential equation is called a <strong>constant coefficient linear differential equation (LDE)</strong>.</p>
 <ul>
 <li><p>This differential equation is called <strong>linear</strong> because there are no non-linear or multiplicative terms of the form <span class="math inline">\(\displaystyle \left(\frac{d^3 y(t)}{dt^3}\right)\left(\frac{d^2 y(t)}{dt^2}\right)\)</span>.</p></li>
 <li><p>It is called <strong>constant coefficient</strong> because the coefficients <span class="math inline">\(a_n\)</span> and <span class="math inline">\(b_m\)</span> are constants that do not depend on time.</p></li>
 </ul>
-<p>There is a one-to-one correspondence between constant coefficient LDE and an LTI system. That is, every LTI system can be described by a constant coefficient LDE and vice-versa.</p>
-<p>Recall that a key defining property of an LTI system is its impulse response, which we will typically denote by <span class="math inline">\(g(t)\)</span> and the transfer function, which we denote by <span class="math inline">\(G(s)\)</span>. Recall that <span class="math inline">\(g(t) \xleftrightarrow{\quad \mathcal L \quad} G(s)\)</span>.</p>
-<p>Now an interesting feature of a constant coefficient LDE is that we can identify the transfer function simply by inspection.</p>
+<p>In general, every LTI system can be described by a constant coefficient LDE and vice-versa. We will now show how to connect the LDE of an LTI system with its fudamental definiting property: <strong>the inpulse reponse</strong>, which we denote the <span class="math inline">\(g(t)\)</span>.</p>
+<p>Recall that the Laplace transform of <span class="math inline">\(g(t)\)</span>, which we denote by <span class="math inline">\(G(s)\)</span>, is called the <strong>transfer function</strong>. The key observation of this section is that we can identify the transfer function from the coefficients of the LDE simply by inspection.</p>
+<section id="identifying-trasnfer-function-from-linear-differential-equations" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="identifying-trasnfer-function-from-linear-differential-equations"><span class="header-section-number">2.3.1</span> Identifying trasnfer function from linear differential equations</h3>
+<p>Conisder an LTI system with input <span class="math inline">\(u(t)\)</span> and output <span class="math inline">\(y(t)\)</span>. We know that <span class="math display">\[Y(s) = G(s)U(s).\]</span> We will use the following block diagram to denote this relationship.</p>
 <div id="fig-LTI-s" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-LTI-s-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/svg/interconnect2.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-LTI-s-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.2: An LTI System
+Figure&nbsp;2.3: An LTI System
 </figcaption>
 </figure>
 </div>
-<p>Given an LTI system with input <span class="math inline">\(u(t)\)</span> and output <span class="math inline">\(y(t)\)</span>, we know that <span class="math display">\[Y(s) = G(s)U(s).\]</span> Therefore, if we know the input and output, we can identify the transfer function using <span class="math display">\[ G(s) = \frac{Y(s)}{U(s)}.\]</span> Now, if we go back to the general formula of a constant coefficient LDE <span class="math display">\[
+<p>If we know the input and output, we can identify the transfer function using <span class="math display">\[ G(s) = \frac{Y(s)}{U(s)}.\]</span> Now, consider a general constant coefficient LDE of the form <span class="math display">\[
 a_n \frac{d^n y(t)}{dt^n}  + a_{n-1} \frac{d^{n-1} y(t)}{dt^{n-1}} + \cdots  a_0 y(t)
 = b_m \frac{d^m u(t)}{dt^m} + b_{m-1} \frac{d^{m-1} u(t)}{dt^{m-1}} + \cdots + b_0 u(t).
-\]</span> and assume that the system starts from zero-initial state and take the LT of both sides, we get <span class="math display">\[
+\]</span> and assume that the system starts from zero-initial state. Taking the LT of both sides, we get <span class="math display">\[
 a_n s^n Y(s) + a_{n-1} s^{n-1} Y(s) + \cdots + a_0 Y(s)
-=
-b_m s^m U(s) + b_{m-1} s^{m-1} U(s) + \cdots + b_0 U(s).
+= b_m s^m U(s) + b_{m-1} s^{m-1} U(s) + \cdots + b_0 U(s).
 \]</span> Rearranging terms, we get <span class="math display">\[
 (a_n s^n + a_{n-1} s^{n-1} + \cdots + a_0) Y(s)
-=
-(b_m s^m + b_{m-1}s^{m-1} + \cdots + b_0) U(s).
+= (b_m s^m + b_{m-1}s^{m-1} + \cdots + b_0) U(s).
 \]</span> Therefore, <span class="math display">\[
 G(s) = \frac{Y(s)}{U(s)}
 = \frac{b_m s^m + b_{m-1} s^{m-1} + \cdots + b_0}
@@ -1037,7 +1075,7 @@ rb.addEventListener("change", function() {
 <p>In this course, we will assume that the system is specified either as a LDE or as a TF. The textbook provides detailed examples of how to derive either the LDE or the TF from a physical system such as an electric circuit or a spring-mass system. Later in the course we will also study other equivalent forms of representing the system such as state space equations and Bode plots.</p>
 <p>A final remark. In all the systems that we consider in this course, we will assume that <span class="math inline">\(m &lt; n\)</span>. So, the denominator of the TF has a strictly higher degree than the numerator. Such transfer functions are called <strong>proper</strong>. It is possible to have causal systems where <span class="math inline">\(m=n\)</span> but we will not consider that in this course. As a consequence, when we consider state space representation in future lectures, we will get formulas which are simpler than more general formulas which you may find at other sources.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1046,7 +1084,7 @@ rb.addEventListener("change", function() {
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>In a real system, there is often a delay between input and output, which is often modeled by a delay block whose output <span class="math inline">\(y(t)\)</span> is a delayed version of the input <span class="math inline">\(u(t)\)</span>, by a delay time <span class="math inline">\(τ\)</span>, that is <span class="math display">\[
   y(t) = u(t-τ).
@@ -1061,8 +1099,9 @@ Y(s) = e^{-τs}U(s).
 </div>
 </div>
 </div>
-<section id="interconnection-of-lti-systems" class="level3" data-number="2.3.1">
-<h3 data-number="2.3.1" class="anchored" data-anchor-id="interconnection-of-lti-systems"><span class="header-section-number">2.3.1</span> Interconnection of LTI Systems</h3>
+</div></div></div></div></div></div></section>
+<section id="interconnection-of-lti-systems" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="interconnection-of-lti-systems"><span class="header-section-number">2.3.2</span> Interconnection of LTI Systems</h3>
 <p>There are three common ways to interconnect LTI systems shown below.</p>
 <div id="fig-cascade" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -1070,7 +1109,7 @@ Y(s) = e^{-τs}U(s).
 <img src="figures/svg/interconnect3.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cascade-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.3: Cascade Connection equivalent to <span class="math inline">\(G_1(s)G_2(s)\)</span>.
+Figure&nbsp;2.4: Cascade Connection equivalent to <span class="math inline">\(G_1(s)G_2(s)\)</span>.
 </figcaption>
 </figure>
 </div>
@@ -1080,7 +1119,7 @@ Figure&nbsp;2.3: Cascade Connection equivalent to <span class="math inline">\(G_
 <img src="figures/svg/interconnect4.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-parallel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.4: Parallel Connection equivalent to <span class="math inline">\(G_1(s) + G_2(s)\)</span>.
+Figure&nbsp;2.5: Parallel Connection equivalent to <span class="math inline">\(G_1(s) + G_2(s)\)</span>.
 </figcaption>
 </figure>
 </div>
@@ -1090,23 +1129,23 @@ Figure&nbsp;2.4: Parallel Connection equivalent to <span class="math inline">\(G
 <img src="figures/svg/interconnect5.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-feedback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.5: Feedback Connection equivalent to <span class="math inline">\(\displaystyle \frac{G(s)}{1 + G(s)H(s)}\)</span>.
+Figure&nbsp;2.6: Feedback Connection equivalent to <span class="math inline">\(\displaystyle \frac{G(s)}{1 + G(s)H(s)}\)</span>.
 </figcaption>
 </figure>
 </div>
 </section>
-</div></div></div></div></div></div></section>
+</section>
 <section id="sec-big-picture" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="sec-big-picture"><span class="header-section-number">2.4</span> The Big Picture</h2>
 <p>Given a plant or system with transfer function <span class="math inline">\(G(s)\)</span>, the objective of control system design is to choose a controller <span class="math inline">\(G_c(s)\)</span> to ensure that the closed loop system is stable and the output tracks the reference signal. As we saw in the <a href="./introduction.html#closed-loop">introductory lecture</a>, we can stabilize such a system using closed loop control. The feedback interconnection formula from <a href="nyquist-stability.html#fig-feedback" class="quarto-xref">Figure&nbsp;<span>12.1</span></a> is the starting point for the more general configuration below.</p>
-<p>However, in general, there are (often unmodeled) disturbances between the actuator and the plant, and also between the output and the feedback sensor, as shown in <a href="#fig-full-feedback" class="quarto-xref">Figure&nbsp;<span>2.6</span></a>.</p>
+<p>However, in general, there are (often unmodeled) disturbances between the actuator and the plant, and also between the output and the feedback sensor, as shown in <a href="#fig-full-feedback" class="quarto-xref">Figure&nbsp;<span>2.7</span></a>.</p>
 <div id="fig-full-feedback" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-full-feedback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/svg/interconnect6.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-full-feedback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.6: A more complete model of feedback control system
+Figure&nbsp;2.7: A more complete model of feedback control system
 </figcaption>
 </figure>
 </div>
@@ -1164,22 +1203,22 @@ G(s)
 <p>Returning to <a href="#sec-big-picture" class="quarto-xref"><span>Section 2.4</span></a>, each closed-loop transfer function from <span class="math inline">\(R\)</span>, <span class="math inline">\(D_1\)</span>, or <span class="math inline">\(D_2\)</span> to <span class="math inline">\(Y\)</span> has the same denominator <span class="math inline">\(1 + G_c(s)G(s)\)</span>. The <strong>poles</strong> of these closed-loop transfer functions are therefore the roots of <span class="math inline">\(1 + G_c(s)G(s) = 0\)</span>. Control design often amounts to choosing <span class="math inline">\(G_c(s)\)</span> so that these closed-loop poles lie in desirable locations—for example, in the open left half plane for stability, or further left for faster response.</p>
 <p>We often represent the poles and zeros using a <strong>pole-zero plot.</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb1" data-startfrom="310" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 309;"><span id="cb1-310"><a href="#cb1-310" aria-hidden="true" tabindex="-1"></a>PZplot <span class="op">=</span> <span class="kw">function</span>(zeros<span class="op">,</span> poles<span class="op">,</span> xdomain<span class="op">,</span> ydomain) {</span>
-<span id="cb1-311"><a href="#cb1-311" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> Plot<span class="op">.</span><span class="fu">plot</span>({</span>
-<span id="cb1-312"><a href="#cb1-312" aria-hidden="true" tabindex="-1"></a>    <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
-<span id="cb1-313"><a href="#cb1-313" aria-hidden="true" tabindex="-1"></a>    <span class="dt">x</span><span class="op">:</span> { <span class="dt">domain</span><span class="op">:</span> xdomain}<span class="op">,</span></span>
-<span id="cb1-314"><a href="#cb1-314" aria-hidden="true" tabindex="-1"></a>    <span class="dt">y</span><span class="op">:</span> { <span class="dt">domain</span><span class="op">:</span> ydomain}<span class="op">,</span></span>
-<span id="cb1-315"><a href="#cb1-315" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-316"><a href="#cb1-316" aria-hidden="true" tabindex="-1"></a>    <span class="dt">marks</span><span class="op">:</span> [</span>
-<span id="cb1-317"><a href="#cb1-317" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Axes</span></span>
-<span id="cb1-318"><a href="#cb1-318" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">ruleX</span>([<span class="dv">0</span>])<span class="op">,</span></span>
-<span id="cb1-319"><a href="#cb1-319" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="dv">0</span>])<span class="op">,</span></span>
-<span id="cb1-320"><a href="#cb1-320" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Data</span></span>
-<span id="cb1-321"><a href="#cb1-321" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">dot</span>(zeros<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span><span class="st">"σ"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span><span class="st">"jω"</span><span class="op">,</span> <span class="dt">r</span><span class="op">:</span> <span class="dv">5</span>})<span class="op">,</span></span>
-<span id="cb1-322"><a href="#cb1-322" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">dot</span>(poles<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span><span class="st">"σ"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span><span class="st">"jω"</span><span class="op">,</span> <span class="dt">symbol</span><span class="op">:</span> <span class="st">"times"</span><span class="op">,</span> <span class="dt">r</span><span class="op">:</span> <span class="dv">5</span>})<span class="op">,</span></span>
-<span id="cb1-323"><a href="#cb1-323" aria-hidden="true" tabindex="-1"></a>    ]</span>
-<span id="cb1-324"><a href="#cb1-324" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb1-325"><a href="#cb1-325" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb1" data-startfrom="341" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 340;"><span id="cb1-341"><a href="#cb1-341" aria-hidden="true" tabindex="-1"></a>PZplot <span class="op">=</span> <span class="kw">function</span>(zeros<span class="op">,</span> poles<span class="op">,</span> xdomain<span class="op">,</span> ydomain) {</span>
+<span id="cb1-342"><a href="#cb1-342" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb1-343"><a href="#cb1-343" aria-hidden="true" tabindex="-1"></a>    <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb1-344"><a href="#cb1-344" aria-hidden="true" tabindex="-1"></a>    <span class="dt">x</span><span class="op">:</span> { <span class="dt">domain</span><span class="op">:</span> xdomain}<span class="op">,</span></span>
+<span id="cb1-345"><a href="#cb1-345" aria-hidden="true" tabindex="-1"></a>    <span class="dt">y</span><span class="op">:</span> { <span class="dt">domain</span><span class="op">:</span> ydomain}<span class="op">,</span></span>
+<span id="cb1-346"><a href="#cb1-346" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-347"><a href="#cb1-347" aria-hidden="true" tabindex="-1"></a>    <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb1-348"><a href="#cb1-348" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Axes</span></span>
+<span id="cb1-349"><a href="#cb1-349" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">ruleX</span>([<span class="dv">0</span>])<span class="op">,</span></span>
+<span id="cb1-350"><a href="#cb1-350" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="dv">0</span>])<span class="op">,</span></span>
+<span id="cb1-351"><a href="#cb1-351" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Data</span></span>
+<span id="cb1-352"><a href="#cb1-352" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">dot</span>(zeros<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span><span class="st">"σ"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span><span class="st">"jω"</span><span class="op">,</span> <span class="dt">r</span><span class="op">:</span> <span class="dv">5</span>})<span class="op">,</span></span>
+<span id="cb1-353"><a href="#cb1-353" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">dot</span>(poles<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span><span class="st">"σ"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span><span class="st">"jω"</span><span class="op">,</span> <span class="dt">symbol</span><span class="op">:</span> <span class="st">"times"</span><span class="op">,</span> <span class="dt">r</span><span class="op">:</span> <span class="dv">5</span>})<span class="op">,</span></span>
+<span id="cb1-354"><a href="#cb1-354" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb1-355"><a href="#cb1-355" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1-356"><a href="#cb1-356" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-1" data-nodetype="declaration">
 
@@ -1189,12 +1228,12 @@ G(s)
 <div id="exm-pole-zero" class="theorem example">
 <p><span class="theorem-title"><strong>Example 2.4 (Pole-zero plot)</strong></span> Consider <span class="math display">\[G(s) = \frac{s+2}{(s+1)^2 + 1^2}.\]</span> The poles are <span class="math inline">\(-1 \pm j\)</span> and the zero is <span class="math inline">\(-2\)</span>. The pole-zero plot is shown below, where the location of the pole is represented by a “cross” and the location of the zero is represented by a “circle”.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb2" data-startfrom="335" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 334;"><span id="cb2-335"><a href="#cb2-335" aria-hidden="true" tabindex="-1"></a><span class="fu">PZplot</span>(</span>
-<span id="cb2-336"><a href="#cb2-336" aria-hidden="true" tabindex="-1"></a>       [ {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span> </span>
-<span id="cb2-337"><a href="#cb2-337" aria-hidden="true" tabindex="-1"></a>       [ { <span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">1</span> } ]<span class="op">,</span></span>
-<span id="cb2-338"><a href="#cb2-338" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">3</span><span class="op">,</span> <span class="dv">3</span>]<span class="op">,</span></span>
-<span id="cb2-339"><a href="#cb2-339" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">3</span><span class="op">,</span> <span class="dv">3</span>]<span class="op">,</span></span>
-<span id="cb2-340"><a href="#cb2-340" aria-hidden="true" tabindex="-1"></a>      )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb2" data-startfrom="366" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 365;"><span id="cb2-366"><a href="#cb2-366" aria-hidden="true" tabindex="-1"></a><span class="fu">PZplot</span>(</span>
+<span id="cb2-367"><a href="#cb2-367" aria-hidden="true" tabindex="-1"></a>       [ {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span> </span>
+<span id="cb2-368"><a href="#cb2-368" aria-hidden="true" tabindex="-1"></a>       [ { <span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">1</span> } ]<span class="op">,</span></span>
+<span id="cb2-369"><a href="#cb2-369" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">3</span><span class="op">,</span> <span class="dv">3</span>]<span class="op">,</span></span>
+<span id="cb2-370"><a href="#cb2-370" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">3</span><span class="op">,</span> <span class="dv">3</span>]<span class="op">,</span></span>
+<span id="cb2-371"><a href="#cb2-371" aria-hidden="true" tabindex="-1"></a>      )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-2" data-nodetype="expression">
 
@@ -1219,30 +1258,30 @@ G(s)
 <blockquote class="blockquote">
 <p>A causal LTI system is stable if all poles are in the open left hand plane.</p>
 </blockquote>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb3" data-startfrom="380" data-source-offset="-1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 379;"><span id="cb3-380"><a href="#cb3-380" aria-hidden="true" tabindex="-1"></a><span class="fu">PZplot</span>(</span>
-<span id="cb3-381"><a href="#cb3-381" aria-hidden="true" tabindex="-1"></a>       [ {<span class="dt">σ</span><span class="op">:</span> <span class="fl">1.5</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span> </span>
-<span id="cb3-382"><a href="#cb3-382" aria-hidden="true" tabindex="-1"></a>       [ { <span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="fl">1.5</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span></span>
-<span id="cb3-383"><a href="#cb3-383" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
-<span id="cb3-384"><a href="#cb3-384" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
-<span id="cb3-385"><a href="#cb3-385" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb3-386"><a href="#cb3-386" aria-hidden="true" tabindex="-1"></a><span class="fu">PZplot</span>(</span>
-<span id="cb3-387"><a href="#cb3-387" aria-hidden="true" tabindex="-1"></a>       [ {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="fl">1.5</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span> </span>
-<span id="cb3-388"><a href="#cb3-388" aria-hidden="true" tabindex="-1"></a>       [ { <span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">1</span> }<span class="op">,</span> { <span class="dt">σ</span><span class="op">:</span> <span class="fl">1.5</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span> } ]<span class="op">,</span></span>
-<span id="cb3-389"><a href="#cb3-389" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
-<span id="cb3-390"><a href="#cb3-390" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
-<span id="cb3-391"><a href="#cb3-391" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb3-392"><a href="#cb3-392" aria-hidden="true" tabindex="-1"></a><span class="fu">PZplot</span>(</span>
-<span id="cb3-393"><a href="#cb3-393" aria-hidden="true" tabindex="-1"></a>       [ {<span class="dt">σ</span><span class="op">:</span> <span class="fl">1.5</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span> </span>
-<span id="cb3-394"><a href="#cb3-394" aria-hidden="true" tabindex="-1"></a>       [ { <span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span></span>
-<span id="cb3-395"><a href="#cb3-395" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
-<span id="cb3-396"><a href="#cb3-396" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
-<span id="cb3-397"><a href="#cb3-397" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb3-398"><a href="#cb3-398" aria-hidden="true" tabindex="-1"></a><span class="fu">PZplot</span>(</span>
-<span id="cb3-399"><a href="#cb3-399" aria-hidden="true" tabindex="-1"></a>       [ {<span class="dt">σ</span><span class="op">:</span> <span class="fl">1.5</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span> </span>
-<span id="cb3-400"><a href="#cb3-400" aria-hidden="true" tabindex="-1"></a>       [ { <span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="fl">0.02</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>}<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="fl">0.02</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span></span>
-<span id="cb3-401"><a href="#cb3-401" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
-<span id="cb3-402"><a href="#cb3-402" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
-<span id="cb3-403"><a href="#cb3-403" aria-hidden="true" tabindex="-1"></a>      )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb3" data-startfrom="411" data-source-offset="-1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 410;"><span id="cb3-411"><a href="#cb3-411" aria-hidden="true" tabindex="-1"></a><span class="fu">PZplot</span>(</span>
+<span id="cb3-412"><a href="#cb3-412" aria-hidden="true" tabindex="-1"></a>       [ {<span class="dt">σ</span><span class="op">:</span> <span class="fl">1.5</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span> </span>
+<span id="cb3-413"><a href="#cb3-413" aria-hidden="true" tabindex="-1"></a>       [ { <span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="fl">1.5</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span></span>
+<span id="cb3-414"><a href="#cb3-414" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb3-415"><a href="#cb3-415" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb3-416"><a href="#cb3-416" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb3-417"><a href="#cb3-417" aria-hidden="true" tabindex="-1"></a><span class="fu">PZplot</span>(</span>
+<span id="cb3-418"><a href="#cb3-418" aria-hidden="true" tabindex="-1"></a>       [ {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="fl">1.5</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span> </span>
+<span id="cb3-419"><a href="#cb3-419" aria-hidden="true" tabindex="-1"></a>       [ { <span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">1</span> }<span class="op">,</span> { <span class="dt">σ</span><span class="op">:</span> <span class="fl">1.5</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span> } ]<span class="op">,</span></span>
+<span id="cb3-420"><a href="#cb3-420" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb3-421"><a href="#cb3-421" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb3-422"><a href="#cb3-422" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb3-423"><a href="#cb3-423" aria-hidden="true" tabindex="-1"></a><span class="fu">PZplot</span>(</span>
+<span id="cb3-424"><a href="#cb3-424" aria-hidden="true" tabindex="-1"></a>       [ {<span class="dt">σ</span><span class="op">:</span> <span class="fl">1.5</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span> </span>
+<span id="cb3-425"><a href="#cb3-425" aria-hidden="true" tabindex="-1"></a>       [ { <span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span></span>
+<span id="cb3-426"><a href="#cb3-426" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb3-427"><a href="#cb3-427" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb3-428"><a href="#cb3-428" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb3-429"><a href="#cb3-429" aria-hidden="true" tabindex="-1"></a><span class="fu">PZplot</span>(</span>
+<span id="cb3-430"><a href="#cb3-430" aria-hidden="true" tabindex="-1"></a>       [ {<span class="dt">σ</span><span class="op">:</span> <span class="fl">1.5</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span> </span>
+<span id="cb3-431"><a href="#cb3-431" aria-hidden="true" tabindex="-1"></a>       [ { <span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">1</span> }<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="op">-</span><span class="fl">0.02</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>}<span class="op">,</span> {<span class="dt">σ</span><span class="op">:</span> <span class="fl">0.02</span><span class="op">,</span> <span class="dt">jω</span><span class="op">:</span> <span class="dv">0</span>} ]<span class="op">,</span></span>
+<span id="cb3-432"><a href="#cb3-432" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb3-433"><a href="#cb3-433" aria-hidden="true" tabindex="-1"></a>       [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb3-434"><a href="#cb3-434" aria-hidden="true" tabindex="-1"></a>      )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div id="fig-ojs-cell-3" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ojs-cell-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1308,7 +1347,7 @@ G(s)
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ojs-cell-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.7: Illustration of stable and unstable systems
+Figure&nbsp;2.8: Illustration of stable and unstable systems
 </figcaption>
 </figure>
 </div>

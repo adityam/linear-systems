@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2026-06-20">
+<meta name="dcterms.date" content="2026-06-24">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>7&nbsp; State observers and output feedback – Linear Systems and Control</title>
@@ -555,7 +555,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 20, 2026</p>
+      <p class="date">June 24, 2026</p>
     </div>
   </div>
   
@@ -764,6 +764,52 @@ T = \bigl[ W \mathcal O_{(A,C)} \bigr]^{-1}
 <p>This method relies on the fact that for a system <span class="math inline">\((A_o,C_o)\)</span> in OCF, <span class="math inline">\(\mathcal O_{(A_o,C_o)} = W^{-1}\)</span>. For a proof, see Lemma 4.5 of William and Lawrence.</p>
 <div id="exm-observer-design" class="theorem example">
 <p><span class="theorem-title"><strong>Example 7.2</strong></span> Consider the following SSM: <span class="math display">\[ A = \MATRIX{3 &amp; 1 \\ 1 &amp; 2}, B = \MATRIX{2 \\1} \text{ and } C = \MATRIX{ 3 &amp; 2}. \]</span> Design a Luenberger observer (i.e., compute the observer gain <span class="math inline">\(L\)</span>) such that the eigenvalues of <span class="math inline">\(A - LC\)</span> are at <span class="math inline">\(-10 \pm 5j\)</span>.</p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We will show the solution via both method 1 and method 2. For method 1, we have the following.</p>
+<ol type="1">
+<li><p>We have <span class="math display">\[ C A = \MATRIX{3 &amp; 2} \MATRIX{3 &amp; 1\\ 1 &amp; 2} = \MATRIX{11 &amp; 7}. \]</span> Therefore, <span class="math display">\[ \mathcal O_{(A,C)} = \MATRIX{ 3 &amp; 2\\ 11 &amp; 7}. \]</span></p></li>
+<li><p><span class="math inline">\(\det \mathcal O_{(A,C)} = 21 - 22 = -1 \neq 0\)</span>. Thus, <span class="math inline">\((A,C)\)</span> is observable and we can design a state Luenberger observer.</p></li>
+<li><p>The characteristic polynomial is given by <span class="math display">\[s I - A = \MATRIX{s &amp; 0 \\ 0 &amp; s} - \MATRIX{3 &amp; 1 \\ 1 &amp; 2} = \MATRIX{ s-3 &amp; -1 \\ -1 &amp; s - 2}.\]</span> Therefore, <span class="math display">\[
+\det(sI-A) = \DET{ s-3 &amp; -1 \\ -1 &amp; s - 2} = (s-3)(s-1) - 1 = s^2 - 5s + 5.
+\]</span></p></li>
+<li><p>The SSM in OCF is <span class="math display">\[ A_o = \MATRIX{0 &amp; -5 \\ 1 &amp; 5}, \quad C_o = \MATRIX{0 &amp; 1}.\]</span></p></li>
+<li><p>We have <span class="math display">\[ C_o A_o = \MATRIX{0 &amp; 1} \MATRIX{0 &amp; -5 \\ 1 &amp; 5} = \MATRIX{0 &amp; 1 // 1 &amp; 5}. \]</span> Therefore, <span class="math display">\[ \mathcal O_{(A_o, C_o)} = \MATRIX{0 &amp; 1 \\ 1 &amp; 5}. \]</span></p></li>
+<li><p>Thus, we have <span class="math display">\[\begin{align*}
+T &amp;= \mathcal O_{(A,C)}^{-1} \mathcal O_{(A_o, C_o)}
+\\
+&amp;= \MATRIX{3 &amp; 2 \\ 11 &amp; 7}^{-1} \MATRIX{0 &amp; 1 \\ 1 &amp; 5}
+\\
+&amp;= \MATRIX{7 &amp; -2 \\ -11 &amp; 3} \MATRIX{0 &amp; 1 \\ 1 &amp; 5}
+\\
+&amp;= \MATRIX{2 &amp; 3 \\ -3 &amp; -4}.
+\end{align*}\]</span></p></li>
+<li><p>The desired characteristic polynomial is <span class="math display">\[ (s+10-5j)(s+10+5j) = (s+10)^2 + 5^2 = s^2 + 20s + 125. \]</span> Thus, <span class="math display">\[ L_o = \MATRIX{125 - 5 \\ 20 - (-5)} = \MATRIX{120 // 25}.\]</span></p></li>
+<li><p>Thus, <span class="math display">\[ L = T L_o = \MATRIX{2 &amp; 3 \\ -3 &amp; -4} \MATRIX{120 // 25} = \MATRIX{315 // -460}. \]</span></p></li>
+</ol>
+<p>Finally, we can redo the calculations using Method 2. In particular, instead of steps 4–6, we have</p>
+<ol start="4" type="1">
+<li><p>Define <span class="math display">\[ W = \MATRIX{ a_1 &amp; 1 \\ 1 &amp; 0 } = \MATRIX{ -5 &amp; 1 \\ 1 &amp; 0 }. \]</span></p></li>
+<li><p>Therefore, <span class="math display">\[\begin{align*}
+  T &amp;= \bigl[ \mathcal W O_{(A,C)} \bigr]^{-1} \\
+  &amp;= \left( \MATRIX{ -5 &amp; 1 \\ 1 &amp; 0 } \MATRIX{ 3 &amp; 2\\ 11 &amp; 7} \right)^{-1} \\
+  &amp;= \MATRIX{2 &amp; 3 \\ -3 &amp; -4},
+  \end{align*}\]</span></p></li>
+</ol>
+<p>Thus, we get the same <span class="math inline">\(T\)</span> as using Method 1. The remaining steps 7 and 8 are the same as before.</p>
+</div>
+</div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">

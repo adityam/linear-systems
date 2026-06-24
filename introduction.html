@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2026-06-20">
+<meta name="dcterms.date" content="2026-06-24">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>1&nbsp; Introduction – Linear Systems and Control</title>
@@ -64,7 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -170,7 +170,7 @@ window.MathJax = {
 <script async="" data-id="101261731" src="//static.getclicky.com/js"></script>
 <script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
 <link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
@@ -554,7 +554,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 20, 2026</p>
+      <p class="date">June 24, 2026</p>
     </div>
   </div>
   
@@ -567,7 +567,7 @@ window.Quarto = {
 
 
 <ul>
-<li><p>Recall from Signals and Systems, we know that a <strong>system</strong> is a process or a device that takes one or more signals as inputs and generates one or more signals as outputs.</p></li>
+<li><p>This course is about <strong>linear systems</strong>. Recall from Signals and Systems, we know that a <strong>system</strong> is a process or a device that takes one or more signals as inputs and generates one or more signals as outputs.</p></li>
 <li><p>The simplest systems are those with one input and one output, often called <strong>single input single output (SISO) systems</strong>. For example, a microphone may be viewed as a SISO system which has a single input (the acoustic pressure) which causes the diaphragm to vibrate and produce a single output (electrical voltage).</p></li>
 <li><p>A system can have <strong>multiple inputs and multiple outputs (MIMO)</strong>. For example, the stereo microphone has two inputs (typically, a left microphone and a right microphone) and generates two voltage signals as outputs.</p></li>
 <li><p>Some fundamental properties of systems that you studied in signals and systems are: <strong>linearity</strong>, <strong>time-invariance</strong>, and <strong>causality</strong>. Please review your notes from signals and systems to ensure that you understand these properties.</p></li>
@@ -601,7 +601,7 @@ window.Quarto = {
 <p>Suppose we have a sensor that can measure the angle <span class="math inline">\(θ(t)\)</span>. Consider a <strong>proportional plus derivative controller,</strong> i.e., a controller given by <span class="math display">\[
   u(t) = - K_p θ(t) - K_d \dot θ(t)
 \]</span> where <span class="math inline">\(K_p\)</span> provides the restoring torque and <span class="math inline">\(K_d\)</span> provides damping.</p>
-<p>Substituting into the linearized dynamics gives gives <span class="math display">\[
+<p>Substituting into the linearized dynamics gives <span class="math display">\[
   \frac{d^2 θ(t)}{dt^2} + b K_d  \frac{ d θ(t)}{dt} + (b K_p  - a) θ(t) = 0.
 \]</span> Using ideas that we will learn using <a href="./routh-hurwitz.html">Routh Hurwitz criterion</a>, we can see that this system is stable if all coefficients are positive, i.e.,</p>
 <ul>
@@ -647,7 +647,7 @@ window.Quarto = {
 </section>
 <section id="closed-loop-control-provides-robustness-against-disturbances-and-model-uncertainty" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="closed-loop-control-provides-robustness-against-disturbances-and-model-uncertainty"><span class="header-section-number">1.2</span> Closed-loop control provides robustness against disturbances and model uncertainty</h2>
-<p>In this section, we present by a simple example of designing the cruise control of a car to illustrate that feedback control can provide robustness against model uncertainty. This example is adapted from Khalil (Chapter 1).</p>
+<p>In this section, we present a simple example of designing the cruise control of a car to illustrate that feedback control can provide robustness against model uncertainty. This example is adapted from Khalil (Chapter 1).</p>
 <p>Consider a car of mass <span class="math inline">\(m\)</span> moving at velocity <span class="math inline">\(v(t)\)</span>. Assume that when the accelerator is pressed at an angle <span class="math inline">\(u(t)\)</span>, the engine produces a thrust <span class="math inline">\(K_e u(t)\)</span>, where <span class="math inline">\(K_e\)</span> is the engine gain. The car experiences friction, which is assumed to be <span class="math inline">\(bv(t)\)</span>, where <span class="math inline">\(b\)</span> is the equivalent damping coefficient. In addition, there is air drag, rolling resistance, and other factors, all of which we model as <strong>disturbance</strong> <span class="math inline">\(w(t)\)</span>.</p>
 <p>Then, by Newton’s second law, the simplified model of the dynamics can be written as <span class="math display">\[
   m \frac{dv(t)}{dt} = K_e u(t) - b v(t) + w(t)
