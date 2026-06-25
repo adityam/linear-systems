@@ -353,21 +353,34 @@ viewof K_1 = Object.assign(Inputs.range([0.5, 1.5], {label: "K", step: 0.1, valu
 //| echo: false
 transformed_first_order = first_order.map(d =>({...d, output: d.output*K_1}))
 
-PZplot = function(zeros, poles, xdomain, ydomain) {
-  return Plot.plot({
+PZplot = function(zeros, poles, xdomain, ydomain, width = 300, square = false) {
+  const opts = {
+    width,
     grid: true,
-    x: { domain: xdomain},
-    y: { domain: ydomain},
-
+    style: { color: "#555", fontSize: "11px" },
+    x: { label: "σ", domain: xdomain, nice: true },
+    y: { label: "jω", domain: ydomain, nice: true },
     marks: [
       // Axes
-      Plot.ruleX([0]),
-      Plot.ruleY([0]),
-      // Data
-      Plot.dot(zeros, {x:"σ", y:"jω", r: 5}),
-      Plot.dot(poles, {x:"σ", y:"jω", symbol: "times", r: 5}),
-    ]
-  })
+      Plot.ruleX([0], { stroke: "#444", strokeWidth: 1.5 }),
+      Plot.ruleY([0], { stroke: "#444", strokeWidth: 1.5 }),
+      // Zeros (○) and poles (×)
+      Plot.dot(zeros, {
+        x: "σ", y: "jω", symbol: "circle", r: 6,
+        fill: "white", stroke: "#2563eb", strokeWidth: 2.5,
+      }),
+      Plot.dot(poles, {
+        x: "σ", y: "jω", symbol: "times", r: 6,
+        stroke: "#dc2626", strokeWidth: 2.5,
+      }),
+    ],
+  };
+  if (square) {
+    opts.height = width;
+  } else {
+    opts.aspectRatio = 1;
+  }
+  return Plot.plot(opts);
 }
 ```
 
@@ -882,7 +895,9 @@ PZplot(
        [], 
        [ {σ: -param_sigma, jω: ω_d_sigma}, {σ: -param_sigma, jω: -ω_d_sigma} ], 
        [-3, 3],
-       [-5, 5],
+       [-4, 4],
+       300,
+       true,
       )
 
 Plot.plot({
@@ -946,7 +961,9 @@ PZplot(
        [], 
        [ {σ: -σ_ωd, jω: param_ωd}, {σ: -σ_ωd, jω: -param_ωd} ], 
        [-3, 3],
-       [-5, 5],
+       [-4, 4],
+       300,
+       true,
       )
 
 Plot.plot({
@@ -1014,7 +1031,9 @@ PZplot(
        [ {σ: -param_ωn*ζ_ωn, jω:  param_ωn*Math.sqrt(1 - ζ_ωn**2) },
          {σ: -param_ωn*ζ_ωn, jω: -param_ωn*Math.sqrt(1 - ζ_ωn**2) } ],
        [-3, 3],
-       [-5, 5],
+       [-4, 4],
+       300,
+       true,
       )
 
 Plot.plot({
@@ -1096,7 +1115,7 @@ specs = [
 Plot.plot({
   grid: true,
   clip: true,
-  y: { domain: [-5,5] },
+  y: { domain: [-4, 4] },
   x: { domain: [-4,1] },
   marks: [
     // Axes
@@ -1443,3 +1462,4 @@ Plot.plot({
 })
 ```
 
+### Exercises {-}

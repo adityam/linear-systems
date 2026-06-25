@@ -339,21 +339,34 @@ Returning to @sec-big-picture, each closed-loop transfer function from $R$, $D_1
 We often represent the poles and zeros using a **pole-zero plot.**
 
 ```{ojs}
-PZplot = function(zeros, poles, xdomain, ydomain) {
-  return Plot.plot({
+PZplot = function(zeros, poles, xdomain, ydomain, width = 300, square = false) {
+  const opts = {
+    width,
     grid: true,
-    x: { domain: xdomain},
-    y: { domain: ydomain},
-
+    style: { color: "#555", fontSize: "11px" },
+    x: { label: "σ", domain: xdomain, nice: true },
+    y: { label: "jω", domain: ydomain, nice: true },
     marks: [
       // Axes
-      Plot.ruleX([0]),
-      Plot.ruleY([0]),
-      // Data
-      Plot.dot(zeros, {x:"σ", y:"jω", r: 5}),
-      Plot.dot(poles, {x:"σ", y:"jω", symbol: "times", r: 5}),
-    ]
-  })
+      Plot.ruleX([0], { stroke: "#444", strokeWidth: 1.5 }),
+      Plot.ruleY([0], { stroke: "#444", strokeWidth: 1.5 }),
+      // Zeros (○) and poles (×)
+      Plot.dot(zeros, {
+        x: "σ", y: "jω", symbol: "circle", r: 6,
+        fill: "white", stroke: "#2563eb", strokeWidth: 2.5,
+      }),
+      Plot.dot(poles, {
+        x: "σ", y: "jω", symbol: "times", r: 6,
+        stroke: "#dc2626", strokeWidth: 2.5,
+      }),
+    ],
+  };
+  if (square) {
+    opts.height = width;
+  } else {
+    opts.aspectRatio = 1;
+  }
+  return Plot.plot(opts);
 }
 ```
 
