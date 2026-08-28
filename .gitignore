@@ -6,6 +6,9 @@
 .jupyter_cache/
 /docs/
 /_book/
+/_site/
 /.cache/
+*.code-workspace
+figures/rsvg
 
 **/*.quarto_ipynb

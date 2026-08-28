@@ -1,18 +1,19 @@
 ---
 course:
-  term: "Fall 2025"
+  term: "Fall 2026"
   office-hours: "Tuesday 10:00am–11:00am"
-  teaching-assistants: "Yiwen Chen and Yiping Liu"
-  mid-term: "Oct 9"
+  tutorial-ta: "Yiwen Chen"
+  lab-tas: "Yiping Liu and Shahin Mahdiyounrad"
+  mid-term: "Oct 15"
   lectures:
-    - "11:35am–12:55am Tuesday, Thursday (MASS 10)"
+    - "10:05am–11:25am Tuesday, Thursday (SADB 2/36)"
   tutorials:
-    - "3:35pm–5:25pm Wednesday, (ENGMC 11)"
+    - "8:35am–10:25am Friday (MAASS 10)"
   labs:
-    - "1:35pm-3:25pm Monday (TR 4090)"
+    - "1:35pm–3:25pm Monday (TR 4090)"
     - "3:35pm–5:25pm Monday (TR 4090)"
     - "1:35pm–3:25pm Tuesday (TR 4090)"
-    - "1:35pm-3:25pm Wednesday (TR 4090)"
+    - "1:35pm–3:25pm Wednesday (TR 4090)"
     - "1:35pm–3:25pm Friday (TR 4090)"
     - "3:35pm–5:25pm Friday (TR 4090)"
 format: 
@@ -29,7 +30,8 @@ Instructor
 - *Office Hours*: {{< meta course.office-hours >}}
 
 Teaching Assistants
-: - {{< meta course.teaching-assistants >}} 
+: - Tutorial TA: {{< meta course.tutorial-ta >}}
+- Lab TAs: {{< meta course.lab-tas >}}
 
 Lectures
 : - {{< meta course.lectures >}} 
