@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2026-06-24">
+<meta name="dcterms.date" content="2026-08-29">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>3&nbsp; State space models – Linear Systems and Control</title>
@@ -15,10 +15,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -29,7 +32,7 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -44,14 +47,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-8fb9028ffe08f1e63cc4690c3f5b5257.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-9b7bab27220103224cd8f41ad4ecce92.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-8fb9028ffe08f1e63cc4690c3f5b5257.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-b5cb491c8d4a2740a7f91f7888270df7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-0a0a8801e83d6be8782cdc57dd29ea97.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-b5cb491c8d4a2740a7f91f7888270df7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/nutshell-1.0.6/nutshell.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -133,9 +136,12 @@ window.MathJax = {
 };
 </script>
 <script async="" data-id="101261731" src="//static.getclicky.com/js"></script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -499,6 +505,7 @@ window.Quarto = {
   <li><a href="#where-have-you-seen-this-before" id="toc-where-have-you-seen-this-before" class="nav-link" data-scroll-target="#where-have-you-seen-this-before"><span class="header-section-number">3.7.3</span> Where have you seen this before?</a></li>
   </ul></li>
   <li><a href="#change-of-coordinates-in-ssms" id="toc-change-of-coordinates-in-ssms" class="nav-link" data-scroll-target="#change-of-coordinates-in-ssms"><span class="header-section-number">3.8</span> Change of coordinates in SSMs</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/state-space-models.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -534,7 +541,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 24, 2026</p>
+      <p class="date">August 29, 2026</p>
     </div>
   </div>
   
@@ -678,7 +685,219 @@ Figure&nbsp;3.1: Structure of CCF representation
 </figcaption>
 </figure>
 </div>
-</section>
+<div id="exm-CCF-1" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.2</strong></span> Consider a system with the transfer function <span class="math display">\[G(s) = \dfrac{s+5}{s^2 + 3s + 2}.\]</span></p>
+<div id="4" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<script>
+var ID = "Al9H7k6r"
+</script>
+<form class="mx-2 my-3 mw-100 qqquestion" name="WeaveQuestion" data-id="Al9H7k6r" data-controltype="" onsubmit="return false;">
+  <div class="form-group ">
+    <div class="controls">
+      <div class="form" id="controls_Al9H7k6r" correct="-1" attempts="0">
+     Find the CCF representation of the system: 
+
+    
+
+    <div style="padding-top: 5px">
+    <fieldset style="border:0px">
+<legend style="display: none" aria-label="Select an item">Select an item</legend>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_Al9H7k6r_1">
+    <input class="form-check-input" type="radio" name="radio_Al9H7k6r" id="radio_Al9H7k6r_1" value="1">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} 0 &amp; -2 \\ 1 &amp; -3 \end{bmatrix},\ B = \begin{bmatrix} 1 \\ 0 \end{bmatrix},\ C = \begin{bmatrix} 1 &amp; 5 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_Al9H7k6r_2">
+    <input class="form-check-input" type="radio" name="radio_Al9H7k6r" id="radio_Al9H7k6r_2" value="2">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} 0 &amp; 1 \\ -2 &amp; -3 \end{bmatrix},\ B = \begin{bmatrix} 1 \\ 0 \end{bmatrix},\ C = \begin{bmatrix} 1 &amp; 5 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_Al9H7k6r_3">
+    <input class="form-check-input" type="radio" name="radio_Al9H7k6r" id="radio_Al9H7k6r_3" value="3">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} 0 &amp; 1 \\ -2 &amp; -3 \end{bmatrix},\ B = \begin{bmatrix} 0 \\ 1 \end{bmatrix},\ C = \begin{bmatrix} 5 &amp; 1 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_Al9H7k6r_4">
+    <input class="form-check-input" type="radio" name="radio_Al9H7k6r" id="radio_Al9H7k6r_4" value="4">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} 0 &amp; -2 \\ 1 &amp; -3 \end{bmatrix},\ B = \begin{bmatrix} 0 \\ 1 \end{bmatrix},\ C = \begin{bmatrix} 5 &amp; 1 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+</fieldset>
+
+     </div>
+    </div>
+    <div id="Al9H7k6r_message" class="qqmessage" style="padding-bottom: 15px">
+    </div>
+
+<script>
+document.getElementById('controls_Al9H7k6r').addEventListener("quizquestion_answer", (e) => {
+          var o = document.getElementById('controls_Al9H7k6r')
+          var atts = Number(o.getAttribute("attempts"))
+          o.setAttribute("correct",  e.detail.correct);
+          o.setAttribute("attempts", atts + 1)
+      }, true)
+</script>
+
+<script text="text/javascript">
+document.querySelectorAll('input[name="radio_Al9H7k6r"]').forEach(function(rb) {
+rb.addEventListener("change", function() {
+    var correct = rb.value == 3;
+    var msgBox = document.getElementById('Al9H7k6r_message');
+    
+  if(correct) {
+    msgBox.innerHTML = "<div class='pluto-output admonition note alert alert-success'> <span>✔&nbsp; Correct </span> </div>";
+    var explanation = document.getElementById("explanation_Al9H7k6r")
+    if (explanation != null) {
+       explanation.style.display = "none";
+    }
+      const correct_answer   = new CustomEvent("quizquestion_answer",
+          {bubbles:true, detail:{correct: 1}}
+  );
+  this.dispatchEvent(correct_answer);
+
+  } else {
+    msgBox.innerHTML = "<div class='pluto-output admonition alert alert-danger'> <span>Χ&nbsp; Incorrect </span> </div>";
+    var explanation = document.getElementById("explanation_Al9H7k6r")
+    if (explanation != null) {
+       explanation.style.display = "block";
+    }
+      const incorrect_answer = new CustomEvent("quizquestion_answer",
+           {bubbles:true, detail:{correct: 0}}
+  );
+  this.dispatchEvent(incorrect_answer);
+
+  }
+
+})});
+
+</script>
+</div>
+</div></form>
+</div>
+<div id="exm-CCF-2" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.3</strong></span> Consider a system with the transfer function <span class="math display">\[G(s) = \dfrac{5}{s^3 - s^2 - 4s + 4}.\]</span></p>
+<div id="6" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<script>
+var ID = "sJrgOZOO"
+</script>
+<form class="mx-2 my-3 mw-100 qqquestion" name="WeaveQuestion" data-id="sJrgOZOO" data-controltype="" onsubmit="return false;">
+  <div class="form-group ">
+    <div class="controls">
+      <div class="form" id="controls_sJrgOZOO" correct="-1" attempts="0">
+     Find the CCF representation of the system: 
+
+    
+
+    <div style="padding-top: 5px">
+    <fieldset style="border:0px">
+<legend style="display: none" aria-label="Select an item">Select an item</legend>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_sJrgOZOO_1">
+    <input class="form-check-input" type="radio" name="radio_sJrgOZOO" id="radio_sJrgOZOO_1" value="1">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} 0 &amp; 0 &amp; -4 \\ 1 &amp; 0 &amp; 4 \\ 0 &amp; 1 &amp; 1 \end{bmatrix},\ B = \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix},\ C = \begin{bmatrix} 5 &amp; 0 &amp; 0 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_sJrgOZOO_2">
+    <input class="form-check-input" type="radio" name="radio_sJrgOZOO" id="radio_sJrgOZOO_2" value="2">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} 0 &amp; 0 &amp; -4 \\ 1 &amp; 0 &amp; 4 \\ 0 &amp; 1 &amp; 1 \end{bmatrix},\ B = \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix},\ C = \begin{bmatrix} 0 &amp; 0 &amp; 5 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_sJrgOZOO_3">
+    <input class="form-check-input" type="radio" name="radio_sJrgOZOO" id="radio_sJrgOZOO_3" value="3">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \\ -4 &amp; 4 &amp; 1 \end{bmatrix},\ B = \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix},\ C = \begin{bmatrix} 5 &amp; 0 &amp; 0 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_sJrgOZOO_4">
+    <input class="form-check-input" type="radio" name="radio_sJrgOZOO" id="radio_sJrgOZOO_4" value="4">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \\ -4 &amp; 4 &amp; 1 \end{bmatrix},\ B = \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix},\ C = \begin{bmatrix} 0 &amp; 0 &amp; 5 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+</fieldset>
+
+     </div>
+    </div>
+    <div id="sJrgOZOO_message" class="qqmessage" style="padding-bottom: 15px">
+    </div>
+
+<script>
+document.getElementById('controls_sJrgOZOO').addEventListener("quizquestion_answer", (e) => {
+          var o = document.getElementById('controls_sJrgOZOO')
+          var atts = Number(o.getAttribute("attempts"))
+          o.setAttribute("correct",  e.detail.correct);
+          o.setAttribute("attempts", atts + 1)
+      }, true)
+</script>
+
+<script text="text/javascript">
+document.querySelectorAll('input[name="radio_sJrgOZOO"]').forEach(function(rb) {
+rb.addEventListener("change", function() {
+    var correct = rb.value == 3;
+    var msgBox = document.getElementById('sJrgOZOO_message');
+    
+  if(correct) {
+    msgBox.innerHTML = "<div class='pluto-output admonition note alert alert-success'> <span>✔&nbsp; Correct </span> </div>";
+    var explanation = document.getElementById("explanation_sJrgOZOO")
+    if (explanation != null) {
+       explanation.style.display = "none";
+    }
+      const correct_answer   = new CustomEvent("quizquestion_answer",
+          {bubbles:true, detail:{correct: 1}}
+  );
+  this.dispatchEvent(correct_answer);
+
+  } else {
+    msgBox.innerHTML = "<div class='pluto-output admonition alert alert-danger'> <span>Χ&nbsp; Incorrect </span> </div>";
+    var explanation = document.getElementById("explanation_sJrgOZOO")
+    if (explanation != null) {
+       explanation.style.display = "block";
+    }
+      const incorrect_answer = new CustomEvent("quizquestion_answer",
+           {bubbles:true, detail:{correct: 0}}
+  );
+  this.dispatchEvent(incorrect_answer);
+
+  }
+
+})});
+
+</script>
+</div>
+</div></form>
+</div>
+</div></div></div></div></section>
 <section id="ocf-representation-1" class="level3" data-number="3.3.2">
 <h3 data-number="3.3.2" class="anchored" data-anchor-id="ocf-representation-1"><span class="header-section-number">3.3.2</span> OCF representation</h3>
 <p>For the generic second order system, the OCF form is <span class="math display">\[
@@ -705,7 +924,219 @@ Figure&nbsp;3.2: Structure of OCF representation
 </figcaption>
 </figure>
 </div>
-</section>
+<div id="exm-OCF-1" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.4</strong></span> Consider a system with the transfer function <span class="math display">\[G(s) = \dfrac{s+5}{s^2 + 3s + 2}.\]</span></p>
+<div id="8" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<script>
+var ID = "zKeIVcgo"
+</script>
+<form class="mx-2 my-3 mw-100 qqquestion" name="WeaveQuestion" data-id="zKeIVcgo" data-controltype="" onsubmit="return false;">
+  <div class="form-group ">
+    <div class="controls">
+      <div class="form" id="controls_zKeIVcgo" correct="-1" attempts="0">
+     Find the OCF representation of the system: 
+
+    
+
+    <div style="padding-top: 5px">
+    <fieldset style="border:0px">
+<legend style="display: none" aria-label="Select an item">Select an item</legend>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_zKeIVcgo_1">
+    <input class="form-check-input" type="radio" name="radio_zKeIVcgo" id="radio_zKeIVcgo_1" value="1">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} 0 &amp; 1 \\ -2 &amp; -3 \end{bmatrix},\ B = \begin{bmatrix} 5 \\ 1 \end{bmatrix},\ C = \begin{bmatrix} 0 &amp; 1 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_zKeIVcgo_2">
+    <input class="form-check-input" type="radio" name="radio_zKeIVcgo" id="radio_zKeIVcgo_2" value="2">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} 0 &amp; -2 \\ 1 &amp; -3 \end{bmatrix},\ B = \begin{bmatrix} 5 \\ 1 \end{bmatrix},\ C = \begin{bmatrix} 0 &amp; 1 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_zKeIVcgo_3">
+    <input class="form-check-input" type="radio" name="radio_zKeIVcgo" id="radio_zKeIVcgo_3" value="3">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} 0 &amp; 1 \\ -2 &amp; -3 \end{bmatrix},\ B = \begin{bmatrix} 1 \\ 5 \end{bmatrix},\ C = \begin{bmatrix} 1 &amp; 0 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_zKeIVcgo_4">
+    <input class="form-check-input" type="radio" name="radio_zKeIVcgo" id="radio_zKeIVcgo_4" value="4">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} 0 &amp; -2 \\ 1 &amp; -3 \end{bmatrix},\ B = \begin{bmatrix} 1 \\ 5 \end{bmatrix},\ C = \begin{bmatrix} 1 &amp; 0 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+</fieldset>
+
+     </div>
+    </div>
+    <div id="zKeIVcgo_message" class="qqmessage" style="padding-bottom: 15px">
+    </div>
+
+<script>
+document.getElementById('controls_zKeIVcgo').addEventListener("quizquestion_answer", (e) => {
+          var o = document.getElementById('controls_zKeIVcgo')
+          var atts = Number(o.getAttribute("attempts"))
+          o.setAttribute("correct",  e.detail.correct);
+          o.setAttribute("attempts", atts + 1)
+      }, true)
+</script>
+
+<script text="text/javascript">
+document.querySelectorAll('input[name="radio_zKeIVcgo"]').forEach(function(rb) {
+rb.addEventListener("change", function() {
+    var correct = rb.value == 2;
+    var msgBox = document.getElementById('zKeIVcgo_message');
+    
+  if(correct) {
+    msgBox.innerHTML = "<div class='pluto-output admonition note alert alert-success'> <span>✔&nbsp; Correct </span> </div>";
+    var explanation = document.getElementById("explanation_zKeIVcgo")
+    if (explanation != null) {
+       explanation.style.display = "none";
+    }
+      const correct_answer   = new CustomEvent("quizquestion_answer",
+          {bubbles:true, detail:{correct: 1}}
+  );
+  this.dispatchEvent(correct_answer);
+
+  } else {
+    msgBox.innerHTML = "<div class='pluto-output admonition alert alert-danger'> <span>Χ&nbsp; Incorrect </span> </div>";
+    var explanation = document.getElementById("explanation_zKeIVcgo")
+    if (explanation != null) {
+       explanation.style.display = "block";
+    }
+      const incorrect_answer = new CustomEvent("quizquestion_answer",
+           {bubbles:true, detail:{correct: 0}}
+  );
+  this.dispatchEvent(incorrect_answer);
+
+  }
+
+})});
+
+</script>
+</div>
+</div></form>
+</div>
+<div id="exm-OCF-2" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.5</strong></span> Consider a system with the transfer function <span class="math display">\[G(s) = \dfrac{5}{s^3 - s^2 - 4s + 4}.\]</span></p>
+<div id="10" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<script>
+var ID = "kqI2lhhn"
+</script>
+<form class="mx-2 my-3 mw-100 qqquestion" name="WeaveQuestion" data-id="kqI2lhhn" data-controltype="" onsubmit="return false;">
+  <div class="form-group ">
+    <div class="controls">
+      <div class="form" id="controls_kqI2lhhn" correct="-1" attempts="0">
+     Find the OCF representation of the system: 
+
+    
+
+    <div style="padding-top: 5px">
+    <fieldset style="border:0px">
+<legend style="display: none" aria-label="Select an item">Select an item</legend>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_kqI2lhhn_1">
+    <input class="form-check-input" type="radio" name="radio_kqI2lhhn" id="radio_kqI2lhhn_1" value="1">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \\ -4 &amp; 4 &amp; 1 \end{bmatrix},\ B = \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix},\ C = \begin{bmatrix} 0 &amp; 0 &amp; 5 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_kqI2lhhn_2">
+    <input class="form-check-input" type="radio" name="radio_kqI2lhhn" id="radio_kqI2lhhn_2" value="2">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \\ -4 &amp; 4 &amp; 1 \end{bmatrix},\ B = \begin{bmatrix} 5 \\ 0 \\ 0 \end{bmatrix},\ C = \begin{bmatrix} 0 &amp; 0 &amp; 1 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_kqI2lhhn_3">
+    <input class="form-check-input" type="radio" name="radio_kqI2lhhn" id="radio_kqI2lhhn_3" value="3">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} 0 &amp; 0 &amp; -4 \\ 1 &amp; 0 &amp; 4 \\ 0 &amp; 1 &amp; 1 \end{bmatrix},\ B = \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix},\ C = \begin{bmatrix} 5 &amp; 0 &amp; 0 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_kqI2lhhn_4">
+    <input class="form-check-input" type="radio" name="radio_kqI2lhhn" id="radio_kqI2lhhn_4" value="4">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} 0 &amp; 0 &amp; -4 \\ 1 &amp; 0 &amp; 4 \\ 0 &amp; 1 &amp; 1 \end{bmatrix},\ B = \begin{bmatrix} 5 \\ 0 \\ 0 \end{bmatrix},\ C = \begin{bmatrix} 0 &amp; 0 &amp; 1 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+</fieldset>
+
+     </div>
+    </div>
+    <div id="kqI2lhhn_message" class="qqmessage" style="padding-bottom: 15px">
+    </div>
+
+<script>
+document.getElementById('controls_kqI2lhhn').addEventListener("quizquestion_answer", (e) => {
+          var o = document.getElementById('controls_kqI2lhhn')
+          var atts = Number(o.getAttribute("attempts"))
+          o.setAttribute("correct",  e.detail.correct);
+          o.setAttribute("attempts", atts + 1)
+      }, true)
+</script>
+
+<script text="text/javascript">
+document.querySelectorAll('input[name="radio_kqI2lhhn"]').forEach(function(rb) {
+rb.addEventListener("change", function() {
+    var correct = rb.value == 4;
+    var msgBox = document.getElementById('kqI2lhhn_message');
+    
+  if(correct) {
+    msgBox.innerHTML = "<div class='pluto-output admonition note alert alert-success'> <span>✔&nbsp; Correct </span> </div>";
+    var explanation = document.getElementById("explanation_kqI2lhhn")
+    if (explanation != null) {
+       explanation.style.display = "none";
+    }
+      const correct_answer   = new CustomEvent("quizquestion_answer",
+          {bubbles:true, detail:{correct: 1}}
+  );
+  this.dispatchEvent(correct_answer);
+
+  } else {
+    msgBox.innerHTML = "<div class='pluto-output admonition alert alert-danger'> <span>Χ&nbsp; Incorrect </span> </div>";
+    var explanation = document.getElementById("explanation_kqI2lhhn")
+    if (explanation != null) {
+       explanation.style.display = "block";
+    }
+      const incorrect_answer = new CustomEvent("quizquestion_answer",
+           {bubbles:true, detail:{correct: 0}}
+  );
+  this.dispatchEvent(incorrect_answer);
+
+  }
+
+})});
+
+</script>
+</div>
+</div></form>
+</div>
+</div></div></div></div></section>
 <section id="dcf-representation" class="level3" data-number="3.3.3">
 <h3 data-number="3.3.3" class="anchored" data-anchor-id="dcf-representation"><span class="header-section-number">3.3.3</span> DCF representation</h3>
 <p>This representation is special and only applicable when the system has distinct real roots. Then, using the partial fraction expansion, the TF may be written as <span class="math display">\[
@@ -730,8 +1161,218 @@ B = \MATRIX{ 1 \\ 1 },
 \quad
 C = \MATRIX{4 &amp; -3}.
 \]</span></p>
-<p>In general, the poles will be complex and have multiplicity. In this setting, a generalization of DCF known as Jordan canonical form (JCF) is used. We will not consider JCF in this course.</p>
-</section>
+<p>In general, the poles will be complex and have multiplicity. In this setting, a generalization of DCF known as Jordan canonical form (JCF) is used. We will not consider JCF in this course. :::{#exm-DCF-1} Consider a system with the transfer function <span class="math display">\[G(s) = \dfrac{s+5}{s^2 + 3s + 2}.\]</span></p>
+<div id="12" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<script>
+var ID = "x9HuYeGj"
+</script>
+<form class="mx-2 my-3 mw-100 qqquestion" name="WeaveQuestion" data-id="x9HuYeGj" data-controltype="" onsubmit="return false;">
+  <div class="form-group ">
+    <div class="controls">
+      <div class="form" id="controls_x9HuYeGj" correct="-1" attempts="0">
+     Find the DCF representation of the system: 
+
+    
+
+    <div style="padding-top: 5px">
+    <fieldset style="border:0px">
+<legend style="display: none" aria-label="Select an item">Select an item</legend>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_x9HuYeGj_1">
+    <input class="form-check-input" type="radio" name="radio_x9HuYeGj" id="radio_x9HuYeGj_1" value="1">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} -1 &amp; 0 \\ 0 &amp; -2 \end{bmatrix},\ B = \begin{bmatrix} 1 \\ 1 \end{bmatrix},\ C = \begin{bmatrix} 4 &amp; -3 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_x9HuYeGj_2">
+    <input class="form-check-input" type="radio" name="radio_x9HuYeGj" id="radio_x9HuYeGj_2" value="2">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} -1 &amp; 0 \\ 0 &amp; -2 \end{bmatrix},\ B = \begin{bmatrix} 0 \\ 1 \end{bmatrix},\ C = \begin{bmatrix} 5 &amp; 1 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_x9HuYeGj_3">
+    <input class="form-check-input" type="radio" name="radio_x9HuYeGj" id="radio_x9HuYeGj_3" value="3">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} 0 &amp; 1 \\ -2 &amp; -3 \end{bmatrix},\ B = \begin{bmatrix} 1 \\ 1 \end{bmatrix},\ C = \begin{bmatrix} 4 &amp; -3 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_x9HuYeGj_4">
+    <input class="form-check-input" type="radio" name="radio_x9HuYeGj" id="radio_x9HuYeGj_4" value="4">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} 0 &amp; 1 \\ -2 &amp; -3 \end{bmatrix},\ B = \begin{bmatrix} 0 \\ 1 \end{bmatrix},\ C = \begin{bmatrix} 5 &amp; 1 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+</fieldset>
+
+     </div>
+    </div>
+    <div id="x9HuYeGj_message" class="qqmessage" style="padding-bottom: 15px">
+    </div>
+
+<script>
+document.getElementById('controls_x9HuYeGj').addEventListener("quizquestion_answer", (e) => {
+          var o = document.getElementById('controls_x9HuYeGj')
+          var atts = Number(o.getAttribute("attempts"))
+          o.setAttribute("correct",  e.detail.correct);
+          o.setAttribute("attempts", atts + 1)
+      }, true)
+</script>
+
+<script text="text/javascript">
+document.querySelectorAll('input[name="radio_x9HuYeGj"]').forEach(function(rb) {
+rb.addEventListener("change", function() {
+    var correct = rb.value == 1;
+    var msgBox = document.getElementById('x9HuYeGj_message');
+    
+  if(correct) {
+    msgBox.innerHTML = "<div class='pluto-output admonition note alert alert-success'> <span>✔&nbsp; Correct </span> </div>";
+    var explanation = document.getElementById("explanation_x9HuYeGj")
+    if (explanation != null) {
+       explanation.style.display = "none";
+    }
+      const correct_answer   = new CustomEvent("quizquestion_answer",
+          {bubbles:true, detail:{correct: 1}}
+  );
+  this.dispatchEvent(correct_answer);
+
+  } else {
+    msgBox.innerHTML = "<div class='pluto-output admonition alert alert-danger'> <span>Χ&nbsp; Incorrect </span> </div>";
+    var explanation = document.getElementById("explanation_x9HuYeGj")
+    if (explanation != null) {
+       explanation.style.display = "block";
+    }
+      const incorrect_answer = new CustomEvent("quizquestion_answer",
+           {bubbles:true, detail:{correct: 0}}
+  );
+  this.dispatchEvent(incorrect_answer);
+
+  }
+
+})});
+
+</script>
+</div>
+</div></form>
+<p>:::</p>
+<div id="exm-DCF-2" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.6</strong></span> Consider a system with the transfer function <span class="math display">\[G(s) = \dfrac{5}{s^3 - s^2 - 4s + 4}.\]</span></p>
+<div id="14" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<script>
+var ID = "4mUy75Sj"
+</script>
+<form class="mx-2 my-3 mw-100 qqquestion" name="WeaveQuestion" data-id="4mUy75Sj" data-controltype="" onsubmit="return false;">
+  <div class="form-group ">
+    <div class="controls">
+      <div class="form" id="controls_4mUy75Sj" correct="-1" attempts="0">
+     Find the DCF representation of the system: 
+
+    
+
+    <div style="padding-top: 5px">
+    <fieldset style="border:0px">
+<legend style="display: none" aria-label="Select an item">Select an item</legend>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_4mUy75Sj_1">
+    <input class="form-check-input" type="radio" name="radio_4mUy75Sj" id="radio_4mUy75Sj_1" value="1">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} 2 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; -2 \end{bmatrix},\ B = \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix},\ C = \begin{bmatrix} 5 &amp; 0 &amp; 0 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_4mUy75Sj_2">
+    <input class="form-check-input" type="radio" name="radio_4mUy75Sj" id="radio_4mUy75Sj_2" value="2">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \\ -4 &amp; 4 &amp; 1 \end{bmatrix},\ B = \begin{bmatrix} 1 \\ 1 \\ 1 \end{bmatrix},\ C = \begin{bmatrix} \tfrac{5}{4} &amp; -\tfrac{5}{3} &amp; \tfrac{5}{12} \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_4mUy75Sj_3">
+    <input class="form-check-input" type="radio" name="radio_4mUy75Sj" id="radio_4mUy75Sj_3" value="3">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \\ -4 &amp; 4 &amp; 1 \end{bmatrix},\ B = \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix},\ C = \begin{bmatrix} 5 &amp; 0 &amp; 0 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_4mUy75Sj_4">
+    <input class="form-check-input" type="radio" name="radio_4mUy75Sj" id="radio_4mUy75Sj_4" value="4">
+    
+    <span class="label-body px-1">
+        \(A = \begin{bmatrix} 2 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; -2 \end{bmatrix},\ B = \begin{bmatrix} 1 \\ 1 \\ 1 \end{bmatrix},\ C = \begin{bmatrix} \tfrac{5}{4} &amp; -\tfrac{5}{3} &amp; \tfrac{5}{12} \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+</fieldset>
+
+     </div>
+    </div>
+    <div id="4mUy75Sj_message" class="qqmessage" style="padding-bottom: 15px">
+    </div>
+
+<script>
+document.getElementById('controls_4mUy75Sj').addEventListener("quizquestion_answer", (e) => {
+          var o = document.getElementById('controls_4mUy75Sj')
+          var atts = Number(o.getAttribute("attempts"))
+          o.setAttribute("correct",  e.detail.correct);
+          o.setAttribute("attempts", atts + 1)
+      }, true)
+</script>
+
+<script text="text/javascript">
+document.querySelectorAll('input[name="radio_4mUy75Sj"]').forEach(function(rb) {
+rb.addEventListener("change", function() {
+    var correct = rb.value == 4;
+    var msgBox = document.getElementById('4mUy75Sj_message');
+    
+  if(correct) {
+    msgBox.innerHTML = "<div class='pluto-output admonition note alert alert-success'> <span>✔&nbsp; Correct </span> </div>";
+    var explanation = document.getElementById("explanation_4mUy75Sj")
+    if (explanation != null) {
+       explanation.style.display = "none";
+    }
+      const correct_answer   = new CustomEvent("quizquestion_answer",
+          {bubbles:true, detail:{correct: 1}}
+  );
+  this.dispatchEvent(correct_answer);
+
+  } else {
+    msgBox.innerHTML = "<div class='pluto-output admonition alert alert-danger'> <span>Χ&nbsp; Incorrect </span> </div>";
+    var explanation = document.getElementById("explanation_4mUy75Sj")
+    if (explanation != null) {
+       explanation.style.display = "block";
+    }
+      const incorrect_answer = new CustomEvent("quizquestion_answer",
+           {bubbles:true, detail:{correct: 0}}
+  );
+  this.dispatchEvent(incorrect_answer);
+
+  }
+
+})});
+
+</script>
+</div>
+</div></form>
+</div>
+</div></div></div></div></section>
 </section>
 <section id="ssm-for-circuits" class="level2" data-number="3.4">
 <h2 data-number="3.4" class="anchored" data-anchor-id="ssm-for-circuits"><span class="header-section-number">3.4</span> SSMs for circuits</h2>
@@ -910,7 +1551,7 @@ B =
 C = \MATRIX{1 &amp; 0 }
 \]</span></p>
 <div id="exm-circuit" class="theorem example">
-<p><span class="theorem-title"><strong>Example 3.2</strong></span> Find the state space model of the circuit shown in <a href="#fig-circuit-exm" class="quarto-xref">Figure&nbsp;<span>3.6</span></a></p>
+<p><span class="theorem-title"><strong>Example 3.7</strong></span> Find the state space model of the circuit shown in <a href="#fig-circuit-exm" class="quarto-xref">Figure&nbsp;<span>3.6</span></a></p>
 <div id="fig-circuit-exm" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-circuit-exm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -923,7 +1564,7 @@ Figure&nbsp;3.6: A complicated circuit
 </div>
 </div>
 <div id="exm-circuit-fall2025" class="theorem example">
-<p><span class="theorem-title"><strong>Example 3.3</strong></span> Find the state space model of the circuit shown in <a href="#fig-circuit-fall2025" class="quarto-xref">Figure&nbsp;<span>3.7</span></a></p>
+<p><span class="theorem-title"><strong>Example 3.8</strong></span> Find the state space model of the circuit shown in <a href="#fig-circuit-fall2025" class="quarto-xref">Figure&nbsp;<span>3.7</span></a></p>
 <div id="fig-circuit-fall2025" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-circuit-fall2025-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -985,7 +1626,110 @@ Figure&nbsp;3.8: Block diagram of SSM. In this diagram, the single lines denote 
 </div>
 <p>The TF can be “read backwards” from the block diagram.</p>
 <div id="exm-SS-to-TF-1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 3.4</strong></span> Let <span class="math inline">\(A = \MATRIX{-1 &amp; 2 \\ 3 &amp; -1}\)</span>, <span class="math inline">\(B = \MATRIX{1 \\ 0}\)</span>, and <span class="math inline">\(C = \MATRIX{2 &amp; 1}\)</span>. Find the TF?</p>
+<p><span class="theorem-title"><strong>Example 3.9</strong></span> Consider an LTI system with the following state space model: <span class="math display">\[A = \MATRIX{-1 &amp; 2 \\ 3 &amp; -1}, \quad B = \MATRIX{1 \\ 0}, \quad C = \MATRIX{2 &amp; 1}.\]</span></p>
+<div id="16" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<script>
+var ID = "8pJ5wNx8"
+</script>
+<form class="mx-2 my-3 mw-100 qqquestion" name="WeaveQuestion" data-id="8pJ5wNx8" data-controltype="" onsubmit="return false;">
+  <div class="form-group ">
+    <div class="controls">
+      <div class="form" id="controls_8pJ5wNx8" correct="-1" attempts="0">
+     Find the transfer function of the system: 
+
+    
+
+    <div style="padding-top: 5px">
+    <fieldset style="border:0px">
+<legend style="display: none" aria-label="Select an item">Select an item</legend>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_8pJ5wNx8_1">
+    <input class="form-check-input" type="radio" name="radio_8pJ5wNx8" id="radio_8pJ5wNx8_1" value="1">
+    
+    <span class="label-body px-1">
+        \(\dfrac{2s + 1}{s^2 + 2s - 5}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_8pJ5wNx8_2">
+    <input class="form-check-input" type="radio" name="radio_8pJ5wNx8" id="radio_8pJ5wNx8_2" value="2">
+    
+    <span class="label-body px-1">
+        \(\dfrac{s + 5}{s^2 + 2s + 5}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_8pJ5wNx8_3">
+    <input class="form-check-input" type="radio" name="radio_8pJ5wNx8" id="radio_8pJ5wNx8_3" value="3">
+    
+    <span class="label-body px-1">
+        \(\dfrac{2s + 5}{s^2 + 2s - 5}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_8pJ5wNx8_4">
+    <input class="form-check-input" type="radio" name="radio_8pJ5wNx8" id="radio_8pJ5wNx8_4" value="4">
+    
+    <span class="label-body px-1">
+        \(\dfrac{2s + 5}{s^2 - 2s - 5}\)
+    </span>
+    </label>
+</div>
+</fieldset>
+
+     </div>
+    </div>
+    <div id="8pJ5wNx8_message" class="qqmessage" style="padding-bottom: 15px">
+    </div>
+
+<script>
+document.getElementById('controls_8pJ5wNx8').addEventListener("quizquestion_answer", (e) => {
+          var o = document.getElementById('controls_8pJ5wNx8')
+          var atts = Number(o.getAttribute("attempts"))
+          o.setAttribute("correct",  e.detail.correct);
+          o.setAttribute("attempts", atts + 1)
+      }, true)
+</script>
+
+<script text="text/javascript">
+document.querySelectorAll('input[name="radio_8pJ5wNx8"]').forEach(function(rb) {
+rb.addEventListener("change", function() {
+    var correct = rb.value == 3;
+    var msgBox = document.getElementById('8pJ5wNx8_message');
+    
+  if(correct) {
+    msgBox.innerHTML = "<div class='pluto-output admonition note alert alert-success'> <span>✔&nbsp; Correct </span> </div>";
+    var explanation = document.getElementById("explanation_8pJ5wNx8")
+    if (explanation != null) {
+       explanation.style.display = "none";
+    }
+      const correct_answer   = new CustomEvent("quizquestion_answer",
+          {bubbles:true, detail:{correct: 1}}
+  );
+  this.dispatchEvent(correct_answer);
+
+  } else {
+    msgBox.innerHTML = "<div class='pluto-output admonition alert alert-danger'> <span>Χ&nbsp; Incorrect </span> </div>";
+    var explanation = document.getElementById("explanation_8pJ5wNx8")
+    if (explanation != null) {
+       explanation.style.display = "block";
+    }
+      const incorrect_answer = new CustomEvent("quizquestion_answer",
+           {bubbles:true, detail:{correct: 0}}
+  );
+  this.dispatchEvent(incorrect_answer);
+
+  }
+
+})});
+
+</script>
+</div>
+</div></form>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
@@ -1012,7 +1756,7 @@ Figure&nbsp;3.8: Block diagram of SSM. In this diagram, the single lines denote 
 <p>Recall that <span class="math inline">\(\det(sI-A)\)</span> is the characteristic equation of <span class="math inline">\(A\)</span> and the roots of the characteristic equation are the eigenvalues of <span class="math inline">\(A\)</span>. Therefore, an important implication of the above formula is <span class="math display">\[\bbox[5pt,border: 1px solid]
 {\text{Poles of $G(s)$} = \text{evals of $A$}}\]</span> This means that we can control the poles of the TF by controlling the eigenvalues of <span class="math inline">\(A\)</span>.</p>
 <p><strong>Changing the eigenvalues of the <span class="math inline">\(A\)</span> matrix will be one of the most simple and the most important design methods that we will learn in this course.</strong></p>
-</section>
+</div></div></section>
 <section id="change-of-coordinates" class="level2" data-number="3.6">
 <h2 data-number="3.6" class="anchored" data-anchor-id="change-of-coordinates"><span class="header-section-number">3.6</span> Change of coordinates</h2>
 <p>A key idea for controller design using state space methods is change of coordinates. To fix ideas, we first review the change of coordinates for vectors and then we will come back to SSMs.</p>
@@ -1026,13 +1770,116 @@ e_2 = \MATRIX{0 \\ 1}.
 \]</span> then we can say that the vector is equal to <span class="math inline">\(\MATRIX{\tilde x_1 \\ \tilde x_2}\)</span> in the coordinate system <span class="math inline">\((v_1, v_2)\)</span>. Note that the vector hasn’t changed, only the coordinate system has.</p>
 <p>We use the following example to illustrate how to move from one coordinate system to another</p>
 <div id="exm-change-of-coordinates" class="theorem example">
-<p><span class="theorem-title"><strong>Example 3.5</strong></span> Let <span class="math inline">\(x = \MATRIX{2 \\ 3}\)</span>. Find its representation in the coordinate system <span class="math display">\[v_1 = \MATRIX{1 \\ 0}
+<p><span class="theorem-title"><strong>Example 3.10</strong></span> Let <span class="math inline">\(x = \MATRIX{2 \\ 3}\)</span>. Consider a new coordinate system defined by the basis vectors <span class="math display">\[v_1 = \MATRIX{1 \\ 0}
 \quad\text{and}\quad
 v_2 = \MATRIX{1 \\ 1}.
 \]</span></p>
+<div id="18" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<script>
+var ID = "nzDi1w0p"
+</script>
+<form class="mx-2 my-3 mw-100 qqquestion" name="WeaveQuestion" data-id="nzDi1w0p" data-controltype="" onsubmit="return false;">
+  <div class="form-group ">
+    <div class="controls">
+      <div class="form" id="controls_nzDi1w0p" correct="-1" attempts="0">
+     Find the representation of \(x\) in the new coordinate system: 
+
+    
+
+    <div style="padding-top: 5px">
+    <fieldset style="border:0px">
+<legend style="display: none" aria-label="Select an item">Select an item</legend>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_nzDi1w0p_1">
+    <input class="form-check-input" type="radio" name="radio_nzDi1w0p" id="radio_nzDi1w0p_1" value="1">
+    
+    <span class="label-body px-1">
+        \(\tilde x = \begin{bmatrix} 1 \\ 3 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_nzDi1w0p_2">
+    <input class="form-check-input" type="radio" name="radio_nzDi1w0p" id="radio_nzDi1w0p_2" value="2">
+    
+    <span class="label-body px-1">
+        \(\tilde x = \begin{bmatrix} -1 \\ -3 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_nzDi1w0p_3">
+    <input class="form-check-input" type="radio" name="radio_nzDi1w0p" id="radio_nzDi1w0p_3" value="3">
+    
+    <span class="label-body px-1">
+        \(\tilde x = \begin{bmatrix} 3 \\ -1 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+<div class="form-check">
+    <label class="form-check-label qqradio" for="radio_nzDi1w0p_4">
+    <input class="form-check-input" type="radio" name="radio_nzDi1w0p" id="radio_nzDi1w0p_4" value="4">
+    
+    <span class="label-body px-1">
+        \(\tilde x = \begin{bmatrix} -1 \\ 3 \end{bmatrix}\)
+    </span>
+    </label>
+</div>
+</fieldset>
+
+     </div>
+    </div>
+    <div id="nzDi1w0p_message" class="qqmessage" style="padding-bottom: 15px">
+    </div>
+
+<script>
+document.getElementById('controls_nzDi1w0p').addEventListener("quizquestion_answer", (e) => {
+          var o = document.getElementById('controls_nzDi1w0p')
+          var atts = Number(o.getAttribute("attempts"))
+          o.setAttribute("correct",  e.detail.correct);
+          o.setAttribute("attempts", atts + 1)
+      }, true)
+</script>
+
+<script text="text/javascript">
+document.querySelectorAll('input[name="radio_nzDi1w0p"]').forEach(function(rb) {
+rb.addEventListener("change", function() {
+    var correct = rb.value == 4;
+    var msgBox = document.getElementById('nzDi1w0p_message');
+    
+  if(correct) {
+    msgBox.innerHTML = "<div class='pluto-output admonition note alert alert-success'> <span>✔&nbsp; Correct </span> </div>";
+    var explanation = document.getElementById("explanation_nzDi1w0p")
+    if (explanation != null) {
+       explanation.style.display = "none";
+    }
+      const correct_answer   = new CustomEvent("quizquestion_answer",
+          {bubbles:true, detail:{correct: 1}}
+  );
+  this.dispatchEvent(correct_answer);
+
+  } else {
+    msgBox.innerHTML = "<div class='pluto-output admonition alert alert-danger'> <span>Χ&nbsp; Incorrect </span> </div>";
+    var explanation = document.getElementById("explanation_nzDi1w0p")
+    if (explanation != null) {
+       explanation.style.display = "block";
+    }
+      const incorrect_answer = new CustomEvent("quizquestion_answer",
+           {bubbles:true, detail:{correct: 0}}
+  );
+  this.dispatchEvent(incorrect_answer);
+
+  }
+
+})});
+
+</script>
+</div>
+</div></form>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1041,7 +1888,7 @@ v_2 = \MATRIX{1 \\ 1}.
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse show">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Let the representation in the new coordinate system be <span class="math inline">\(\tilde x = \MATRIX{\tilde x_1 \\ \tilde x_2}\)</span>. Thus, we must have <span class="math display">\[
 2 e_1 + 3 e_2 = \tilde x_1 v_1 + \tilde x_2 v_2.
@@ -1085,7 +1932,7 @@ Figure&nbsp;3.9: Vector <span class="math inline">\(x\)</span> in different coor
 </div>
 </div>
 </div>
-</section>
+</div></div></section>
 <section id="review-of-eigenvalues-and-eigenvectors" class="level2" data-number="3.7">
 <h2 data-number="3.7" class="anchored" data-anchor-id="review-of-eigenvalues-and-eigenvectors"><span class="header-section-number">3.7</span> Review of eigenvalues and eigenvectors</h2>
 <p>For the last several years, eigenvalues and eigenvectors are not covered in CEGEP. Therefore, students who come from CEGEP and don’t take the linear algebra course at McGill haven’t seen this material before. Eigenvalues and eigenvectors are perhaps the most fundamental idea in linear algebra. We present a quick review of this material here, but if you haven’t seen this material before, I strongly study it in detail. Some resources:</p>
@@ -1101,7 +1948,7 @@ f(α_1 x_1 + α_2 x_2) = α_1 f(x_1) + α_2 f(x_2).
 <p>Suppose we were free to choose the coordinate system in which we evaluate <span class="math inline">\(f\)</span>. Which coordinate system should we choose? This is where eigenvalues and eigenvectors come in.</p>
 <p>An <strong>eigenvector</strong> is a special vector <span class="math inline">\(x\)</span> such that <span class="math inline">\(f(x)\)</span> is a scaled (and possibly flipped) version of <span class="math inline">\(x\)</span> (i.e., <span class="math inline">\(f(x)\)</span> lies in the linear subspace spanned by <span class="math inline">\(x\)</span>). Mathematically, there exists a scalar <span class="math inline">\(λ\)</span> such that <span class="math display">\[ A x = λ x \]</span></p>
 <div id="exm-permutation" class="theorem example">
-<p><span class="theorem-title"><strong>Example 3.6</strong></span> Consider <span class="math inline">\(A = \MATRIX{0 &amp; 1 \\ 1 &amp; 0}\)</span>. This is a permultation matrix. <span class="math display">\[
+<p><span class="theorem-title"><strong>Example 3.11</strong></span> Consider <span class="math inline">\(A = \MATRIX{0 &amp; 1 \\ 1 &amp; 0}\)</span>. This is a permultation matrix. <span class="math display">\[
 A \MATRIX{x_1 \\ x_2} = \MATRIX{x_2 \\ x_1}.
 \]</span></p>
 <ul>
@@ -1144,7 +1991,7 @@ A \MATRIX{x_1 \\ x_2} = \MATRIX{x_2 \\ x_1}.
 </div>
 </div>
 <div id="exm-eigenvalues" class="theorem example">
-<p><span class="theorem-title"><strong>Example 3.7</strong></span> Find the eigenvalues and eigenvectors of <span class="math inline">\(A = \MATRIX{3 &amp; 1 \\ 1 &amp; 3 }\)</span>.</p>
+<p><span class="theorem-title"><strong>Example 3.12</strong></span> Consider the matrix <span class="math inline">\(A = \MATRIX{3 &amp; 1 \\ 1 &amp; 3 }\)</span>. Find the eigenvalues and eigenvectors of <span class="math inline">\(A\)</span>.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="true" aria-label="Toggle callout">
@@ -1194,12 +2041,12 @@ A \MATRIX{x_1 \\ x_2} = \MATRIX{x_2 \\ x_1}.
 </div>
 <div class="callout-body-container callout-body">
 <p>For any eigenvalue <span class="math inline">\(λ\)</span>, the matrix <span class="math inline">\(λ I - A\)</span> is singular. Therefore, the equation <span class="math inline">\((λI - A) x = 0\)</span> will have multiple solutions. Which solution to pick?</p>
-<p>The standard convention (especially when you are using a mathematical programming language to compute eigenvectors) is to pick the <strong>unit vector</strong>. For example, in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>3.7</span></a>, one would pick:</p>
+<p>The standard convention (especially when you are using a mathematical programming language to compute eigenvectors) is to pick the <strong>unit vector</strong>. For example, in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>3.12</span></a>, one would pick:</p>
 <ul>
 <li>For <span class="math inline">\(λ = 4\)</span>, the eigenvector is <span class="math inline">\(\MATRIX{ \frac{1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}}}\)</span>.</li>
 <li>For <span class="math inline">\(λ = 2\)</span>, the eigenvector is <span class="math inline">\(\MATRIX{ \frac{-1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}}}\)</span>.</li>
 </ul>
-<p>However, when doing analysis by hand, it is often more convenient to pick eigenvectors which are easier to represent. For example, in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>3.7</span></a>, one would pick</p>
+<p>However, when doing analysis by hand, it is often more convenient to pick eigenvectors which are easier to represent. For example, in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>3.12</span></a>, one would pick</p>
 <ul>
 <li>For <span class="math inline">\(λ = 4\)</span>, the eigenvector is <span class="math inline">\(\MATRIX{1 \\ 1}\)</span>.</li>
 <li>For <span class="math inline">\(λ = 2\)</span>, the eigenvector is <span class="math inline">\(\MATRIX{-1 \\ 1}\)</span>.</li>
@@ -1217,12 +2064,12 @@ A \MATRIX{x_1 \\ x_2} = \MATRIX{x_2 \\ x_1}.
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li><p>Note that in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>3.7</span></a>, the matrix <span class="math inline">\(A\)</span> is symmetric. Symmetric matrices have real eigenvalues.</p></li>
+<li><p>Note that in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>3.12</span></a>, the matrix <span class="math inline">\(A\)</span> is symmetric. Symmetric matrices have real eigenvalues.</p></li>
 <li><p>We can show that <span class="math display">\[
   λ_1 + λ_2 + \cdots + λ_n = \text{Trace}(A)
 \]</span> (where <span class="math inline">\(\text{Trace}(A)\)</span> means the sum of diagonal elements of <span class="math inline">\(A\)</span> and <span class="math display">\[
   λ_1 λ_2 \cdots λ_n = \det(A).
-\]</span> You can verify these properties for <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>3.7</span></a>.</p></li>
+\]</span> You can verify these properties for <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>3.12</span></a>.</p></li>
 <li><p>In general for any <span class="math inline">\(2 × 2\)</span> matrix, <span class="math display">\[
   \det(λI - A) = λ^2 - \text{Trace}(A) λ + \det(A).
 \]</span></p></li>
@@ -1231,7 +2078,7 @@ A \MATRIX{x_1 \\ x_2} = \MATRIX{x_2 \\ x_1}.
 </div>
 <p>If the matrix is not symmetric, then the eigenvalues may be complex.</p>
 <div id="exm-imaginary-eigenvalues" class="theorem example">
-<p><span class="theorem-title"><strong>Example 3.8 (Complex eigenvalues)</strong></span> Find the eigenvalues of the rotation matrix <span class="math inline">\(A = \MATRIX{0 &amp; -1 \\ 1 &amp; 0}\)</span>.</p>
+<p><span class="theorem-title"><strong>Example 3.13 (Complex eigenvalues)</strong></span> Find the eigenvalues of the rotation matrix <span class="math inline">\(A = \MATRIX{0 &amp; -1 \\ 1 &amp; 0}\)</span>.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
@@ -1245,7 +2092,7 @@ A \MATRIX{x_1 \\ x_2} = \MATRIX{x_2 \\ x_1}.
 </div>
 <div id="callout-9" class="callout-9-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
-<p>The characterisic equation is <span class="math display">\[
+<p>The characteristic equation is <span class="math display">\[
 \det(λI - A) = \DET{λ &amp; 1 \\ -1 &amp; λ} = λ^2 + 1 = 0.
 \]</span> Thus, the eigenvalues are <span class="math inline">\(\pm j\)</span>.</p>
 </div>
@@ -1254,7 +2101,7 @@ A \MATRIX{x_1 \\ x_2} = \MATRIX{x_2 \\ x_1}.
 </section>
 <section id="why-are-eigenvalues-useful" class="level3" data-number="3.7.2">
 <h3 data-number="3.7.2" class="anchored" data-anchor-id="why-are-eigenvalues-useful"><span class="header-section-number">3.7.2</span> Why are eigenvalues useful?</h3>
-<p>Let’s consider an example. Suppose <span class="math inline">\(A = \MATRIX{3 &amp; 1 \\ 1 &amp; 3}\)</span>. We have seen in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>3.7</span></a> that the eigenvalues are <span class="math inline">\(λ_1 = 4\)</span> and <span class="math inline">\(λ_2 = 2\)</span> and the corresponding eigenvectors are <span class="math display">\[
+<p>Let’s consider an example. Suppose <span class="math inline">\(A = \MATRIX{3 &amp; 1 \\ 1 &amp; 3}\)</span>. We have seen in <a href="#exm-eigenvalues" class="quarto-xref">Example&nbsp;<span>3.12</span></a> that the eigenvalues are <span class="math inline">\(λ_1 = 4\)</span> and <span class="math inline">\(λ_2 = 2\)</span> and the corresponding eigenvectors are <span class="math display">\[
 v_1 = \MATRIX{1 \\ 1}, \quad
 v_2 = \MATRIX{-1 \\ 1}.
 \]</span></p>
@@ -1389,6 +2236,24 @@ y(t) &amp;= \tilde C \tilde x(t)
 </ol>
 <p>These properties hold because the change of coordinates (or similarity transformation) does not physically change the state; it only changes the coordinate system that we are using to represent the state.</p>
 <p>Change of coordinates (or similarity transformation) is a very useful tool for control system synthesis. As we will see later, it is easy to design controllers for systems in CCF. So, when we have to design controllers for systems not in CCF, we first find a similarity transformation that converts the system to CCF; then we design a controller for the system in CCF; and finally we convert the controller back to the original coordinate system. Don’t worry if this doesn’t make sense now. We will discuss this in detail in the next few lectures.</p>
+</section>
+<section id="exercises" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="exercises">Exercises</h2>
+<div id="exr-canonical-forms" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 3.1</strong></span> Write the state-space representations of the following systems in the controllable canonical form, observable canonical form, and diagonal canonical form.</p>
+<ol type="a">
+<li><p><span class="math inline">\(G(s) = \dfrac{s+3}{(s+1)(s+2)}\)</span></p></li>
+<li><p><span class="math inline">\(G(s) = \dfrac{5}{s^3 - s^2 - 4s + 4}\)</span></p></li>
+</ol>
+</div>
+<div id="exr-canonical-forms-higher-order" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 3.2</strong></span> Write the state-space representations of the following systems in the controllable canonical form and observable canonical form.</p>
+<ol type="a">
+<li><p><span class="math inline">\(G(s) = \dfrac{0.5s^2+ 2s + 1}{s^3 - 2 s^2 + 2.5}\)</span></p></li>
+<li><p><span class="math inline">\(G(s) = \dfrac{s^2 + 3s + 3}{s^3 + 5s^2 + 32 s + 8}\)</span></p></li>
+<li><p><span class="math inline">\(G(s) = \dfrac{s^3 + 3s^2 + 9s + 10}{s^4 + 9s^3 + 5s^2 + 32 s + 8}\)</span></p></li>
+</ol>
+</div>
 
 
 </section>

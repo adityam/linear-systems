@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2026-06-24">
+<meta name="dcterms.date" content="2026-08-29">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>Linear Systems and Control</title>
@@ -15,10 +15,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -43,14 +46,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-8fb9028ffe08f1e63cc4690c3f5b5257.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-9b7bab27220103224cd8f41ad4ecce92.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-8fb9028ffe08f1e63cc4690c3f5b5257.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-b5cb491c8d4a2740a7f91f7888270df7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-0a0a8801e83d6be8782cdc57dd29ea97.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-b5cb491c8d4a2740a7f91f7888270df7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/nutshell-1.0.6/nutshell.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -445,7 +448,7 @@ window.MathJax = {
   <ul>
   <li><a href="#course-outline" id="toc-course-outline" class="nav-link active" data-scroll-target="#course-outline">Course Outline</a>
   <ul class="collapse">
-  <li><a href="#general-information-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206d65746120636f757273652e7465726d203e7d7d" id="toc-general-information-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206d65746120636f757273652e7465726d203e7d7d" class="nav-link" data-scroll-target="#general-information-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206d65746120636f757273652e7465726d203e7d7d">General Information (Fall 2025)</a></li>
+  <li><a href="#general-information-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206d65746120636f757273652e7465726d203e7d7d" id="toc-general-information-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206d65746120636f757273652e7465726d203e7d7d" class="nav-link" data-scroll-target="#general-information-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206d65746120636f757273652e7465726d203e7d7d">General Information (Fall 2026)</a></li>
   <li><a href="#graduate-attributes-and-learning-outcomes" id="toc-graduate-attributes-and-learning-outcomes" class="nav-link" data-scroll-target="#graduate-attributes-and-learning-outcomes">Graduate Attributes and Learning Outcomes</a></li>
   <li><a href="#course-content" id="toc-course-content" class="nav-link" data-scroll-target="#course-content">Course Content</a></li>
   <li><a href="#lab-schedule" id="toc-lab-schedule" class="nav-link" data-scroll-target="#lab-schedule">Lab Schedule</a></li>
@@ -495,7 +498,7 @@ window.MathJax = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 24, 2026</p>
+      <p class="date">August 29, 2026</p>
     </div>
   </div>
   
@@ -510,7 +513,7 @@ window.MathJax = {
 <section id="course-outline" class="level1 unnumbered">
 <h1 class="unnumbered">Course Outline</h1>
 <section id="general-information-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206d65746120636f757273652e7465726d203e7d7d" class="level2">
-<h2 class="anchored" data-anchor-id="general-information-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206d65746120636f757273652e7465726d203e7d7d">General Information (Fall 2025)</h2>
+<h2 class="anchored" data-anchor-id="general-information-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206d65746120636f757273652e7465726d203e7d7d">General Information (Fall 2026)</h2>
 <dl>
 <dt>Instructor</dt>
 <dd>
@@ -526,19 +529,24 @@ window.MathJax = {
 <dt>Teaching Assistants</dt>
 <dd>
 <ul>
-<li><p>Yiwen Chen and Yiping Liu</p></li>
+<li>Tutorial TA: Yiwen Chen</li>
 </ul>
 </dd>
+</dl>
+<ul>
+<li>Lab TAs: Yiping Liu and Shahin Mahdiyounrad</li>
+</ul>
+<dl>
 <dt>Lectures</dt>
 <dd>
 <ul>
-<li><p>11:35am–12:55am Tuesday, Thursday (MASS 10)</p></li>
+<li><p>10:05am–11:25am Tuesday, Thursday (SADB 2/36)</p></li>
 </ul>
 </dd>
 <dt>Tutorials</dt>
 <dd>
 <ul>
-<li><p>3:35pm–5:25pm Wednesday, (ENGMC 11)</p></li>
+<li><p>8:35am–10:25am Friday (MAASS 10)</p></li>
 </ul>
 </dd>
 </dl>
@@ -547,7 +555,7 @@ window.MathJax = {
 <dt>Labs</dt>
 <dd>
 <ul>
-<li><p>1:35pm-3:25pm Monday (TR 4090)</p></li>
+<li><p>1:35pm–3:25pm Monday (TR 4090)</p></li>
 </ul>
 </dd>
 <dd>
@@ -562,7 +570,7 @@ window.MathJax = {
 </dd>
 <dd>
 <ul>
-<li><p>1:35pm-3:25pm Wednesday (TR 4090)</p></li>
+<li><p>1:35pm–3:25pm Wednesday (TR 4090)</p></li>
 </ul>
 </dd>
 <dd>
@@ -805,7 +813,7 @@ window.MathJax = {
 <ul>
 <li><p><strong>Assignments (20%)</strong> Weekly homework assignments. Typically, each assignment will consist of four questions, out of which one or two randomly selected questions will be grader. The lowest two homework assignments will be dropped.</p></li>
 <li><p><strong>Laboratory (20%)</strong> In-person weekly labs, to be conducted in groups of two. At the end of each lab, each group has to submit a lab report by filling in a Matlab Livescript template provided as part of the lab assignment.</p></li>
-<li><p><strong>Mid Term (20%)</strong> Closed book in-class exam. <span class="text-danger"><strong>Oct 9</strong></span> (during class time)</p></li>
+<li><p><strong>Mid Term (20%)</strong> Closed book in-class exam. <span class="text-danger"><strong>Oct 15</strong></span> (during class time)</p></li>
 <li><p><strong>Final Exam (40%)</strong> Closed book, in-person exam. Will be scheduled by the exam office and the dates will be announced later.</p>
 <p>The final exam will cover <strong>all</strong> the material seen in the class during the term.</p></li>
 </ul>
