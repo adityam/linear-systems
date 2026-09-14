@@ -1,7 +1,7 @@
 ---
 course:
   term: "Fall 2026"
-  office-hours: "Tuesday 10:00am–11:00am"
+  office-hours: "Wednesday 2:00pm–3:00pm"
   tutorial-ta: "Yiwen Chen"
   lab-tas: "Yiping Liu and Shahin Mahdiyounrad"
   mid-term: "Oct 15"
