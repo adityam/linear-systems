@@ -141,7 +141,7 @@ Reference Books
 
 - **Assignments (20%)** Weekly homework assignments. Typically, each assignment will consist of four questions, out of which one or two randomly selected questions will be grader. The lowest two homework assignments will be dropped.
 
-- **Laboratory (20%)** In-person weekly labs, to be conducted in groups of two. At the end of each lab, each group has to submit a lab report by filling in a Matlab Livescript template provided as part of the lab assignment.
+- **Laboratory (20%)** In-person weekly labs, to be conducted in groups of two. At the end of each lab, each group has to submit a lab report by filling in a Matlab Livescript template provided as part of the lab assignment. The lowest two lab grades will be dropped.
 
 - **Mid Term (20%)** Closed book in-class exam.
   [**{{< meta course.mid-term >}}**]{.text-danger} (during class time)
