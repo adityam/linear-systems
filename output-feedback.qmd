@@ -315,7 +315,7 @@ We will show the solution via both method 1 and method 2. For method 1, we have 
     $$ A_o = \MATRIX{0 & -5 \\ 1 & 5}, \quad C_o = \MATRIX{0 & 1}.$$
 
 5. We have
-   $$ C_o A_o = \MATRIX{0 & 1} \MATRIX{0 & -5 \\ 1 & 5} = \MATRIX{0 & 1 // 1 & 5}. $$
+   $$ C_o A_o = \MATRIX{0 & 1} \MATRIX{0 & -5 \\ 1 & 5} = \MATRIX{0 & 1 \\ 1 & 5}. $$
    Therefore,
    $$ \mathcal O_{(A_o, C_o)} = \MATRIX{0 & 1 \\ 1 & 5}. $$
 
@@ -333,10 +333,10 @@ We will show the solution via both method 1 and method 2. For method 1, we have 
 7. The desired characteristic polynomial is
    $$ (s+10-5j)(s+10+5j) = (s+10)^2 + 5^2 = s^2 + 20s + 125. $$
    Thus,
-   $$ L_o = \MATRIX{125 - 5 \\ 20 - (-5)} = \MATRIX{120 // 25}.$$
+   $$ L_o = \MATRIX{125 - 5 \\ 20 - (-5)} = \MATRIX{120 \\ 25}.$$
 
 8. Thus, 
-   $$ L = T L_o = \MATRIX{2 & 3 \\ -3 & -4} \MATRIX{120 // 25} = \MATRIX{315 // -460}. $$
+   $$ L = T L_o = \MATRIX{2 & 3 \\ -3 & -4} \MATRIX{120 \\ 25} = \MATRIX{315 \\ -460}. $$
 
 Finally, we can redo the calculations using Method 2. In particular, instead of steps 4–6, we have
 
