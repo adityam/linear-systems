@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.18">
+<meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2026-09-18">
+<meta name="dcterms.date" content="2026-10-22">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>7&nbsp; State observers and output feedback – Linear Systems and Control</title>
@@ -82,14 +82,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-598ba1b3b5b1e6b9a0847aa592b66d16.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-6dacfc38238b1b36797dbc1260b68aa7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-598ba1b3b5b1e6b9a0847aa592b66d16.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-244df521f9e1060c766a85f6e87c4ae9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-dcae93dccd7d247611774a4b77384144.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-244df521f9e1060c766a85f6e87c4ae9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/nutshell-1.0.6/nutshell.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -525,6 +525,7 @@ window.Quarto = {
   <li><a href="#observer-design" id="toc-observer-design" class="nav-link" data-scroll-target="#observer-design"><span class="header-section-number">7.3.2</span> Observer design</a></li>
   </ul></li>
   <li><a href="#output-feedback" id="toc-output-feedback" class="nav-link" data-scroll-target="#output-feedback"><span class="header-section-number">7.4</span> Output feedback</a></li>
+  <li><a href="#uncontrollable-and-unobservable-modes" id="toc-uncontrollable-and-unobservable-modes" class="nav-link" data-scroll-target="#uncontrollable-and-unobservable-modes"><span class="header-section-number">7.5</span> Uncontrollable and unobservable modes</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/output-feedback.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -560,7 +561,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 18, 2026</p>
+      <p class="date">October 22, 2026</p>
     </div>
   </div>
   
@@ -790,7 +791,7 @@ T = \bigl[ W \mathcal O_{(A,C)} \bigr]^{-1}
 \det(sI-A) = \DET{ s-3 &amp; -1 \\ -1 &amp; s - 2} = (s-3)(s-1) - 1 = s^2 - 5s + 5.
 \]</span></p></li>
 <li><p>The SSM in OCF is <span class="math display">\[ A_o = \MATRIX{0 &amp; -5 \\ 1 &amp; 5}, \quad C_o = \MATRIX{0 &amp; 1}.\]</span></p></li>
-<li><p>We have <span class="math display">\[ C_o A_o = \MATRIX{0 &amp; 1} \MATRIX{0 &amp; -5 \\ 1 &amp; 5} = \MATRIX{0 &amp; 1 // 1 &amp; 5}. \]</span> Therefore, <span class="math display">\[ \mathcal O_{(A_o, C_o)} = \MATRIX{0 &amp; 1 \\ 1 &amp; 5}. \]</span></p></li>
+<li><p>We have <span class="math display">\[ C_o A_o = \MATRIX{0 &amp; 1} \MATRIX{0 &amp; -5 \\ 1 &amp; 5} = \MATRIX{0 &amp; 1 \\ 1 &amp; 5}. \]</span> Therefore, <span class="math display">\[ \mathcal O_{(A_o, C_o)} = \MATRIX{0 &amp; 1 \\ 1 &amp; 5}. \]</span></p></li>
 <li><p>Thus, we have <span class="math display">\[\begin{align*}
 T &amp;= \mathcal O_{(A,C)}^{-1} \mathcal O_{(A_o, C_o)}
 \\
@@ -800,8 +801,8 @@ T &amp;= \mathcal O_{(A,C)}^{-1} \mathcal O_{(A_o, C_o)}
 \\
 &amp;= \MATRIX{2 &amp; 3 \\ -3 &amp; -4}.
 \end{align*}\]</span></p></li>
-<li><p>The desired characteristic polynomial is <span class="math display">\[ (s+10-5j)(s+10+5j) = (s+10)^2 + 5^2 = s^2 + 20s + 125. \]</span> Thus, <span class="math display">\[ L_o = \MATRIX{125 - 5 \\ 20 - (-5)} = \MATRIX{120 // 25}.\]</span></p></li>
-<li><p>Thus, <span class="math display">\[ L = T L_o = \MATRIX{2 &amp; 3 \\ -3 &amp; -4} \MATRIX{120 // 25} = \MATRIX{315 // -460}. \]</span></p></li>
+<li><p>The desired characteristic polynomial is <span class="math display">\[ (s+10-5j)(s+10+5j) = (s+10)^2 + 5^2 = s^2 + 20s + 125. \]</span> Thus, <span class="math display">\[ L_o = \MATRIX{125 - 5 \\ 20 - (-5)} = \MATRIX{120 \\ 25}.\]</span></p></li>
+<li><p>Thus, <span class="math display">\[ L = T L_o = \MATRIX{2 &amp; 3 \\ -3 &amp; -4} \MATRIX{120 \\ 25} = \MATRIX{315 \\ -460}. \]</span></p></li>
 </ol>
 <p>Finally, we can redo the calculations using Method 2. In particular, instead of steps 4–6, we have</p>
 <ol start="4" type="1">
@@ -860,7 +861,7 @@ L = \MATRIX{\ell_0 \\ \vdots \\ \ell_{n-1}}
 \quad\text{where }
 K = \MATRIX{k_0 &amp; \cdots &amp; k_{n-1}}.
 \]</span></p>
-<p>As before, we will first consider the system without any reference signal, i.e., <span class="math inline">\(r(t) = 0\)</span>. In tihs case, there are <span class="math inline">\(2n\)</span> tunable gains <span class="math inline">\(k_0, \dots, k_{n-1}\)</span> and <span class="math inline">\(\ell_0, \dots, \ell_{n-1}\)</span> and the hope is that we can find these gain to arbitrarily choose the eigenvalues of the closed loop system.</p>
+<p>As before, we will first consider the system without any reference signal, i.e., <span class="math inline">\(r(t) = 0\)</span>. In this case, there are <span class="math inline">\(2n\)</span> tunable gains <span class="math inline">\(k_0, \dots, k_{n-1}\)</span> and <span class="math inline">\(\ell_0, \dots, \ell_{n-1}\)</span> and the hope is that we can find these gain to arbitrarily choose the eigenvalues of the closed loop system.</p>
 <p>Writing the above equations in state space form, we get <span class="math display">\[
 \MATRIX{ \dot x(t) \\ \dot {\hat x}(t) } =
 \MATRIX{ A &amp; -BK \\ LC &amp; A - BK - LC }
@@ -879,6 +880,120 @@ K = \MATRIX{k_0 &amp; \cdots &amp; k_{n-1}}.
   \{\text{eigenvalues of $(A - LC)$}\}.
 \]</span> Thus, we can separately design the controller gain <span class="math inline">\(K\)</span> and the observer gain <span class="math inline">\(L\)</span> by using the methods described earlier. This is called <strong>the separation principle.</strong></p>
 <p>If we choose observer poles several times faster than controller poles, the controller poles will dominate. Thus, output feedback gives essentially the same performance as (the non-implementable) state feedback.</p>
+</section>
+<section id="uncontrollable-and-unobservable-modes" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="uncontrollable-and-unobservable-modes"><span class="header-section-number">7.5</span> Uncontrollable and unobservable modes</h2>
+<p>When we <a href="./state-feedback.html#understanding-lack-of-controllability">studied lack of controllability</a>, we saw that when <span class="math inline">\(A\)</span> is diagonal, a zero entry in <span class="math inline">\(B\)</span> means that the input cannot affect the corresponding mode. Such a model is called <strong>uncontrollable</strong>. In the same way, a zero entry in <span class="math inline">\(C\)</span> means that the corresponding mode does not affect the output. Such a model is called <strong>unobservable</strong>. To see how such modes affect the TF, consider a SSM with a diagonal <span class="math inline">\(A\)</span> matrix: <span class="math display">\[
+A = \MATRIX{-p_1 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; -p_2 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; -p_3 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; -p_4},
+\quad
+B = \MATRIX{b_1 \\ b_2 \\ b_3 \\ b_4},
+\quad
+C = \MATRIX{c_1 &amp; c_2 &amp; c_3 &amp; c_4},
+\]</span> where we assume that <span class="math inline">\(p_1, \dots, p_4\)</span> are distinct. Since <span class="math inline">\(A\)</span> is diagonal, the SSM is a collection of four first-order systems which do not interact with each other: <span class="math display">\[\begin{align*}
+  \dot x_1(t) &amp;= -p_1 x_1(t) + b_1 u(t), \\
+  \dot x_2(t) &amp;= -p_2 x_2(t) + b_2 u(t), \\
+  \dot x_3(t) &amp;= -p_3 x_3(t) + b_3 u(t), \\
+  \dot x_4(t) &amp;= -p_4 x_4(t) + b_4 u(t), \\
+  y(t) &amp;= c_1 x_1(t) + c_2 x_2(t) + c_3 x_3(t) + c_4 x_4(t).
+\end{align*}\]</span> Thus, the input affects <span class="math inline">\(x_i\)</span> only if <span class="math inline">\(b_i \neq 0\)</span>, and <span class="math inline">\(x_i\)</span> affects the output only if <span class="math inline">\(c_i \neq 0\)</span>.</p>
+<p>Since <span class="math inline">\(A\)</span> is diagonal, so is <span class="math inline">\((sI - A)^{-1}\)</span>: <span class="math display">\[
+  (sI - A)^{-1} = \MATRIX{ \dfrac{1}{s+p_1} &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; \dfrac{1}{s+p_2} &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; \dfrac{1}{s+p_3} &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; \dfrac{1}{s+p_4} }.
+\]</span> Therefore, <span class="math display">\[
+  G(s) = C (sI - A)^{-1} B
+  = \frac{c_1 b_1}{s+p_1} + \frac{c_2 b_2}{s+p_2} + \frac{c_3 b_3}{s+p_3} + \frac{c_4 b_4}{s+p_4}.
+\]</span> So, the eigenvalue <span class="math inline">\(-p_i\)</span> is a pole of <span class="math inline">\(G(s)\)</span> only if both <span class="math inline">\(b_i \neq 0\)</span> and <span class="math inline">\(c_i \neq 0\)</span>, i.e., only if the mode <span class="math inline">\(x_i\)</span> is affected by the input <em>and</em> affects the output.</p>
+<p>The following example has modes of all four types.</p>
+<div id="exm-four-modes" class="theorem example">
+<p><span class="theorem-title"><strong>Example 7.3</strong></span> Consider the SSM <span class="math display">\[
+A = \MATRIX{-1 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; -2 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; -3 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; -4},
+\quad
+B = \MATRIX{1 \\ 1 \\ 0 \\ 0},
+\quad
+C = \MATRIX{1 &amp; 0 &amp; 1 &amp; 0}.
+\]</span></p>
+</div>
+<p>The differential equations are <span class="math display">\[\begin{align*}
+  \dot x_1(t) &amp;= -x_1(t) + u(t), \\
+  \dot x_2(t) &amp;= -2 x_2(t) + u(t), \\
+  \dot x_3(t) &amp;= -3 x_3(t), \\
+  \dot x_4(t) &amp;= -4 x_4(t), \\
+  y(t) &amp;= x_1(t) + x_3(t).
+\end{align*}\]</span> By inspection, we can classify the four modes as follows:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">State</th>
+<th style="text-align: center;">Affected by <span class="math inline">\(u\)</span>?</th>
+<th style="text-align: center;">Appears in <span class="math inline">\(y\)</span>?</th>
+<th style="text-align: left;">Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(x_1\)</span></td>
+<td style="text-align: center;">Yes</td>
+<td style="text-align: center;">Yes</td>
+<td style="text-align: left;">controllable and observable</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(x_2\)</span></td>
+<td style="text-align: center;">Yes</td>
+<td style="text-align: center;">No</td>
+<td style="text-align: left;">controllable but not observable</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(x_3\)</span></td>
+<td style="text-align: center;">No</td>
+<td style="text-align: center;">Yes</td>
+<td style="text-align: left;">observable but not controllable</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(x_4\)</span></td>
+<td style="text-align: center;">No</td>
+<td style="text-align: center;">No</td>
+<td style="text-align: left;">neither controllable nor observable</td>
+</tr>
+</tbody>
+</table>
+<p>Consistent with this classification, both <span class="math inline">\(\mathcal C_{(A,B)}\)</span> and <span class="math inline">\(\mathcal O_{(A,C)}\)</span> have rank <span class="math inline">\(2\)</span>, so the system is neither controllable nor observable.</p>
+<p>From the general formula, the TF is <span class="math display">\[
+  G(s) = \frac{1 \cdot 1}{s+1} + \frac{0 \cdot 1}{s+2} + \frac{1 \cdot 0}{s+3} + \frac{0 \cdot 0}{s+4}
+  = \frac{1}{s+1}.
+\]</span></p>
+<p>The characteristic polynomial of <span class="math inline">\(A\)</span> is <span class="math inline">\((s+1)(s+2)(s+3)(s+4)\)</span>, but the TF has only one pole, at <span class="math inline">\(-1\)</span>. The only mode that appears in the TF is <span class="math inline">\(x_1\)</span>, which is the only mode that is both controllable and observable. The other three modes do not appear in the TF:</p>
+<ul>
+<li><span class="math inline">\(x_2\)</span> is driven by the input, but it never reaches the output.</li>
+<li><span class="math inline">\(x_3\)</span> reaches the output, but it is never driven by the input. Since the TF is computed with zero initial conditions, <span class="math inline">\(x_3(t) = 0\)</span> for all <span class="math inline">\(t\)</span>. If <span class="math inline">\(x_3(0) \neq 0\)</span>, then the term <span class="math inline">\(e^{-3t} x_3(0)\)</span> does appear in the output, but it is not part of the TF.</li>
+<li><span class="math inline">\(x_4\)</span> is neither driven by the input nor reaches the output.</li>
+</ul>
+<p>We can also see the missing modes as pole-zero cancellations. If we write <span class="math inline">\(G(s)\)</span> with the characteristic polynomial of <span class="math inline">\(A\)</span> as the denominator, we get <span class="math display">\[
+  G(s) = \frac{(s+2)(s+3)(s+4)}{(s+1)(s+2)(s+3)(s+4)} = \frac{1}{s+1}.
+\]</span> This is what we get when we compute the TF numerically. Removing the common factors gives <span class="math inline">\(1/(s+1)\)</span>, which is the TF of the <strong>minimal realization</strong> of the system.</p>
+<div id="6" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> [<span class="op">-</span><span class="fl">1.0</span> <span class="fl">0</span> <span class="fl">0</span> <span class="fl">0</span>; <span class="fl">0</span> <span class="op">-</span><span class="fl">2</span> <span class="fl">0</span> <span class="fl">0</span>; <span class="fl">0</span> <span class="fl">0</span> <span class="op">-</span><span class="fl">3</span> <span class="fl">0</span>; <span class="fl">0</span> <span class="fl">0</span> <span class="fl">0</span> <span class="op">-</span><span class="fl">4</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> [<span class="fl">1.0</span>; <span class="fl">1</span>; <span class="fl">0</span>; <span class="fl">0</span>]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> [<span class="fl">1.0</span> <span class="fl">0</span> <span class="fl">1</span> <span class="fl">0</span>]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> <span class="fu">tf</span>(<span class="fu">ss</span>(A, B, C, <span class="fl">0</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>TransferFunction{Continuous, ControlSystemsBase.SisoRational{Float64}}
+     1.0s^3 + 9.0s^2 + 26.0s + 24.0
+-----------------------------------------
+1.0s^4 + 10.0s^3 + 35.0s^2 + 50.0s + 24.0
+
+Continuous-time transfer function model</code></pre>
+</div>
+</div>
+<div id="8" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">minreal</span>(G)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>TransferFunction{Continuous, ControlSystemsBase.SisoRational{Float64}}
+          1.0
+------------------------
+1.0s + 1.000000000000002
+
+Continuous-time transfer function model</code></pre>
+</div>
+</div>
 
 
 </section>
