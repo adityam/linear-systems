@@ -419,3 +419,97 @@ $$
 Thus, we can separately design the controller gain $K$ and the observer gain $L$ by using the methods described earlier. This is called **the separation principle.**
 
 If we choose observer poles several times faster than controller poles, the controller poles will dominate. Thus, output feedback gives essentially the same performance as (the non-implementable) state feedback. 
+
+## Uncontrollable and unobservable modes
+
+When we [studied lack of controllability](state-feedback.qmd#understanding-lack-of-controllability), we saw that when $A$ is diagonal, a zero entry in $B$ means that the input cannot affect the corresponding mode. Such a model is called **uncontrollable**. In the same way, a zero entry in $C$ means that the corresponding mode does not affect the output. Such a model is called **unobservable**. To see how such modes affect the TF, consider a SSM with a diagonal $A$ matrix:
+$$
+A = \MATRIX{-p_1 & 0 & 0 & 0 \\ 0 & -p_2 & 0 & 0 \\ 0 & 0 & -p_3 & 0 \\ 0 & 0 & 0 & -p_4},
+\quad
+B = \MATRIX{b_1 \\ b_2 \\ b_3 \\ b_4},
+\quad
+C = \MATRIX{c_1 & c_2 & c_3 & c_4},
+$$
+where we assume that $p_1, \dots, p_4$ are distinct. Since $A$ is diagonal, the SSM is a collection of four first-order systems which do not interact with each other:
+\begin{align*}
+  \dot x_1(t) &= -p_1 x_1(t) + b_1 u(t), \\
+  \dot x_2(t) &= -p_2 x_2(t) + b_2 u(t), \\
+  \dot x_3(t) &= -p_3 x_3(t) + b_3 u(t), \\
+  \dot x_4(t) &= -p_4 x_4(t) + b_4 u(t), \\
+  y(t) &= c_1 x_1(t) + c_2 x_2(t) + c_3 x_3(t) + c_4 x_4(t).
+\end{align*}
+Thus, the input affects $x_i$ only if $b_i \neq 0$, and $x_i$ affects the output only if $c_i \neq 0$.
+
+Since $A$ is diagonal, so is $(sI - A)^{-1}$:
+$$
+  (sI - A)^{-1} = \MATRIX{ \dfrac{1}{s+p_1} & 0 & 0 & 0 \\ 0 & \dfrac{1}{s+p_2} & 0 & 0 \\ 0 & 0 & \dfrac{1}{s+p_3} & 0 \\ 0 & 0 & 0 & \dfrac{1}{s+p_4} }.
+$$
+Therefore,
+$$
+  G(s) = C (sI - A)^{-1} B
+  = \frac{c_1 b_1}{s+p_1} + \frac{c_2 b_2}{s+p_2} + \frac{c_3 b_3}{s+p_3} + \frac{c_4 b_4}{s+p_4}.
+$$
+So, the eigenvalue $-p_i$ is a pole of $G(s)$ only if both $b_i \neq 0$ and $c_i \neq 0$, i.e., only if the mode $x_i$ is affected by the input _and_ affects the output.
+
+The following example has modes of all four types.
+
+:::{#exm-four-modes}
+Consider the SSM
+$$
+A = \MATRIX{-1 & 0 & 0 & 0 \\ 0 & -2 & 0 & 0 \\ 0 & 0 & -3 & 0 \\ 0 & 0 & 0 & -4},
+\quad
+B = \MATRIX{1 \\ 1 \\ 0 \\ 0},
+\quad
+C = \MATRIX{1 & 0 & 1 & 0}.
+$$
+:::
+
+The differential equations are
+\begin{align*}
+  \dot x_1(t) &= -x_1(t) + u(t), \\
+  \dot x_2(t) &= -2 x_2(t) + u(t), \\
+  \dot x_3(t) &= -3 x_3(t), \\
+  \dot x_4(t) &= -4 x_4(t), \\
+  y(t) &= x_1(t) + x_3(t).
+\end{align*}
+By inspection, we can classify the four modes as follows:
+
+| State | Affected by $u$? | Appears in $y$? | Type |
+|:-----:|:----------------:|:---------------:|:-----|
+| $x_1$ | Yes | Yes | controllable and observable |
+| $x_2$ | Yes | No  | controllable but not observable |
+| $x_3$ | No  | Yes | observable but not controllable |
+| $x_4$ | No  | No  | neither controllable nor observable |
+
+Consistent with this classification, both $\mathcal C_{(A,B)}$ and $\mathcal O_{(A,C)}$ have rank $2$, so the system is neither controllable nor observable.
+
+From the general formula, the TF is
+$$
+  G(s) = \frac{1 \cdot 1}{s+1} + \frac{0 \cdot 1}{s+2} + \frac{1 \cdot 0}{s+3} + \frac{0 \cdot 0}{s+4}
+  = \frac{1}{s+1}.
+$$
+
+The characteristic polynomial of $A$ is $(s+1)(s+2)(s+3)(s+4)$, but the TF has only one pole, at $-1$. The only mode that appears in the TF is $x_1$, which is the only mode that is both controllable and observable. The other three modes do not appear in the TF:
+
+- $x_2$ is driven by the input, but it never reaches the output.
+- $x_3$ reaches the output, but it is never driven by the input. Since the TF is computed with zero initial conditions, $x_3(t) = 0$ for all $t$. If $x_3(0) \neq 0$, then the term $e^{-3t} x_3(0)$ does appear in the output, but it is not part of the TF.
+- $x_4$ is neither driven by the input nor reaches the output.
+
+We can also see the missing modes as pole-zero cancellations. If we write $G(s)$ with the characteristic polynomial of $A$ as the denominator, we get
+$$
+  G(s) = \frac{(s+2)(s+3)(s+4)}{(s+1)(s+2)(s+3)(s+4)} = \frac{1}{s+1}.
+$$
+This is what we get when we compute the TF numerically. Removing the common factors gives $1/(s+1)$, which is the TF of the **minimal realization** of the system.
+
+```{julia}
+#| echo: true
+A = [-1.0 0 0 0; 0 -2 0 0; 0 0 -3 0; 0 0 0 -4]
+B = [1.0; 1; 0; 0]
+C = [1.0 0 1 0]
+G = tf(ss(A, B, C, 0))
+```
+
+```{julia}
+#| echo: true
+minreal(G)
+```
