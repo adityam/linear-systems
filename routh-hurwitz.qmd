@@ -4,7 +4,7 @@ title: Routh-Hurwitz Stability Criterion
 engine: julia
 execute:
   echo: false
-  freeze: true
+  freeze: false
   cache: true
 
 ---
@@ -46,7 +46,7 @@ Thus, the closed-loop transfer function has a pole at $1 - K$. The system is sta
 $$ K > 1. $$
 :::
 
-In the above example, we could identify the roots of the closed loop transfer function and thereby determine the values of gain $K$ for which the system is stable. However, we can only factorize lower order polynomials; for polynomials with degree greater than $5$, we need to resort to numerical methods. Doing so, makes it difficult to find the range of values of $K$ for which a polynomial is stable. 
+In the above example, we could identify the roots of the closed loop transfer function and thereby determine the values of gain $K$ for which the system is stable. However, we can only factorize lower order polynomials; for polynomials with degree greater than or equal to $5$, we need to resort to numerical methods. Doing so, makes it difficult to find the range of values of $K$ for which a polynomial is stable. 
 
 However, for determine the stability of a system, we don't need to find the roots of the denominator polynomial; we simply need to verify that all the roots are in the OLHP. The following result shows that we can determine if roots lie in the ORHP without factorizing a polynomial. 
 
@@ -287,7 +287,7 @@ All this appears to be magic! To get some intuition behind on why Routh-Hurwitz 
 
     The Routh-Hurwitz criteria states that if $a_0$, $a_1$, and $a_2$ are non-zero and have the same signs, then all roots of $D(s)$ are in the OLHP. It is easy to verify that this is true as the roots of $D(s)$ are given by
     $$
-        \frac{-a_1 \pm \sqrt{a_1^2 - 4 a_0 a_2}}{2a_0}
+        \frac{-a_1 \pm \sqrt{a_1^2 - 4 a_0 a_2}}{2a_2}
     $$
     which either are complex valued with negative real part, or are negative real valued. 
 
@@ -335,7 +335,7 @@ $$ D(s) = s^5 + 2s^4 + 3s^3 + 6s^2 + 5s + 3. $$
   <td>$s^3$</td>
   <td>$0$</td>
   <td>$7/2$</td>
-  <td>$3$</td>
+  <td>$0$</td>
 </tr>
 </table>
 
@@ -535,7 +535,7 @@ s^n D(s) &= s^n \left( \frac 1s + p_1 \right) \left( \frac 1s + p_2 \right) \cdo
 \end{align*}
 Thus, if $p_i$ is a root of $D(s)$, then $\dfrac{1}{p_i}$ is a root of $s^n D(\frac 1s)$. 
 
-The key point is that **$p_i$ and $1/p_i$ have the same sign**. In particular if 
+The key point is that **the real part of $p_i$ and $1/p_i$ have the same sign**. In particular if 
 $$
 p_i = a_i + j b_i \implies \frac {1}{p_i} = \frac{a}{|p_i|} - j\frac{ b_i}{|p_i|}
 $$
@@ -554,6 +554,7 @@ We have already computed the reciprocal polynomial above. We now construct the R
 ```{julia}
 #| html-table-processing: none
 
+c = [1,2,3,6,5,3]
 (html, RA) = RouthArray(reverse(c))
 html
 ```
@@ -756,7 +757,7 @@ Since we have a row of zeros, we split our analysis into two cases. The remainde
 
    - Treat the part upto row $s^{2k}$ as usual. That is we count the number of sign changes and the number of sign changes in the colum from row $s^n$ to $s^{2k}$ correspond to the number of roots of $R(s)$ to be in the ORHP.
 
-   - The part from row $s^{2k-1}$ to $s^0$ is treated differently. The number of roots in the ORHP is still equal to the number of sign changes. However, the number of roots in OLHP is equal to the number of roots in ORHP. The remaining roots ($n - 2k$) lie on the $j ω$-axis.
+   - The part from row $s^{2k-1}$ to $s^0$ is treated differently. The number of roots in the ORHP is still equal to the number of sign changes, say $r$. However, the number of roots in OLHP is equal to the number of roots in ORHP. The remaining roots ($2k - 2r$) lie on the $j ω$-axis.
 
 :::
 
@@ -774,7 +775,7 @@ The denominator of the TF $C(sI - A)^{-1}B$ is the characteristic polynomial of 
 \begin{align*}
 \det(sI - A) &= \DET{s & 0 & -1 \\ -1 & s & -1 \\ 10 & 5 & s + 2}
 \\
-&= s \DET{s & -1 \\ 5 & s + 2} -1 \DET{-1 & -1 \\ s & 5} 
+&= s \DET{s & -1 \\ 5 & s + 2} -1 \DET{-1 & s \\ 10 & 5} 
 \\
 &= s^3 + 2 s^2 + 15s + 5
 \end{align*}
@@ -811,7 +812,7 @@ Find the value of $K$ for which the system is stable.
 The closed loop transfer function is given by
 $$
 T(s) = \frac{K G(s)}{1 + K G(s)}
-= \frac{K(s+1)}{s^3 + 5s^2 + (K-6)s + K
+= \frac{K(s+1)}{s^3 + 5s^2 + (K-6)s + K}
 $$
 
 Therefore, the Routh array is given by
