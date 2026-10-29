@@ -619,6 +619,20 @@ $$
 
 :::
 
+:::{.callout-note}
+### Remark: Why replace the zero row by the derivative?
+
+The reason that we replace a row of zero by the derivative of the row above is as follows.
+Let $P_{2k}(s)$ be the even polynomial corresponding to the row above the row of zeros. Consider
+$$P_{2k}(s+\varepsilon) = P_{2k}(s) + \varepsilon P'_{2k}(s) + O(\varepsilon^2), 
+  \qquad \varepsilon > 0.$$
+This shifts every root from $\lambda$ to $\lambda-\varepsilon$. For sufficiently small $\varepsilon$, the number of roots in the ORHP is unchanged, while roots on the $j\omega$-axis move into the OLHP.
+
+Since $P_{2k}$ is even, the even and odd parts of the shifted polynomial are
+$$P_{2k}(s) + O(\varepsilon^2) \quad\text{and}\quad \varepsilon P'_{2k}(s) + O(\varepsilon^3),$$
+respectively. These provide the first two rows of its Routh array. Dividing the second row by the positive number $\varepsilon$ preserves the sign-change count. As $\varepsilon \to 0^+$, these rows approach the coefficients of $P_{2k}(s)$ and $P'_{2k}(s)$. This is the reason for replacing the zero row with the coefficients of $P'_{2k}(s)$.
+:::
+
 The rows that we have encountered until the row of all zeros corresponds to the remainder polynomial. We interpret is the same way we did the normal case. 
 
 Observe that the divisor polynomial is an **even** polynomial.  A key feature of an even polynomial is that it has **an equal number of roots in the OLHP and the ORHP**. The number of sign changes is equal to the number of roots in the ORHP. So, the number of roots in OLHP are the same. The remaining roots must be on the $j ω$-axis. 
@@ -901,4 +915,38 @@ $$
 $$
 which is equivalent to
 $$ -1 < K < 10 $$
+:::
+
+## Exercises {-}
+
+:::{#exr-routh-pole-count}
+Consider an LTI system with a rational transfer function $H(s) = N(s)/D(s)$. For each denominator $D(s)$ below, find the number of poles in the open left half-plane (OLHP), in the open right half-plane (ORHP), and on the $jω$-axis.
+
+a. $D(s) = s^4 + s^3 + s^2 + 2s + 1$
+
+b. $D(s) = s^4 + 4s^3 + 6s^2 + 8s + 3$
+
+c. $D(s) = s^4 + 2s^3 + 3s^2 + 6s + 2$
+
+d. $D(s) = s^4 + 4s^3 + 5s^2 + 4s + 4$
+
+e. $D(s) = s^5 + 3s^4 + 10s^3 + 30s^2 + 9s + 27$
+
+f. $D(s) = s^7 - 2s^6 - s^5 + 2s^4 + 4s^3 - 8s^2 - 4s$
+:::
+
+:::{#exr-routh-proportional-gain}
+Consider a unity-feedback system with forward-path gain $K$ and plant
+$$
+  G(s) = \frac{1}{s^3 + 8s^2 + 19s + 12}.
+$$
+Find the values of $K$ for which the closed-loop system is stable.
+:::
+
+:::{#exr-routh-parameter}
+Consider a unity-feedback system with plant
+$$
+  G(s) = \frac{2}{s(s+1)(s+p)}.
+$$
+Find the values of $p$ for which the closed-loop system is stable.
 :::
