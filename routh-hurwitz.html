@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2026-10-28">
+<meta name="dcterms.date" content="2026-10-29">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>8&nbsp; Routh-Hurwitz Stability Criterion – Linear Systems and Control</title>
@@ -87,9 +87,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-6022819f5b0b9f618dd19cab9786bfa7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-68a718146b9033c7e0a056894d51c066.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-6022819f5b0b9f618dd19cab9786bfa7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-bdffd17703f04ca26a025a29fca24545.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-99731f076717be7f02a3b14f27150379.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-bdffd17703f04ca26a025a29fca24545.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/nutshell-1.0.6/nutshell.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -529,6 +529,7 @@ window.Quarto = {
   <li><a href="#special-cases-entire-row-of-zeros" id="toc-special-cases-entire-row-of-zeros" class="nav-link" data-scroll-target="#special-cases-entire-row-of-zeros"><span class="header-section-number">8.5</span> Special cases: Entire row of zeros</a></li>
   <li><a href="#stability-in-state-space" id="toc-stability-in-state-space" class="nav-link" data-scroll-target="#stability-in-state-space"><span class="header-section-number">8.6</span> Stability in state space</a></li>
   <li><a href="#stable-design-via-routh-hurwitz" id="toc-stable-design-via-routh-hurwitz" class="nav-link" data-scroll-target="#stable-design-via-routh-hurwitz"><span class="header-section-number">8.7</span> Stable design via Routh-Hurwitz</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/routh-hurwitz.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -564,7 +565,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 28, 2026</p>
+      <p class="date">October 29, 2026</p>
     </div>
   </div>
   
@@ -1118,7 +1119,7 @@ Figure&nbsp;8.1: Block diagram of a proportional controller
 <table class="routhsigns"><thead><tr><td>Term</td><td>Sign</td></tr></thead><tbody><tr><td>$s^{3}$</td><td>$+$</td></tr><tr><td>$s^{2}$</td><td>$+$</td></tr><tr><td>$s^{1}$</td><td>$+$</td></tr><tr><td>$s^{0}$</td><td>$+$</td></tr></tbody></table>
 </div>
 </div>
-<p>Since we have a row of zeros, we split our analysis into two cases. The remainder polynomial, which is rows <span class="math inline">\(s^3\)</span> to <span class="math inline">\(s^2\)</span> and has no sign change, and the divisor polynomial, which is rows <span class="math inline">\(s^2\)</span> to <span class="math inline">\(s^0\)</span> and has no sign changes either. So, we have</p>
+<p>Since we have a row of zeros, we split our analysis into two cases. The quotient polynomial <span class="math inline">\(Q(s)\)</span>, which is rows <span class="math inline">\(s^3\)</span> to <span class="math inline">\(s^2\)</span> and has no sign change, and the divisor polynomial, which is rows <span class="math inline">\(s^2\)</span> to <span class="math inline">\(s^0\)</span> and has no sign changes either. So, we have</p>
 <table class="table-striped caption-top table">
 <thead>
 <tr class="header">
@@ -1132,7 +1133,7 @@ Figure&nbsp;8.1: Block diagram of a proportional controller
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: center;">Remainder</td>
+<td style="text-align: center;">Quotient</td>
 <td style="text-align: center;">1</td>
 <td style="text-align: center;">0</td>
 <td style="text-align: center;">0</td>
@@ -1305,12 +1306,27 @@ D(s) = s^5 + 7s^4 + 6 s^3 + 42 s^2 + 8 s + 56.
 <p>For instance, in the above example, row <span class="math inline">\(s^3\)</span> is zero. The above claim means that <span class="math display">\[
 P_4(s) = s^4 + 6 s^2 + 8
 \]</span> divides <span class="math inline">\(D(s)\)</span>. This is indeed the case and we can verify that <span class="math display">\[
-D(s) = \underbrace{(s+7)}_{\text{remainder poly.}}
+D(s) = \underbrace{(s+7)}_{\text{quotient poly. } Q(s)}
        \underbrace{(s^4 + 6s^2 + 8)}_{\text{divisor poly.}}.
 \]</span></p>
 </div>
 </div>
-<p>The rows that we have encountered until the row of all zeros corresponds to the remainder polynomial. We interpret is the same way we did the normal case.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Remark: Why replace the zero row by the derivative?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The reason that we replace a row of zero by the derivative of the row above is as follows. Let <span class="math inline">\(P_{2k}(s)\)</span> be the even polynomial corresponding to the row above the row of zeros. Consider <span class="math display">\[P_{2k}(s+\varepsilon) = P_{2k}(s) + \varepsilon P'_{2k}(s) + O(\varepsilon^2),
+  \qquad \varepsilon &gt; 0.\]</span> This shifts every root from <span class="math inline">\(\lambda\)</span> to <span class="math inline">\(\lambda-\varepsilon\)</span>. For sufficiently small <span class="math inline">\(\varepsilon\)</span>, the number of roots in the ORHP is unchanged, while roots on the <span class="math inline">\(j\omega\)</span>-axis move into the OLHP.</p>
+<p>Since <span class="math inline">\(P_{2k}\)</span> is even, the even and odd parts of the shifted polynomial are <span class="math display">\[P_{2k}(s) + O(\varepsilon^2) \quad\text{and}\quad \varepsilon P'_{2k}(s) + O(\varepsilon^3),\]</span> respectively. These provide the first two rows of its Routh array. Dividing the second row by the positive number <span class="math inline">\(\varepsilon\)</span> preserves the sign-change count. As <span class="math inline">\(\varepsilon \to 0^+\)</span>, these rows approach the coefficients of <span class="math inline">\(P_{2k}(s)\)</span> and <span class="math inline">\(P'_{2k}(s)\)</span>. This is the reason for replacing the zero row with the coefficients of <span class="math inline">\(P'_{2k}(s)\)</span>.</p>
+</div>
+</div>
+<p>The rows above the row of all zeros correspond to the quotient polynomial <span class="math inline">\(Q(s)\)</span>. We interpret them the same way as in the normal case.</p>
 <p>Observe that the divisor polynomial is an <strong>even</strong> polynomial. A key feature of an even polynomial is that it has <strong>an equal number of roots in the OLHP and the ORHP</strong>. The number of sign changes is equal to the number of roots in the ORHP. So, the number of roots in OLHP are the same. The remaining roots must be on the <span class="math inline">\(j ω\)</span>-axis.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1336,7 +1352,7 @@ D(s) = \underbrace{(s+7)}_{\text{remainder poly.}}
 <!-- TODO: Add a figure -->
 </div>
 </div>
-<p>The rows that we have encountered until the row of all zeros corresponds to the remainder polynomial. We interpret is the same way we did the normal case.</p>
+<p>The rows above the row of all zeros correspond to the quotient polynomial <span class="math inline">\(Q(s)\)</span>. We interpret them the same way as in the normal case.</p>
 <p>We first compute the Routh Array</p>
 <div id="42" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -1349,7 +1365,7 @@ D(s) = \underbrace{(s+7)}_{\text{remainder poly.}}
 <table class="routhsigns"><thead><tr><td>Term</td><td>Sign</td></tr></thead><tbody><tr><td>$s^{5}$</td><td>$+$</td></tr><tr><td>$s^{4}$</td><td>$+$</td></tr><tr><td>$s^{3}$</td><td>$+$</td></tr><tr><td>$s^{2}$</td><td>$+$</td></tr><tr><td>$s^{1}$</td><td>$+$</td></tr><tr><td>$s^{0}$</td><td>$+$</td></tr></tbody></table>
 </div>
 </div>
-<p>Since we have a row of zeros, we split our analysis into two cases. The remainder polynomial, which is rows <span class="math inline">\(s^5\)</span> to <span class="math inline">\(s^4\)</span> and has no sign change, and the divisor polynomial, which is rows <span class="math inline">\(s^4\)</span> to <span class="math inline">\(s^0\)</span> and has no sign changes either. So, we have</p>
+<p>Since we have a row of zeros, we split our analysis into two cases. The quotient polynomial <span class="math inline">\(Q(s)\)</span>, which is rows <span class="math inline">\(s^5\)</span> to <span class="math inline">\(s^4\)</span> and has no sign change, and the divisor polynomial, which is rows <span class="math inline">\(s^4\)</span> to <span class="math inline">\(s^0\)</span> and has no sign changes either. So, we have</p>
 <table class="table-striped caption-top table">
 <thead>
 <tr class="header">
@@ -1363,7 +1379,7 @@ D(s) = \underbrace{(s+7)}_{\text{remainder poly.}}
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: center;">Remainder</td>
+<td style="text-align: center;">Quotient</td>
 <td style="text-align: center;">1</td>
 <td style="text-align: center;">0</td>
 <td style="text-align: center;">0</td>
@@ -1408,7 +1424,7 @@ D(s) = (s^2 + 2)(s+1) = s^3 + s^2 + 2s + 2.
 \]</span> Use Routh Hurwitz to find the location of the roots.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1417,7 +1433,7 @@ D(s) = (s^2 + 2)(s+1) = s^3 + s^2 + 2s + 2.
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>We write the Routh Array</p>
 <div id="48" class="cell" data-execution_count="1">
@@ -1431,7 +1447,7 @@ D(s) = (s^2 + 2)(s+1) = s^3 + s^2 + 2s + 2.
 <table class="routhsigns"><thead><tr><td>Term</td><td>Sign</td></tr></thead><tbody><tr><td>$s^{3}$</td><td>$+$</td></tr><tr><td>$s^{2}$</td><td>$+$</td></tr><tr><td>$s^{1}$</td><td>$+$</td></tr><tr><td>$s^{0}$</td><td>$+$</td></tr></tbody></table>
 </div>
 </div>
-<p>Since we have a row of zeros, we split our analysis into two cases. The remainder polynomial, which is rows <span class="math inline">\(s^3\)</span> to <span class="math inline">\(s^2\)</span> and has no sign change, and the divisor polynomial, which is rows <span class="math inline">\(s^2\)</span> to <span class="math inline">\(s^0\)</span> and has no sign changes either. So, we have</p>
+<p>Since we have a row of zeros, we split our analysis into two cases. The quotient polynomial <span class="math inline">\(Q(s)\)</span>, which is rows <span class="math inline">\(s^3\)</span> to <span class="math inline">\(s^2\)</span> and has no sign change, and the divisor polynomial, which is rows <span class="math inline">\(s^2\)</span> to <span class="math inline">\(s^0\)</span> and has no sign changes either. So, we have</p>
 <table class="table-striped caption-top table">
 <thead>
 <tr class="header">
@@ -1445,7 +1461,7 @@ D(s) = (s^2 + 2)(s+1) = s^3 + s^2 + 2s + 2.
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: center;">Remainder</td>
+<td style="text-align: center;">Quotient</td>
 <td style="text-align: center;">1</td>
 <td style="text-align: center;">0</td>
 <td style="text-align: center;">0</td>
@@ -1503,10 +1519,10 @@ D(s) = (s^2 + 2)(s+1) = s^3 + s^2 + 2s + 2.
 <li>No.&nbsp;of poles in OLHP = degree - (no. of sign changes)</li>
 <li>No.&nbsp;of poles on the <span class="math inline">\(j ω\)</span>-axis = 0.</li>
 </ul></li>
-<li><p><strong>Whole row of zero.</strong> Since <span class="math inline">\(s\)</span> does not divide <span class="math inline">\(D(s)\)</span>, we get a row of zeros only at some odd row <span class="math inline">\(s^{2k-1}\)</span>. This means that the polynomial <span class="math inline">\(P_{2k}\)</span> corresponding to the parent row <span class="math inline">\(s^{2k}\)</span> divides <span class="math inline">\(D(s)\)</span>. We will use <span class="math inline">\(R(s)\)</span> to denote the remainder polynomial.</p>
+<li><p><strong>Whole row of zero.</strong> Since <span class="math inline">\(s\)</span> does not divide <span class="math inline">\(D(s)\)</span>, we get a row of zeros only at some odd row <span class="math inline">\(s^{2k-1}\)</span>. This means that the polynomial <span class="math inline">\(P_{2k}\)</span> corresponding to the parent row <span class="math inline">\(s^{2k}\)</span> divides <span class="math inline">\(D(s)\)</span>. We will use <span class="math inline">\(Q(s) = D(s)/P_{2k}(s)\)</span> to denote the quotient polynomial, so that <span class="math inline">\(D(s) = P_{2k}(s)Q(s)\)</span>.</p>
 <p>Replace row <span class="math inline">\(P_{2k-1}(s)\)</span> by <span class="math inline">\(P'_{2k}(s)\)</span> and continue filling the Routh array as usual.</p>
 <ul>
-<li><p>Treat the part upto row <span class="math inline">\(s^{2k}\)</span> as usual. That is we count the number of sign changes and the number of sign changes in the colum from row <span class="math inline">\(s^n\)</span> to <span class="math inline">\(s^{2k}\)</span> correspond to the number of roots of <span class="math inline">\(R(s)\)</span> to be in the ORHP.</p></li>
+<li><p>Treat the part upto row <span class="math inline">\(s^{2k}\)</span> as usual. That is we count the number of sign changes and the number of sign changes in the colum from row <span class="math inline">\(s^n\)</span> to <span class="math inline">\(s^{2k}\)</span> correspond to the number of roots of <span class="math inline">\(Q(s)\)</span> to be in the ORHP.</p></li>
 <li><p>The part from row <span class="math inline">\(s^{2k-1}\)</span> to <span class="math inline">\(s^0\)</span> is treated differently. The number of roots in the ORHP is still equal to the number of sign changes, say <span class="math inline">\(r\)</span>. However, the number of roots in OLHP is equal to the number of roots in ORHP. The remaining roots (<span class="math inline">\(2k - 2r\)</span>) lie on the <span class="math inline">\(j ω\)</span>-axis.</p></li>
 </ul></li>
 </ol>
@@ -1579,7 +1595,7 @@ D(s) = (s^2 + 2)(s+1) = s^3 + s^2 + 2s + 2.
 <p>Find the value of <span class="math inline">\(K\)</span> for which the system is stable.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1588,7 +1604,7 @@ D(s) = (s^2 + 2)(s+1) = s^3 + s^2 + 2s + 2.
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The closed loop transfer function is given by <span class="math display">\[
 T(s) = \frac{K G(s)}{1 + K G(s)}
@@ -1642,7 +1658,7 @@ K &gt; 0
 <p>Find the values of <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> for which the system is stable.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1651,7 +1667,7 @@ K &gt; 0
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The closed loop transfer function is given by <span class="math display">\[
 T(s) = \frac{\left(A + \dfrac{B}{s}\right) G(s)}{1 + \left(A + \dfrac{B}{s}\right)G(s)}
@@ -1705,7 +1721,7 @@ B &gt; 0.
 <p>Find the value of <span class="math inline">\(K\)</span> for which the system is stable.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1714,7 +1730,7 @@ B &gt; 0.
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The closed loop transfer function is given by <span class="math display">\[
 T(s) = \frac{K G(s)}{1 + K G(s)}
@@ -1756,6 +1772,30 @@ T(s) = \frac{K G(s)}{1 + K G(s)}
 \]</span> which is equivalent to <span class="math display">\[ -1 &lt; K &lt; 10 \]</span></p>
 </div>
 </div>
+</div>
+</section>
+<section id="exercises" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="exercises">Exercises</h2>
+<div id="exr-routh-pole-count" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 8.1</strong></span> Consider an LTI system with a rational transfer function <span class="math inline">\(H(s) = N(s)/D(s)\)</span>. For each denominator <span class="math inline">\(D(s)\)</span> below, find the number of poles in the open left half-plane (OLHP), in the open right half-plane (ORHP), and on the <span class="math inline">\(jω\)</span>-axis.</p>
+<ol type="a">
+<li><p><span class="math inline">\(D(s) = s^4 + s^3 + s^2 + 2s + 1\)</span></p></li>
+<li><p><span class="math inline">\(D(s) = s^4 + 4s^3 + 6s^2 + 8s + 3\)</span></p></li>
+<li><p><span class="math inline">\(D(s) = s^4 + 2s^3 + 3s^2 + 6s + 2\)</span></p></li>
+<li><p><span class="math inline">\(D(s) = s^4 + 4s^3 + 5s^2 + 4s + 4\)</span></p></li>
+<li><p><span class="math inline">\(D(s) = s^5 + 3s^4 + 10s^3 + 30s^2 + 9s + 27\)</span></p></li>
+<li><p><span class="math inline">\(D(s) = s^7 - 2s^6 - s^5 + 2s^4 + 4s^3 - 8s^2 - 4s\)</span></p></li>
+</ol>
+</div>
+<div id="exr-routh-proportional-gain" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 8.2</strong></span> Consider a unity-feedback system with forward-path gain <span class="math inline">\(K\)</span> and plant <span class="math display">\[
+  G(s) = \frac{1}{s^3 + 8s^2 + 19s + 12}.
+\]</span> Find the values of <span class="math inline">\(K\)</span> for which the closed-loop system is stable.</p>
+</div>
+<div id="exr-routh-parameter" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 8.3</strong></span> Consider a unity-feedback system with plant <span class="math display">\[
+  G(s) = \frac{2}{s(s+1)(s+p)}.
+\]</span> Find the values of <span class="math inline">\(p\)</span> for which the closed-loop system is stable.</p>
 </div>
 
 
