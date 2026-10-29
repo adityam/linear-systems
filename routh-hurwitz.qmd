@@ -478,11 +478,11 @@ We now look at the signs of the terms in the first column:
 #| html-table-processing: none
 sign_changes(RA)
 ```
-Since we have a row of zeros, we split our analysis into two cases. The remainder polynomial, which is rows $s^3$ to $s^2$ and has no sign change, and the divisor polynomial, which is rows $s^2$ to $s^0$ and has no sign changes either. So, we have
+Since we have a row of zeros, we split our analysis into two cases. The quotient polynomial $Q(s)$, which is rows $s^3$ to $s^2$ and has no sign change, and the divisor polynomial, which is rows $s^2$ to $s^0$ and has no sign changes either. So, we have
 
 | Polynomial | degree | no. of sign changes | ORHP | OLHP | $j ω$-axis |
 |:----------:|:------:|:-------------------:|:----:|:----:|:-----------|
-| Remainder  | 1 | 0 | 0 | 1 | 0 | 
+| Quotient   | 1 | 0 | 0 | 1 | 0 |
 | Divisor    | 2 | 0 | 0 | 0 | 2 |
 | $D(s)$     | 3 |   | 0 | 1 | 2 |
 
@@ -613,7 +613,7 @@ P_4(s) = s^4 + 6 s^2 + 8
 $$
 divides $D(s)$. This is indeed the case and we can verify that
 $$
-D(s) = \underbrace{(s+7)}_{\text{remainder poly.}}
+D(s) = \underbrace{(s+7)}_{\text{quotient poly. } Q(s)}
        \underbrace{(s^4 + 6s^2 + 8)}_{\text{divisor poly.}}.
 $$
 
@@ -633,7 +633,7 @@ $$P_{2k}(s) + O(\varepsilon^2) \quad\text{and}\quad \varepsilon P'_{2k}(s) + O(\
 respectively. These provide the first two rows of its Routh array. Dividing the second row by the positive number $\varepsilon$ preserves the sign-change count. As $\varepsilon \to 0^+$, these rows approach the coefficients of $P_{2k}(s)$ and $P'_{2k}(s)$. This is the reason for replacing the zero row with the coefficients of $P'_{2k}(s)$.
 :::
 
-The rows that we have encountered until the row of all zeros corresponds to the remainder polynomial. We interpret is the same way we did the normal case. 
+The rows above the row of all zeros correspond to the quotient polynomial $Q(s)$. We interpret them the same way as in the normal case.
 
 Observe that the divisor polynomial is an **even** polynomial.  A key feature of an even polynomial is that it has **an equal number of roots in the OLHP and the ORHP**. The number of sign changes is equal to the number of roots in the ORHP. So, the number of roots in OLHP are the same. The remaining roots must be on the $j ω$-axis. 
 
@@ -665,7 +665,7 @@ Thus, in all cases, no. of roots in the ORHP = no. of roots in the OLHP.
 <!-- TODO: Add a figure -->
 :::
 
-The rows that we have encountered until the row of all zeros corresponds to the remainder polynomial. We interpret is the same way we did the normal case. 
+The rows above the row of all zeros correspond to the quotient polynomial $Q(s)$. We interpret them the same way as in the normal case.
 
 We first compute the Routh Array
 
@@ -683,11 +683,11 @@ We now look at the signs of the terms in the first column:
 sign_changes(RA)
 ```
 
-Since we have a row of zeros, we split our analysis into two cases. The remainder polynomial, which is rows $s^5$ to $s^4$ and has no sign change, and the divisor polynomial, which is rows $s^4$ to $s^0$ and has no sign changes either. So, we have
+Since we have a row of zeros, we split our analysis into two cases. The quotient polynomial $Q(s)$, which is rows $s^5$ to $s^4$ and has no sign change, and the divisor polynomial, which is rows $s^4$ to $s^0$ and has no sign changes either. So, we have
 
 | Polynomial | degree | no. of sign changes | ORHP | OLHP | $j ω$-axis |
 |:----------:|:------:|:-------------------:|:----:|:----:|:-----------|
-| Remainder  | 1 | 0 | 0 | 1 | 0 | 
+| Quotient   | 1 | 0 | 0 | 1 | 0 |
 | Divisor    | 4 | 0 | 0 | 0 | 4 |
 | $D(s)$     | 5 |   | 0 | 1 | 4 |
 
@@ -729,11 +729,11 @@ sign_changes(RA)
 ```
 
 
-Since we have a row of zeros, we split our analysis into two cases. The remainder polynomial, which is rows $s^3$ to $s^2$ and has no sign change, and the divisor polynomial, which is rows $s^2$ to $s^0$ and has no sign changes either. So, we have
+Since we have a row of zeros, we split our analysis into two cases. The quotient polynomial $Q(s)$, which is rows $s^3$ to $s^2$ and has no sign change, and the divisor polynomial, which is rows $s^2$ to $s^0$ and has no sign changes either. So, we have
 
 | Polynomial | degree | no. of sign changes | ORHP | OLHP | $j ω$-axis |
 |:----------:|:------:|:-------------------:|:----:|:----:|:-----------|
-| Remainder  | 1 | 0 | 0 | 1 | 0 | 
+| Quotient   | 1 | 0 | 0 | 1 | 0 |
 | Divisor    | 2 | 0 | 0 | 0 | 2 |
 | $D(s)$     | 3 |   | 0 | 1 | 2 |
 
@@ -765,11 +765,11 @@ Since we have a row of zeros, we split our analysis into two cases. The remainde
    - No. of poles in OLHP = degree - (no. of sign changes)
    - No. of poles on the $j ω$-axis = 0.
 
-5. **Whole row of zero.** Since $s$ does not divide $D(s)$, we get a row of zeros only at some odd row $s^{2k-1}$. This means that the polynomial $P_{2k}$ corresponding to the parent row $s^{2k}$ divides $D(s)$. We will use $R(s)$ to denote the remainder polynomial.
+5. **Whole row of zero.** Since $s$ does not divide $D(s)$, we get a row of zeros only at some odd row $s^{2k-1}$. This means that the polynomial $P_{2k}$ corresponding to the parent row $s^{2k}$ divides $D(s)$. We will use $Q(s) = D(s)/P_{2k}(s)$ to denote the quotient polynomial, so that $D(s) = P_{2k}(s)Q(s)$.
 
    Replace row $P_{2k-1}(s)$ by $P'_{2k}(s)$ and continue filling the Routh array as usual. 
 
-   - Treat the part upto row $s^{2k}$ as usual. That is we count the number of sign changes and the number of sign changes in the colum from row $s^n$ to $s^{2k}$ correspond to the number of roots of $R(s)$ to be in the ORHP.
+   - Treat the part upto row $s^{2k}$ as usual. That is we count the number of sign changes and the number of sign changes in the colum from row $s^n$ to $s^{2k}$ correspond to the number of roots of $Q(s)$ to be in the ORHP.
 
    - The part from row $s^{2k-1}$ to $s^0$ is treated differently. The number of roots in the ORHP is still equal to the number of sign changes, say $r$. However, the number of roots in OLHP is equal to the number of roots in ORHP. The remaining roots ($2k - 2r$) lie on the $j ω$-axis.
 
