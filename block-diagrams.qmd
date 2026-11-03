@@ -221,84 +221,151 @@ Find the transfer function $Y(s)/R(s)$ for the block diagram below. Keep the ans
 
 ## From a transfer function to a block diagram
 
-We can also work in the other direction: start from a transfer function and construct a block diagram using integrators. We first build the controllable canonical form for two orders, then build the observable canonical form for the same transfer functions.
+There are two ways to implement a transfer function: using differentiators or using integrators. Integrators are cheaper to implement, so we study that method here.
+
+### Motivating example
+
+We illustrate the method via an example. Consider
+$$
+  G(s) = \frac{s + 2}{s^2 + 3 s + 4}.
+$$
+
+We first write the numerator and denominator as polynomials in $1/s$ (multiply both by $1/s^2$):
+$$
+  G(s) = \frac{ \dfrac 1s + \dfrac 2{s^2} }{ 1 + \dfrac 3s + \dfrac 4{s^2} }
+$$
+and view this as
+$$
+  G(s) = \frac{1}{1 + \Bigl[ \dfrac 3s + \dfrac 4{s^2} \Bigr]}
+  \cdot \Bigl[ \dfrac 1s + \dfrac 2{s^2} \Bigr].
+$$
+
+We will implement both parts separately.
+
+#### The numerator {.unnumbered}
+
+First consider the numerator $\dfrac 1s + \dfrac 2{s^2}$, which can be implemented as
+
+![Implementation of $1/s + 2/s^2$](figures/svg/tf-to-block1.svg){#fig-tf-to-block-num width=60%}
+
+For reasons that will become clear later, we draw this as follows:
+
+![The same diagram with the integrators stacked vertically](figures/svg/tf-to-block2.svg){#fig-tf-to-block-num-ladder width=55%}
+
+#### The denominator {.unnumbered}
+
+We now look at the denominator, $\dfrac{1}{1 + \bigl[ \frac 3s + \frac 4{s^2} \bigr]}$. Note that the term in square brackets has the same form as the numerator. So, we first draw the term in square brackets. We can draw it in either orientation:
+
+![The term in square brackets, and its mirror image](figures/svg/tf-to-block3.svg){#fig-tf-to-block-bracket}
+
+Now we can implement $1/(1 + [\cdots])$ using feedback.
+
+![Implementation of $1/(1+[\cdots])$ via feedback](figures/svg/tf-to-block4.svg){#fig-tf-to-block-den width=70%}
+
+#### Combining the numerator and denominator {.unnumbered}
+
+Now we combine the numerator and the denominator.
+
+![Denominator (feedback loop) followed by the numerator](figures/svg/tf-to-block5.svg){#fig-tf-to-block-combine}
+
+Note that the two "integrator ladders" have the same voltages (they carry the same signals), so we can combine them.
+
+![Both parts sharing a single integrator ladder](figures/svg/tf-to-block6.svg){#fig-tf-to-block-shared width=75%}
+
+This gives us the general form of the implementation, for
+$$
+  G(s) = \frac{b_1 s + b_0}{s^2 + a_1 s + a_0}.
+$$
+The gains in the feedback path are the coefficients of the denominator in reverse order, and the gains in the output path are the coefficients of the numerator in reverse order.
 
 ### Controllable canonical form (CCF)
 
-Consider the general second-order, strictly proper transfer function
+This corresponds to the CCF form of the transfer function.
 
+![Controllable canonical form (CCF)](figures/svg/block-diagram-practice2.svg){#fig-tf-to-block-ccf}
+
+Let's write the equations corresponding to the two integrators, with states $x_1$ (output of the lower integrator) and $x_2$ (output of the upper integrator):
 $$
-G(s)=\frac{Y(s)}{U(s)}=\frac{b_1s+b_0}{s^2+a_1s+a_0}.
+  \dot x_1 = x_2, \qquad
+  \dot x_2 = -a_0 x_1 - a_1 x_2 + u,
 $$
-
-Dividing numerator and denominator by $s^2$ gives
-
+which can be written in matrix form as
 $$
-G(s)=\frac{b_1/s+b_0/s^2}{1+a_1/s+a_0/s^2}.
+  \begin{bmatrix} \dot x_1 \\ \dot x_2 \end{bmatrix}
+  = \begin{bmatrix} 0 & 1 \\ -a_0 & -a_1 \end{bmatrix}
+    \begin{bmatrix} x_1 \\ x_2 \end{bmatrix}
+  + \begin{bmatrix} 0 \\ 1 \end{bmatrix} u.
 $$
-
-Let $W(s)$ be the signal entering a pair of cascaded integrators. With zero initial conditions, set $X_2(s)=W(s)/s$ and $X_1(s)=W(s)/s^2$. Then
-
+Similarly, the output is $y = b_0 x_1 + b_1 x_2$, which can be written as
 $$
-W(s)=U(s)-a_1X_2(s)-a_0X_1(s),
-\qquad
-Y(s)=b_1X_2(s)+b_0X_1(s).
+  y = \begin{bmatrix} b_0 & b_1 \end{bmatrix}
+      \begin{bmatrix} x_1 \\ x_2 \end{bmatrix}.
 $$
-
-The numerator and denominator use the same two integrator signals, so they can share one integrator ladder. The feedback paths implement the denominator, and the output sum implements the numerator.
-
-![Integrator realization in controllable canonical form.](figures/svg/block-diagram-practice2.svg){#fig-tf-to-block-ccf}
-
-Now consider a three-integrator ladder for
-
-$$
-G(s)=\frac{Y(s)}{U(s)}
-=\frac{b_2s^2+b_1s+b_0}{s^3+a_2s^2+a_1s+a_0}.
-$$
-
-Dividing by $s^3$ gives numerator terms $b_2/s+b_1/s^2+b_0/s^3$ and denominator terms $1+a_2/s+a_1/s^2+a_0/s^3$. The same three integrator outputs can serve both parts.
-
-Let $W(s)$ enter the ladder, with $X_3(s)=W(s)/s$, $X_2(s)=W(s)/s^2$, and $X_1(s)=W(s)/s^3$. With zero initial conditions, the summing points implement
-
-$$
-\begin{aligned}
-W(s)&=U(s)-a_2X_3(s)-a_1X_2(s)-a_0X_1(s),\\
-Y(s)&=b_2X_3(s)+b_1X_2(s)+b_0X_1(s).
-\end{aligned}
-$$
-
-![Three-integrator ladder in controllable canonical form.](figures/svg/block-diagram-practice4.svg){#fig-tf-to-block-ccf-third}
 
 ### Observable canonical form (OCF)
 
-For the second-order transfer function above, the observable canonical form has signal equations
-
+We can also implement the OCF form of the transfer function as follows:
 $$
-\dot x_1(t)=-a_0x_2(t)+b_0u(t),
-\qquad
-\dot x_2(t)=x_1(t)-a_1x_2(t)+b_1u(t),
-\qquad
-y(t)=x_2(t).
+  \begin{bmatrix} \dot x_1 \\ \dot x_2 \end{bmatrix}
+  = \begin{bmatrix} 0 & -a_0 \\ 1 & -a_1 \end{bmatrix}
+    \begin{bmatrix} x_1 \\ x_2 \end{bmatrix}
+  + \begin{bmatrix} b_0 \\ b_1 \end{bmatrix} u,
+  \qquad
+  y = \begin{bmatrix} 0 & 1 \end{bmatrix}
+      \begin{bmatrix} x_1 \\ x_2 \end{bmatrix},
 $$
-
-Integrating each state equation gives a second block diagram for the same input-output relation.
-
-![Integrator realization in observable canonical form.](figures/svg/block-diagram-practice3.svg){#fig-tf-to-block-ocf}
-
-For the third-order transfer function, the observable canonical form uses the state equations
-
+which can be expanded as
 $$
-\begin{aligned}
-\dot x_1(t)&=-a_0x_3(t)+b_0u(t),\\
-\dot x_2(t)&=x_1(t)-a_1x_3(t)+b_1u(t),\\
-\dot x_3(t)&=x_2(t)-a_2x_3(t)+b_2u(t),\\
-y(t)&=x_3(t).
-\end{aligned}
+  \dot x_1 = -a_0 x_2 + b_0 u, \qquad
+  \dot x_2 = x_1 - a_1 x_2 + b_1 u, \qquad
+  y = x_2.
 $$
+We implement these equations as follows:
 
-Each equation has one summing point followed by an integrator. The output $x_3$ returns through the three denominator gains.
+![Observable canonical form (OCF)](figures/svg/block-diagram-practice3.svg){#fig-tf-to-block-ocf}
 
-![Three-integrator ladder in observable canonical form.](figures/svg/block-diagram-practice5.svg){#fig-tf-to-block-ocf-third}
+Here the gains in the input path are the coefficients of the numerator in reverse order, and the gains in the feedback path are the coefficients of the denominator in reverse order.
 
-The state variables differ between the CCF and OCF diagrams, although each pair realizes the same transfer function. For the corresponding state-space matrices, see [State space models](state-space-models.qmd).
+### Higher-order transfer functions
 
+The same construction works for any order. As an example, consider
+$$
+  G(s) = \frac{b_2 s^2 + b_1 s + b_0}{s^3 + a_2 s^2 + a_1 s + a_0}.
+$$
+Dividing by $s^3$ gives numerator terms $b_2/s + b_1/s^2 + b_0/s^3$ and denominator terms $1 + a_2/s + a_1/s^2 + a_0/s^3$. The same three-integrator ladder serves both. Let $W(s)$ enter the ladder, with $X_3 = W/s$, $X_2 = W/s^2$, $X_1 = W/s^3$. The summing points implement
+$$
+  W = U - a_2 X_3 - a_1 X_2 - a_0 X_1, \qquad
+  Y = b_2 X_3 + b_1 X_2 + b_0 X_1,
+$$
+which gives the CCF diagram:
+
+![Three-integrator ladder in controllable canonical form](figures/svg/block-diagram-practice4.svg){#fig-tf-to-block-ccf-third}
+
+The OCF has the state equations
+$$
+  \begin{aligned}
+  \dot x_1 &= -a_0 x_3 + b_0 u, \\
+  \dot x_2 &= x_1 - a_1 x_3 + b_1 u, \\
+  \dot x_3 &= x_2 - a_2 x_3 + b_2 u, \\
+  y &= x_3,
+  \end{aligned}
+$$
+i.e., each equation is a summing point followed by an integrator, and the output $x_3$ returns through the three denominator gains:
+
+![Three-integrator ladder in observable canonical form](figures/svg/block-diagram-practice5.svg){#fig-tf-to-block-ocf-third}
+
+#### Extending to order $n$
+
+For
+$$
+  G(s) = \frac{b_{n-1} s^{n-1} + \cdots + b_1 s + b_0}{s^n + a_{n-1} s^{n-1} + \cdots + a_1 s + a_0},
+$$
+proceed in the same way:
+
+1. Divide the numerator and denominator by $s^n$.
+2. **CCF:** draw a ladder of $n$ integrators. The output of the $k$-th integrator from the bottom is $x_k$. Feed back $a_0, \dots, a_{n-1}$ from $x_1, \dots, x_n$ into the input summing point (with negative sign), and combine $b_0, \dots, b_{n-1}$ times $x_1, \dots, x_n$ in the output summing point.
+3. **OCF:** use one summing point before each of the $n$ integrators. The $k$-th summing point adds $b_{k-1} u$, $-a_{k-1} x_n$, and (for $k > 1$) $x_{k-1}$. The output is $y = x_n$.
+
+In both cases, the gains appear in the diagram as the coefficients of the numerator and denominator in reverse order. If the transfer function is not strictly proper, first write it as a constant plus a strictly proper part; the constant is a direct (feed-through) path from $U$ to $Y$.
+
+For the corresponding state-space matrices, see [State space models](state-space-models.qmd).
