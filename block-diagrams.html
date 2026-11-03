@@ -492,8 +492,10 @@ window.Quarto = {
   <li><a href="#back-to-the-example" id="toc-back-to-the-example" class="nav-link" data-scroll-target="#back-to-the-example"><span class="header-section-number">9.3</span> Back to the example</a></li>
   <li><a href="#from-a-transfer-function-to-a-block-diagram" id="toc-from-a-transfer-function-to-a-block-diagram" class="nav-link" data-scroll-target="#from-a-transfer-function-to-a-block-diagram"><span class="header-section-number">9.4</span> From a transfer function to a block diagram</a>
   <ul class="collapse">
-  <li><a href="#controllable-canonical-form-ccf" id="toc-controllable-canonical-form-ccf" class="nav-link" data-scroll-target="#controllable-canonical-form-ccf"><span class="header-section-number">9.4.1</span> Controllable canonical form (CCF)</a></li>
-  <li><a href="#observable-canonical-form-ocf" id="toc-observable-canonical-form-ocf" class="nav-link" data-scroll-target="#observable-canonical-form-ocf"><span class="header-section-number">9.4.2</span> Observable canonical form (OCF)</a></li>
+  <li><a href="#motivating-example" id="toc-motivating-example" class="nav-link" data-scroll-target="#motivating-example"><span class="header-section-number">9.4.1</span> Motivating example</a></li>
+  <li><a href="#controllable-canonical-form-ccf" id="toc-controllable-canonical-form-ccf" class="nav-link" data-scroll-target="#controllable-canonical-form-ccf"><span class="header-section-number">9.4.2</span> Controllable canonical form (CCF)</a></li>
+  <li><a href="#observable-canonical-form-ocf" id="toc-observable-canonical-form-ocf" class="nav-link" data-scroll-target="#observable-canonical-form-ocf"><span class="header-section-number">9.4.3</span> Observable canonical form (OCF)</a></li>
+  <li><a href="#higher-order-transfer-functions" id="toc-higher-order-transfer-functions" class="nav-link" data-scroll-target="#higher-order-transfer-functions"><span class="header-section-number">9.4.4</span> Higher-order transfer functions</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/adityam/linear-systems/edit/quarto/block-diagrams.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
@@ -858,102 +860,202 @@ Figure&nbsp;9.4: Practice block diagram with three forward blocks, two feedback 
 </section>
 <section id="from-a-transfer-function-to-a-block-diagram" class="level2" data-number="9.4">
 <h2 data-number="9.4" class="anchored" data-anchor-id="from-a-transfer-function-to-a-block-diagram"><span class="header-section-number">9.4</span> From a transfer function to a block diagram</h2>
-<p>We can also work in the other direction: start from a transfer function and construct a block diagram using integrators. We first build the controllable canonical form for two orders, then build the observable canonical form for the same transfer functions.</p>
-<section id="controllable-canonical-form-ccf" class="level3" data-number="9.4.1">
-<h3 data-number="9.4.1" class="anchored" data-anchor-id="controllable-canonical-form-ccf"><span class="header-section-number">9.4.1</span> Controllable canonical form (CCF)</h3>
-<p>Consider the general second-order, strictly proper transfer function</p>
-<p><span class="math display">\[
-G(s)=\frac{Y(s)}{U(s)}=\frac{b_1s+b_0}{s^2+a_1s+a_0}.
+<p>There are two ways to implement a transfer function: using differentiators or using integrators. Integrators are cheaper to implement, so we study that method here.</p>
+<section id="motivating-example" class="level3" data-number="9.4.1">
+<h3 data-number="9.4.1" class="anchored" data-anchor-id="motivating-example"><span class="header-section-number">9.4.1</span> Motivating example</h3>
+<p>We illustrate the method via an example. Consider <span class="math display">\[
+  G(s) = \frac{s + 2}{s^2 + 3 s + 4}.
 \]</span></p>
-<p>Dividing numerator and denominator by <span class="math inline">\(s^2\)</span> gives</p>
-<p><span class="math display">\[
-G(s)=\frac{b_1/s+b_0/s^2}{1+a_1/s+a_0/s^2}.
+<p>We first write the numerator and denominator as polynomials in <span class="math inline">\(1/s\)</span> (multiply both by <span class="math inline">\(1/s^2\)</span>): <span class="math display">\[
+  G(s) = \frac{ \dfrac 1s + \dfrac 2{s^2} }{ 1 + \dfrac 3s + \dfrac 4{s^2} }
+\]</span> and view this as <span class="math display">\[
+  G(s) = \frac{1}{1 + \Bigl[ \dfrac 3s + \dfrac 4{s^2} \Bigr]}
+  \cdot \Bigl[ \dfrac 1s + \dfrac 2{s^2} \Bigr].
 \]</span></p>
-<p>Let <span class="math inline">\(W(s)\)</span> be the signal entering a pair of cascaded integrators. With zero initial conditions, set <span class="math inline">\(X_2(s)=W(s)/s\)</span> and <span class="math inline">\(X_1(s)=W(s)/s^2\)</span>. Then</p>
-<p><span class="math display">\[
-W(s)=U(s)-a_1X_2(s)-a_0X_1(s),
-\qquad
-Y(s)=b_1X_2(s)+b_0X_1(s).
-\]</span></p>
-<p>The numerator and denominator use the same two integrator signals, so they can share one integrator ladder. The feedback paths implement the denominator, and the output sum implements the numerator.</p>
+<p>We will implement both parts separately.</p>
+<section id="the-numerator" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="the-numerator">The numerator</h4>
+<p>First consider the numerator <span class="math inline">\(\dfrac 1s + \dfrac 2{s^2}\)</span>, which can be implemented as</p>
+<div id="fig-tf-to-block-num" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tf-to-block-num-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/tf-to-block1.svg" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tf-to-block-num-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.5: Implementation of <span class="math inline">\(1/s + 2/s^2\)</span>
+</figcaption>
+</figure>
+</div>
+<p>For reasons that will become clear later, we draw this as follows:</p>
+<div id="fig-tf-to-block-num-ladder" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tf-to-block-num-ladder-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/tf-to-block2.svg" class="img-fluid figure-img" style="width:55.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tf-to-block-num-ladder-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.6: The same diagram with the integrators stacked vertically
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="the-denominator" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="the-denominator">The denominator</h4>
+<p>We now look at the denominator, <span class="math inline">\(\dfrac{1}{1 + \bigl[ \frac 3s + \frac 4{s^2} \bigr]}\)</span>. Note that the term in square brackets has the same form as the numerator. So, we first draw the term in square brackets. We can draw it in either orientation:</p>
+<div id="fig-tf-to-block-bracket" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tf-to-block-bracket-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/tf-to-block3.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tf-to-block-bracket-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.7: The term in square brackets, and its mirror image
+</figcaption>
+</figure>
+</div>
+<p>Now we can implement <span class="math inline">\(1/(1 + [\cdots])\)</span> using feedback.</p>
+<div id="fig-tf-to-block-den" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tf-to-block-den-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/tf-to-block4.svg" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tf-to-block-den-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.8: Implementation of <span class="math inline">\(1/(1+[\cdots])\)</span> via feedback
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="combining-the-numerator-and-denominator" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="combining-the-numerator-and-denominator">Combining the numerator and denominator</h4>
+<p>Now we combine the numerator and the denominator.</p>
+<div id="fig-tf-to-block-combine" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tf-to-block-combine-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/tf-to-block5.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tf-to-block-combine-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.9: Denominator (feedback loop) followed by the numerator
+</figcaption>
+</figure>
+</div>
+<p>Note that the two “integrator ladders” have the same voltages (they carry the same signals), so we can combine them.</p>
+<div id="fig-tf-to-block-shared" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tf-to-block-shared-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/tf-to-block6.svg" class="img-fluid figure-img" style="width:75.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tf-to-block-shared-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.10: Both parts sharing a single integrator ladder
+</figcaption>
+</figure>
+</div>
+<p>This gives us the general form of the implementation, for <span class="math display">\[
+  G(s) = \frac{b_1 s + b_0}{s^2 + a_1 s + a_0}.
+\]</span> The gains in the feedback path are the coefficients of the denominator in reverse order, and the gains in the output path are the coefficients of the numerator in reverse order.</p>
+</section>
+</section>
+<section id="controllable-canonical-form-ccf" class="level3" data-number="9.4.2">
+<h3 data-number="9.4.2" class="anchored" data-anchor-id="controllable-canonical-form-ccf"><span class="header-section-number">9.4.2</span> Controllable canonical form (CCF)</h3>
+<p>This corresponds to the CCF form of the transfer function.</p>
 <div id="fig-tf-to-block-ccf" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-tf-to-block-ccf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/svg/block-diagram-practice2.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tf-to-block-ccf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.5: Integrator realization in controllable canonical form.
+Figure&nbsp;9.11: Controllable canonical form (CCF)
 </figcaption>
 </figure>
 </div>
-<p>Now consider a three-integrator ladder for</p>
-<p><span class="math display">\[
-G(s)=\frac{Y(s)}{U(s)}
-=\frac{b_2s^2+b_1s+b_0}{s^3+a_2s^2+a_1s+a_0}.
+<p>Let’s write the equations corresponding to the two integrators, with states <span class="math inline">\(x_1\)</span> (output of the lower integrator) and <span class="math inline">\(x_2\)</span> (output of the upper integrator): <span class="math display">\[
+  \dot x_1 = x_2, \qquad
+  \dot x_2 = -a_0 x_1 - a_1 x_2 + u,
+\]</span> which can be written in matrix form as <span class="math display">\[
+  \begin{bmatrix} \dot x_1 \\ \dot x_2 \end{bmatrix}
+  = \begin{bmatrix} 0 &amp; 1 \\ -a_0 &amp; -a_1 \end{bmatrix}
+    \begin{bmatrix} x_1 \\ x_2 \end{bmatrix}
+  + \begin{bmatrix} 0 \\ 1 \end{bmatrix} u.
+\]</span> Similarly, the output is <span class="math inline">\(y = b_0 x_1 + b_1 x_2\)</span>, which can be written as <span class="math display">\[
+  y = \begin{bmatrix} b_0 &amp; b_1 \end{bmatrix}
+      \begin{bmatrix} x_1 \\ x_2 \end{bmatrix}.
 \]</span></p>
-<p>Dividing by <span class="math inline">\(s^3\)</span> gives numerator terms <span class="math inline">\(b_2/s+b_1/s^2+b_0/s^3\)</span> and denominator terms <span class="math inline">\(1+a_2/s+a_1/s^2+a_0/s^3\)</span>. The same three integrator outputs can serve both parts.</p>
-<p>Let <span class="math inline">\(W(s)\)</span> enter the ladder, with <span class="math inline">\(X_3(s)=W(s)/s\)</span>, <span class="math inline">\(X_2(s)=W(s)/s^2\)</span>, and <span class="math inline">\(X_1(s)=W(s)/s^3\)</span>. With zero initial conditions, the summing points implement</p>
-<p><span class="math display">\[
-\begin{aligned}
-W(s)&amp;=U(s)-a_2X_3(s)-a_1X_2(s)-a_0X_1(s),\\
-Y(s)&amp;=b_2X_3(s)+b_1X_2(s)+b_0X_1(s).
-\end{aligned}
-\]</span></p>
-<div id="fig-tf-to-block-ccf-third" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-tf-to-block-ccf-third-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figures/svg/block-diagram-practice4.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tf-to-block-ccf-third-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.6: Three-integrator ladder in controllable canonical form.
-</figcaption>
-</figure>
-</div>
 </section>
-<section id="observable-canonical-form-ocf" class="level3" data-number="9.4.2">
-<h3 data-number="9.4.2" class="anchored" data-anchor-id="observable-canonical-form-ocf"><span class="header-section-number">9.4.2</span> Observable canonical form (OCF)</h3>
-<p>For the second-order transfer function above, the observable canonical form has signal equations</p>
-<p><span class="math display">\[
-\dot x_1(t)=-a_0x_2(t)+b_0u(t),
-\qquad
-\dot x_2(t)=x_1(t)-a_1x_2(t)+b_1u(t),
-\qquad
-y(t)=x_2(t).
-\]</span></p>
-<p>Integrating each state equation gives a second block diagram for the same input-output relation.</p>
+<section id="observable-canonical-form-ocf" class="level3" data-number="9.4.3">
+<h3 data-number="9.4.3" class="anchored" data-anchor-id="observable-canonical-form-ocf"><span class="header-section-number">9.4.3</span> Observable canonical form (OCF)</h3>
+<p>We can also implement the OCF form of the transfer function as follows: <span class="math display">\[
+  \begin{bmatrix} \dot x_1 \\ \dot x_2 \end{bmatrix}
+  = \begin{bmatrix} 0 &amp; -a_0 \\ 1 &amp; -a_1 \end{bmatrix}
+    \begin{bmatrix} x_1 \\ x_2 \end{bmatrix}
+  + \begin{bmatrix} b_0 \\ b_1 \end{bmatrix} u,
+  \qquad
+  y = \begin{bmatrix} 0 &amp; 1 \end{bmatrix}
+      \begin{bmatrix} x_1 \\ x_2 \end{bmatrix},
+\]</span> which can be expanded as <span class="math display">\[
+  \dot x_1 = -a_0 x_2 + b_0 u, \qquad
+  \dot x_2 = x_1 - a_1 x_2 + b_1 u, \qquad
+  y = x_2.
+\]</span> We implement these equations as follows:</p>
 <div id="fig-tf-to-block-ocf" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-tf-to-block-ocf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/svg/block-diagram-practice3.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tf-to-block-ocf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.7: Integrator realization in observable canonical form.
+Figure&nbsp;9.12: Observable canonical form (OCF)
 </figcaption>
 </figure>
 </div>
-<p>For the third-order transfer function, the observable canonical form uses the state equations</p>
-<p><span class="math display">\[
-\begin{aligned}
-\dot x_1(t)&amp;=-a_0x_3(t)+b_0u(t),\\
-\dot x_2(t)&amp;=x_1(t)-a_1x_3(t)+b_1u(t),\\
-\dot x_3(t)&amp;=x_2(t)-a_2x_3(t)+b_2u(t),\\
-y(t)&amp;=x_3(t).
-\end{aligned}
-\]</span></p>
-<p>Each equation has one summing point followed by an integrator. The output <span class="math inline">\(x_3\)</span> returns through the three denominator gains.</p>
+<p>Here the gains in the input path are the coefficients of the numerator in reverse order, and the gains in the feedback path are the coefficients of the denominator in reverse order.</p>
+</section>
+<section id="higher-order-transfer-functions" class="level3" data-number="9.4.4">
+<h3 data-number="9.4.4" class="anchored" data-anchor-id="higher-order-transfer-functions"><span class="header-section-number">9.4.4</span> Higher-order transfer functions</h3>
+<p>The same construction works for any order. As an example, consider <span class="math display">\[
+  G(s) = \frac{b_2 s^2 + b_1 s + b_0}{s^3 + a_2 s^2 + a_1 s + a_0}.
+\]</span> Dividing by <span class="math inline">\(s^3\)</span> gives numerator terms <span class="math inline">\(b_2/s + b_1/s^2 + b_0/s^3\)</span> and denominator terms <span class="math inline">\(1 + a_2/s + a_1/s^2 + a_0/s^3\)</span>. The same three-integrator ladder serves both. Let <span class="math inline">\(W(s)\)</span> enter the ladder, with <span class="math inline">\(X_3 = W/s\)</span>, <span class="math inline">\(X_2 = W/s^2\)</span>, <span class="math inline">\(X_1 = W/s^3\)</span>. The summing points implement <span class="math display">\[
+  W = U - a_2 X_3 - a_1 X_2 - a_0 X_1, \qquad
+  Y = b_2 X_3 + b_1 X_2 + b_0 X_1,
+\]</span> which gives the CCF diagram:</p>
+<div id="fig-tf-to-block-ccf-third" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tf-to-block-ccf-third-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/svg/block-diagram-practice4.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tf-to-block-ccf-third-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.13: Three-integrator ladder in controllable canonical form
+</figcaption>
+</figure>
+</div>
+<p>The OCF has the state equations <span class="math display">\[
+  \begin{aligned}
+  \dot x_1 &amp;= -a_0 x_3 + b_0 u, \\
+  \dot x_2 &amp;= x_1 - a_1 x_3 + b_1 u, \\
+  \dot x_3 &amp;= x_2 - a_2 x_3 + b_2 u, \\
+  y &amp;= x_3,
+  \end{aligned}
+\]</span> i.e., each equation is a summing point followed by an integrator, and the output <span class="math inline">\(x_3\)</span> returns through the three denominator gains:</p>
 <div id="fig-tf-to-block-ocf-third" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-tf-to-block-ocf-third-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/svg/block-diagram-practice5.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tf-to-block-ocf-third-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.8: Three-integrator ladder in observable canonical form.
+Figure&nbsp;9.14: Three-integrator ladder in observable canonical form
 </figcaption>
 </figure>
 </div>
-<p>The state variables differ between the CCF and OCF diagrams, although each pair realizes the same transfer function. For the corresponding state-space matrices, see <a href="./state-space-models.html">State space models</a>.</p>
+<section id="extending-to-order-n" class="level4" data-number="9.4.4.1">
+<h4 data-number="9.4.4.1" class="anchored" data-anchor-id="extending-to-order-n"><span class="header-section-number">9.4.4.1</span> Extending to order <span class="math inline">\(n\)</span></h4>
+<p>For <span class="math display">\[
+  G(s) = \frac{b_{n-1} s^{n-1} + \cdots + b_1 s + b_0}{s^n + a_{n-1} s^{n-1} + \cdots + a_1 s + a_0},
+\]</span> proceed in the same way:</p>
+<ol type="1">
+<li>Divide the numerator and denominator by <span class="math inline">\(s^n\)</span>.</li>
+<li><strong>CCF:</strong> draw a ladder of <span class="math inline">\(n\)</span> integrators. The output of the <span class="math inline">\(k\)</span>-th integrator from the bottom is <span class="math inline">\(x_k\)</span>. Feed back <span class="math inline">\(a_0, \dots, a_{n-1}\)</span> from <span class="math inline">\(x_1, \dots, x_n\)</span> into the input summing point (with negative sign), and combine <span class="math inline">\(b_0, \dots, b_{n-1}\)</span> times <span class="math inline">\(x_1, \dots, x_n\)</span> in the output summing point.</li>
+<li><strong>OCF:</strong> use one summing point before each of the <span class="math inline">\(n\)</span> integrators. The <span class="math inline">\(k\)</span>-th summing point adds <span class="math inline">\(b_{k-1} u\)</span>, <span class="math inline">\(-a_{k-1} x_n\)</span>, and (for <span class="math inline">\(k &gt; 1\)</span>) <span class="math inline">\(x_{k-1}\)</span>. The output is <span class="math inline">\(y = x_n\)</span>.</li>
+</ol>
+<p>In both cases, the gains appear in the diagram as the coefficients of the numerator and denominator in reverse order. If the transfer function is not strictly proper, first write it as a constant plus a strictly proper part; the constant is a direct (feed-through) path from <span class="math inline">\(U\)</span> to <span class="math inline">\(Y\)</span>.</p>
+<p>For the corresponding state-space matrices, see <a href="./state-space-models.html">State space models</a>.</p>
 
 
+</section>
 </section>
 </section>
 
