@@ -1,0 +1,134 @@
+\usepath[/home/adityam/Projects/presentations]
+\enablemode[euler]
+\environment env-fonts.tex
+\usemodule[tikz]
+\usetikzlibrary[positioning,arrows.meta]
+
+\startMPdefinitions
+ahangle := 65;
+ahlength := 10;
+vardef arrowhead expr p =
+  save q, e, f, g; path q; pair e; pair f; pair g;
+  e = point length p of p;
+  q = gobble(p shifted -e cutafter makepath(pencircle scaled 2ahlength)) cuttings;
+  f = point 0 of (q rotated 0.5ahangle) shifted e;
+  g = point length q of (reverse q rotated -0.5ahangle) shifted e;
+  f .. {dir (angle direction length q of (q rotated 0.5ahangle) - 0.3ahangle)}e
+    & e{dir (angle direction 0 of ((reverse q) rotated -0.5ahangle)+0.3ahangle)} .. g
+enddef;
+vardef arrowpath expr p = p enddef;
+def mfun_draw_arrow_path text t =
+  if autoarrows : set_ahlength(t); fi
+  draw arrowpath mfun_arrow_path t;
+  draw arrowhead mfun_arrow_path t;
+  endgroup;
+enddef;
+def mfun_draw_arrow_path_double text t =
+  if autoarrows : set_ahlength(t); fi
+  draw arrowpath (reverse arrowpath mfun_arrow_path) t;
+  draw arrowhead mfun_arrow_path t;
+  draw arrowhead reverse mfun_arrow_path t;
+  endgroup;
+enddef;
+primarydef a -+ b = a -- (xpart b, ypart a) -- b enddef;
+primarydef a +- b = a -- (xpart a, ypart b) -- b enddef;
+input boxes;
+input mp-sketch;
+sketchypaths;
+sketch_amount := 1.3bp;
+pickup pencircle scaled 2bp;
+defaultdx := 10bp;
+defaultdy := 10bp;
+\stopMPdefinitions
+
+\tikzset{
+  int/.style={draw,rectangle,minimum height=3.6em,minimum width=2.4em,inner sep=1ex},
+  gain/.style={draw,rectangle,minimum height=2.8em,minimum width=2.8em,inner sep=1ex},
+  sum/.style={draw,circle,minimum size=6mm,inner sep=0pt},
+  tap/.style={circle,fill,inner sep=1.2pt}
+}
+
+\starttext
+
+% Practice diagram adapted from the first additional exercise in the handwritten notes.
+\startMPpage[offset=1dk]
+  begingroup;
+  sketchypaths;
+  ux := 1cm; uy := 1cm;
+  circleit.sum_one("\tfc $+$");
+  circleit.sum_two("\tfc $+$");
+  boxit.G_one("$G_1(s)$");
+  boxit.G_two("$G_2(s)$");
+  boxit.G_three("$G_3(s)$");
+  boxit.H_one("$H_1(s)$");
+  boxit.H_two("$H_2(s)$");
+
+  sum_one.c = origin;
+  G_one.w - sum_one.e = (1.8ux,0);
+  G_two.w - G_one.e = (1.5ux,0);
+  sum_two.w - G_two.e = (1.5ux,0);
+  G_three.w - sum_two.e = (1.8ux,0);
+  xpart H_one.c = xpart G_one.c;
+  ypart G_one.s - ypart H_one.n = 1.4uy;
+  xpart H_two.c = xpart G_two.c;
+  ypart H_one.s - ypart H_two.n = 1.5uy;
+  boxes_fixsize(sum_one,sum_two,G_one,G_two,G_three,H_one,H_two);
+  boxes_fixpos(sum_one,sum_two,G_one,G_two,G_three,H_one,H_two);
+  drawunboxed(sum_one,sum_two,G_one,G_two,G_three,H_one,H_two);
+
+  pair Input,Output,split_one,split_two,split_three,top_left,top_right;
+  Input := sum_one.w - (1.5ux,0);
+  split_one := sum_one.e + (0.75ux,0);
+  split_two := sum_two.e + (0.75ux,0);
+  split_three := G_three.e + (0.75ux,0);
+  Output := split_three + (1.5ux,0);
+  top_left := (xpart sum_one.c, ypart G_one.n + 1.6uy);
+  top_right := (xpart split_two, ypart top_left);
+
+  for i = 1 upto 5:
+    sketch_amount := 1.3bp;
+    draw bpath sum_one;
+    draw bpath sum_two;
+    draw bpath G_one cornered 10bp;
+    draw bpath G_two cornered 10bp;
+    draw bpath G_three cornered 10bp;
+    draw bpath H_one cornered 10bp;
+    draw bpath H_two cornered 10bp;
+    sketch_amount := 0.6bp;
+    drawarrow Input -- lft sum_one.w;
+    drawarrow sum_one.e -- lft G_one.w;
+    drawarrow G_one.e -- lft G_two.w;
+    drawarrow G_two.e -- lft sum_two.w;
+    drawarrow sum_two.e -- lft G_three.w;
+    drawarrow G_three.e -- Output;
+    normaldraw split_one -- (xpart split_one,ypart H_one.c)
+      -- (H_one.w - (0.75ux,0));
+    drawarrow H_one.w - (0.75ux,0) -- lft H_one.w;
+    normaldraw H_one.e -- (xpart sum_two.c,ypart H_one.c)
+      -- (sum_two.s - (0,0.75uy));
+    drawarrow sum_two.s - (0,0.75uy) -- bot sum_two.s;
+    normaldraw split_two -- top_right -- top_left
+      -- (sum_one.n + (0,0.75uy));
+    drawarrow sum_one.n + (0,0.75uy) -- top sum_one.n;
+    normaldraw split_three -- (xpart split_three,ypart H_two.c)
+      -- (H_two.e + (0.75ux,0));
+    drawarrow H_two.e + (0.75ux,0) -- rt H_two.e;
+    normaldraw H_two.w -- (xpart sum_one.c,ypart H_two.c)
+      -- (sum_one.s - (0,0.75uy));
+    drawarrow sum_one.s - (0,0.75uy) -- bot sum_one.s;
+  endfor;
+  fill fullcircle scaled 4bp shifted split_one;
+  fill fullcircle scaled 4bp shifted split_two;
+  fill fullcircle scaled 4bp shifted split_three;
+  label.ulft("\tfx $+$",sum_one.w+(2bp,2bp));
+  label.top("\tfx $+$",sum_one.n+(0,2bp));
+  label.lrt("\tfx $-$",sum_one.s+(2bp,0));
+  label.ulft("\tfx $+$",sum_two.w+(2bp,2bp));
+  label.lrt("\tfx $-$",sum_two.s+(2bp,0));
+  label.lft("$R(s)$",Input);
+  label.rt("$Y(s)$",Output);
+  currentpicture := currentpicture scaled 1.5;
+  endgroup;
+\stopMPpage
+
+\stoptext

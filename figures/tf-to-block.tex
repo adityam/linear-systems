@@ -5,7 +5,8 @@
 \usetikzlibrary[positioning,arrows.meta]
 
 \tikzset{
-  block/.style={draw,rectangle,minimum height=3em,minimum width=4em,inner sep=1ex},
+  int/.style={draw,rectangle,minimum height=4.4em,minimum width=2.6em,inner sep=1ex},
+  gain/.style={draw,rectangle,minimum height=2.8em,minimum width=2.8em,inner sep=1ex},
   sum/.style={draw,circle,minimum size=6mm,inner sep=0pt},
   tap/.style={circle,fill,inner sep=1.2pt}
 }
@@ -14,12 +15,12 @@
 
 % 1. Numerator 1/s + 2/s^2, cascade form.
 \startTEXpage[offset=1dk]
-\scale[scale=1500]{\starttikzpicture[thick]
-  \node[block] (i1) at (0,0) {$1/s$};
-  \node[block] (i2) at (4,0) {$1/s$};
+\scale[scale=1500]{\starttikzpicture[thick,y=1.15cm]
+  \node[int] (i1) at (0,0) {$\dfrac{1}{s}$};
+  \node[int] (i2) at (4,0) {$\dfrac{1}{s}$};
   \node[tap] (t) at (2,0) {};
-  \node[block] (g1) at (4,-3.4) {$1$};
-  \node[block] (g2) at (7.5,-1.7) {$2$};
+  \node[gain] (g1) at (4,-3.4) {$1$};
+  \node[gain] (g2) at (7.5,-1.7) {$2$};
   \node[sum] (s) at (7.5,-3.4) {$+$};
   \draw[-{Stealth[length=3mm,width=2.4mm]}] (-1.8,0) -- (i1.west);
   \draw[-{Stealth[length=3mm,width=2.4mm]}] (i1.east) -- (i2.west);
@@ -33,13 +34,13 @@
 
 % 2. Numerator, ladder drawn vertically; 3. bracket term, vertical and mirrored.
 \startTEXpage[offset=1dk]
-\scale[scale=1500]{\starttikzpicture[thick]
-  \node[block] (i1) at (0,0) {$1/s$};
-  \node[block] (i2) at (0,-3) {$1/s$};
+\scale[scale=1500]{\starttikzpicture[thick,y=1.15cm]
+  \node[int] (i1) at (0,0) {$\dfrac{1}{s}$};
+  \node[int] (i2) at (0,-3) {$\dfrac{1}{s}$};
   \node[tap] (xa) at (0,-1.5) {};
-  \node[tap] (xb) at (0,-4.5) {};
-  \node[block] (g1) at (3,-1.5) {$1$};
-  \node[block] (g2) at (3,-4.5) {$2$};
+  \node[coordinate] (xb) at (0,-4.5) {};
+  \node[gain] (g1) at (3,-1.5) {$1$};
+  \node[gain] (g2) at (3,-4.5) {$2$};
   \node[sum] (s) at (6,-1.5) {$+$};
   \draw[-{Stealth[length=3mm,width=2.4mm]}] (-1.5,1.5) -| (0,1.5) -- (i1.north);
   \draw[-{Stealth[length=3mm,width=2.4mm]}] (i1.south) -- (i2.north);
@@ -53,14 +54,14 @@
 \stopTEXpage
 
 \startTEXpage[offset=1dk]
-\scale[scale=1500]{\starttikzpicture[thick]
+\scale[scale=1500]{\starttikzpicture[thick,y=1.15cm]
   % left: bracket term
-  \node[block] (i1) at (0,0) {$1/s$};
-  \node[block] (i2) at (0,-3) {$1/s$};
+  \node[int] (i1) at (0,0) {$\dfrac{1}{s}$};
+  \node[int] (i2) at (0,-3) {$\dfrac{1}{s}$};
   \node[tap] (xa) at (0,-1.5) {};
-  \node[tap] (xb) at (0,-4.5) {};
-  \node[block] (g1) at (3,-1.5) {$3$};
-  \node[block] (g2) at (3,-4.5) {$4$};
+  \node[coordinate] (xb) at (0,-4.5) {};
+  \node[gain] (g1) at (3,-1.5) {$3$};
+  \node[gain] (g2) at (3,-4.5) {$4$};
   \node[sum] (s) at (6,-1.5) {$+$};
   \draw[-{Stealth[length=3mm,width=2.4mm]}] (-1.5,1.5) -| (0,1.5) -- (i1.north);
   \draw[-{Stealth[length=3mm,width=2.4mm]}] (i1.south) -- (i2.north);
@@ -72,12 +73,12 @@
   \draw[-{Stealth[length=3mm,width=2.4mm]}] (s.north) |- (7.5,1.5);
   \node at (9,-1.5) {\tfd $\equiv$};
   % right: mirror image
-  \node[block] (mi1) at (18,0) {$1/s$};
-  \node[block] (mi2) at (18,-3) {$1/s$};
+  \node[int] (mi1) at (18,0) {$\dfrac{1}{s}$};
+  \node[int] (mi2) at (18,-3) {$\dfrac{1}{s}$};
   \node[tap] (mxa) at (18,-1.5) {};
-  \node[tap] (mxb) at (18,-4.5) {};
-  \node[block] (mg1) at (15,-1.5) {$3$};
-  \node[block] (mg2) at (15,-4.5) {$4$};
+  \node[coordinate] (mxb) at (18,-4.5) {};
+  \node[gain] (mg1) at (15,-1.5) {$3$};
+  \node[gain] (mg2) at (15,-4.5) {$4$};
   \node[sum] (ms) at (12,-1.5) {$+$};
   \draw[-{Stealth[length=3mm,width=2.4mm]}] (19.5,1.5) -| (18,1.5) -- (mi1.north);
   \draw[-{Stealth[length=3mm,width=2.4mm]}] (mi1.south) -- (mi2.north);
@@ -92,18 +93,18 @@
 
 % 4. Feedback implementation of 1/(1+[...]).
 \startTEXpage[offset=1dk]
-\scale[scale=1500]{\starttikzpicture[thick]
+\scale[scale=1500]{\starttikzpicture[thick,y=1.15cm]
   \node[sum] (s) at (0,0) {$+$};
   \node[tap] (t) at (6,0) {};
   \node[sum] (s2) at (0,-3.5) {$+$};
-  \node[block] (i1) at (6,-2) {$1/s$};
-  \node[block] (i2) at (6,-5) {$1/s$};
+  \node[int] (i1) at (6,-2) {$\dfrac{1}{s}$};
+  \node[int] (i2) at (6,-5) {$\dfrac{1}{s}$};
   \node[tap] (xa) at (6,-3.5) {};
-  \node[tap] (xb) at (6,-6.5) {};
-  \node[block] (g3) at (3,-3.5) {$3$};
-  \node[block] (g4) at (3,-6.5) {$4$};
-  \draw[gray] (-1.3,-1.2) rectangle (8.2,-7.6);
-  \node[right] at (8.5,-4.2) {Term in brackets};
+  \node[coordinate] (xb) at (6,-6.5) {};
+  \node[gain] (g3) at (3,-3.5) {$3$};
+  \node[gain] (g4) at (3,-6.5) {$4$};
+  \draw[gray] (-1.3,-1.0) rectangle (8.2,-7.6);
+  \node[right] at (8.5,-4.6) {Term in brackets};
   \draw[-{Stealth[length=3mm,width=2.4mm]}] (-1.8,0) -- (s.west) node[above left] {$+$};
   \draw[-{Stealth[length=3mm,width=2.4mm]}] (s.east) -- (t.center) -- (8.5,0);
   \draw[-{Stealth[length=3mm,width=2.4mm]}] (t.center) -- (i1.north);
@@ -119,23 +120,23 @@
 
 % 5. Numerator and denominator side by side.
 \startTEXpage[offset=1dk]
-\scale[scale=1500]{\starttikzpicture[thick]
+\scale[scale=1500]{\starttikzpicture[thick,y=1.15cm]
   \node[sum] (s) at (0,0) {$+$};
   \node[tap] (t) at (6,0) {};
   \node[sum] (s2) at (0,-3.5) {$+$};
-  \node[block] (i1) at (6,-2) {$1/s$};
-  \node[block] (i2) at (6,-5) {$1/s$};
+  \node[int] (i1) at (6,-2) {$\dfrac{1}{s}$};
+  \node[int] (i2) at (6,-5) {$\dfrac{1}{s}$};
   \node[tap] (xa) at (6,-3.5) {};
-  \node[tap] (xb) at (6,-6.5) {};
-  \node[block] (g3) at (3,-3.5) {$3$};
-  \node[block] (g4) at (3,-6.5) {$4$};
-  \node[tap] (t2) at (9,0) {};
-  \node[block] (n1) at (9,-2) {$1/s$};
-  \node[block] (n2) at (9,-5) {$1/s$};
+  \node[coordinate] (xb) at (6,-6.5) {};
+  \node[gain] (g3) at (3,-3.5) {$3$};
+  \node[gain] (g4) at (3,-6.5) {$4$};
+  \node[coordinate] (t2) at (9,0) {};
+  \node[int] (n1) at (9,-2) {$\dfrac{1}{s}$};
+  \node[int] (n2) at (9,-5) {$\dfrac{1}{s}$};
   \node[tap] (na) at (9,-3.5) {};
-  \node[tap] (nb) at (9,-6.5) {};
-  \node[block] (h1) at (12,-3.5) {$1$};
-  \node[block] (h2) at (12,-6.5) {$2$};
+  \node[coordinate] (nb) at (9,-6.5) {};
+  \node[gain] (h1) at (12,-3.5) {$1$};
+  \node[gain] (h2) at (12,-6.5) {$2$};
   \node[sum] (sy) at (15,-3.5) {$+$};
   \draw[-{Stealth[length=3mm,width=2.4mm]}] (-1.8,0) -- (s.west) node[above left] {$+$};
   \draw[-{Stealth[length=3mm,width=2.4mm]}] (s.east) -- (t.center) -- (t2.center);
@@ -160,18 +161,18 @@
 
 % 6. Shared integrator ladder.
 \startTEXpage[offset=1dk]
-\scale[scale=1500]{\starttikzpicture[thick]
+\scale[scale=1500]{\starttikzpicture[thick,y=1.15cm]
   \node[sum] (s) at (0,0) {$+$};
-  \node[tap] (t) at (6,0) {};
+  \node[coordinate] (t) at (6,0) {};
   \node[sum] (s2) at (0,-3.5) {$+$};
-  \node[block] (i1) at (6,-2) {$1/s$};
-  \node[block] (i2) at (6,-5) {$1/s$};
+  \node[int] (i1) at (6,-2) {$\dfrac{1}{s}$};
+  \node[int] (i2) at (6,-5) {$\dfrac{1}{s}$};
   \node[tap] (xa) at (6,-3.5) {};
   \node[tap] (xb) at (6,-6.5) {};
-  \node[block] (g3) at (3,-3.5) {$3$};
-  \node[block] (g4) at (3,-6.5) {$4$};
-  \node[block] (h1) at (9,-3.5) {$1$};
-  \node[block] (h2) at (9,-6.5) {$2$};
+  \node[gain] (g3) at (3,-3.5) {$3$};
+  \node[gain] (g4) at (3,-6.5) {$4$};
+  \node[gain] (h1) at (9,-3.5) {$1$};
+  \node[gain] (h2) at (9,-6.5) {$2$};
   \node[sum] (sy) at (12,-3.5) {$+$};
   \draw[-{Stealth[length=3mm,width=2.4mm]}] (-1.8,0) -- (s.west) node[above left] {$+$};
   \draw[-{Stealth[length=3mm,width=2.4mm]}] (s.east) -- (t.center);
@@ -190,4 +191,172 @@
   \draw[-{Stealth[length=3mm,width=2.4mm]}] (sy.north) |- (13.5,0);
 \stoptikzpicture}
 \stopTEXpage
+
+% Controllable canonical-form integrator realization.
+\startTEXpage[offset=1dk]
+\scale[scale=1500]{\starttikzpicture[thick,y=1.2cm]
+  \node[sum] (su) at (0,0) {$+$};
+  \node[sum] (sf) at (0,-3) {$+$};
+  \node[int] (i1) at (5,-1.5) {$\dfrac{1}{s}$};
+  \node[int] (i2) at (5,-4.5) {$\dfrac{1}{s}$};
+  \node[coordinate] (w) at (5,0) {};
+  \node[tap] (x2) at (5,-3) {};
+  \node[tap] (x1) at (5,-6) {};
+  \node[gain] (a1) at (2,-3) {$a_1$};
+  \node[gain] (a0) at (2,-6) {$a_0$};
+  \node[gain] (b1) at (8.5,-3) {$b_1$};
+  \node[gain] (b0) at (8.5,-6) {$b_0$};
+  \node[sum] (sy) at (11.5,-3) {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (-1.4,0) node[left] {$U(s)$} -- (su.west) node[above left] {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (su.east) -- (w.center);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (w.center) -- (i1.north);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (i1.south) -- (x2.center);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (x2.center) -- (i2.north);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (i2.south) -- (x1.center);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (x2.center) -- (a1.east);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (a1.west) -- (sf.east) node[above right] {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (x1.center) -- (a0.east);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (a0.west) -| (sf.south) node[below left] {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (sf.north) -- (su.south) node[below left] {$-$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (x2.center) -- (b1.west);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (b1.east) -- (sy.west) node[above left] {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (x1.center) -- (b0.west);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (b0.east) -| (sy.south) node[below left] {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (sy.east) -- (13,-3) node[right] {$Y(s)$};
+  \node[right=3pt] at (i1.east) {$x_2(t)$};
+  \node[right=3pt] at (i2.east) {$x_1(t)$};
+\stoptikzpicture}
+\stopTEXpage
+
+% Observable canonical-form integrator realization.
+\startTEXpage[offset=1dk]
+\scale[scale=1500]{\starttikzpicture[thick,y=1.55cm]
+  \node[tap] (utap) at (0,0) {};
+  \node[gain] (b0) at (2,0) {$b_0$};
+  \node[gain] (b1) at (2,-3) {$b_1$};
+  \node[sum] (s1) at (5,0) {$+$};
+  \node[sum] (s2) at (5,-3) {$+$};
+  \node[int] (i1) at (5,-1.5) {$\dfrac{1}{s}$};
+  \node[int] (i2) at (5,-4.5) {$\dfrac{1}{s}$};
+  \node[coordinate] (x2) at (5,-6) {};
+  \node[gain] (a0) at (8,0) {$a_0$};
+  \node[gain] (a1) at (8,-3) {$a_1$};
+  \node[coordinate] (ytap) at (10,-6) {};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (-1,0) node[left] {$U(s)$} -- (b0.west);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (utap.center) |- (b1.west);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (b0.east) -- (s1.west) node[above left] {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (s1.south) -- (i1.north);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (i1.south) -- (s2.north) node[above right] {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (b1.east) -- (s2.west) node[above left] {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (s2.south) -- (i2.north);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (i2.south) -- (x2.center);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (x2.center) -- (ytap.center) -- (10,0) -- (11.2,0) node[right] {$Y(s)$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (10,0) -- (a0.east);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (a0.west) -- (s1.east) node[above right] {$-$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (10,-3) -- (a1.east);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (a1.west) -- (s2.east) node[above right] {$-$};
+  \node[tap] at (10,0) {};
+  \node[tap] at (10,-3) {};
+  \node[right=3pt] at (i1.east) {$x_1(t)$};
+  \node[right=3pt] at (i2.east) {$x_2(t)$};
+\stoptikzpicture}
+\stopTEXpage
+
+% Third-order controllable canonical-form ladder.
+\startTEXpage[offset=1dk]
+\scale[scale=1500]{\starttikzpicture[thick,y=1.2cm]
+  \node[sum] (su) at (0,0) {$+$};
+  \node[sum] (sf2) at (0,-3) {$+$};
+  \node[sum] (sf1) at (0,-6) {$+$};
+  \node[int] (i1) at (5,-1.5) {$\dfrac{1}{s}$};
+  \node[int] (i2) at (5,-4.5) {$\dfrac{1}{s}$};
+  \node[int] (i3) at (5,-7.5) {$\dfrac{1}{s}$};
+  \node[coordinate] (w) at (5,0) {};
+  \node[tap] (x3) at (5,-3) {};
+  \node[tap] (x2) at (5,-6) {};
+  \node[tap] (x1) at (5,-9) {};
+  \node[gain] (a2) at (2,-3) {$a_2$};
+  \node[gain] (a1) at (2,-6) {$a_1$};
+  \node[gain] (a0) at (2,-9) {$a_0$};
+  \node[gain] (b2) at (8.5,-3) {$b_2$};
+  \node[gain] (b1) at (8.5,-6) {$b_1$};
+  \node[gain] (b0) at (8.5,-9) {$b_0$};
+  \node[sum] (sy2) at (11.5,-3) {$+$};
+  \node[sum] (sy1) at (11.5,-6) {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (-1.4,0) node[left] {$U(s)$} -- (su.west) node[above left] {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (su.east) -- (w.center);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (w.center) -- (i1.north);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (i1.south) -- (x3.center);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (x3.center) -- (i2.north);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (i2.south) -- (x2.center);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (x2.center) -- (i3.north);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (i3.south) -- (x1.center);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (x3.center) -- (a2.east);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (a2.west) -- (sf2.east) node[above right] {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (x2.center) -- (a1.east);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (a1.west) -- (sf1.east) node[above right] {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (x1.center) -- (a0.east);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (a0.west) -| (sf1.south) node[below left] {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (sf1.north) -- (sf2.south) node[below left] {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (sf2.north) -- (su.south) node[below left] {$-$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (x3.center) -- (b2.west);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (b2.east) -- (sy2.west) node[above left] {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (x2.center) -- (b1.west);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (b1.east) -- (sy1.west) node[above left] {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (x1.center) -- (b0.west);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (b0.east) -| (sy1.south) node[below left] {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (sy1.north) -- (sy2.south) node[below left] {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (sy2.east) -- (13,-3) node[right] {$Y(s)$};
+  \node[right=3pt] at (i1.east) {$x_3(t)$};
+  \node[right=3pt] at (i2.east) {$x_2(t)$};
+  \node[right=3pt] at (i3.east) {$x_1(t)$};
+\stoptikzpicture}
+\stopTEXpage
+
+% Third-order observable canonical-form ladder.
+\startTEXpage[offset=1dk]
+\scale[scale=1500]{\starttikzpicture[thick,y=1.55cm]
+  \node[tap] (utap) at (0,0) {};
+  \node[gain] (b0) at (2,0) {$b_0$};
+  \node[gain] (b1) at (2,-3) {$b_1$};
+  \node[gain] (b2) at (2,-6) {$b_2$};
+  \node[sum] (s1) at (5,0) {$+$};
+  \node[sum] (s2) at (5,-3) {$+$};
+  \node[sum] (s3) at (5,-6) {$+$};
+  \node[int] (i1) at (5,-1.5) {$\dfrac{1}{s}$};
+  \node[int] (i2) at (5,-4.5) {$\dfrac{1}{s}$};
+  \node[int] (i3) at (5,-7.5) {$\dfrac{1}{s}$};
+  \node[coordinate] (x3) at (5,-9) {};
+  \node[gain] (a0) at (8,0) {$a_0$};
+  \node[gain] (a1) at (8,-3) {$a_1$};
+  \node[gain] (a2) at (8,-6) {$a_2$};
+  \node[coordinate] (ytap) at (10,-9) {};
+  \node[tap] (fb1) at (10,-3) {};
+  \node[tap] (fb2) at (10,-6) {};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (-1,0) node[left] {$U(s)$} -- (b0.west);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (utap.center) |- (b1.west);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (utap.center) |- (b2.west);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (b0.east) -- (s1.west) node[above left] {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (s1.south) -- (i1.north);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (i1.south) -- (s2.north) node[above right] {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (b1.east) -- (s2.west) node[above left] {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (s2.south) -- (i2.north);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (i2.south) -- (s3.north) node[above right] {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (b2.east) -- (s3.west) node[above left] {$+$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (s3.south) -- (i3.north);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (i3.south) -- (x3.center);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (x3.center) -- (ytap.center) -- (10,0) -- (11.2,0) node[right] {$Y(s)$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (10,0) -- (a0.east);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (a0.west) -- (s1.east) node[above right] {$-$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (fb1.center) -- (a1.east);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (a1.west) -- (s2.east) node[above right] {$-$};
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (fb2.center) -- (a2.east);
+  \draw[-{Stealth[length=3mm,width=2.4mm]}] (a2.west) -- (s3.east) node[above right] {$-$};
+  \node[tap] at (10,0) {};
+  \node[right=3pt] at (i1.east) {$x_1(t)$};
+  \node[right=3pt] at (i2.east) {$x_2(t)$};
+  \node[right=3pt] at (i3.east) {$x_3(t)$};
+\stoptikzpicture}
+\stopTEXpage
+
 \stoptext

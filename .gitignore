@@ -12,3 +12,11 @@
 figures/rsvg
 
 **/*.quarto_ipynb
+
+# Local tooling and unrelated projects
+.agents/
+.claude/
+.cursor/
+_quarto-assignment.yml
+assignments/
+linear-systems-chatbot/

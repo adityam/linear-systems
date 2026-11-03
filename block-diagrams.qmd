@@ -213,10 +213,10 @@ $$
 {1 + G_2(s)G_3(s)G_4(s) \Bigl[ \dfrac{H_1(s)}{G_2(s)} + \dfrac{H_2(s)}{G_4(s)} + H_3(s)G_1(s) \Bigr]}.
 $$
 
-:::{#exr-block-diagram-practice}
+:::{#exr-block-diagram-exercise}
 Find the transfer function $Y(s)/R(s)$ for the block diagram below. Keep the answer in terms of the general blocks $G_1(s),G_2(s),G_3(s)$ and $H_1(s),H_2(s)$. The upper path returns the signal before $G_3(s)$ to the positive input of the first summing point; the lower path returns the output through $H_2(s)$.
 
-![Practice block diagram with three forward blocks, two feedback paths, and a bypass path.](figures/svg/block-diagram-practice1.svg){#fig-block-diagram-practice}
+![Exercise block diagram with three forward blocks, two feedback paths, and a bypass path.](figures/svg/block-diagram-exercise1.svg){#fig-block-diagram-exercise}
 :::
 
 ## From a transfer function to a block diagram
@@ -282,7 +282,7 @@ The gains in the feedback path are the coefficients of the denominator in revers
 
 This corresponds to the CCF form of the transfer function.
 
-![Controllable canonical form (CCF)](figures/svg/block-diagram-practice2.svg){#fig-tf-to-block-ccf}
+![Controllable canonical form (CCF)](figures/svg/tf-to-block7.svg){#fig-tf-to-block-ccf}
 
 Let's write the equations corresponding to the two integrators, with states $x_1$ (output of the lower integrator) and $x_2$ (output of the upper integrator):
 $$
@@ -322,7 +322,7 @@ $$
 $$
 We implement these equations as follows:
 
-![Observable canonical form (OCF)](figures/svg/block-diagram-practice3.svg){#fig-tf-to-block-ocf}
+![Observable canonical form (OCF)](figures/svg/tf-to-block8.svg){#fig-tf-to-block-ocf}
 
 Here the gains in the input path are the coefficients of the numerator in reverse order, and the gains in the feedback path are the coefficients of the denominator in reverse order.
 
@@ -339,7 +339,7 @@ $$
 $$
 which gives the CCF diagram:
 
-![Three-integrator ladder in controllable canonical form](figures/svg/block-diagram-practice4.svg){#fig-tf-to-block-ccf-third}
+![Three-integrator ladder in controllable canonical form](figures/svg/tf-to-block9.svg){#fig-tf-to-block-ccf-third}
 
 The OCF has the state equations
 $$
@@ -352,7 +352,7 @@ $$
 $$
 i.e., each equation is a summing point followed by an integrator, and the output $x_3$ returns through the three denominator gains:
 
-![Three-integrator ladder in observable canonical form](figures/svg/block-diagram-practice5.svg){#fig-tf-to-block-ocf-third}
+![Three-integrator ladder in observable canonical form](figures/svg/tf-to-block10.svg){#fig-tf-to-block-ocf-third}
 
 #### Extending to order $n$
 
