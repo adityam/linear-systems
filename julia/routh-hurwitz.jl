@@ -53,7 +53,7 @@ function RouthArray(polynomial; details=true, normalize=true, s1zero=true)
    ## Normal case
    for col = 1:n_cols[row]
       D = [ RA[row-2, 1] RA[row-2, col+1]; RA[row-1, 1] RA[row-1, col+1] ]
-      RA[row, col] = -det(D)//RA[row - 1, 1] |> expand |> simplify
+      RA[row, col] = -det(D)/RA[row - 1, 1] |> expand |> simplify
    end
 
   end
