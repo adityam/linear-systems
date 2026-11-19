@@ -41,6 +41,15 @@
   
 
 
+/* Figures written by code cells as raw <img> tags (e.g. the Julia GIF animations) do not get
+   Bootstrap's .img-fluid, so a 750px GIF overflows the ~750px text column (or a narrower
+   tab pane, where the img has no class at all) and gets a horizontal scrollbar.
+   Shrink them to their container instead. */
+.cell-output-display img {
+  max-width: 100%;
+  height: auto;
+}
+
 // Copied from https://github.com/quarto-dev/quarto-web/blob/386ce1f654644a9db8134770c5312fe2b3c3b6b4/styles.css#L143
 @media (max-width: 575px) {
 

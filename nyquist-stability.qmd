@@ -24,7 +24,10 @@ execute:
 
 using Revise
 
+ENV["GKSwstype"] = "nul"   # GR: null default device, never open the gksqt window
 using ControlSystems, Plots, LaTeXStrings
+
+include("julia/routh-hurwitz.jl")
 
 current_theme = :bright
 current_colors = theme_palette(current_theme)
@@ -194,7 +197,7 @@ sGplane(sCurve, G, "figures/nyquist-example3.gif")
 
 ```{julia}
 #| label: fig-contour-3
-#| fig-cap: A contour in $s$-plane for @exm-complex-mapping that encircles a poles and a zero
+#| fig-cap: A contour in $s$-plane for @exm-complex-mapping that encircles a pole and a zero
 N = 50
 sCurve = 3 .* vcat(range(-1.0+im, 1.0+im, N), 
               range( 1.0+im, 1.0-im, N),
@@ -322,7 +325,7 @@ $$
 \bbox[5pt,border: 1px solid]
 {\begin{array}{@{}c@{}}
 \text{Number of clockwise encirclements}\\
-\text{of \textbf{$-1 + j0$} in the} \\
+\text{of $\boldsymbol{-1 + j0}$ in the} \\
 \text{Nyquist plot of $GH$}
 \end{array}} 
 $$
@@ -399,7 +402,7 @@ From observation we know that system $GH$ is not stable and $P = 1$. Thus, for s
 #### $K=50$
 
 ```{julia}
-#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. 
+#| fig-cap: Mapping of the Nyquist contour to the $GH$-plane for $K = 50$. The plot does not encircle $-1$, so $N = 0$ and $Z = N + P = 1$, and the closed loop is unstable.
 
 K = 50
 
@@ -417,7 +420,7 @@ sGplane(sCurve, GH, "figures/nyquist-NP-2.gif", show_poles=false, show_critical=
 #### $K=100$
 
 ```{julia}
-#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. 
+#| fig-cap: Mapping of the Nyquist contour to the $GH$-plane for $K = 100$. The plot encircles $-1$ once counter-clockwise, so $N = -1$ and $Z = N + P = 0$, and the closed loop is stable.
 
 K = 100
 
@@ -436,7 +439,7 @@ sGplane(sCurve, GH, "figures/nyquist-NP-3.gif", show_poles=false, show_critical=
 #### $K=336$
 
 ```{julia}
-#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. 
+#| fig-cap: Mapping of the Nyquist contour to the $GH$-plane for $K = 336$. The plot passes through $-1$, so $1 + GH$ has zeros on the $jω$-axis and the closed loop is marginally stable.
 
 K = 336
 
@@ -455,7 +458,7 @@ sGplane(sCurve, GH, "figures/nyquist-NP-4.gif", show_poles=false, show_critical=
 #### $K=500$
 
 ```{julia}
-#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. 
+#| fig-cap: Mapping of the Nyquist contour to the $GH$-plane for $K = 500$. The plot encircles $-1$ once clockwise, so $N = 1$ and $Z = N + P = 2$, and the closed loop is unstable.
 
 K = 500
 
@@ -493,7 +496,7 @@ From observation we note that system $GH$ is unstable and $P = 2$. Thus, for sta
 #### $K=1$
 
 ```{julia}
-#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. The kink around $10+j$ in the $GH$-plane will become a point as $R \to ∞$ in the $s$-plane.
+#| fig-cap: Mapping of the Nyquist contour to the $GH$-plane for $K = 1$. The plot does not encircle $-1$, so $N = 0$ and $Z = N + P = 2$, and the closed loop is unstable. The kink near $1 + j0$ becomes a point as $R \to ∞$.
 
 K = 1
 
@@ -512,7 +515,7 @@ sGplane(sCurve, GH, "figures/nyquist-NP-6.gif", show_poles=false, show_critical=
 #### $K=10$
 
 ```{julia}
-#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. The kink around $10+j$ in the $GH$-plane will become a point as $R \to ∞$ in the $s$-plane.
+#| fig-cap: Mapping of the Nyquist contour to the $GH$-plane for $K = 10$. The plot encircles $-1$ twice counter-clockwise, so $N = -2$ and $Z = N + P = 0$, and the closed loop is stable. The kink near $10 + j0$ becomes a point as $R \to ∞$.
 
 K = 10
 
@@ -547,7 +550,7 @@ The Nyquist plot for $K=1$ is shown in @fig-nyquist-gain-1.
 
 ```{julia}
 #| label: fig-nyquist-gain-1
-#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. 
+#| fig-cap: Mapping of the Nyquist contour to the $GH$-plane for $K = 1$. The plot meets the real axis at $0$ and $1/2$.
 
 N = 50
 R = 20
@@ -573,7 +576,22 @@ First observe that $P=0$. Therefore, for stability (i.e., for $Z=0$), we need $N
 | $0 < -\dfrac 1K < \dfrac 12$ | $(-∞,-2)$ | $1$ | No |
 | $\dfrac 12 < -\dfrac 1K < ∞$ | $(-2,0)$ | $0$ | Yes |
 
-Thus, the system is stable for $K > 0$ or $K \in (-2,0)$. 
+Thus, the system is stable for $K > 0$ or $K \in (-2,0)$.
+:::
+
+:::{.callout-note collapse="true"}
+#### Verification via Routh-Hurwitz
+
+The closed-loop characteristic polynomial is $(s + 1)(s + 2) + K = s^2 + 3s + (2 + K)$. Its [Routh array](routh-hurwitz.qmd) is
+
+```{julia}
+#| html-table-processing: none
+@variables K
+(html, RA) = RouthArray([1, 3, 2 + K])
+html
+```
+
+For stability, all terms in the first column must be positive. Thus, we need $2 + K > 0$, i.e., $K > -2$, which matches the Nyquist analysis.
 :::
 
 :::{#exm-nyquist-gain-2}
@@ -586,7 +604,7 @@ which intersects the $σ$-axis at $-0.1$, $0$, $1$.
 
 ```{julia}
 #| label: fig-nyquist-gain-2
-#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. 
+#| fig-cap: Mapping of the Nyquist contour to the $GH$-plane for $K = 1$. The plot meets the real axis at $-0.1$, $0$, and $1$.
 
 N = 50
 R = 20
@@ -613,7 +631,22 @@ First observe that $P=0$. Therefore, for stability (i.e., for $Z=0$), we need $N
 | $0 < -\dfrac 1K < 1$ | $(-∞,-1)$ | $1$ | No |
 | $1 < -\dfrac 1K < ∞$ | $(-1,0)$ | $0$ | Yes |
 
-Thus, the system is stable for $K > 10$ or $K \in (-1,0)$. 
+Thus, the system is stable for $K \in (0, 10)$ or $K \in (-1,0)$.
+:::
+
+:::{.callout-note collapse="true"}
+#### Verification via Routh-Hurwitz
+
+The closed-loop characteristic polynomial is $(s + 1)(s + 2)(s + 3) + 6K = s^3 + 6s^2 + 11s + (6 + 6K)$. Its [Routh array](routh-hurwitz.qmd) is
+
+```{julia}
+#| html-table-processing: none
+@variables K
+(html, RA) = RouthArray([1, 6, 11, 6 + 6K])
+html
+```
+
+For stability, all terms in the first column must be positive. Thus, we need $10 - K > 0$ and $6 + 6K > 0$, i.e., $-1 < K < 10$, which matches the Nyquist analysis.
 :::
 
 :::{#exm-nyquist-gain-3}
@@ -627,7 +660,7 @@ which intersects the $σ$-axis at $-2/3$, $-1/2$, $0$.
 
 ```{julia}
 #| label: fig-nyquist-gain-3
-#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. 
+#| fig-cap: Mapping of the Nyquist contour to the $GH$-plane for $K = 1$. The plot meets the real axis at $-2/3$, $-1/2$, and $0$.
 
 N = 50
 R = 20
@@ -654,7 +687,22 @@ First observe that $s^2 - s + 1$ has two poles in the ORHP (since the roots are 
 | $-\dfrac{1}{2} < -\dfrac 1K < 0$ | $(2,∞)$ | $-1$ | No |
 | $0 < -\dfrac 1K < ∞$ | $(-∞,0)$ | $0$ | No |
 
-Thus, the system is stable for $K \in (1.5, 2)$. 
+Thus, the system is stable for $K \in (1.5, 2)$.
+:::
+
+:::{.callout-note collapse="true"}
+#### Verification via Routh-Hurwitz
+
+The closed-loop characteristic polynomial is $(s + 2)(s^2 - s + 1) + K(s - 1) = s^3 + s^2 + (K - 1)s + (2 - K)$. Its [Routh array](routh-hurwitz.qmd) is
+
+```{julia}
+#| html-table-processing: none
+@variables K
+(html, RA) = RouthArray([1, 1, K - 1, 2 - K])
+html
+```
+
+For stability, all terms in the first column must be positive. Thus, we need $2K - 3 > 0$ and $2 - K > 0$, i.e., $1.5 < K < 2$, which matches the Nyquist analysis.
 :::
 
 ## Poles on the $j ω$-axis
@@ -665,7 +713,7 @@ The TF has no poles in the ORHP, so $P = 0$. For stability (i.e., $Z=0$), we nee
 
 ```{julia}
 #| label: fig-pole
-#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. 
+#| fig-cap: Mapping of the Nyquist contour to the $GH$-plane when the contour passes through the pole at the origin. The two arms of the plot go off to infinity, so the plot is not closed.
 
 N = 50
 R = 20
@@ -683,7 +731,7 @@ In this case, the Nyquist plot is not a closed curve so we cannot count the numb
 
 ```{julia}
 #| label: fig-pole-fix
-#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. Although it is not visitble at this scale, the contour skips the pole at origin by going around a semi-circle of radius $0.2$. 
+#| fig-cap: Mapping of the Nyquist contour to the $GH$-plane when the contour skips the pole at the origin along a semicircle of radius $0.2$ (not visible at this scale). The image of that semicircle is the clockwise arc through the right half-plane that closes the plot.
 
 N = 50
 R = 20
@@ -724,14 +772,14 @@ Thus, we have the following:
 
 This is consistent with the contour in @fig-pole-fix. Thus, there are no encirclements of $-1$ in the $GH$-plane. Hence, $N = 0$, which implies, $Z = 0$. Hence, the system is stable.
 
-We now do a few practise exercises.
+We now do a few practice exercises.
 
 :::{#exm-nyquist-fix-pole-1}
 Consider $GH = \dfrac{K}{s(s+1)(2s+1)}$. The Nyquist plot for $K=1$ is shown in @fig-pole-1. Find the values of $K$ for which the closed loop system is stable. 
 
 ```{julia}
 #| label: fig-pole-1
-#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. 
+#| fig-cap: Mapping of the Nyquist contour to the $GH$-plane for $K = 1$, with the contour passing through the pole at the origin. The plot is not closed.
 
 N = 50
 R = 20
@@ -771,7 +819,7 @@ The two arms of the Nyquist plot in @fig-pole-1 are connected via a semi-circle 
 
 ```{julia}
 #| label: fig-pole-1-fixed
-#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. Although it is not visitble at this scale, the contour skips the pole at origin by going around a semi-circle of radius $0.2$. 
+#| fig-cap: Mapping of the Nyquist contour to the $GH$-plane for $K = 1$, with the contour skipping the pole at the origin along a semicircle of radius $0.2$ (not visible at this scale). The image of that semicircle is the clockwise arc through the right half-plane that closes the plot.
 
 N = 50
 R = 20
@@ -805,7 +853,7 @@ Consider $GH = \dfrac{K}{s^2(s+1)}$. Find the values of $K$ for which the closed
 
 ```{julia}
 #| label: fig-pole-2
-#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. 
+#| fig-cap: Mapping of the Nyquist contour to the $GH$-plane for $K = 1$, with the contour passing through the double pole at the origin. The plot is not closed.
 
 N = 50
 R = 20
@@ -843,7 +891,7 @@ The two arms of the Nyquist plot in @fig-pole-2 are connected via a circle in cl
 
 ```{julia}
 #| label: fig-pole-2-fixed
-#| fig-cap: Mapping of the contour in $s$-plane to $GH$ plane. Although it is not visitble at this scale, the contour skips the pole at origin by going around a semi-circle of radius $0.2$. 
+#| fig-cap: Mapping of the Nyquist contour to the $GH$-plane for $K = 1$, with the contour skipping the double pole at the origin along a semicircle of radius $0.2$ (not visible at this scale). The image of that semicircle is a full clockwise circle of large radius that closes the plot.
 
 N = 50
 R = 20
@@ -860,7 +908,7 @@ GH(s) = 1/(s^2*(s+1))
 sGplane(sCurve, GH, "figures/nyquist-pole-2-fixed.gif", show_poles=false, show_critical=true, GLabel=L"$GH$-plane")
 ```
 
-Thus, irrespective of the value of $K$, $N=2$. Since $P = 0$, we have $Z = 0$. Thus, the system is not stable for any values of $K$.
+Thus, for any $K > 0$, $N = 2$. Since $P = 0$, we have $Z = N + P = 2$. For $K < 0$, the point $-1/K$ lies on the positive real axis, which the circle at infinity encircles once in the clockwise direction, so $N = 1$ and $Z = 1$. Thus, the system is not stable for any values of $K$.
 :::
 
 :::{.callout-warning}
