@@ -26,6 +26,7 @@ In the [previous lecture](freq-modeling.qmd), we saw that we can use the pole ze
 
 using Revise
 
+ENV["GKSwstype"] = "nul"   # GR: null default device, never open the gksqt window
 using ControlSystems, Plots, LaTeXStrings
 
 current_theme = :bright

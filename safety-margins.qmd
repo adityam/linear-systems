@@ -26,6 +26,7 @@ In practice, we never know the transfer function perfectly. So, it is important 
 
 using Revise
 
+ENV["GKSwstype"] = "nul"   # GR: null default device, never open the gksqt window
 using ControlSystems, StatsPlots, LaTeXStrings, Plots.PlotMeasures
 using Hyperscript, Printf
 

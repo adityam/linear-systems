@@ -81,6 +81,7 @@ Using ideas that we will learn using [Routh Hurwitz criterion](routh-hurwitz.qmd
 To illustrate this, we solve the above differential equation for different values of $K_p$ with $a = 2$, $b = 1$, and $K_d = 1$, assuming that the system starts with an initial angle of $θ(0) = 0.2$ rad and $\dot θ(0) = 0$. 
 
 ```{julia}
+ENV["GKSwstype"] = "nul"   # GR: null default device, never open the gksqt window
 using DifferentialEquations, Plots
 using DataFrames
 

@@ -26,6 +26,7 @@ So far, we have investigated system stability and transient response. We now loo
 
 using Revise
 
+ENV["GKSwstype"] = "nul"   # GR: null default device, never open the gksqt window
 using ControlSystems, Plots, LaTeXStrings
 
 current_theme = :bright

@@ -28,6 +28,7 @@ In this lecture, we will review frequency domain modeling of LTI systems. You ha
 
 using Revise
 
+ENV["GKSwstype"] = "nul"   # GR: null default device, never open the gksqt window
 using ControlSystems, Plots, LaTeXStrings
 using QuizQuestions
 
