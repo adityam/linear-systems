@@ -1,6 +1,11 @@
 ---
 title: Nyquist Stability Criterion
 
+other-links:
+  - text: Lecture slides
+    href: slides/nyquist.html
+    icon: easel
+
 engine: julia
 execute:
   echo: false

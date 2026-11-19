@@ -1,5 +1,7 @@
 project:
   type: book
+  # Render the lecture slides (slides/, a separate Quarto project) and copy them into _book/slides/
+  post-render: scripts/publish-slides.sh
 
 book:
   title: Linear Systems and Control

@@ -1,0 +1,111 @@
+/*-- scss:defaults --*/
+
+$primary:   #0d6efd;
+$secondary: #6c757d;
+$danger:    #dc3545;
+$success:   #198754;
+$gray-100:  #f8f9fa;
+$gray-300:  #dee2e6;
+$gray-700:  #495057;
+
+$body-bg: #ffffff;
+$body-color: #212529;
+$link-color: $primary;
+$presentation-font-size-root: 34px;
+$presentation-heading-color: #1f3a5f;
+$presentation-h2-font-size: 1.45em;
+
+/*-- scss:rules --*/
+
+.reveal .slides .text-primary,
+.text-primary   { color: $primary !important; }
+.text-secondary { color: $secondary; }
+.text-danger    { color: $danger; }
+.text-success   { color: $success; }
+
+.text-smaller { font-size: 80%; }
+.text-small   { font-size: 70%; }
+.text-bigger  { font-size: 120%; }
+
+.reveal .slides .center-block { text-align: center; }
+
+// Section divider slides
+.reveal .slides section.divider h2 {
+  font-size: 2.2em;
+  color: $primary;
+  border-bottom: 3px solid $primary;
+  padding-bottom: 0.25em;
+  display: inline-block;
+}
+
+// A boxed "key result" without the callout chrome
+.reveal .slides .keybox {
+  border: 2px solid $primary;
+  border-radius: 6px;
+  background: rgba($primary, 0.05);
+  padding: 0.35em 0.8em;
+  margin: 0.5em auto;
+}
+
+// Animated s-plane / G-plane maps produced by the lecture notes
+.reveal .slides img.anim {
+  display: block;
+  margin: 0 auto;
+  max-height: 440px;
+  width: auto;
+}
+.reveal .slides img.anim-small { max-height: 340px; }
+
+.reveal .slides .caption {
+  font-size: 0.6em;
+  color: $secondary;
+  text-align: center;
+  margin-top: 0.2em;
+}
+
+// Compact tables (case analysis, angle tables)
+.reveal .slides table.compact,
+.reveal .slides .compact table {
+  font-size: 0.7em;
+  margin: 0.3em auto;
+}
+.reveal .slides .compact table th,
+.reveal .slides .compact table td {
+  padding: 0.25em 0.6em;
+  vertical-align: middle;
+}
+
+// Small "limits" tables on the Nyquist-sketching slides
+.reveal .slides .limits table {
+  font-size: 0.85em;
+  margin: 0.2em auto 0.5em;
+}
+.reveal .slides .limits table th,
+.reveal .slides .limits table td {
+  padding: 0.2em 0.8em;
+}
+
+// Displays whose sub/superscript labels need to be readable from the back
+.reveal .slides .bigmath { font-size: 1.25em; }
+
+// Observable plots and inputs
+.reveal .slides .cell-output-display svg { max-width: 100%; }
+.reveal .slides form label { font-size: 0.6em; }
+// Number box next to an Observable slider: smaller text, wide enough for e.g. "-0.600"
+.reveal .slides form input[type="number"] {
+  font-size: 0.6em;
+  width: 5.5em;
+  flex-shrink: 0;  // Observable Inputs lets it shrink (and ellipsize) inside the flex row
+}
+.reveal .slides .ojs-readout {
+  font-size: 0.75em;
+  line-height: 1.5;
+}
+.reveal .slides .plot-legend {
+  font-size: 0.55em;
+  color: $secondary;
+  text-align: center;
+}
+
+// Slides with the boxed (\bbox) equations from the notes: shrink the displays so they fit
+.reveal .slides section.boxmath .math.display { font-size: 0.8em; }

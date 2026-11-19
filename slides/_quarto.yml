@@ -1,0 +1,28 @@
+# Lecture slides live in their own Quarto project so that rendering the book
+# (one level up) does not pick them up, and the book's HTML options do not
+# leak into the slides. A full render of the book renders them and publishes
+# them at slides/<deck>.html (see scripts/publish-slides.sh).
+#
+# Render with:  quarto render slides/nyquist.qmd
+# Preview with: quarto preview slides/nyquist.qmd
+#
+# Figures are referenced as figures/..., where slides/figures is a link to
+# ../figures (the preview server cannot reach files outside slides/).
+
+project:
+  type: default
+
+format:
+  revealjs:
+    theme: [default, slides.scss]
+    width: 1280
+    height: 720
+    margin: 0.04
+    slide-number: true
+    history: false
+    html-math-method: mathjax
+    include-in-header:
+      - ../static/html/mathjax.html
+
+execute:
+  echo: false
