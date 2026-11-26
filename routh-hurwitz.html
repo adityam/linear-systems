@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Mahajan">
-<meta name="dcterms.date" content="2026-11-19">
+<meta name="dcterms.date" content="2026-11-26">
 <meta name="description" content="Course Notes for ECSE 307 (McGill University)">
 
 <title>8&nbsp; Routh-Hurwitz Stability Criterion – Linear Systems and Control</title>
@@ -574,7 +574,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 19, 2026</p>
+      <p class="date">November 26, 2026</p>
     </div>
   </div>
   
@@ -1019,7 +1019,7 @@ Figure&nbsp;8.1: Block diagram of a proportional controller
 <p>We first compute the Routh Array</p>
 <div id="22" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
-<table class="routharray"><tbody><tr><td>$s^{5}$</td><td>$1$</td><td>$3$</td><td>$5$</td></tr><tr><td>$s^{4}$</td><td>$2$</td><td>$6$</td><td>$3$</td></tr><tr><td>$s^{3}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 3 \\ 2 &amp; 6}}{2} = \cancel{0} \epsilon$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 5 \\ 2 &amp; 3}}{2} = \frac{7}{2}$</td></tr><tr><td>$s^{2}$</td><td>$\displaystyle -\frac{\DET{ 2 &amp; 6 \\ \epsilon &amp; \frac{7}{2}}}{\epsilon} = \frac{-7 + 6 \epsilon}{\epsilon}$</td><td>$\displaystyle -\frac{\DET{ 2 &amp; 3 \\ \epsilon &amp; 0}}{\epsilon} = 3$</td></tr><tr><td>$s^{1}$</td><td>$\displaystyle -\frac{\DET{ \epsilon &amp; \frac{7}{2} \\ \frac{-7 + 6 \epsilon}{\epsilon} &amp; 3}}{\frac{-7 + 6 \epsilon}{\epsilon}} = \frac{\frac{-49}{2} + 21 \epsilon - 3 \epsilon^{2}}{-7 + 6 \epsilon}$</td></tr><tr><td>$s^{0}$</td><td>$\displaystyle -\frac{\DET{ \frac{-7 + 6 \epsilon}{\epsilon} &amp; 3 \\ \frac{\frac{-49}{2} + 21 \epsilon - 3 \epsilon^{2}}{-7 + 6 \epsilon} &amp; 0}}{\frac{\frac{-49}{2} + 21 \epsilon - 3 \epsilon^{2}}{-7 + 6 \epsilon}} = 3$</td></tr></tbody></table>
+<table class="routharray"><tbody><tr><td>$s^{5}$</td><td>$1$</td><td>$3$</td><td>$5$</td></tr><tr><td>$s^{4}$</td><td>$2$</td><td>$6$</td><td>$3$</td></tr><tr><td>$s^{3}$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 3 \\ 2 &amp; 6}}{2} = \cancel{0} \epsilon$</td><td>$\displaystyle -\frac{\DET{ 1 &amp; 5 \\ 2 &amp; 3}}{2} = \frac{7}{2}$</td></tr><tr><td>$s^{2}$</td><td>$\displaystyle -\frac{\DET{ 2 &amp; 6 \\ \epsilon &amp; \frac{7}{2}}}{\epsilon} = \frac{-7 + 6 ~ \epsilon}{\epsilon}$</td><td>$\displaystyle -\frac{\DET{ 2 &amp; 3 \\ \epsilon &amp; 0}}{\epsilon} = 3$</td></tr><tr><td>$s^{1}$</td><td>$\displaystyle -\frac{\DET{ \epsilon &amp; \frac{7}{2} \\ \frac{-7 + 6 ~ \epsilon}{\epsilon} &amp; 3}}{\frac{-7 + 6 ~ \epsilon}{\epsilon}} = \frac{\frac{-49}{2} + 21 ~ \epsilon - 3 ~ \epsilon^{2}}{-7 + 6 ~ \epsilon}$</td></tr><tr><td>$s^{0}$</td><td>$\displaystyle -\frac{\DET{ \frac{-7 + 6 ~ \epsilon}{\epsilon} &amp; 3 \\ \frac{\frac{-49}{2} + 21 ~ \epsilon - 3 ~ \epsilon^{2}}{-7 + 6 ~ \epsilon} &amp; 0}}{\frac{\frac{-49}{2} + 21 ~ \epsilon - 3 ~ \epsilon^{2}}{-7 + 6 ~ \epsilon}} = 3$</td></tr></tbody></table>
 </div>
 </div>
 <p>We now look at the signs of the terms in the first column:</p>
@@ -1636,12 +1636,12 @@ T(s) = \frac{K G(s)}{1 + K G(s)}
 </tr>
 <tr class="odd">
 <td>$s^{1}$</td>
-<td>$\displaystyle -\frac{\DET{ 1 &amp; -6 + K \\ 5 &amp; K}}{5} = -6 + \frac{4}{5} K$</td>
+<td>$\displaystyle -\frac{\DET{ 1 &amp; -6 + K \\ 5 &amp; K}}{5} = -6 + \frac{4}{5} ~ K$</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>$s^{0}$</td>
-<td>$\displaystyle -\frac{\DET{ 5 &amp; K \\ -6 + \frac{4}{5} K &amp; 0}}{-6 + \frac{4}{5} K} = K$</td>
+<td>$\displaystyle -\frac{\DET{ 5 &amp; K \\ -6 + \frac{4}{5} ~ K &amp; 0}}{-6 + \frac{4}{5} ~ K} = K$</td>
 <td></td>
 </tr>
 </tbody>
@@ -1699,12 +1699,12 @@ T(s) = \frac{\left(A + \dfrac{B}{s}\right) G(s)}{1 + \left(A + \dfrac{B}{s}\righ
 </tr>
 <tr class="odd">
 <td>$s^{1}$</td>
-<td>$\displaystyle -\frac{\DET{ 1 &amp; 2 + A \\ 3 &amp; B}}{3} = 2 + A - \frac{1}{3} B$</td>
+<td>$\displaystyle -\frac{\DET{ 1 &amp; 2 + A \\ 3 &amp; B}}{3} = 2 + A - \frac{1}{3} ~ B$</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>$s^{0}$</td>
-<td>$\displaystyle -\frac{\DET{ 3 &amp; B \\ 2 + A - \frac{1}{3} B &amp; 0}}{2 + A - \frac{1}{3} B} = B$</td>
+<td>$\displaystyle -\frac{\DET{ 3 &amp; B \\ 2 + A - \frac{1}{3} ~ B &amp; 0}}{2 + A - \frac{1}{3} ~ B} = B$</td>
 <td></td>
 </tr>
 </tbody>
@@ -1758,16 +1758,16 @@ T(s) = \frac{K G(s)}{1 + K G(s)}
 <tr class="even">
 <td>$s^{2}$</td>
 <td>$6$</td>
-<td>$6 + 6 K$</td>
+<td>$6 + 6 ~ K$</td>
 </tr>
 <tr class="odd">
 <td>$s^{1}$</td>
-<td>$\displaystyle -\frac{\DET{ 1 &amp; 11 \\ 6 &amp; 6 + 6 K}}{6} = 10 - K$</td>
+<td>$\displaystyle -\frac{\DET{ 1 &amp; 11 \\ 6 &amp; 6 + 6 ~ K}}{6} = 10 - K$</td>
 <td></td>
 </tr>
 <tr class="even">
 <td>$s^{0}$</td>
-<td>$\displaystyle -\frac{\DET{ 6 &amp; 6 + 6 K \\ 10 - K &amp; 0}}{10 - K} = 6 + 6 K$</td>
+<td>$\displaystyle -\frac{\DET{ 6 &amp; 6 + 6 ~ K \\ 10 - K &amp; 0}}{10 - K} = 6 + 6 ~ K$</td>
 <td></td>
 </tr>
 </tbody>

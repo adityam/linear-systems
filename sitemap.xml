@@ -2,62 +2,62 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://adityam.github.io/linear-systems/index.html</loc>
-    <lastmod>2026-11-19T13:32:23.035Z</lastmod>
+    <lastmod>2026-11-26T19:45:15.442Z</lastmod>
   </url>
   <url>
     <loc>https://adityam.github.io/linear-systems/introduction.html</loc>
-    <lastmod>2026-11-19T13:32:23.035Z</lastmod>
+    <lastmod>2026-11-26T19:45:15.442Z</lastmod>
   </url>
   <url>
     <loc>https://adityam.github.io/linear-systems/freq-modeling.html</loc>
-    <lastmod>2026-11-19T13:32:23.035Z</lastmod>
+    <lastmod>2026-11-26T19:45:15.442Z</lastmod>
   </url>
   <url>
     <loc>https://adityam.github.io/linear-systems/state-space-models.html</loc>
-    <lastmod>2026-11-19T13:32:23.039Z</lastmod>
+    <lastmod>2026-11-26T19:45:15.446Z</lastmod>
   </url>
   <url>
     <loc>https://adityam.github.io/linear-systems/step-response.html</loc>
-    <lastmod>2026-11-19T13:32:23.040Z</lastmod>
+    <lastmod>2026-11-26T19:45:15.447Z</lastmod>
   </url>
   <url>
     <loc>https://adityam.github.io/linear-systems/matrix-exponential.html</loc>
-    <lastmod>2026-11-19T13:32:23.037Z</lastmod>
+    <lastmod>2026-11-26T19:45:15.444Z</lastmod>
   </url>
   <url>
     <loc>https://adityam.github.io/linear-systems/state-feedback.html</loc>
-    <lastmod>2026-11-19T13:32:23.039Z</lastmod>
+    <lastmod>2026-11-26T19:45:15.446Z</lastmod>
   </url>
   <url>
     <loc>https://adityam.github.io/linear-systems/output-feedback.html</loc>
-    <lastmod>2026-11-19T13:32:23.037Z</lastmod>
+    <lastmod>2026-11-26T19:45:15.444Z</lastmod>
   </url>
   <url>
     <loc>https://adityam.github.io/linear-systems/routh-hurwitz.html</loc>
-    <lastmod>2026-11-19T13:32:23.037Z</lastmod>
+    <lastmod>2026-11-26T19:45:15.444Z</lastmod>
   </url>
   <url>
     <loc>https://adityam.github.io/linear-systems/block-diagrams.html</loc>
-    <lastmod>2026-11-19T13:32:23.010Z</lastmod>
+    <lastmod>2026-11-26T19:45:15.418Z</lastmod>
   </url>
   <url>
     <loc>https://adityam.github.io/linear-systems/steady-state-errors.html</loc>
-    <lastmod>2026-11-19T13:32:23.040Z</lastmod>
+    <lastmod>2026-11-26T19:45:15.447Z</lastmod>
   </url>
   <url>
     <loc>https://adityam.github.io/linear-systems/bode-and-nyquist.html</loc>
-    <lastmod>2026-11-19T13:32:23.011Z</lastmod>
+    <lastmod>2026-11-26T19:45:15.418Z</lastmod>
   </url>
   <url>
     <loc>https://adityam.github.io/linear-systems/nyquist-stability.html</loc>
-    <lastmod>2026-11-19T13:32:23.037Z</lastmod>
+    <lastmod>2026-11-26T19:45:15.444Z</lastmod>
   </url>
   <url>
     <loc>https://adityam.github.io/linear-systems/safety-margins.html</loc>
-    <lastmod>2026-11-19T13:32:23.037Z</lastmod>
+    <lastmod>2026-11-26T19:45:15.444Z</lastmod>
   </url>
   <url>
     <loc>https://adityam.github.io/linear-systems/lag-lead-compensators.html</loc>
-    <lastmod>2026-11-19T13:32:23.036Z</lastmod>
+    <lastmod>2026-11-26T19:45:15.444Z</lastmod>
   </url>
 </urlset>
