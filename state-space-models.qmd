@@ -289,6 +289,7 @@ $$
 
 
 In general, the poles will be complex and have multiplicity. In this setting, a generalization of DCF known as Jordan canonical form (JCF) is used. We will not consider JCF in this course.
+
 :::{#exm-DCF-1}
 Consider a system with the transfer function
 $$G(s) = \dfrac{s+5}{s^2 + 3s + 2}.$$

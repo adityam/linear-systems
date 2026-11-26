@@ -804,6 +804,7 @@ html
 
 We now look at the sign of the terms in the first column:
 ```{julia}
+#| html-table-processing: none
 sign_changes(RA)
 ```
 Since there are no sign changes, the system is stable!

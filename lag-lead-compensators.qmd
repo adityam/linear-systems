@@ -10,7 +10,7 @@ aliases:
   - lead-lag-compensators.html
 ---
 
-In this section, we study a class of frequency domain controllers known as the lead-lag compensators. To get intution, we start with the simplest form of controllers: the proportional controller. 
+In this section, we study a class of frequency domain controllers known as the lead-lag compensators. To get intuition, we start with the simplest form of controllers: the proportional controller. 
 
 ```{julia}
 #| output: false
@@ -148,8 +148,8 @@ Thus, we need a gain compensation of $K = -20 \text{dB} = \dfrac{1}{10}$.
 The gain adjustment procedure can be summarized as follows:
 
 1. Draw the Bode plot (both gain and phase plots).
-2. Find the frequence $ω^d_{\rm gc}$ on the phase plot that gives the desired PM.
-3. Add a **gain compensation** $K$ of $-20\log| G(ω^d_{\rm gc})|$
+2. Find the frequency $ω^d_{\rm gc}$ on the phase plot that gives the desired PM.
+3. Add a **gain compensation** $K$ of $-20\log| G(j ω^d_{\rm gc})|$
 
 Then, the system $KG(s)$ has a PM equal to the desired PM. The drawback is that the above procedure changes the error constant of the system. For instance, in @exm-gain-adjustment, gain adjustment changes the velocity constant from $K_v = 100$ to $K_v = 10$. 
 
@@ -157,12 +157,12 @@ In the rest of the section, we design two forms of **compensators** that allow u
 
 ## Lag Compensator
 
-The primary function of a lag compensator is to provide attentuation in the high-frequency range to give a system sufficient phase margin. The general form of the lag compensator is
+The primary function of a lag compensator is to provide attenuation in the high-frequency range to give a system sufficient phase margin. The general form of the lag compensator is
 $$
 KG_c(s) = K \cdot \frac {1}{α} \cdot \frac{s + \dfrac{1}{T}}{s + \dfrac{1}{αT}},
 \quad α > 1.
 $$
-The lag compesnator is parameterized controller with three tunable parameters: $K$, $T$, and $α$. The Bode plot of $G_c(s)$ for $α = 10$ is shown in @fig-lag. Typically, we use this to design a compensator for type-1 system to meet requirements that can be translated in terms of phase margin and velocity constant. 
+The lag compensator is a parameterized controller with three tunable parameters: $K$, $T$, and $α$. The Bode plot of $G_c(s)$ for $α = 10$ is shown in @fig-lag. Typically, we use this to design a compensator for a type-1 system to meet requirements that can be translated in terms of phase margin and velocity constant. 
 
 ```{julia}
 #| fig-cap: Bode plot of $G_c(s)$ for $α = 10$. Note that at $ω = 10/T$ (the green dot), the phase has returned back to zero.
@@ -218,13 +218,13 @@ Given a desired velocity constant and phase margin, we choose the parameters $K$
 
    Now, we look at the phase plot of $H(s)$, which is the same as the phase plot of $G(s)$, and find the **desired gain crossover frequency** $ω^d_{\rm gc}$ such that
    $$
-     \angle H(j ω^d_{\rm gc}) = - 180 + \text{target PM}.
+     \angle H(j ω^d_{\rm gc}) = - 180 ^∘ + \text{target PM}.
    $$
    We want that at this frequency the gain plot of $H(s)$ should pass through the 0dB line.
 
 3. **Determine the zero (and thus the value of $T$).**
 
-   Look at the Bode plot of @fig-lag. Observe that at frequencies above $10/T$ (the green dot in the plot), the lag compensator $G_c(s)$ has negligible phase, but provides a gain attentuation of $-20 \log α$ dB. So, we choose
+   Look at the Bode plot of @fig-lag. Observe that at frequencies above $10/T$ (the green dot in the plot), the lag compensator $G_c(s)$ has negligible phase, but provides a gain attenuation of $-20 \log α$ dB. So, we choose
    $$
     \dfrac{10}{T} = ω^d_{\rm gc}.
    $$
@@ -236,18 +236,18 @@ Given a desired velocity constant and phase margin, we choose the parameters $K$
    $$
    The above relationship is an approximation rather than an equality because we are using the straight line approximations for the phase plot. In reality, the phase of $G_c(j ω^d_{\rm gc})$ at $10/T$ is not exactly zero. This was one of the reasons that we added a safety margin of $5 ^∘$ to $12 ^∘$. 
 
-4. **Determine the attentuation needed to be $ω^d_{\rm gc}$ the gain crossover frequency**
+4. **Determine the attenuation needed for $ω^d_{\rm gc}$ to be the gain crossover frequency.**
 
     Since $H(s)$ did not have the desired PM (in step 2), it must be the case that $| H(j ω^d_{\rm gc}) |_{\rm dB} \ge 0\, {\rm dB}$. We choose $α$ such that
-    $$| H(j ω^d_{\rm gc}) |_{dB} - 20 \log α = 0. $$
-    This ensures that $|G_c(j ω^d_{\rm gc}) H(j ω^d_{\rm gc}|_{\rm dB} \approx 0\,{\rm dB}$. Therefore, the PM of $K G_c(s) G(s)$ is approximately the target PM. In practise, we are slightly off because both the gain and the phase plots were approximations. 
+    $$| H(j ω^d_{\rm gc}) |_{\rm dB} - 20 \log α = 0. $$
+    This ensures that $|G_c(j ω^d_{\rm gc}) H(j ω^d_{\rm gc})|_{\rm dB} \approx 0\,{\rm dB}$. Therefore, the PM of $K G_c(s) G(s)$ is approximately the target PM. In practice, we are slightly off because both the gain and the phase plots were approximations. 
 
 :::{#exm-lag-lead}
 Consider the open loop system
 $$
 G(s) = \dfrac{100}{s(s+10)(s+100)}.
 $$
-Suppose we want a PM of $60 ^∘$ and a velocity constant of $K_v = 100$. Design a lag compensator that meets this specificiation.
+Suppose we want a PM of $60 ^∘$ and a velocity constant of $K_v = 100$. Design a lag compensator that meets this specification.
 :::
 
 :::{.callout-note collapse="false"} 
@@ -257,7 +257,7 @@ As a first step, we draw the Bode plot of $G(s)$. First we normalize the numerat
 $$ G(s) = \frac{1}{10} \cdot \frac{1}{s \Bigl( 1 + \dfrac{s}{10} \Bigr)
   \Bigl( 1 + \dfrac{s}{100} \Bigr)}.
 $$
-The correponding Bode plot is shown in @fig-example.
+The corresponding Bode plot is shown in @fig-example.
 
 ```{julia}
 #| fig-cap: Bode plot for $G(s)$ of @exm-lag-lead.
@@ -279,12 +279,12 @@ We now follow the steps to find $K$, $T$, and $α$ parameters of the lag compens
 
 1. **Determine $K$**
 
-    Observe that the initial $-20$ dB line crosses the $0$ dB line at $ω = 0.1$. Thus, the velocity constant of $G(s)$ is $0.1$. [We could have obtained this from the expression of the normalized TF as well]. The desrived velocity constant is $K_v = 100$. Thus, we want
+    Observe that the initial $-20$ dB line crosses the $0$ dB line at $ω = 0.1$. Thus, the velocity constant of $G(s)$ is $0.1$. [We could have obtained this from the expression of the normalized TF as well]. The desired velocity constant is $K_v = 100$. Thus, we want
     $$
     K = \dfrac{\text{desired $K_v$}}{\text{current $K_v$}} = \frac{100}{0.1} = 1000 = 60\,{\rm dB}.
     $$
 
-    For the next parts, we will consider the gain-compensated transfer function $H(s) = KG(s)$. The magnitude plot of $H(s)$ is the similar to the magnitude plot of $G(s)$ but is shifted up by $20 \log K = 60$ dB. The phase plot is $H(s)$ is the same as the phase plot of $G(s)$. 
+    For the next parts, we will consider the gain-compensated transfer function $H(s) = KG(s)$. The magnitude plot of $H(s)$ is similar to the magnitude plot of $G(s)$ but is shifted up by $20 \log K = 60$ dB. The phase plot of $H(s)$ is the same as the phase plot of $G(s)$. 
 
 2. **Determine $1/T$.**
 
@@ -329,7 +329,7 @@ We now follow the steps to find $K$, $T$, and $α$ parameters of the lag compens
     \frac{1}{T} = 0.25119.
     $$
 
-3. **Determining $α$**
+3. **Determine $α$**
 
     Now we look at the magnitude plot of $H(s)$ and compute $| H(j ω^{d}_{\rm gc})|$. Recall that the magnitude plot of $H(s)$ is equal to the magnitude plot of $G(s)$ shifted up by $60$ dB (which is $20\log K$). Thus, we have
     $$
@@ -358,7 +358,7 @@ We now follow the steps to find $K$, $T$, and $α$ parameters of the lag compens
     = -20 + 20(- 0.4)
     = -28\,{\rm dB}. $$
     Consequently,
-    $$ H(j ω^d_{\rm gc}) = -28\,{\rm dB} + 60\,{\rm dB} = 32\,{\rm dB}. $$
+    $$ |H(j ω^d_{\rm gc})| = -28\,{\rm dB} + 60\,{\rm dB} = 32\,{\rm dB}. $$
 
     So, we need the lag compensator to provide an attenuation of $32$ dB. So, we want
     $$
@@ -457,12 +457,12 @@ plot!(plt, res_3.t, res_3.y', label=L"y_3(t)")
 
 In the above plot $y_1(t)$ is the ramp response of the uncompensated system, $y_2(t)$ is the ramp response of the gain compensated system, and $y_3(t)$ is the ramp response of the lag compensated system.
 
-Note that the uncompensated system has a large error (because it has a small error constant); the gain compensated system has a small steady-state error, but has overshoot and oscillations (because it has small phase margin); while the lag compensatoed system has small steady-state error (the error becomes much smaller if we let the system run for longer time) but has no overshoot or oscillations. 
+Note that the uncompensated system has a large error (because it has a small error constant); the gain compensated system has a small steady-state error, but has overshoot and oscillations (because it has small phase margin); while the lag compensated system has small steady-state error (the error becomes much smaller if we let the system run for longer time) but has no overshoot or oscillations. 
 :::
 
 ## Lead Compensator
 
-The general form of the lead compensaotor is
+The general form of the lead compensator is
 $$
 KG_c(s) = K \cdot \frac{1}{β} \cdot 
   \frac{s + \dfrac{1}{T}}{s + \dfrac{1}{βT}},
@@ -471,7 +471,7 @@ $$
 As was the case for the lag compensator, the lead compensator is parameterized by three tunable parameters: $K$, $T$, and $β$. The Bode plot of $G_c(s)$ for $β = 0.1$ is shown in @fig-lead. Typically, we use the lead compensator to design a compensator for a type-1 system to meet requirements that can be translated in terms of phase margin and velocity constant. 
 
 ```{julia}
-#| fig-cap: Bode plot of $G_c(s)$ for $β = 0.1$. Note that the phase is the maximum at $ω = 1/\sqrt{β}T$.
+#| fig-cap: Bode plot of $G_c(s)$ for $β = 0.1$. Note that the phase is the maximum at $ω = 1/(\sqrt{β}T)$.
 #| label: fig-lead
 
 β = 0.1
@@ -543,7 +543,7 @@ Given a desired velocity constant and phase margin, we choose the parameters $K$
    Moreover, at that frequency
    $$ |G_c(j ω_{\max})| = 10 \log \frac{1}{β}\, {\rm dB}.$$
 
-   We want $ω_{\max}$ to be the new gain crossover frequency. In order to do so, we set $ω_{\max}$ to be the frequency at which the magnitude of the gain compensated system is the $-10 \log \frac 1{β}$. This ensures that
+   We want $ω_{\max}$ to be the new gain crossover frequency. In order to do so, we set $ω_{\max}$ to be the frequency at which the magnitude of the gain compensated system is $-10 \log \frac 1{β}$. This ensures that
    $$
       |K G_c(j ω_{\max}) G(j ω_{\max})|_{\rm dB}
       = |K G(j ω_{\max})|_{\rm dB} + |G_c(j ω_{\max})|_{\rm dB} 
@@ -573,14 +573,14 @@ As a first step, we draw the Bode plot of $G(s)$, which is shown in @fig-example
    This step is the same as before, and we find that 
    $$ K = 1000 = 60\,{\rm dB}. $$
 
-2. **Determine required phase comensation**
+2. **Determine required phase compensation**
     
    The desired PM is $60 ^∘$. So we set
    $$
    \text{target phase margin} = 60 ^∘ + 12 ^∘ = 72 ^∘.
    $$
 
-   Next we determine the PM of the gain compensated system $H(s) = KG(s)$. To do so, we first find the gain cutoff frequency $ω_{\rm gc}$, which is the frequency where $|KG(j ω)| = 0\,{\rm dB}$, or equivalently, $|G(j ω)| = -60\,{\rm dB}$. 
+   Next we determine the PM of the gain compensated system $H(s) = KG(s)$. To do so, we first find the gain crossover frequency $ω_{\rm gc}$, which is the frequency where $|KG(j ω)| = 0\,{\rm dB}$, or equivalently, $|G(j ω)| = -60\,{\rm dB}$. 
 
    From @fig-example, we can see that $ω_{\rm gc} \in (10, 100)$. So we have
    $$
@@ -615,7 +615,7 @@ As a first step, we draw the Bode plot of $G(s)$, which is shown in @fig-example
     $$
     Hence,
     $$
-    P_{ω} = P_{10} + 90(1.5 - 1) = 180 ^∘.
+    P_{ω} = P_{10} - 90(1.5 - 1) = -180 ^∘.
     $$
     Thus, the $\text{PM} = 0 ^∘$. 
 
@@ -655,10 +655,10 @@ As a first step, we draw the Bode plot of $G(s)$, which is shown in @fig-example
    $$
    Thus,
    $$
-   |G(j ω^d_{\rm gc})| = -16\,{\rm dB} - 60\,{\rm dB} = -72\,{\rm dB}.
+   |G(j ω^d_{\rm gc})| = -16\,{\rm dB} - 60\,{\rm dB} = -76\,{\rm dB}.
    $$
 
-   From the Bode plot, we know that $ω^d_{\rm gc} \in (10, 100)$. THus, 
+   From the Bode plot, we know that $ω^d_{\rm gc} \in (10, 100)$. Thus, 
    $$
    \frac{G_{10} - G_{ω}}{\log 10 - \log ω^d_{\rm gc}} = -40.
    $$
@@ -686,7 +686,7 @@ As a first step, we draw the Bode plot of $G(s)$, which is shown in @fig-example
 
     Hence, we have
     $$
-    \frac 1T = ω^d_{\rm gc} \sqrt{β} = 12.58.
+    \frac 1T = ω^d_{\rm gc} \sqrt{β} = 12.56.
     $$
 
 Combining everything together, we get that the lead-compensator is given by
@@ -761,9 +761,9 @@ plot!(plt, res_2.t, res_2.y', label=L"y_2(t)")
 plot!(plt, res_3.t, res_3.y', label=L"y_3(t)")
 ```
 
-In the above plot $y_1(t)$ is the ramp response of the uncompensated system, $y_2(t)$ is the ramp response of the gain compensated system, and $y_3(t)$ is the ramp response of the lag compensated system.
+In the above plot $y_1(t)$ is the ramp response of the uncompensated system, $y_2(t)$ is the ramp response of the gain compensated system, and $y_3(t)$ is the ramp response of the lead compensated system.
 
-Note that the uncompensated system has a large error (because it has a small error constant); the gain compensated system has a small steady-state error, but has overshoot and oscillations (because it has small phase margin); while the lead compensatoed system has small steady-state error  but has little overshoot or oscillations. (Even though we did not achieve the target PM of $60 ^∘$, the achieved PM of $46.78 ^∘$ is still good, so the ramp response is good.  
+Note that the uncompensated system has a large error (because it has a small error constant); the gain compensated system has a small steady-state error, but has overshoot and oscillations (because it has small phase margin); while the lead compensated system has small steady-state error but has little overshoot or oscillations. (Even though we did not achieve the desired PM of $60 ^∘$, the achieved PM of $46.78 ^∘$ is still good, so the ramp response is good.)  
 :::
 
 ## Lag-Lead compensators
